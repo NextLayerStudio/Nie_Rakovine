@@ -1,0 +1,11 @@
+{
+  "name": "ONKO KLUB",
+  "short_name": "ONKO KLUB",
+  "description": "Podporná aplikácia pre ľudí s onkologickým ochorením.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#CA6A8A",
+  "theme_color": "#6F2380",
+  "orientation": "portrait",
+  "icons": []
+}

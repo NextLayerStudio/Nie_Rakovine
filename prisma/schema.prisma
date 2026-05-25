@@ -1,0 +1,151 @@
+// Onko Klub - Prisma schema
+// Targeting Neon (Vercel Postgres). Two URLs:
+//   - DATABASE_URL: pooled connection used at runtime
+//   - DIRECT_URL:   direct connection used for migrations
+// Run `npx prisma migrate dev` after the database is connected.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ---------------- Users / auth ----------------
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum SubscriptionPlan {
+  NONE
+  MONTHLY
+  YEARLY
+}
+
+enum SubscriptionStatus {
+  INACTIVE
+  ACTIVE
+  CANCELLED
+  PAST_DUE
+}
+
+model User {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  passwordHash    String
+  fullName        String
+  birthDate       DateTime?
+  role            UserRole @default(USER)
+
+  // Profile populated by the multi-step registration form
+  profile         UserProfile?
+
+  // Subscription
+  subscriptionPlan   SubscriptionPlan   @default(NONE)
+  subscriptionStatus SubscriptionStatus @default(INACTIVE)
+  subscriptionStart  DateTime?
+  subscriptionEnd    DateTime?
+
+  // Relations
+  eventRegistrations EventRegistration[]
+  articleLikes       ArticleLike[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserProfile {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Location (from "Zvoľte si miesto v ktorom sa nachádzate")
+  city           String?
+  region         String?
+  latitude       Float?
+  longitude      Float?
+
+  // Diagnosis info
+  diagnosis      String?
+  diagnosisPhase String?
+  diagnosisYear  Int?
+
+  // Multi-select fields stored as string arrays
+  interests      String[] @default([])
+  expectations   String[] @default([])
+  hearAboutUs    String[] @default([])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ---------------- Content ----------------
+
+enum PostType {
+  VIDEO
+  ARTICLE
+  RECIPE
+}
+
+model Post {
+  id          String   @id @default(cuid())
+  type        PostType
+  title       String
+  excerpt     String?
+  body        String?   // markdown / html
+  coverUrl    String?
+  videoUrl    String?
+  published   Boolean  @default(false)
+  publishedAt DateTime?
+  likes       ArticleLike[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ArticleLike {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+}
+
+// ---------------- Events ----------------
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String           // e.g. "ONKO YOGA"
+  description String?
+  coverUrl    String?
+  location    String?
+  startsAt    DateTime
+  endsAt      DateTime?
+  capacity    Int?
+  published   Boolean  @default(true)
+
+  registrations EventRegistration[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EventRegistration {
+  id        String   @id @default(cuid())
+  eventId   String
+  userId    String
+  name      String?
+  surname   String?
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([eventId, userId])
+}

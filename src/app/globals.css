@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-purple: #6f2380;
+  --brand-purple-soft: #6f238066;
+  --brand-pink: #ca6a8a;
+  --brand-pink-soft: #ca6a8acc;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  color: #1d1620;
+  background: #f7f4f6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-y: contain;
+}
+
+/* Make the app behave like a mobile-first canvas centred on larger screens */
+@media (min-width: 640px) {
+  body {
+    background:
+      radial-gradient(1200px 600px at 50% -10%, rgba(202, 106, 138, 0.18), transparent 60%),
+      radial-gradient(1200px 600px at 50% 110%, rgba(111, 35, 128, 0.18), transparent 60%),
+      #1f1422;
+  }
+}
+
+@layer components {
+  /* Mobile shell - simulates the phone canvas on desktops, full-bleed on mobile */
+  .phone-shell {
+    @apply mx-auto w-full bg-white sm:my-6 sm:max-w-[420px] sm:rounded-[36px] sm:shadow-card sm:overflow-hidden;
+    min-height: 100dvh;
+  }
+
+  @media (min-width: 640px) {
+    .phone-shell {
+      min-height: min(900px, calc(100dvh - 48px));
+    }
+  }
+
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-2 rounded-pill px-6 py-3 text-sm font-semibold transition active:scale-[0.98] disabled:opacity-60 disabled:pointer-events-none;
+  }
+  .btn-primary {
+    @apply btn bg-brand-purple text-white shadow-soft hover:brightness-110;
+  }
+  .btn-secondary {
+    @apply btn bg-brand-pink text-white shadow-soft hover:brightness-110;
+  }
+  .btn-soft {
+    @apply btn bg-brand-pink-soft text-white hover:bg-brand-pink;
+  }
+  .btn-ghost {
+    @apply btn bg-white text-brand-purple border border-brand-purple/20;
+  }
+
+  .input {
+    @apply w-full rounded-pill bg-brand-pink-soft/70 px-5 py-3 text-sm text-white placeholder-white/80 outline-none ring-0 focus:bg-brand-pink;
+  }
+  .input-light {
+    @apply w-full rounded-pill bg-[#F2D9E2] px-5 py-3 text-sm text-brand-purple placeholder-brand-purple/60 outline-none focus:bg-[#EAC4D2];
+  }
+  .label {
+    @apply mb-1 block text-xs font-medium text-brand-purple/80;
+  }
+
+  .card {
+    @apply rounded-3xl bg-white shadow-card;
+  }
+
+  .pill-tab {
+    @apply inline-flex items-center justify-center rounded-pill px-4 py-2 text-xs font-semibold;
+  }
+}
+
+/* Hide scrollbars on mobile carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
