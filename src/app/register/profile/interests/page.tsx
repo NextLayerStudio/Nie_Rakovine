@@ -1,10 +1,13 @@
-import { CheckboxList } from "@/components/CheckboxList";
 import { PhoneShell } from "@/components/PhoneShell";
 import { TopBar } from "@/components/TopBar";
+import { requireUser } from "@/lib/auth";
 import { INTEREST_OPTIONS } from "@/lib/constants";
+import { InterestsForm } from "./InterestsForm";
 
-// Step 3 - interests
-export default function InterestsStep() {
+export const dynamic = "force-dynamic";
+
+export default async function InterestsStep() {
+  const user = await requireUser();
   return (
     <PhoneShell>
       <TopBar
@@ -19,29 +22,10 @@ export default function InterestsStep() {
         </h2>
       </div>
 
-      <form
-        action="/register/profile/expectations"
-        className="mt-5 flex flex-1 flex-col gap-4 px-5"
-      >
-        <CheckboxList name="interests" options={INTEREST_OPTIONS} />
-
-        <div className="mt-auto pb-2">
-          <button type="submit" className="btn-secondary mx-auto flex w-40 justify-between">
-            Ďalej
-            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden>
-              <path
-                d="M9 6l6 6-6 6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
-      </form>
-
-      <div className="h-6" />
+      <InterestsForm
+        options={INTEREST_OPTIONS}
+        defaultSelected={user.profile?.interests ?? []}
+      />
     </PhoneShell>
   );
 }

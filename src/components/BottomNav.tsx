@@ -6,42 +6,37 @@ import { cn } from "@/lib/utils";
 
 const items = [
   { href: "/home", label: "Domov", icon: HomeIcon },
-  { href: "/home/calendar", label: "Kalendár", icon: CalendarIcon },
-  { href: "/home/notifications", label: "Notifikácie", icon: BellIcon },
+  { href: "/home/forums", label: "Fóra", icon: ForumIcon },
   { href: "/home/search", label: "Hľadať", icon: SearchIcon },
-  { href: "/menu", label: "Menu", icon: MenuIcon },
+  { href: "/home/calendar", label: "Kalendár", icon: CalendarIcon },
 ];
 
 export function BottomNav() {
   const pathname = usePathname();
+
   return (
     <nav
-      className="sticky bottom-0 z-20 mt-auto border-t border-brand-purple/10 bg-brand-pink/95 backdrop-blur"
-      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      className="sticky bottom-0 z-20 mt-auto bg-white px-6 pt-2"
+      style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
     >
-      <ul className="grid grid-cols-5">
+      <ul className="mx-auto grid h-[64px] w-full max-w-[340px] grid-cols-4 items-center rounded-full bg-brand-pink px-2 shadow-soft">
         {items.map(({ href, label, icon: Icon }) => {
           const active =
-            pathname === href ||
-            (href !== "/home" && pathname?.startsWith(href));
+            href === "/home"
+              ? pathname === "/home"
+              : pathname === href || pathname?.startsWith(`${href}/`);
+
           return (
-            <li key={href}>
+            <li key={href} className="flex justify-center">
               <Link
                 href={href}
+                aria-label={label}
                 className={cn(
-                  "flex flex-col items-center justify-center gap-1 py-2 text-[10px] font-semibold transition",
-                  active ? "text-white" : "text-white/70",
+                  "grid h-12 w-12 place-items-center rounded-full text-white transition",
+                  active ? "bg-white/20" : "hover:bg-white/10",
                 )}
               >
-                <span
-                  className={cn(
-                    "grid h-9 w-9 place-items-center rounded-full",
-                    active ? "bg-white text-brand-purple" : "text-white",
-                  )}
-                >
-                  <Icon />
-                </span>
-                <span>{label}</span>
+                <Icon />
               </Link>
             </li>
           );
@@ -51,68 +46,69 @@ export function BottomNav() {
   );
 }
 
+const iconClass = "h-[30px] w-[30px]";
+
 function HomeIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+    <svg viewBox="0 0 24 24" className={iconClass} fill="none" aria-hidden>
       <path
-        d="M4 11l8-7 8 7v8a2 2 0 01-2 2h-3v-6h-6v6H6a2 2 0 01-2-2v-8z"
+        d="M5 11.5 12 5l7 6.5V19a1.5 1.5 0 01-1.5 1.5H15v-5.5H9V20.5H6.5A1.5 1.5 0 015 19v-7.5z"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.8"
         strokeLinejoin="round"
       />
     </svg>
   );
 }
-function CalendarIcon() {
+
+/** Fóra — speech bubble with dots (not notifications). */
+function ForumIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
-      <rect
-        x="3"
-        y="5"
-        width="18"
-        height="16"
-        rx="3"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      <path d="M3 9h18M8 3v4M16 3v4" stroke="currentColor" strokeWidth="2" />
-    </svg>
-  );
-}
-function BellIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+    <svg viewBox="0 0 24 24" className={iconClass} fill="none" aria-hidden>
       <path
-        d="M6 16V11a6 6 0 1112 0v5l1.5 2H4.5L6 16zM10 20a2 2 0 004 0"
+        d="M6 9.5a5.5 5.5 0 0110.4-1.8A4.5 4.5 0 0119 12c0 2.4-2 4.3-4.5 4.3H12l-3.8 2.8V16.5A5.5 5.5 0 016 9.5z"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.8"
         strokeLinejoin="round"
-        strokeLinecap="round"
       />
+      <circle cx="9" cy="11.5" r="0.9" fill="currentColor" />
+      <circle cx="12" cy="11.5" r="0.9" fill="currentColor" />
+      <circle cx="15" cy="11.5" r="0.9" fill="currentColor" />
     </svg>
   );
 }
+
 function SearchIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
-      <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
+    <svg viewBox="0 0 24 24" className={iconClass} fill="none" aria-hidden>
+      <circle cx="10.5" cy="10.5" r="6.2" stroke="currentColor" strokeWidth="1.8" />
       <path
-        d="M21 21l-4-4"
+        d="M15.8 15.8 20 20"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.8"
         strokeLinecap="round"
       />
     </svg>
   );
 }
-function MenuIcon() {
+
+function CalendarIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
-      <path
-        d="M4 7h16M4 12h16M4 17h16"
+    <svg viewBox="0 0 24 24" className={iconClass} fill="none" aria-hidden>
+      <rect
+        x="4"
+        y="5.5"
+        width="16"
+        height="14"
+        rx="2.5"
         stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
+        strokeWidth="1.8"
+      />
+      <path d="M4 9.5h16M8 4v2.5M16 4v2.5" stroke="currentColor" strokeWidth="1.8" />
+      <path
+        d="M8.5 12.5h2v2h-2zM13.5 12.5h2v2h-2z"
+        fill="currentColor"
+        opacity="0.9"
       />
     </svg>
   );

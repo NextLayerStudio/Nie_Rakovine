@@ -1,17 +1,15 @@
 import Link from "next/link";
+import { prisma } from "@/lib/prisma";
+import { deleteEventAction } from "@/lib/actions/events";
 
-// Stub list - will be replaced once Prisma is connected.
-const PLACEHOLDER_EVENTS = [
-  {
-    id: "yoga-2026-06-14",
-    title: "ONKO YOGA",
-    startsAt: "2026-06-14T10:00",
-    location: "Trnavská cesta 25, Bratislava",
-    registrations: 7,
-  },
-];
+export const dynamic = "force-dynamic";
 
-export default function AdminEventsPage() {
+export default async function AdminEventsPage() {
+  const events = await prisma.event.findMany({
+    orderBy: { startsAt: "desc" },
+    include: { _count: { select: { registrations: true } } },
+  });
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -31,28 +29,64 @@ export default function AdminEventsPage() {
               <th className="px-4 py-3">Názov</th>
               <th className="px-4 py-3">Začiatok</th>
               <th className="px-4 py-3">Miesto</th>
-              <th className="px-4 py-3">Registrácie</th>
-              <th className="px-4 py-3" />
+              <th className="px-4 py-3">Reg.</th>
+              <th className="px-4 py-3">Stav</th>
+              <th className="px-4 py-3 text-right">Akcie</th>
             </tr>
           </thead>
           <tbody>
-            {PLACEHOLDER_EVENTS.map((event) => (
+            {events.length === 0 && (
+              <tr>
+                <td
+                  colSpan={6}
+                  className="px-4 py-10 text-center text-sm text-brand-purple/60"
+                >
+                  Žiadne podujatia. Vytvorte prvé pomocou tlačidla vyššie.
+                </td>
+              </tr>
+            )}
+            {events.map((event) => (
               <tr key={event.id} className="border-t border-brand-purple/10">
                 <td className="px-4 py-3 font-medium">{event.title}</td>
                 <td className="px-4 py-3 text-brand-purple/80">
-                  {event.startsAt.replace("T", " ")}
+                  {new Intl.DateTimeFormat("sk-SK", {
+                    dateStyle: "short",
+                    timeStyle: "short",
+                  }).format(event.startsAt)}
                 </td>
                 <td className="px-4 py-3 text-brand-purple/80">
-                  {event.location}
+                  {event.location ?? "—"}
                 </td>
-                <td className="px-4 py-3">{event.registrations}</td>
+                <td className="px-4 py-3">
+                  {event._count.registrations}
+                  {event.capacity ? ` / ${event.capacity}` : ""}
+                </td>
+                <td className="px-4 py-3">
+                  <span
+                    className={`rounded-pill px-2 py-0.5 text-[10px] font-semibold ${event.published ? "bg-green-100 text-green-700" : "bg-brand-purple/10 text-brand-purple"}`}
+                  >
+                    {event.published ? "Publikované" : "Skryté"}
+                  </span>
+                </td>
                 <td className="px-4 py-3 text-right">
                   <Link
                     href={`/admin/events/${event.id}`}
-                    className="text-brand-purple underline-offset-2 hover:underline"
+                    className="mr-3 text-brand-purple underline-offset-2 hover:underline"
                   >
                     Upraviť
                   </Link>
+                  <form
+                    action={deleteEventAction}
+                    className="inline"
+                  >
+                    <input type="hidden" name="id" value={event.id} />
+                    <button
+                      type="submit"
+                      className="text-xs text-red-600 hover:underline"
+                    >
+                      Zmazať
+                    </button>
+                  </form>
                 </td>
               </tr>
             ))}

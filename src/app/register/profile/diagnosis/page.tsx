@@ -1,10 +1,12 @@
 import { PhoneShell } from "@/components/PhoneShell";
 import { TopBar } from "@/components/TopBar";
+import { requireUser } from "@/lib/auth";
+import { DiagnosisForm } from "./DiagnosisForm";
 
-const PHASES = ["1. fáza", "2. fáza", "3. fáza", "4. fáza", "Remisia"];
+export const dynamic = "force-dynamic";
 
-// Step 2 - diagnosis
-export default function DiagnosisStep() {
+export default async function DiagnosisStep() {
+  const user = await requireUser();
   return (
     <PhoneShell>
       <TopBar
@@ -19,67 +21,11 @@ export default function DiagnosisStep() {
         </h2>
       </div>
 
-      <form
-        action="/register/profile/interests"
-        className="mt-5 flex flex-1 flex-col gap-3 px-5"
-      >
-        <input
-          name="diagnosis"
-          type="text"
-          placeholder="napr. karcinóm prsníka"
-          className="input-light"
-        />
-
-        <div>
-          <label className="label" htmlFor="phase">
-            Fáza liečby
-          </label>
-          <select
-            id="phase"
-            name="phase"
-            className="input-light text-brand-purple"
-          >
-            <option value="">Vyberte fázu</option>
-            {PHASES.map((p) => (
-              <option key={p} value={p}>
-                {p}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="label" htmlFor="year">
-            Rok diagnostikovania
-          </label>
-          <input
-            id="year"
-            name="year"
-            type="number"
-            min="1950"
-            max={new Date().getFullYear()}
-            placeholder="napr. 2024"
-            className="input-light"
-          />
-        </div>
-
-        <div className="mt-auto pb-2">
-          <button type="submit" className="btn-secondary mx-auto flex w-40 justify-between">
-            Ďalej
-            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden>
-              <path
-                d="M9 6l6 6-6 6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
-      </form>
-
-      <div className="h-6" />
+      <DiagnosisForm
+        defaultDiagnosis={user.profile?.diagnosis ?? ""}
+        defaultPhase={user.profile?.diagnosisPhase ?? ""}
+        defaultYear={user.profile?.diagnosisYear ?? null}
+      />
     </PhoneShell>
   );
 }

@@ -2,17 +2,16 @@
 
 Mobile-first podporná webová aplikácia pre ľudí s onkologickým ochorením.
 Postavená výhradne na **Next.js + TypeScript + Tailwind CSS** s **Prisma**
-ako ORM pripraveným na **Neon (Vercel Postgres)**.
+nad **Neon (Vercel Postgres)**.
 
 ## Tech stack
 
-- **Next.js 15** (App Router)
+- **Next.js 15** (App Router, Server Actions)
 - **TypeScript** (strict)
 - **Tailwind CSS** s vlastnou paletou ONKO KLUBU
-- **Prisma** (PostgreSQL / Neon) — schéma je pripravená, pripojenie sa spraví
-  hneď po prvom pushi
-- Vykreslenie na mobil prvé (`phone-shell` kontajner), na desktope sa zobrazí
-  ako náhľad telefónu
+- **Prisma 5** + **Neon Postgres**
+- **bcryptjs** (hashovanie hesiel) + **jose** (podpis session cookies)
+- Mobile-first canvas (`phone-shell`), na desktope sa zobrazí ako náhľad telefónu
 
 ## Farebná paleta
 
@@ -24,69 +23,117 @@ ako ORM pripraveným na **Neon (Vercel Postgres)**.
 | `brand.pink-soft`  | `#CA6A8ACC` | Vstupy, prekryvy                      |
 | `brand.white`      | `#FFFFFF`   | Pozadie kariet, kontrast              |
 
-Použiť napr. cez `bg-brand-purple` / `text-brand-pink` v Tailwinde.
-
-## Štruktúra obrazoviek
-
-| Cesta                                | Obrazovka z dizajnu                              |
-| ------------------------------------ | ------------------------------------------------ |
-| `/`                                  | (1) Splash screen                                |
-| `/welcome`                           | (2) Welcome — Prihlásiť / Registrovať            |
-| `/login`                             | (3) Prihlásenie                                  |
-| `/register`                          | (3) Nový účet                                    |
-| `/register/subscription`             | (2) Výber predplatného (ročné / mesačné)         |
-| `/register/profile/location`         | (3) Miesto, kde sa nachádzate                    |
-| `/register/profile/diagnosis`        | (3) Diagnóza, fáza, rok                          |
-| `/register/profile/interests`        | (3) O čo máte záujem                             |
-| `/register/profile/expectations`     | (3) Očakávania + s čím pomôcť                    |
-| `/register/profile/source`           | (3) Čo získate + odkiaľ ste sa dozvedeli         |
-| `/register/profile/done`             | (3) Vitajte v ONKO KLUBE                         |
-| `/reset-password`                    | (3) Zmena hesla                                  |
-| `/home`                              | (4) Domov — videá                                |
-| `/home/articles`                     | (4) Domov — články                               |
-| `/home/recipes`                      | (4) Domov — recepty                              |
-| `/home/events/yoga`                  | (4) Registrácia na podujatie ONKO YOGA           |
-| `/menu`                              | (4) Menu (sidebar)                               |
-| `/admin`                             | Admin — prehľad (mimo mobilného shellu)          |
-| `/admin/events`, `/admin/events/new` | Admin — správa podujatí                          |
-
 ## Lokálny vývoj
 
 ```bash
 npm install
-npm run dev
+npm run dev          # http://localhost:3000
 ```
 
-App beží na `http://localhost:3000`.
+## Databáza (Neon)
 
-## Pripojenie Neon (po prvom pushi)
+Spojenie je v `.env` (premenné `DATABASE_URL` pooled +
+`DATABASE_URL_UNPOOLED` direct).
 
-1. Vo Vercel vytvor projekt a pridaj **Neon Postgres** integráciu.
-2. Skopíruj `DATABASE_URL` a `DIRECT_URL` do `.env.local`
-   (vzor je v `.env.example`).
-3. Vygeneruj klienta a spusti prvú migráciu:
+```bash
+npm run db:generate  # vygeneruje Prisma klienta
+npm run db:migrate   # vytvorí novú migráciu (dev)
+npm run db:push      # priame push schémy (bez migrácie)
+npm run db:studio    # Prisma Studio (vizuálny editor DB)
+npm run db:seed      # vytvorí admina + vzorové podujatie a obsah
+```
 
-   ```bash
-   npm run db:generate
-   npm run db:migrate -- --name init
-   ```
+> Pri prvom spustení už bola migrácia `init` aplikovaná a seed naplnil
+> admina, jedno vzorové podujatie a 3 obsahy.
 
-4. (voliteľné) Otvor Prisma Studio:
+## Auth (vlastná, lightweight)
 
-   ```bash
-   npm run db:studio
-   ```
+- **Hashovanie:** `bcryptjs` (10 rounds)
+- **Session:** signovaný JWT v httpOnly cookie `onko_session` (30 dní),
+  HS256 cez `jose`
+- **Middleware** (`src/middleware.ts`): chráni `/home`, `/menu`, `/profile`,
+  `/admin` — ak chýba session, presmeruje na `/login?next=...`
+- **Server-side role check:** `requireUser()` / `requireAdmin()`
+  v `src/lib/auth.ts`
 
-## Admin
+### Admin účet (zo seedu, z `.env`)
 
-Pre administračný účet (správa podujatí, obsahu a používateľov) je v schéme
-pripravená rola `ADMIN`. Bootstrap admina sa vytvorí seedom po pripojení DB
-(`ADMIN_EMAIL` / `ADMIN_PASSWORD` v `.env.local`).
+| | |
+|---|---|
+| Email | `admin@onkoklub.sk` |
+| Heslo | `OnkoAdmin#2026` |
 
-## Poznámky k dizajnu
+Tieto údaje **zmeňte v produkcii** v `.env` (`ADMIN_EMAIL`, `ADMIN_PASSWORD`)
+a spustite `npm run db:seed` znova — heslo sa prepíše.
 
-- Aplikácia je primárne pre **mobilné zariadenia** — používame `phone-shell`
-  kontajner šírky 420 px, na desktope sa centruje s tieňom ako náhľad telefónu.
-- `viewport` má `userScalable: false` a `viewportFit: "cover"` pre PWA-like
-  zobrazenie na iOS.
-- Slovenská lokalizácia (`lang="sk"`) priamo v `RootLayout`.
+## Dátový model (Prisma)
+
+- **User** + **UserProfile** (lokalita, diagnóza, fáza, rok, záujmy,
+  očakávania, hearAboutUs, predplatné)
+- **Post** (VIDEO / ARTICLE / RECIPE) + **ArticleLike**
+- **Event** + **EventRegistration**
+- Enumy: `UserRole`, `SubscriptionPlan`, `SubscriptionStatus`, `PostType`
+
+## Štruktúra obrazoviek
+
+### Verejné (mobilné)
+
+| Cesta                                | Popis                                        |
+| ------------------------------------ | -------------------------------------------- |
+| `/`                                  | Splash (pink) → auto-redirect na `/welcome` |
+| `/welcome`                           | Prihlásiť / Registrovať                      |
+| `/login`                             | Prihlásenie (server action)                  |
+| `/register`                          | Nový účet (server action, hashed password)   |
+| `/register/subscription`             | Výber predplatného (uloží do DB)             |
+| `/register/profile/location`         | Krok 1 – lokalita                            |
+| `/register/profile/diagnosis`        | Krok 2 – diagnóza, fáza, rok                 |
+| `/register/profile/interests`        | Krok 3 – záujmy                              |
+| `/register/profile/expectations`     | Krok 4 – očakávania + pomoc                  |
+| `/register/profile/source`           | Krok 5 – čo získate + ako ste sa dozvedeli   |
+| `/register/profile/done`             | Vitajte v ONKO KLUBE                         |
+| `/reset-password`                    | Zmena hesla                                  |
+
+### Po prihlásení (chránené middleware)
+
+| Cesta                                | Popis                                        |
+| ------------------------------------ | -------------------------------------------- |
+| `/home`                              | Domov – videá + najbližšie podujatia         |
+| `/home/articles`                     | Domov – články                               |
+| `/home/recipes`                      | Domov – recepty                              |
+| `/home/calendar`                     | Pripravované podujatia                       |
+| `/home/notifications`                | Notifikácie                                  |
+| `/home/search`                       | Vyhľadávanie                                 |
+| `/home/events/[id]`                  | Detail podujatia + registrácia               |
+| `/home/events/[id]/registered`      | Potvrdenie registrácie                       |
+| `/menu`                              | Sidebar menu                                 |
+| `/menu/[slug]`                       | Stránky z menu                               |
+| `/profile`                           | Môj profil (všetky uložené info z DB)        |
+
+### Admin (chránené `requireAdmin`)
+
+| Cesta                                | Popis                                        |
+| ------------------------------------ | -------------------------------------------- |
+| `/admin`                             | Dashboard (počty, najbližšie podujatie)      |
+| `/admin/events`                      | Zoznam podujatí + zmazať                     |
+| `/admin/events/new`                  | Vytvoriť podujatie                           |
+| `/admin/events/[id]`                 | Upraviť + zoznam registrácií                 |
+| `/admin/posts`                       | Zoznam obsahu                                |
+| `/admin/posts/new`                   | Vytvoriť video / článok / recept             |
+| `/admin/posts/[id]`                  | Upraviť obsah                                |
+| `/admin/users`                       | Zoznam registrovaných používateľov           |
+
+## Server actions
+
+Všetky mutácie idú cez React Server Actions (`useActionState`):
+
+- `src/lib/actions/auth.ts` — `registerAction`, `loginAction`, `logoutAction`, `resetPasswordAction`
+- `src/lib/actions/profile.ts` — `chooseSubscriptionAction`, `saveLocationAction`, `saveDiagnosisAction`, `saveInterestsAction`, `saveExpectationsAction`, `saveSourceAction`
+- `src/lib/actions/events.ts` — `createEventAction`, `updateEventAction`, `deleteEventAction`, `registerForEventAction`
+- `src/lib/actions/posts.ts` — `createPostAction`, `updatePostAction`, `deletePostAction`, `togglePostLikeAction`
+
+## Logo
+
+Aktuálne sa používa inline SVG placeholder v `src/components/OnkoLogo.tsx`.
+Keď budú dodané oficiálne logo súbory, ulož ich do `public/logo/`
+(vid `public/logo/README.md`) a swapni inline SVG za `<Image>` v
+`OnkoLogo.tsx` / `NieRakovineMark`.

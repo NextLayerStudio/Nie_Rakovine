@@ -6,11 +6,13 @@ import { cn } from "@/lib/utils";
 export function CheckboxList({
   name,
   options,
+  defaultSelected = [],
 }: {
   name: string;
   options: string[];
+  defaultSelected?: string[];
 }) {
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string[]>(defaultSelected);
 
   function toggle(value: string) {
     setSelected((curr) =>

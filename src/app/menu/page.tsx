@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { BottomNav } from "@/components/BottomNav";
 import { PhoneShell } from "@/components/PhoneShell";
+import { requireUser } from "@/lib/auth";
+import { logoutAction } from "@/lib/actions/auth";
 
 const MAIN_ITEMS = [
   { href: "/menu/zdravotna-karta", label: "Moja zdravotná karta", icon: "card" },
   { href: "/menu/cvicenie", label: "Cvičenie", icon: "yoga" },
-  { href: "/menu/profil", label: "Môj profil", icon: "user" },
+  { href: "/profile", label: "Môj profil", icon: "user" },
   { href: "/menu/kontakt-lekar", label: "Kontakt na lekára", icon: "doctor" },
   { href: "/menu/zlavy", label: "Zľavy", icon: "tag" },
   { href: "/menu/aktivity", label: "Aktivity", icon: "activity" },
@@ -14,7 +16,12 @@ const MAIN_ITEMS = [
   { href: "/menu/nastavenia", label: "Nastavenia", icon: "settings" },
 ];
 
-export default function MenuPage() {
+export const dynamic = "force-dynamic";
+
+export default async function MenuPage() {
+  const user = await requireUser();
+  const isAdmin = user.role === "ADMIN";
+
   return (
     <PhoneShell>
       <div className="flex flex-1 flex-col overflow-y-auto bg-brand-pink text-white">
@@ -29,8 +36,10 @@ export default function MenuPage() {
               }}
             />
             <div>
-              <p className="text-sm font-semibold">Jana Nováková</p>
-              <p className="text-[11px] text-white/80">Členka ONKO KLUBU</p>
+              <p className="text-sm font-semibold">{user.fullName}</p>
+              <p className="text-[11px] text-white/80">
+                {isAdmin ? "Administrátor" : "Členka ONKO KLUBU"}
+              </p>
             </div>
           </Link>
           <Link
@@ -51,6 +60,18 @@ export default function MenuPage() {
 
         <nav className="px-3 pb-4">
           <ul className="flex flex-col gap-1">
+            {isAdmin && (
+              <li>
+                <Link
+                  href="/admin"
+                  className="flex items-center gap-4 rounded-2xl bg-white/20 px-4 py-3 text-sm font-semibold hover:bg-white/30"
+                >
+                  <MenuIcon name="settings" />
+                  <span>Administrácia</span>
+                  <span className="ml-auto text-white/70">›</span>
+                </Link>
+              </li>
+            )}
             {MAIN_ITEMS.map((item) => (
               <li key={item.href}>
                 <Link
@@ -67,7 +88,7 @@ export default function MenuPage() {
         </nav>
 
         <div className="mt-auto px-5 pb-6">
-          <form action="/welcome">
+          <form action={logoutAction}>
             <button
               type="submit"
               className="w-full rounded-pill bg-white py-3 text-sm font-semibold text-brand-purple"

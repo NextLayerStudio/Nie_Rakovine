@@ -1,10 +1,14 @@
 import Link from "next/link";
 import { FeedHeader } from "@/components/FeedHeader";
+import { requireUser } from "@/lib/auth";
 
-export default function EventRegisteredPage() {
+export const dynamic = "force-dynamic";
+
+export default async function EventRegisteredPage() {
+  const user = await requireUser();
   return (
     <>
-      <FeedHeader />
+      <FeedHeader name={user.fullName} />
       <div className="mx-4 rounded-3xl bg-brand-purple p-6 text-center text-white shadow-card">
         <h2 className="text-lg font-bold">Ďakujeme za registráciu!</h2>
         <p className="mt-2 text-xs text-white/90">

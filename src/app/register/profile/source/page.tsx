@@ -1,10 +1,13 @@
-import { CheckboxList } from "@/components/CheckboxList";
 import { PhoneShell } from "@/components/PhoneShell";
 import { TopBar } from "@/components/TopBar";
+import { requireUser } from "@/lib/auth";
 import { GAIN_OPTIONS, HEAR_ABOUT_US_OPTIONS } from "@/lib/constants";
+import { SourceForm } from "./SourceForm";
 
-// Step 5 - what ONKO KLUB will give them + how they heard about us
-export default function SourceStep() {
+export const dynamic = "force-dynamic";
+
+export default async function SourceStep() {
+  const user = await requireUser();
   return (
     <PhoneShell>
       <TopBar
@@ -13,28 +16,16 @@ export default function SourceStep() {
         step={{ current: 5, total: 5 }}
       />
 
-      <form
-        action="/register/profile/done"
-        className="flex flex-1 flex-col gap-5 overflow-y-auto px-5 pb-2"
-      >
-        <h2 className="text-center text-base font-semibold text-brand-purple">
-          Čo od ONKO KLUBU očakávate?
-        </h2>
-        <CheckboxList name="gain" options={GAIN_OPTIONS} />
-
-        <h3 className="text-center text-sm font-semibold text-brand-purple">
-          S čím by sme Vám vedeli pomôcť?
-        </h3>
-        <CheckboxList name="hearAboutUs" options={HEAR_ABOUT_US_OPTIONS} />
-
-        <div className="flex justify-center pt-2">
-          <button type="submit" className="btn-secondary w-40">
-            Hotovo
-          </button>
-        </div>
-      </form>
-
-      <div className="h-4" />
+      <SourceForm
+        gainOptions={GAIN_OPTIONS}
+        hearOptions={HEAR_ABOUT_US_OPTIONS}
+        defaultGain={
+          user.profile?.expectations
+            .filter((e) => e.startsWith("získať: "))
+            .map((e) => e.replace(/^získať:\s*/, "")) ?? []
+        }
+        defaultHear={user.profile?.hearAboutUs ?? []}
+      />
     </PhoneShell>
   );
 }

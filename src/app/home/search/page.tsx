@@ -1,9 +1,13 @@
 import { FeedHeader } from "@/components/FeedHeader";
+import { requireUser } from "@/lib/auth";
 
-export default function SearchPage() {
+export const dynamic = "force-dynamic";
+
+export default async function SearchPage() {
+  const user = await requireUser();
   return (
     <>
-      <FeedHeader />
+      <FeedHeader name={user.fullName} />
       <section className="mx-4">
         <input
           type="search"

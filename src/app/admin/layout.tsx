@@ -1,12 +1,16 @@
 import Link from "next/link";
+import { requireAdmin } from "@/lib/auth";
+import { logoutAction } from "@/lib/actions/auth";
 
-// Admin shell - desktop-friendly layout (not phone-sized).
-// Auth/role checks will be added once the database is connected.
-export default function AdminLayout({
+export const dynamic = "force-dynamic";
+
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = await requireAdmin();
+
   return (
     <div className="min-h-[100dvh] bg-white text-brand-purple">
       <header className="border-b border-brand-purple/10 bg-brand-purple text-white">
@@ -24,12 +28,23 @@ export default function AdminLayout({
             <Link href="/admin/users" className="hover:underline">
               Používatelia
             </Link>
+            <span className="hidden text-xs text-white/70 sm:inline">
+              {user.email}
+            </span>
             <Link
               href="/home"
               className="rounded-pill bg-white px-3 py-1 text-xs font-bold text-brand-purple"
             >
-              Odísť do appky
+              Aplikácia
             </Link>
+            <form action={logoutAction}>
+              <button
+                type="submit"
+                className="rounded-pill border border-white/40 px-3 py-1 text-xs font-bold"
+              >
+                Odhlásiť
+              </button>
+            </form>
           </nav>
         </div>
       </header>

@@ -1,27 +1,39 @@
 import { FeedHeader, FeedTabs } from "@/components/FeedHeader";
 import { PostCard } from "@/components/PostCard";
+import { prisma } from "@/lib/prisma";
+import { requireUser } from "@/lib/auth";
 
-export default function HomeRecipesPage() {
+export const dynamic = "force-dynamic";
+
+export default async function HomeRecipesPage() {
+  const user = await requireUser();
+  const recipes = await prisma.post.findMany({
+    where: { type: "RECIPE", published: true },
+    orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
+  });
+
   return (
     <>
-      <FeedHeader />
+      <FeedHeader name={user.fullName} />
       <FeedTabs active="recipes" />
 
       <section className="pt-1">
-        <PostCard
-          kind="recipe"
-          title="Vyživujúci paradajkový vývar s bazalkou"
-          meta="30 min"
-          ctaLabel="Recept"
-          bg="linear-gradient(180deg, #ffcdb2 0%, #e07a5f 100%)"
-        />
-        <PostCard
-          kind="recipe"
-          title="Quinoa misa s pečeným cíceronom a tahini"
-          meta="25 min"
-          ctaLabel="Recept"
-          bg="linear-gradient(180deg, #f6d6c2 0%, #b08968 100%)"
-        />
+        {recipes.length === 0 ? (
+          <div className="mx-4 rounded-3xl bg-white p-6 text-center text-xs text-brand-purple/70 shadow-card">
+            Žiadne recepty zatiaľ nie sú publikované.
+          </div>
+        ) : (
+          recipes.map((r) => (
+            <PostCard
+              key={r.id}
+              href={`/home/recipes/${r.id}`}
+              type={r.type}
+              title={r.title}
+              excerpt={r.excerpt}
+              coverUrl={r.coverUrl}
+            />
+          ))
+        )}
       </section>
     </>
   );

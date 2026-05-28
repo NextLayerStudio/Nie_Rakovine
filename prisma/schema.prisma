@@ -10,8 +10,10 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
+  // Pooled connection from Neon (used by app at runtime)
   url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  // Direct (unpooled) connection — used by Prisma migrations
+  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 // ---------------- Users / auth ----------------
@@ -54,6 +56,9 @@ model User {
   // Relations
   eventRegistrations EventRegistration[]
   articleLikes       ArticleLike[]
+  forumMemberships   ForumMembership[]
+  forumThreads       ForumThread[]
+  forumComments      ForumComment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -148,4 +153,61 @@ model EventRegistration {
   createdAt DateTime @default(now())
 
   @@unique([eventId, userId])
+}
+
+// ---------------- Forums (Fóra) ----------------
+
+model Forum {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  accentColor String?  @default("#6F2380") // circle color on list card
+  published   Boolean  @default(true)
+
+  members ForumMembership[]
+  threads ForumThread[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ForumMembership {
+  id        String   @id @default(cuid())
+  forumId   String
+  userId    String
+  forum     Forum    @relation(fields: [forumId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([forumId, userId])
+}
+
+model ForumThread {
+  id        String   @id @default(cuid())
+  forumId   String
+  authorId  String
+  title     String?
+  body      String
+  coverUrl  String?
+  likeCount Int      @default(0)
+
+  forum    Forum           @relation(fields: [forumId], references: [id], onDelete: Cascade)
+  author   User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments ForumComment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ForumComment {
+  id        String   @id @default(cuid())
+  threadId  String
+  authorId  String
+  body      String
+
+  thread ForumThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  author User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
