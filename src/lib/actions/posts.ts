@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin, requireUser } from "@/lib/auth";
+import { notifyProfileFollowersNewPost } from "@/lib/notifications";
+import { parseCancerTypes } from "@/lib/cancer-type";
 import type { PostType } from "@prisma/client";
 
 export type ActionState = { ok: boolean; message?: string };
@@ -21,12 +23,14 @@ export async function createPostAction(
   const coverUrl = String(formData.get("coverUrl") ?? "").trim() || null;
   const videoUrl = String(formData.get("videoUrl") ?? "").trim() || null;
   const published = formData.get("published") === "on";
+  const profileId = String(formData.get("profileId") ?? "").trim() || null;
+  const cancerTypes = parseCancerTypes(formData.getAll("cancerTypes"));
 
   if (!title || !["VIDEO", "ARTICLE", "RECIPE"].includes(type)) {
     return { ok: false, message: "Vyplňte názov a typ obsahu." };
   }
 
-  await prisma.post.create({
+  const post = await prisma.post.create({
     data: {
       type,
       title,
@@ -36,14 +40,18 @@ export async function createPostAction(
       videoUrl,
       published,
       publishedAt: published ? new Date() : null,
+      profileId,
+      cancerTypes,
     },
+    include: { profile: { select: { id: true, displayName: true } } },
   });
 
-  revalidatePath("/admin/posts");
-  revalidatePath("/home");
-  revalidatePath("/home/articles");
-  revalidatePath("/home/recipes");
-  redirect("/admin/posts");
+  if (published) {
+    await notifyProfileFollowersNewPost(post);
+  }
+
+  revalidatePaths(profileId);
+  redirect(profileId ? `/admin/profiles/${profileId}` : "/admin/profiles");
 }
 
 export async function updatePostAction(
@@ -62,7 +70,12 @@ export async function updatePostAction(
   const videoUrl = String(formData.get("videoUrl") ?? "").trim() || null;
   const published = formData.get("published") === "on";
 
-  await prisma.post.update({
+  const profileId = String(formData.get("profileId") ?? "").trim() || null;
+  const cancerTypes = parseCancerTypes(formData.getAll("cancerTypes"));
+
+  const existing = await prisma.post.findUnique({ where: { id } });
+
+  const post = await prisma.post.update({
     where: { id },
     data: {
       type,
@@ -73,23 +86,45 @@ export async function updatePostAction(
       videoUrl,
       published,
       publishedAt: published ? new Date() : null,
+      profileId,
+      cancerTypes,
     },
+    include: { profile: { select: { id: true, displayName: true } } },
   });
 
-  revalidatePath("/admin/posts");
-  revalidatePath("/home");
-  revalidatePath("/home/articles");
-  revalidatePath("/home/recipes");
-  redirect("/admin/posts");
+  if (published && !existing?.published) {
+    await notifyProfileFollowersNewPost(post);
+  }
+
+  revalidatePaths(profileId);
+  redirect(profileId ? `/admin/profiles/${profileId}` : "/admin/profiles");
 }
 
 export async function deletePostAction(formData: FormData): Promise<void> {
   await requireAdmin();
   const id = String(formData.get("id") ?? "");
   if (!id) return;
+  const post = await prisma.post.findUnique({
+    where: { id },
+    select: { profileId: true },
+  });
   await prisma.post.delete({ where: { id } });
-  revalidatePath("/admin/posts");
-  redirect("/admin/posts");
+  revalidatePaths(post?.profileId ?? null);
+  redirect(
+    post?.profileId
+      ? `/admin/profiles/${post.profileId}`
+      : "/admin/profiles",
+  );
+}
+
+function revalidatePaths(profileId: string | null) {
+  revalidatePath("/admin/profiles");
+  if (profileId) revalidatePath(`/admin/profiles/${profileId}`);
+  revalidatePath("/home");
+  revalidatePath("/home/articles");
+  revalidatePath("/home/recipes");
+  revalidatePath("/home/profiles");
+  revalidatePath("/home/notifications");
 }
 
 // ------ Public: like / unlike a post -----------------------------------
@@ -115,4 +150,6 @@ export async function togglePostLikeAction(formData: FormData): Promise<void> {
   revalidatePath("/home");
   revalidatePath("/home/articles");
   revalidatePath("/home/recipes");
+  revalidatePath("/home/forums");
+  revalidatePath("/home/profiles");
 }

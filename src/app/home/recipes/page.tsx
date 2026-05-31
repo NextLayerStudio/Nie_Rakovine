@@ -1,4 +1,6 @@
-import { FeedHeader, FeedTabs } from "@/components/FeedHeader";
+import { FeedTabs } from "@/components/FeedHeader";
+import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
+import { LikeButton } from "@/components/LikeButton";
 import { PostCard } from "@/components/PostCard";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
@@ -10,11 +12,21 @@ export default async function HomeRecipesPage() {
   const recipes = await prisma.post.findMany({
     where: { type: "RECIPE", published: true },
     orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
+    include: { _count: { select: { likes: true } } },
   });
+
+  const userLikes = await prisma.articleLike.findMany({
+    where: {
+      userId: user.id,
+      postId: { in: recipes.map((r) => r.id) },
+    },
+    select: { postId: true },
+  });
+  const likedIds = new Set(userLikes.map((l) => l.postId));
 
   return (
     <>
-      <FeedHeader name={user.fullName} />
+      <FeedHeaderWrapper />
       <FeedTabs active="recipes" />
 
       <section className="pt-1">
@@ -31,6 +43,13 @@ export default async function HomeRecipesPage() {
               title={r.title}
               excerpt={r.excerpt}
               coverUrl={r.coverUrl}
+              likeSlot={
+                <LikeButton
+                  postId={r.id}
+                  liked={likedIds.has(r.id)}
+                  count={r._count.likes}
+                />
+              }
             />
           ))
         )}

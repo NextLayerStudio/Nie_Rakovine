@@ -7,12 +7,14 @@ export function PostCard({
   title,
   excerpt,
   coverUrl,
+  likeSlot,
 }: {
   href: string;
   type: PostType;
   title: string;
   excerpt: string | null;
   coverUrl: string | null;
+  likeSlot?: React.ReactNode;
 }) {
   const bg =
     coverUrl ??
@@ -44,10 +46,11 @@ export function PostCard({
             {excerpt}
           </p>
         )}
-        <div className="mt-3 flex items-center justify-end">
+        <div className="mt-3 flex items-center justify-between gap-2">
+          {likeSlot}
           <Link
             href={href}
-            className="rounded-pill bg-brand-pink px-4 py-1.5 text-xs font-semibold text-white"
+            className="ml-auto rounded-pill bg-brand-pink px-4 py-1.5 text-xs font-semibold text-white"
           >
             {type === "VIDEO"
               ? "Pozrieť"

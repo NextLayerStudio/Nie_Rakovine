@@ -7,6 +7,7 @@ import {
   updatePostAction,
   type ActionState,
 } from "@/lib/actions/posts";
+import { CancerTypeSelect } from "@/components/CancerTypeSelect";
 import { FormError, SubmitButton } from "@/components/FormError";
 
 const INITIAL: ActionState = { ok: false };
@@ -14,9 +15,11 @@ const INITIAL: ActionState = { ok: false };
 export function PostForm({
   mode,
   post,
+  profileId,
 }: {
   mode: "create" | "edit";
   post?: Post;
+  profileId?: string;
 }) {
   const [state, formAction] = useActionState(
     mode === "create" ? createPostAction : updatePostAction,
@@ -29,6 +32,13 @@ export function PostForm({
       className="mt-6 space-y-4 rounded-2xl border border-brand-purple/10 bg-white p-6 shadow-card"
     >
       {post && <input type="hidden" name="id" value={post.id} />}
+      {(profileId || post?.profileId) && (
+        <input
+          type="hidden"
+          name="profileId"
+          value={profileId ?? post?.profileId ?? ""}
+        />
+      )}
 
       <label className="block">
         <span className="mb-1 block text-xs font-semibold text-brand-purple/80">
@@ -67,6 +77,17 @@ export function PostForm({
         name="videoUrl"
         defaultValue={post?.videoUrl ?? ""}
       />
+
+      <div>
+        <span className="mb-1 block text-xs font-semibold text-brand-purple/80">
+          Pre typ rakoviny
+        </span>
+        <CancerTypeSelect
+          variant="admin"
+          defaultValue={post?.cancerTypes ?? []}
+          helpText="Prázdne = pre všetkých. Inak sa zobrazí najmä týmto používateľom."
+        />
+      </div>
 
       <label className="flex items-center gap-2 text-sm">
         <input

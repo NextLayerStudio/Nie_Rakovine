@@ -9,7 +9,7 @@ export default function DonePage() {
       <div className="flex flex-1 flex-col items-center justify-center px-8 text-center text-white">
         <h1 className="text-4xl font-extrabold tracking-tight">Vitajte</h1>
         <div className="mt-10">
-          <OnkoLogo variant="white" />
+          <OnkoLogo size="md" />
         </div>
         <p className="mt-8 max-w-[24ch] text-sm leading-relaxed text-white/90">
           Vaša registrácia bola úspešná. Tešíme sa, že ste sa stali súčasťou

@@ -40,7 +40,7 @@ export function CommentForm({
             name="body"
             type="text"
             required
-            placeholder="Zapojiť sa do konverzácie"
+            placeholder="Napíšte správu…"
             className="min-w-0 flex-1 bg-transparent py-2 text-sm text-white placeholder-white/80 outline-none"
           />
           <SubmitButton
@@ -58,7 +58,13 @@ export function CommentForm({
             </svg>
           </SubmitButton>
         </div>
-        <FormError message={state.message} />
+        {state.ok && state.message ? (
+          <p className="px-2 text-center text-[11px] font-medium text-white/95">
+            {state.message}
+          </p>
+        ) : (
+          <FormError message={state.message} />
+        )}
       </form>
     </div>
   );

@@ -2,10 +2,28 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import type { EventCategory } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin, requireUser } from "@/lib/auth";
+import { notifyNearbyUsersNewEvent } from "@/lib/notifications";
+import { EVENT_CATEGORIES } from "@/lib/event-category";
+import { parseCancerTypes } from "@/lib/cancer-type";
 
 export type ActionState = { ok: boolean; message?: string };
+
+function parseCategory(formData: FormData): EventCategory | null {
+  const raw = String(formData.get("category") ?? "").trim();
+  return (EVENT_CATEGORIES as string[]).includes(raw)
+    ? (raw as EventCategory)
+    : null;
+}
+
+function parseCoord(formData: FormData, name: string): number | null {
+  const raw = String(formData.get(name) ?? "").trim();
+  if (!raw) return null;
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : null;
+}
 
 // ------ Admin: create / edit / delete -----------------------------------
 export async function createEventAction(
@@ -27,22 +45,29 @@ export async function createEventAction(
     return { ok: false, message: "Vyplňte aspoň názov a čas začiatku." };
   }
 
-  await prisma.event.create({
+  const profileId = String(formData.get("profileId") ?? "").trim() || null;
+
+  const event = await prisma.event.create({
     data: {
       title,
       description,
+      category: parseCategory(formData),
       startsAt: new Date(startsAtStr),
       endsAt: endsAtStr ? new Date(endsAtStr) : null,
       location,
+      latitude: parseCoord(formData, "latitude"),
+      longitude: parseCoord(formData, "longitude"),
       capacity: capacityStr ? Number(capacityStr) : null,
       coverUrl,
+      profileId,
+      cancerTypes: parseCancerTypes(formData.getAll("cancerTypes")),
     },
   });
 
-  revalidatePath("/admin/events");
-  revalidatePath("/home");
-  revalidatePath("/home/calendar");
-  redirect("/admin/events");
+  await notifyNearbyUsersNewEvent(event);
+
+  revalidateEventPaths(profileId);
+  redirect(profileId ? `/admin/profiles/${profileId}` : "/admin/profiles");
 }
 
 export async function updateEventAction(
@@ -63,34 +88,53 @@ export async function updateEventAction(
   const coverUrl = String(formData.get("coverUrl") ?? "").trim() || null;
   const published = formData.get("published") === "on";
 
+  const profileId = String(formData.get("profileId") ?? "").trim() || null;
+
   await prisma.event.update({
     where: { id },
     data: {
       title,
       description,
+      category: parseCategory(formData),
       startsAt: new Date(startsAtStr),
       endsAt: endsAtStr ? new Date(endsAtStr) : null,
       location,
+      latitude: parseCoord(formData, "latitude"),
+      longitude: parseCoord(formData, "longitude"),
       capacity: capacityStr ? Number(capacityStr) : null,
       coverUrl,
       published,
+      profileId,
+      cancerTypes: parseCancerTypes(formData.getAll("cancerTypes")),
     },
   });
 
-  revalidatePath("/admin/events");
-  revalidatePath(`/admin/events/${id}`);
-  revalidatePath("/home");
-  revalidatePath("/home/calendar");
-  redirect("/admin/events");
+  revalidateEventPaths(profileId);
+  redirect(profileId ? `/admin/profiles/${profileId}` : "/admin/profiles");
 }
 
 export async function deleteEventAction(formData: FormData): Promise<void> {
   await requireAdmin();
   const id = String(formData.get("id") ?? "");
   if (!id) return;
+  const event = await prisma.event.findUnique({
+    where: { id },
+    select: { profileId: true },
+  });
   await prisma.event.delete({ where: { id } });
-  revalidatePath("/admin/events");
-  redirect("/admin/events");
+  revalidateEventPaths(event?.profileId ?? null);
+  redirect(
+    event?.profileId
+      ? `/admin/profiles/${event.profileId}`
+      : "/admin/profiles",
+  );
+}
+
+function revalidateEventPaths(profileId: string | null) {
+  revalidatePath("/admin/profiles");
+  if (profileId) revalidatePath(`/admin/profiles/${profileId}`);
+  revalidatePath("/home");
+  revalidatePath("/home/calendar");
 }
 
 // ------ Public: sign up for an event ------------------------------------

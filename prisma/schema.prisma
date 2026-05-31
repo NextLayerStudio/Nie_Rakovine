@@ -23,6 +23,28 @@ enum UserRole {
   ADMIN
 }
 
+// Curated cancer-type taxonomy used to personalise content.
+enum CancerType {
+  PRSNIK
+  HRUBE_CREVO
+  PLUCA
+  PROSTATA
+  KOZA
+  KRCOK_MATERNICE
+  TELO_MATERNICE
+  VAJECNIKY
+  MOCOVE_CESTY
+  PODZALUDKOVA
+  ZALUDOK
+  PECEN
+  LYMFOM
+  LEUKEMIA
+  MOZOG
+  STITNA_ZLAZA
+  HLAVA_KRK
+  INE
+}
+
 enum SubscriptionPlan {
   NONE
   MONTHLY
@@ -58,7 +80,10 @@ model User {
   articleLikes       ArticleLike[]
   forumMemberships   ForumMembership[]
   forumThreads       ForumThread[]
+  forumThreadLikes   ForumThreadLike[]
   forumComments      ForumComment[]
+  profileFollows     ProfileFollow[]
+  notifications      Notification[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -79,14 +104,81 @@ model UserProfile {
   diagnosis      String?
   diagnosisPhase String?
   diagnosisYear  Int?
+  // Cancer type(s) chosen at registration — drives personalised content.
+  cancerTypes    CancerType[] @default([])
 
   // Multi-select fields stored as string arrays
   interests      String[] @default([])
   expectations   String[] @default([])
   hearAboutUs    String[] @default([])
 
+  // Radius (km) used for "activities near me" + nearby-event notifications
+  notifyRadiusKm Int      @default(50)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// ---------------- Club profiles (Instagram-style, admin-managed) ----------------
+
+model ClubProfile {
+  id          String   @id @default(cuid())
+  handle      String   @unique // URL slug, e.g. "onko-yoga"
+  displayName String
+  bio         String?
+  avatarUrl   String?
+  coverUrl    String?
+  published   Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  // Empty = general (everyone); otherwise targeted to these cancer types.
+  cancerTypes CancerType[] @default([])
+
+  posts    Post[]
+  events   Event[]
+  followers ProfileFollow[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProfileFollow {
+  id        String   @id @default(cuid())
+  userId    String
+  profileId String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profile   ClubProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, profileId])
+}
+
+// ---------------- Notifications ----------------
+
+enum NotificationType {
+  NEW_POST
+  FORUM_THREAD_APPROVED
+  FORUM_COMMENT_APPROVED
+  NEW_EVENT_NEARBY
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String?
+  href      String?
+  read      Boolean          @default(false)
+  postId    String?
+  threadId  String?
+  commentId String?
+  profileId String?
+  eventId   String?
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([userId, read, createdAt])
 }
 
 // ---------------- Content ----------------
@@ -97,8 +189,19 @@ enum PostType {
   RECIPE
 }
 
+enum EventCategory {
+  EDUKACNE
+  RELAXACNE
+  FYZICKE
+  MENTALNE
+  EXTERNE
+  INTERNE
+}
+
 model Post {
   id          String   @id @default(cuid())
+  profileId   String?
+  profile     ClubProfile? @relation(fields: [profileId], references: [id], onDelete: SetNull)
   type        PostType
   title       String
   excerpt     String?
@@ -107,6 +210,7 @@ model Post {
   videoUrl    String?
   published   Boolean  @default(false)
   publishedAt DateTime?
+  cancerTypes CancerType[] @default([])
   likes       ArticleLike[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -127,14 +231,20 @@ model ArticleLike {
 
 model Event {
   id          String   @id @default(cuid())
+  profileId   String?
+  profile     ClubProfile? @relation(fields: [profileId], references: [id], onDelete: SetNull)
   title       String           // e.g. "ONKO YOGA"
   description String?
+  category    EventCategory?
   coverUrl    String?
   location    String?
+  latitude    Float?
+  longitude   Float?
   startsAt    DateTime
   endsAt      DateTime?
   capacity    Int?
   published   Boolean  @default(true)
+  cancerTypes CancerType[] @default([])
 
   registrations EventRegistration[]
 
@@ -157,12 +267,20 @@ model EventRegistration {
 
 // ---------------- Forums (Fóra) ----------------
 
+enum ForumModerationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model Forum {
   id          String   @id @default(cuid())
   title       String
   description String?
-  accentColor String?  @default("#6F2380") // circle color on list card
+  imageUrl    String?  // profile picture (admin)
+  accentColor String?  @default("#6F2380") // fallback when no imageUrl
   published   Boolean  @default(true)
+  cancerTypes CancerType[] @default([])
 
   members ForumMembership[]
   threads ForumThread[]
@@ -190,13 +308,26 @@ model ForumThread {
   body      String
   coverUrl  String?
   likeCount Int      @default(0)
+  status    ForumModerationStatus @default(PENDING)
 
   forum    Forum           @relation(fields: [forumId], references: [id], onDelete: Cascade)
   author   User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes    ForumThreadLike[]
   comments ForumComment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model ForumThreadLike {
+  id        String   @id @default(cuid())
+  userId    String
+  threadId  String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  thread    ForumThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, threadId])
 }
 
 model ForumComment {
@@ -204,6 +335,7 @@ model ForumComment {
   threadId  String
   authorId  String
   body      String
+  status    ForumModerationStatus @default(PENDING)
 
   thread ForumThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
   author User        @relation(fields: [authorId], references: [id], onDelete: Cascade)

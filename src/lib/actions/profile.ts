@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
+import { parseCancerTypes } from "@/lib/cancer-type";
 import type {
   SubscriptionPlan,
   SubscriptionStatus,
@@ -94,6 +95,7 @@ export async function saveDiagnosisAction(
   const phase = String(formData.get("phase") ?? "").trim() || null;
   const yearStr = String(formData.get("year") ?? "").trim();
   const year = yearStr ? Number(yearStr) : null;
+  const cancerTypes = parseCancerTypes(formData.getAll("cancerTypes"));
 
   await prisma.userProfile.upsert({
     where: { userId: user.id },
@@ -102,11 +104,13 @@ export async function saveDiagnosisAction(
       diagnosis,
       diagnosisPhase: phase,
       diagnosisYear: year,
+      cancerTypes,
     },
     update: {
       diagnosis,
       diagnosisPhase: phase,
       diagnosisYear: year,
+      cancerTypes,
     },
   });
 

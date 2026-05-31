@@ -6,6 +6,7 @@
   --brand-purple: #6f2380;
   --brand-purple-soft: #6f238066;
   --brand-pink: #ca6a8a;
+  --brand-pink-loading: #ca6a8ae3;
   --brand-pink-soft: #ca6a8acc;
 }
 
@@ -87,4 +88,46 @@ body {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ONKO KLUB loading screen */
+@keyframes onko-loading-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.92;
+    transform: scale(1.03);
+  }
+}
+
+.onko-loading-pulse {
+  animation: onko-loading-pulse 2s ease-in-out infinite;
+}
+
+@keyframes loading-dot-bounce {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+}
+
+.loading-dot {
+  animation: loading-dot-bounce 1.2s ease-in-out infinite;
+}
+
+.loading-dot-delay-1 {
+  animation-delay: 0.15s;
+}
+
+.loading-dot-delay-2 {
+  animation-delay: 0.3s;
 }

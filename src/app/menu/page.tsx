@@ -5,6 +5,7 @@ import { requireUser } from "@/lib/auth";
 import { logoutAction } from "@/lib/actions/auth";
 
 const MAIN_ITEMS = [
+  { href: "/home/profiles", label: "Profily", icon: "users" },
   { href: "/menu/zdravotna-karta", label: "Moja zdravotná karta", icon: "card" },
   { href: "/menu/cvicenie", label: "Cvičenie", icon: "yoga" },
   { href: "/profile", label: "Môj profil", icon: "user" },

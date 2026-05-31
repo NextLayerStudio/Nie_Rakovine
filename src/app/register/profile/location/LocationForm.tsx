@@ -1,8 +1,9 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { saveLocationAction, type ActionState } from "@/lib/actions/profile";
 import { FormError, SubmitButton } from "@/components/FormError";
+import { LocationPicker } from "@/components/map/LocationPicker";
 
 const REGIONS = [
   "Bratislavský",
@@ -17,20 +18,34 @@ const REGIONS = [
 
 const INITIAL: ActionState = { ok: false };
 
+/** Map a Nominatim region string ("Žilinský kraj") to one of our options. */
+function matchRegion(raw: string | null): string {
+  if (!raw) return "";
+  const cleaned = raw.replace(/\s*kraj\s*/i, "").trim();
+  return REGIONS.find((r) => cleaned.toLowerCase().startsWith(r.toLowerCase().slice(0, 6))) ?? "";
+}
+
 export function LocationForm({
   defaultRegion,
   defaultCity,
+  defaultLat,
+  defaultLng,
 }: {
   defaultRegion: string;
   defaultCity: string;
+  defaultLat: number | null;
+  defaultLng: number | null;
 }) {
   const [state, formAction] = useActionState(saveLocationAction, INITIAL);
+  const [region, setRegion] = useState(defaultRegion);
+  const [city, setCity] = useState(defaultCity);
 
   return (
     <form action={formAction} className="mt-5 flex flex-1 flex-col px-5">
       <select
         name="region"
-        defaultValue={defaultRegion}
+        value={region}
+        onChange={(e) => setRegion(e.target.value)}
         className="input-light text-brand-purple"
       >
         <option value="">Vyberte kraj</option>
@@ -44,30 +59,26 @@ export function LocationForm({
       <input
         name="city"
         type="text"
-        defaultValue={defaultCity}
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
         placeholder="Mesto (voliteľné)"
         className="input-light mt-3"
       />
 
       <p className="my-3 text-center text-xs text-brand-purple/60">
-        alebo vyberte na mape
+        alebo označte miesto kde bývate na mape
       </p>
 
-      <div className="relative h-56 w-full overflow-hidden rounded-3xl bg-[#e8e1d8]">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "radial-gradient(rgba(111,35,128,0.18) 1px, transparent 1px)",
-            backgroundSize: "14px 14px",
-          }}
-        />
-        <div className="absolute left-1/2 top-1/2 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-brand-purple text-white shadow-lg">
-          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
-            <path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7zm0 9.5A2.5 2.5 0 1012 6a2.5 2.5 0 000 5.5z" />
-          </svg>
-        </div>
-      </div>
+      <LocationPicker
+        defaultLat={defaultLat}
+        defaultLng={defaultLng}
+        height="h-56"
+        onResolved={({ city: c, region: r }) => {
+          if (c) setCity(c);
+          const matched = matchRegion(r);
+          if (matched) setRegion(matched);
+        }}
+      />
 
       <FormError message={state.message} />
 

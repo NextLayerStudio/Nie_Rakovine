@@ -44,24 +44,110 @@ async function main() {
   const endsAt = new Date(startsAt);
   endsAt.setHours(11, 30, 0, 0);
 
+  const clubProfile = await prisma.clubProfile.upsert({
+    where: { handle: "onko-klub" },
+    create: {
+      handle: "onko-klub",
+      displayName: "ONKO KLUB",
+      bio: "Oficiálny profil klubu — videá, články, recepty a podujatia.",
+      published: true,
+      sortOrder: 0,
+    },
+    update: {},
+  });
+
   const yogaSlug = "yoga-sample";
   await prisma.event.upsert({
     where: { id: yogaSlug },
     create: {
       id: yogaSlug,
+      profileId: clubProfile.id,
       title: "ONKO YOGA",
       description:
         "Pravidelné jogové stretnutia pre členky a členov klubu. Lekcia je vedená skúsenou cvičiteľkou špecializovanou na onkologických pacientov. Cvičenie je vhodné pre začiatočníkov.",
+      category: "FYZICKE",
       location: "Trnavská cesta 25, Bratislava",
+      latitude: 48.1620,
+      longitude: 17.1450,
       startsAt,
       endsAt,
       capacity: 15,
       published: true,
     },
-    update: {},
+    update: {
+      profileId: clubProfile.id,
+      category: "FYZICKE",
+      latitude: 48.1620,
+      longitude: 17.1450,
+    },
   });
 
+  // A few more events spread across Slovakia + categories (calendar/near-me tests)
+  const extraEvents = [
+    {
+      id: "event-edu-kosice",
+      title: "Prednáška: výživa počas liečby",
+      description: "Odborná prednáška s diskusiou a priestorom na otázky.",
+      category: "EDUKACNE" as const,
+      location: "Hlavná 50, Košice",
+      latitude: 48.7200,
+      longitude: 21.2580,
+      dayOffset: 7,
+    },
+    {
+      id: "event-relax-zilina",
+      title: "Relaxačné popoludnie",
+      description: "Mindfulness, dýchanie a oddych v príjemnom prostredí.",
+      category: "RELAXACNE" as const,
+      location: "Národná 12, Žilina",
+      latitude: 49.2230,
+      longitude: 18.7390,
+      dayOffset: 10,
+    },
+    {
+      id: "event-mental-nitra",
+      title: "Skupinová psychologická podpora",
+      description: "Bezpečný priestor na zdieľanie pod vedením psychológa.",
+      category: "MENTALNE" as const,
+      location: "Štefánikova 8, Nitra",
+      latitude: 48.3060,
+      longitude: 18.0860,
+      dayOffset: 21,
+    },
+  ];
+
+  for (const ev of extraEvents) {
+    const s = new Date();
+    s.setDate(s.getDate() + ev.dayOffset);
+    s.setHours(16, 0, 0, 0);
+    const e = new Date(s);
+    e.setHours(18, 0, 0, 0);
+    await prisma.event.upsert({
+      where: { id: ev.id },
+      create: {
+        id: ev.id,
+        profileId: clubProfile.id,
+        title: ev.title,
+        description: ev.description,
+        category: ev.category,
+        location: ev.location,
+        latitude: ev.latitude,
+        longitude: ev.longitude,
+        startsAt: s,
+        endsAt: e,
+        capacity: 20,
+        published: true,
+      },
+      update: {
+        category: ev.category,
+        latitude: ev.latitude,
+        longitude: ev.longitude,
+      },
+    });
+  }
+
   // ---------- Sample posts -------------------------------------------------
+  // cancerTypes [] = general (everyone). Non-empty = targeted personalisation.
   const posts = [
     {
       id: "sample-video-1",
@@ -71,6 +157,7 @@ async function main() {
       body: null,
       coverUrl: null,
       videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      cancerTypes: [] as const,
     },
     {
       id: "sample-article-1",
@@ -81,6 +168,7 @@ async function main() {
       body: "## Prvý mesiac\n\nDoprajte si oddych...",
       coverUrl: null,
       videoUrl: null,
+      cancerTypes: [] as const,
     },
     {
       id: "sample-recipe-1",
@@ -90,6 +178,28 @@ async function main() {
       body: "**Suroviny:** paradajky, cibuľa, cesnak, bazalka, olivový olej...",
       coverUrl: null,
       videoUrl: null,
+      cancerTypes: [] as const,
+    },
+    {
+      id: "sample-article-prsnik",
+      type: "ARTICLE" as const,
+      title: "Rakovina prsníka: čo očakávať po operácii",
+      excerpt:
+        "Sprievodca rekonvalescenciou a rehabilitáciou po operácii prsníka.",
+      body: "## Po operácii\n\nRehabilitácia ramena a starostlivosť o jazvu...",
+      coverUrl: null,
+      videoUrl: null,
+      cancerTypes: ["PRSNIK"] as const,
+    },
+    {
+      id: "sample-article-prostata",
+      type: "ARTICLE" as const,
+      title: "Život s rakovinou prostaty — praktické rady",
+      excerpt: "Ako zvládať liečbu a každodenný život s diagnózou prostaty.",
+      body: "## Bežný deň\n\nPohyb, strava a kontrolné vyšetrenia...",
+      coverUrl: null,
+      videoUrl: null,
+      cancerTypes: ["PROSTATA"] as const,
     },
   ];
 
@@ -98,10 +208,12 @@ async function main() {
       where: { id: p.id },
       create: {
         ...p,
+        cancerTypes: [...p.cancerTypes],
+        profileId: clubProfile.id,
         published: true,
         publishedAt: new Date(),
       },
-      update: {},
+      update: { profileId: clubProfile.id, cancerTypes: [...p.cancerTypes] },
     });
   }
 
@@ -145,6 +257,21 @@ async function main() {
     update: {},
   });
 
+  // Targeted forum — only shown mainly to users with breast cancer.
+  await prisma.forum.upsert({
+    where: { id: "forum-prsnik" },
+    create: {
+      id: "forum-prsnik",
+      title: "RAKOVINA PRSNÍKA",
+      description:
+        "Komunita pre pacientky a pacientov s rakovinou prsníka — skúsenosti, otázky a vzájomná podpora.",
+      accentColor: "#CA6A8A",
+      published: true,
+      cancerTypes: ["PRSNIK"],
+    },
+    update: { cancerTypes: ["PRSNIK"] },
+  });
+
   const sampleThread = await prisma.forumThread.upsert({
     where: { id: "thread-sample-1" },
     create: {
@@ -155,8 +282,9 @@ async function main() {
       body:
         "Ahojte všetkým, chcela by som sa podeliť o jednoduché cvičenia, ktoré mi pomáhajú po chemoterapii. Čo funguje vám?",
       likeCount: 15,
+      status: "APPROVED",
     },
-    update: {},
+    update: { status: "APPROVED" },
   });
 
   await prisma.forumComment.upsert({
@@ -167,11 +295,12 @@ async function main() {
       authorId: admin.id,
       body:
         "Ďakujem za otvorenie tejto témy — veľmi to pomáha novým členkám.",
+      status: "APPROVED",
     },
-    update: {},
+    update: { status: "APPROVED" },
   });
 
-  console.log(`✔ Vzorové podujatie, obsah a fóra pripravené.`);
+  console.log(`✔ Profil, podujatie, obsah a fóra pripravené.`);
 }
 
 main()

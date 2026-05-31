@@ -17,7 +17,7 @@ export default async function DiagnosisStep() {
 
       <div className="px-6 text-center">
         <h2 className="text-base font-semibold text-brand-purple">
-          Napíšte vašu diagnózu
+          Vaša diagnóza
         </h2>
       </div>
 
@@ -25,6 +25,7 @@ export default async function DiagnosisStep() {
         defaultDiagnosis={user.profile?.diagnosis ?? ""}
         defaultPhase={user.profile?.diagnosisPhase ?? ""}
         defaultYear={user.profile?.diagnosisYear ?? null}
+        defaultCancerTypes={user.profile?.cancerTypes ?? []}
       />
     </PhoneShell>
   );

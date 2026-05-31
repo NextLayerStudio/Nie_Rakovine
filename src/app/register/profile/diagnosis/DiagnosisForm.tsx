@@ -1,8 +1,10 @@
 "use client";
 
 import { useActionState } from "react";
+import type { CancerType } from "@prisma/client";
 import { saveDiagnosisAction, type ActionState } from "@/lib/actions/profile";
 import { FormError, SubmitButton } from "@/components/FormError";
+import { CancerTypeSelect } from "@/components/CancerTypeSelect";
 
 const PHASES = ["1. fáza", "2. fáza", "3. fáza", "4. fáza", "Remisia"];
 
@@ -12,21 +14,31 @@ export function DiagnosisForm({
   defaultDiagnosis,
   defaultPhase,
   defaultYear,
+  defaultCancerTypes,
 }: {
   defaultDiagnosis: string;
   defaultPhase: string;
   defaultYear: number | null;
+  defaultCancerTypes: CancerType[];
 }) {
   const [state, formAction] = useActionState(saveDiagnosisAction, INITIAL);
 
   return (
     <form action={formAction} className="mt-5 flex flex-1 flex-col gap-3 px-5">
+      <div>
+        <label className="label">Typ onkologického ochorenia</label>
+        <CancerTypeSelect
+          defaultValue={defaultCancerTypes}
+          helpText="Vyberte jeden alebo viac typov. Podľa toho vám prispôsobíme obsah, profily, fóra a aktivity."
+        />
+      </div>
+
       <input
         name="diagnosis"
         type="text"
         defaultValue={defaultDiagnosis}
-        placeholder="napr. karcinóm prsníka"
-        className="input-light"
+        placeholder="Spresnenie diagnózy (voliteľné)"
+        className="input-light mt-2"
       />
 
       <div>

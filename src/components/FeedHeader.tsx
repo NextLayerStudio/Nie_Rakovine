@@ -1,6 +1,12 @@
 import Link from "next/link";
 
-export function FeedHeader({ name }: { name: string }) {
+export function FeedHeader({
+  name,
+  unreadCount = 0,
+}: {
+  name: string;
+  unreadCount?: number;
+}) {
   return (
     <header className="px-5 pb-2 pt-4 font-sans">
       <div className="flex items-center justify-between gap-3">
@@ -30,7 +36,11 @@ export function FeedHeader({ name }: { name: string }) {
             aria-label="Notifikácie"
             className="relative grid h-11 w-11 place-items-center rounded-full bg-brand-pink-soft text-black"
           >
-            <span className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full bg-brand-pink" />
+            {unreadCount > 0 && (
+              <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-pink px-1 text-[9px] font-bold text-white">
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
               <path
                 d="M6 16V11a6 6 0 1112 0v5l1.5 2H4.5L6 16zM10 20a2 2 0 004 0"

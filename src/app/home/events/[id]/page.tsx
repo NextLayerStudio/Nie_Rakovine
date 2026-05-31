@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { FeedHeader } from "@/components/FeedHeader";
+import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { EventRegistrationForm } from "./EventRegistrationForm";
@@ -44,7 +44,7 @@ export default async function EventPage({
 
   return (
     <>
-      <FeedHeader name={user.fullName} />
+      <FeedHeaderWrapper />
 
       <article className="mx-4 overflow-hidden rounded-3xl bg-white shadow-card">
         <div className="aspect-[5/3] w-full" style={cover} />

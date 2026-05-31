@@ -24,6 +24,8 @@ export default async function LocationStep() {
       <LocationForm
         defaultRegion={user.profile?.region ?? ""}
         defaultCity={user.profile?.city ?? ""}
+        defaultLat={user.profile?.latitude ?? null}
+        defaultLng={user.profile?.longitude ?? null}
       />
     </PhoneShell>
   );

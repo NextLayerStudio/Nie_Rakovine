@@ -14,6 +14,7 @@ export default {
           purple: "#6F2380",
           "purple-soft": "#6F238066",
           pink: "#CA6A8A",
+          "pink-register": "#D588A1",
           "pink-soft": "#CA6A8ACC",
           white: "#FFFFFF",
         },

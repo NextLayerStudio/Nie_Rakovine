@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { loginAction, type ActionState } from "@/lib/actions/auth";
 import { FormError, SubmitButton } from "@/components/FormError";
+import { LoginLoadingOverlay } from "./LoginLoadingOverlay";
 
 const INITIAL: ActionState = { ok: false };
 
@@ -24,8 +25,11 @@ export function LoginForm({
     }
   }, [state, router]);
 
+  const redirecting = state.ok && !!state.redirectTo;
+
   return (
     <form action={formAction} className="mt-6 flex flex-1 flex-col gap-4 px-6">
+      <LoginLoadingOverlay redirecting={redirecting} />
       <input type="hidden" name="next" value={next} />
 
       {isAdminLogin && (

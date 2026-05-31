@@ -1,52 +1,56 @@
-import Link from "next/link";
-import { FeedHeader } from "@/components/FeedHeader";
+import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
+import { CalendarView, type CalendarEvent } from "@/components/calendar/CalendarView";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
+import { distanceKm } from "@/lib/geo";
+import { relevantWhere } from "@/lib/cancer-personalization";
 
 export const dynamic = "force-dynamic";
 
 export default async function CalendarPage() {
   const user = await requireUser();
-  const events = await prisma.event.findMany({
-    where: { published: true, startsAt: { gte: new Date() } },
-    orderBy: { startsAt: "asc" },
-  });
+  const userTypes = user.profile?.cancerTypes ?? [];
+
+  const [events, registrations] = await Promise.all([
+    prisma.event.findMany({
+      where: { published: true, ...relevantWhere(userTypes) },
+      orderBy: { startsAt: "asc" },
+      include: { profile: { select: { displayName: true, handle: true } } },
+    }),
+    prisma.eventRegistration.findMany({
+      where: { userId: user.id },
+      select: { eventId: true },
+    }),
+  ]);
+
+  const registeredIds = new Set(registrations.map((r) => r.eventId));
+  const me = {
+    latitude: user.profile?.latitude ?? null,
+    longitude: user.profile?.longitude ?? null,
+  };
+
+  const calendarEvents: CalendarEvent[] = events.map((e) => ({
+    id: e.id,
+    title: e.title,
+    description: e.description,
+    location: e.location,
+    coverUrl: e.coverUrl,
+    category: e.category,
+    startsAt: e.startsAt.toISOString(),
+    endsAt: e.endsAt ? e.endsAt.toISOString() : null,
+    profileName: e.profile?.displayName ?? "ONKO KLUB",
+    registered: registeredIds.has(e.id),
+    distanceKm: distanceKm(me, e),
+  }));
 
   return (
     <>
-      <FeedHeader name={user.fullName} />
-      <section className="mx-4 space-y-3">
-        <h2 className="px-1 text-base font-bold text-brand-purple">Kalendár</h2>
-
-        {events.length === 0 ? (
-          <div className="card p-5 text-xs text-brand-purple/70">
-            Žiadne pripravované podujatia.
-          </div>
-        ) : (
-          events.map((event) => (
-            <Link
-              key={event.id}
-              href={`/home/events/${event.id}`}
-              className="block rounded-3xl bg-white p-4 shadow-card"
-            >
-              <p className="text-[11px] font-medium uppercase text-brand-pink">
-                {new Intl.DateTimeFormat("sk-SK", {
-                  day: "numeric",
-                  month: "long",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                }).format(event.startsAt)}
-              </p>
-              <p className="mt-1 text-sm font-bold text-brand-purple">
-                {event.title}
-              </p>
-              {event.location && (
-                <p className="text-xs text-brand-purple/70">{event.location}</p>
-              )}
-            </Link>
-          ))
-        )}
-      </section>
+      <FeedHeaderWrapper />
+      <CalendarView
+        events={calendarEvents}
+        hasLocation={me.latitude !== null && me.longitude !== null}
+        radiusKm={user.profile?.notifyRadiusKm ?? 50}
+      />
     </>
   );
 }
