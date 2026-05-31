@@ -1,21 +1,43 @@
 /**
- * Ensures DATABASE_URL_UNPOOLED exists before any Prisma CLI command.
- * Vercel/Neon often only inject DATABASE_URL (pooled) — Prisma schema needs
- * directUrl for migrate deploy.
+ * Ensures Prisma env vars exist before CLI commands.
  *
- * Resolution order:
- *   1. DATABASE_URL_UNPOOLED (explicit)
- *   2. DIRECT_URL (Vercel Postgres / some Neon templates)
- *   3. POSTGRES_URL_NON_POOLING (Neon + Vercel integration)
- *   4. Derive from DATABASE_URL (strip "-pooler" from hostname)
+ * Vercel Storage / Neon integration uses STORAGE_* names; Prisma expects
+ * DATABASE_URL and DATABASE_URL_UNPOOLED — this script maps them.
  *
- * Writes DATABASE_URL_UNPOOLED into .env so Prisma CLI picks it up on Vercel.
+ * postinstall: use --generate-only (no real DB needed during npm install).
+ * build: requires a real URL from Vercel env (STORAGE_* or standard names).
  */
 import fs from "node:fs";
 import path from "node:path";
 
+const PLACEHOLDER =
+  "postgresql://build:build@127.0.0.1:5432/build?schema=public";
+
+const generateOnly = process.argv.includes("--generate-only");
+
+const POOLED_KEYS = [
+  "DATABASE_URL",
+  "STORAGE_DATABASE_URL",
+  "POSTGRES_URL",
+];
+
+const UNPOOLED_KEYS = [
+  "DATABASE_URL_UNPOOLED",
+  "STORAGE_DATABASE_URL_UNPOOLED",
+  "DIRECT_URL",
+  "POSTGRES_URL_NON_POOLING",
+];
+
 function trimQuotes(v) {
   return v?.trim().replace(/^["']|["']$/g, "") ?? "";
+}
+
+function firstEnv(keys) {
+  for (const key of keys) {
+    const v = trimQuotes(process.env[key]);
+    if (v) return v;
+  }
+  return "";
 }
 
 function deriveFromPooled(pooled) {
@@ -35,40 +57,50 @@ function deriveFromPooled(pooled) {
   }
 }
 
-function resolveUnpooledUrl() {
-  const explicit = trimQuotes(process.env.DATABASE_URL_UNPOOLED);
+function resolveUnpooledUrl(pooledUrl) {
+  const explicit = firstEnv(UNPOOLED_KEYS);
   if (explicit) return explicit;
+  return deriveFromPooled(pooledUrl);
+}
 
-  for (const key of ["DIRECT_URL", "POSTGRES_URL_NON_POOLING"]) {
-    const v = trimQuotes(process.env[key]);
-    if (v) return v;
+function upsertEnvFile(key, value) {
+  const envPath = path.join(process.cwd(), ".env");
+  let lines = [];
+  if (fs.existsSync(envPath)) {
+    lines = fs.readFileSync(envPath, "utf8").split("\n");
+    lines = lines.filter((line) => !line.startsWith(`${key}=`));
   }
-
-  return deriveFromPooled(process.env.DATABASE_URL);
+  const safe = value.replace(/"/g, '\\"');
+  lines.push(`${key}="${safe}"`);
+  fs.writeFileSync(envPath, lines.filter(Boolean).join("\n") + "\n");
 }
 
-const unpooled = resolveUnpooledUrl();
-if (!unpooled) {
-  console.error(
-    "\n[ensure-db-env] Missing database URL for Prisma migrations.\n" +
-      "Set one of these in Vercel → Environment Variables:\n" +
-      "  • DATABASE_URL_UNPOOLED (Neon direct connection)\n" +
-      "  • DIRECT_URL\n" +
-      "  • POSTGRES_URL_NON_POOLING\n" +
-      "  • or DATABASE_URL (pooled Neon URL — we will strip -pooler automatically)\n",
-  );
-  process.exit(1);
+let databaseUrl = firstEnv(POOLED_KEYS);
+let unpooled = resolveUnpooledUrl(databaseUrl);
+
+if (!databaseUrl || !unpooled) {
+  if (generateOnly) {
+    if (!databaseUrl) databaseUrl = PLACEHOLDER;
+    if (!unpooled) unpooled = deriveFromPooled(databaseUrl) ?? PLACEHOLDER;
+    console.log(
+      "[ensure-db-env] generate-only: placeholder env (install phase, no DB needed)",
+    );
+  } else {
+    console.error(
+      "\n[ensure-db-env] Missing database URL for Prisma migrations.\n" +
+        "On Vercel with Storage, you should have STORAGE_DATABASE_URL.\n" +
+        "Or set DATABASE_URL manually in Environment Variables.\n",
+    );
+    process.exit(1);
+  }
+} else {
+  const source = trimQuotes(process.env.STORAGE_DATABASE_URL)
+    ? "STORAGE_DATABASE_URL"
+    : "DATABASE_URL";
+  console.log(`[ensure-db-env] Mapped ${source} → DATABASE_URL for Prisma`);
 }
 
+process.env.DATABASE_URL = databaseUrl;
 process.env.DATABASE_URL_UNPOOLED = unpooled;
-
-const envPath = path.join(process.cwd(), ".env");
-let lines = [];
-if (fs.existsSync(envPath)) {
-  lines = fs.readFileSync(envPath, "utf8").split("\n");
-  lines = lines.filter((line) => !line.startsWith("DATABASE_URL_UNPOOLED="));
-}
-lines.push(`DATABASE_URL_UNPOOLED="${unpooled.replace(/"/g, '\\"')}"`);
-fs.writeFileSync(envPath, lines.filter(Boolean).join("\n") + "\n");
-
-console.log("[ensure-db-env] DATABASE_URL_UNPOOLED ready for Prisma");
+upsertEnvFile("DATABASE_URL", databaseUrl);
+upsertEnvFile("DATABASE_URL_UNPOOLED", unpooled);

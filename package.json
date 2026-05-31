@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "node scripts/ensure-db-env.mjs && prisma generate",
+    "postinstall": "node scripts/ensure-db-env.mjs --generate-only && prisma generate",
     "dev": "next dev",
     "build": "node scripts/ensure-db-env.mjs && prisma generate && prisma migrate deploy && next build",
     "start": "next start",

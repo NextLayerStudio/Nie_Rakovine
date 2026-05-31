@@ -4,12 +4,20 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
+/** Vercel Storage / Neon may expose STORAGE_DATABASE_URL instead of DATABASE_URL. */
+function getRawDatabaseUrl(): string {
+  for (const key of ["DATABASE_URL", "STORAGE_DATABASE_URL", "POSTGRES_URL"]) {
+    const raw = process.env[key]?.trim().replace(/^["']|["']$/g, "");
+    if (raw) return raw;
+  }
+  throw new Error(
+    "DATABASE_URL is not set (also checked STORAGE_DATABASE_URL)",
+  );
+}
+
 /** Tune Neon pooler URL — avoids P2024 pool exhaustion in Next.js dev. */
 function getDatabaseUrl(): string {
-  const raw = process.env.DATABASE_URL?.trim().replace(/^["']|["']$/g, "");
-  if (!raw) {
-    throw new Error("DATABASE_URL is not set");
-  }
+  const raw = getRawDatabaseUrl();
 
   try {
     const normalized = raw.replace(/^postgresql:/, "postgres:");
