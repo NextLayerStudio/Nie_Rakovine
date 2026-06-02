@@ -1,11 +1,10 @@
 /**
  * Ensures Prisma env vars exist before CLI commands.
  *
- * Vercel Storage / Neon integration uses STORAGE_* names; Prisma expects
- * DATABASE_URL and DATABASE_URL_UNPOOLED — this script maps them.
+ * Vercel Storage uses STORAGE_* names; Prisma expects DATABASE_URL /
+ * DATABASE_URL_UNPOOLED — this script maps them.
  *
- * postinstall: use --generate-only (no real DB needed during npm install).
- * build: requires a real URL from Vercel env (STORAGE_* or standard names).
+ * --generate-only: placeholders only in process.env (never writes .env).
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -32,9 +31,29 @@ function trimQuotes(v) {
   return v?.trim().replace(/^["']|["']$/g, "") ?? "";
 }
 
+function isPlaceholder(url) {
+  return !url || url.includes("127.0.0.1") || url.includes("@build:");
+}
+
+function readFromEnvFile(key) {
+  const envPath = path.join(process.cwd(), ".env");
+  if (!fs.existsSync(envPath)) return "";
+  for (const line of fs.readFileSync(envPath, "utf8").split("\n")) {
+    if (line.startsWith(`${key}=`)) {
+      const v = trimQuotes(line.slice(key.length + 1));
+      if (!isPlaceholder(v)) return v;
+    }
+  }
+  return "";
+}
+
 function firstEnv(keys) {
   for (const key of keys) {
     const v = trimQuotes(process.env[key]);
+    if (v && !isPlaceholder(v)) return v;
+  }
+  for (const key of keys) {
+    const v = readFromEnvFile(key);
     if (v) return v;
   }
   return "";
@@ -64,6 +83,7 @@ function resolveUnpooledUrl(pooledUrl) {
 }
 
 function upsertEnvFile(key, value) {
+  if (isPlaceholder(value)) return;
   const envPath = path.join(process.cwd(), ".env");
   let lines = [];
   if (fs.existsSync(envPath)) {
@@ -83,7 +103,7 @@ if (!databaseUrl || !unpooled) {
     if (!databaseUrl) databaseUrl = PLACEHOLDER;
     if (!unpooled) unpooled = deriveFromPooled(databaseUrl) ?? PLACEHOLDER;
     console.log(
-      "[ensure-db-env] generate-only: placeholder env (install phase, no DB needed)",
+      "[ensure-db-env] generate-only: in-memory placeholder ( .env not modified )",
     );
   } else {
     console.error(
@@ -102,5 +122,9 @@ if (!databaseUrl || !unpooled) {
 
 process.env.DATABASE_URL = databaseUrl;
 process.env.DATABASE_URL_UNPOOLED = unpooled;
-upsertEnvFile("DATABASE_URL", databaseUrl);
-upsertEnvFile("DATABASE_URL_UNPOOLED", unpooled);
+
+// Never write build placeholders into .env (breaks local dev).
+if (!generateOnly) {
+  upsertEnvFile("DATABASE_URL", databaseUrl);
+  upsertEnvFile("DATABASE_URL_UNPOOLED", unpooled);
+}

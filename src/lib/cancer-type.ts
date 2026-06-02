@@ -57,6 +57,12 @@ export function cancerTypeShort(type: CancerType): string {
   return CANCER_TYPE_META[type]?.short ?? String(type);
 }
 
+/** Human-readable list for profile / admin (e.g. "Rakovina prsníka, Lymfóm"). */
+export function formatCancerTypes(types: CancerType[] | undefined | null): string {
+  if (!types?.length) return "—";
+  return types.map(cancerTypeLabel).join(", ");
+}
+
 /** Parse + validate cancer types coming from a form submission. */
 export function parseCancerTypes(values: FormDataEntryValue[]): CancerType[] {
   const valid = new Set<string>(CANCER_TYPES);

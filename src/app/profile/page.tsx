@@ -2,6 +2,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { PhoneShell } from "@/components/PhoneShell";
 import { TopBar } from "@/components/TopBar";
 import { requireUser } from "@/lib/auth";
+import { formatCancerTypes } from "@/lib/cancer-type";
 
 export const dynamic = "force-dynamic";
 
@@ -41,7 +42,14 @@ export default async function ProfilePage() {
             </h3>
             <div className="card divide-y divide-brand-purple/10">
               <Row label="Lokalita" value={[user.profile.region, user.profile.city].filter(Boolean).join(", ") || "—"} />
-              <Row label="Diagnóza" value={user.profile.diagnosis || "—"} />
+              <Row
+                label="Typ ochorenia"
+                value={formatCancerTypes(user.profile.cancerTypes)}
+              />
+              <Row
+                label="Diagnóza"
+                value={user.profile.diagnosis || "—"}
+              />
               <Row label="Fáza" value={user.profile.diagnosisPhase || "—"} />
               <Row label="Rok diagnózy" value={user.profile.diagnosisYear?.toString() || "—"} />
               <Row label="Záujmy" value={user.profile.interests.join(", ") || "—"} />
