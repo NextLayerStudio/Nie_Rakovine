@@ -16,7 +16,7 @@ export function BottomNav() {
 
   return (
     <nav
-      className="sticky bottom-0 z-20 mt-auto bg-white px-6 pt-2"
+      className="z-20 shrink-0 bg-white px-6 pt-2"
       style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
     >
       <ul className="mx-auto grid h-[64px] w-full max-w-[340px] grid-cols-4 items-center rounded-full bg-brand-pink px-2 shadow-soft">

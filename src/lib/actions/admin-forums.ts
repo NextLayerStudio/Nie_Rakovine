@@ -29,7 +29,15 @@ export async function createForumAction(
   if (!title) return { ok: false, message: "Zadajte názov fóra." };
 
   await prisma.forum.create({
-    data: { title, description, imageUrl, accentColor, published, cancerTypes },
+    data: {
+      title,
+      description,
+      imageUrl,
+      accentColor,
+      published,
+      cancerTypes,
+      createdById: null,
+    },
   });
 
   revalidatePath("/admin/forums");
@@ -71,6 +79,28 @@ export async function deleteForumAction(formData: FormData): Promise<void> {
   revalidatePath("/admin/forums");
   revalidatePath("/home/forums");
   redirect("/admin/forums");
+}
+
+/** Approve a user-proposed forum: make it visible to everyone. */
+export async function approveForumAction(formData: FormData): Promise<void> {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+  await prisma.forum.update({ where: { id }, data: { published: true } });
+  revalidatePath("/admin/forums");
+  revalidatePath("/admin/forums/moderation");
+  revalidatePath("/home/forums");
+}
+
+/** Reject a user-proposed forum by deleting it. */
+export async function rejectForumAction(formData: FormData): Promise<void> {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  if (!id) return;
+  await prisma.forum.delete({ where: { id } });
+  revalidatePath("/admin/forums");
+  revalidatePath("/admin/forums/moderation");
+  revalidatePath("/home/forums");
 }
 
 // ---------- Admin: forum posts (only admin publishes) --------------------

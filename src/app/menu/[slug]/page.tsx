@@ -3,13 +3,10 @@ import { PhoneShell } from "@/components/PhoneShell";
 import { TopBar } from "@/components/TopBar";
 
 const LABELS: Record<string, string> = {
-  "zdravotna-karta": "Moja zdravotná karta",
-  cvicenie: "Cvičenie",
-  profil: "Môj profil",
-  "kontakt-lekar": "Kontakt na lekára",
+  "zlavova-karta": "Moja zľavová karta",
+  "kontent-kniznica": "Kontent knižnica",
   zlavy: "Zľavy",
   aktivity: "Aktivity",
-  clenovia: "Členov",
   informacie: "Informácie",
   nastavenia: "Nastavenia",
 };
@@ -24,7 +21,7 @@ export default async function MenuItemPage({
 
   return (
     <PhoneShell>
-      <div className="flex flex-1 flex-col overflow-y-auto">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         <TopBar backHref="/menu" title={title} />
 
         <section className="px-6 py-4">

@@ -8,7 +8,7 @@ export function FeedHeader({
   unreadCount?: number;
 }) {
   return (
-    <header className="px-5 pb-2 pt-4 font-sans">
+    <header className="px-5 pb-1.5 pt-3 font-sans">
       <div className="flex items-center justify-between gap-3">
         <Link
           href="/profile"
@@ -16,7 +16,7 @@ export function FeedHeader({
         >
           <div
             aria-hidden
-            className="h-14 w-14 shrink-0 rounded-full bg-cover bg-center ring-2 ring-brand-purple/15"
+            className="h-12 w-12 shrink-0 rounded-full bg-cover bg-center ring-2 ring-brand-purple/15"
             style={{
               backgroundImage:
                 "linear-gradient(135deg, #b8c0c4 0%, #6f2380 100%)",
@@ -24,7 +24,7 @@ export function FeedHeader({
           />
           <div className="min-w-0">
             <p className="text-sm leading-none text-brand-pink">Ahoj!</p>
-            <p className="mt-1 truncate text-[22px] font-bold leading-tight text-black">
+            <p className="mt-0.5 truncate text-xl font-bold leading-tight text-black">
               {name}
             </p>
           </div>

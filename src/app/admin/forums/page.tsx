@@ -64,7 +64,13 @@ export default async function AdminForumsPage() {
                 <td className="px-4 py-3">{f._count.members}</td>
                 <td className="px-4 py-3">{f._count.threads}</td>
                 <td className="px-4 py-3">
-                  {f.published ? "Publikované" : "Skryté"}
+                  {f.published ? (
+                    "Publikované"
+                  ) : (
+                    <span className="rounded-pill bg-brand-pink-soft/60 px-2 py-0.5 text-xs font-semibold text-brand-purple">
+                      Čaká na schválenie
+                    </span>
+                  )}
                 </td>
                 <td className="px-4 py-3 text-right">
                   <Link

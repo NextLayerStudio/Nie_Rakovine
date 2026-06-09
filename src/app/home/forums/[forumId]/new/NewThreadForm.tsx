@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { createThreadAction, type ActionState } from "@/lib/actions/forums";
+import { PostImagePicker } from "@/components/PostImagePicker";
 import { FormError, SubmitButton } from "@/components/FormError";
 
 const INITIAL: ActionState = { ok: false };
@@ -21,11 +22,12 @@ export function NewThreadForm({ forumId }: { forumId: string }) {
         name="body"
         required
         rows={6}
-        placeholder="Napíšte správu do fóra…"
+        placeholder="Napíšte príspevok do fóra…"
         className="w-full rounded-2xl border border-brand-purple/15 bg-white px-4 py-3 text-sm text-brand-purple outline-none focus:border-brand-purple"
       />
+      <PostImagePicker />
       <p className="text-center text-[11px] text-brand-purple/60">
-        Po odoslaní správa čaká na overenie administrátorom.
+        Po odoslaní príspevok čaká na overenie administrátorom.
       </p>
       <SubmitButton className="w-full rounded-full bg-brand-pink py-3 text-sm font-semibold text-white">
         Odoslať na schválenie

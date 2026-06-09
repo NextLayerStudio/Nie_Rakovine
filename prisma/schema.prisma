@@ -79,6 +79,7 @@ model User {
   eventRegistrations EventRegistration[]
   articleLikes       ArticleLike[]
   forumMemberships   ForumMembership[]
+  createdForums      Forum[]             @relation("ForumCreator")
   forumThreads       ForumThread[]
   forumThreadLikes   ForumThreadLike[]
   forumComments      ForumComment[]
@@ -281,6 +282,9 @@ model Forum {
   accentColor String?  @default("#6F2380") // fallback when no imageUrl
   published   Boolean  @default(true)
   cancerTypes CancerType[] @default([])
+  // Set when a regular user proposes a forum — stays unpublished until admin approves.
+  createdById String?
+  createdBy   User?    @relation("ForumCreator", fields: [createdById], references: [id], onDelete: SetNull)
 
   members ForumMembership[]
   threads ForumThread[]

@@ -6,10 +6,14 @@ export function ForumFollowButton({
   forumId,
   isFollowing,
   size = "sm",
+  joinLabel = "Sledovať",
+  joinedLabel = "Sledujem",
 }: {
   forumId: string;
   isFollowing: boolean;
   size?: "sm" | "md";
+  joinLabel?: string;
+  joinedLabel?: string;
 }) {
   const sizing =
     size === "md" ? "px-4 py-1.5 text-xs" : "px-3 py-1 text-[10px]";
@@ -25,7 +29,7 @@ export function ForumFollowButton({
             : "border border-brand-pink text-brand-pink"
         }`}
       >
-        {isFollowing ? "Sledujem" : "Sledovať"}
+        {isFollowing ? joinedLabel : joinLabel}
       </button>
     </form>
   );

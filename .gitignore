@@ -45,6 +45,10 @@ yarn-error.log*
 *.sln
 *.sw?
 
+# User-uploaded forum images (local dev)
+public/uploads/forums/
+public/uploads/threads/
+
 # Prisma
 prisma/migrations/dev.db*
 

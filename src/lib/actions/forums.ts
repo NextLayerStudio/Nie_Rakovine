@@ -4,13 +4,24 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
+import { saveForumImage, saveUploadedImage } from "@/lib/forum-image";
 
 export type ActionState = { ok: boolean; message?: string };
+
+async function isPublishedForum(forumId: string) {
+  const forum = await prisma.forum.findFirst({
+    where: { id: forumId, published: true },
+    select: { id: true },
+  });
+  return !!forum;
+}
 
 export async function joinForumAction(formData: FormData): Promise<void> {
   const user = await requireUser();
   const forumId = String(formData.get("forumId") ?? "");
   if (!forumId) return;
+
+  if (!(await isPublishedForum(forumId))) return;
 
   await prisma.forumMembership.upsert({
     where: { forumId_userId: { forumId, userId: user.id } },
@@ -39,6 +50,7 @@ export async function toggleForumFollowAction(
       where: { forumId_userId: { forumId, userId: user.id } },
     });
   } else {
+    if (!(await isPublishedForum(forumId))) return;
     await prisma.forumMembership.create({
       data: { forumId, userId: user.id },
     });
@@ -97,9 +109,33 @@ export async function createThreadAction(
   const forumId = String(formData.get("forumId") ?? "");
   const body = String(formData.get("body") ?? "").trim();
   const title = String(formData.get("title") ?? "").trim() || null;
+  const imageFile = formData.get("image");
 
   if (!forumId || !body) {
     return { ok: false, message: "Napíšte text príspevku." };
+  }
+
+  let coverUrl: string | null = null;
+  try {
+    coverUrl = await saveUploadedImage(
+      imageFile instanceof File ? imageFile : null,
+      "threads",
+      "thread",
+    );
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Obrázok sa nepodarilo uložiť.",
+    };
+  }
+
+  // Only published (admin-approved) forums accept posts.
+  const forum = await prisma.forum.findFirst({
+    where: { id: forumId, published: true },
+    select: { id: true },
+  });
+  if (!forum) {
+    return { ok: false, message: "Fórum nie je dostupné." };
   }
 
   const membership = await prisma.forumMembership.findUnique({
@@ -115,6 +151,7 @@ export async function createThreadAction(
       authorId: user.id,
       title,
       body,
+      coverUrl,
       status: "PENDING",
     },
   });
@@ -122,6 +159,53 @@ export async function createThreadAction(
   revalidatePath("/admin/forums/moderation");
   revalidatePath(`/home/forums/${forumId}`);
   redirect(`/home/forums/${forumId}?pending=1`);
+}
+
+/** A regular user proposes a new forum. It stays hidden until an admin approves it. */
+export async function createForumByUserAction(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const user = await requireUser();
+  const title = String(formData.get("title") ?? "").trim();
+  const description = String(formData.get("description") ?? "").trim() || null;
+  const accentColor =
+    String(formData.get("accentColor") ?? "").trim() || "#6F2380";
+  const imageFile = formData.get("image");
+
+  if (!title) {
+    return { ok: false, message: "Zadajte názov fóra." };
+  }
+
+  let imageUrl: string | null = null;
+  try {
+    imageUrl = await saveForumImage(
+      imageFile instanceof File ? imageFile : null,
+    );
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Obrázok sa nepodarilo uložiť.",
+    };
+  }
+
+  // User-created forums: published=false + createdById set → admin must approve.
+  await prisma.forum.create({
+    data: {
+      title,
+      description,
+      imageUrl,
+      accentColor,
+      published: false,
+      createdById: user.id,
+      members: { create: { userId: user.id } },
+    },
+  });
+
+  revalidatePath("/admin/forums");
+  revalidatePath("/admin/forums/moderation");
+  revalidatePath("/home/forums");
+  redirect("/home/forums?submitted=1");
 }
 
 export async function createCommentAction(

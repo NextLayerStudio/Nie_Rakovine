@@ -28,25 +28,25 @@ export function PostCard({
     : { background: bg };
 
   return (
-    <article className="card mx-4 mb-4 overflow-hidden">
-      <div className="flex items-center justify-between px-4 pt-3">
-        <span className="rounded-pill bg-brand-purple/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-brand-purple">
+    <article className="card mx-4 mb-3 overflow-hidden">
+      <div className="flex items-center justify-between px-4 pt-2">
+        <span className="rounded-pill bg-brand-purple/10 px-3 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brand-purple">
           {kindLabel(type)}
         </span>
       </div>
 
-      <div className="mt-3 aspect-[5/4] w-full" style={coverStyle} />
+      <div className="mt-2 aspect-[16/9] w-full" style={coverStyle} />
 
-      <div className="px-4 py-3">
-        <h3 className="line-clamp-2 text-sm font-semibold text-brand-purple">
+      <div className="px-4 py-2">
+        <h3 className="line-clamp-1 text-sm font-semibold text-brand-purple">
           {title}
         </h3>
         {excerpt && (
-          <p className="mt-1 line-clamp-2 text-xs text-brand-purple/70">
+          <p className="mt-0.5 line-clamp-1 text-xs text-brand-purple/70">
             {excerpt}
           </p>
         )}
-        <div className="mt-3 flex items-center justify-between gap-2">
+        <div className="mt-2 flex items-center justify-between gap-2">
           {likeSlot}
           <Link
             href={href}

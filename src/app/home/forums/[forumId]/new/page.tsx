@@ -26,7 +26,7 @@ export default async function NewForumThreadPage({
 
   return (
     <>
-      <ForumSubHeader backHref={`/home/forums/${forumId}`} title="Nová správa" />
+      <ForumSubHeader backHref={`/home/forums/${forumId}`} title="Nový príspevok" />
       <NewThreadForm forumId={forumId} />
     </>
   );

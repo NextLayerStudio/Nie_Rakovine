@@ -25,14 +25,14 @@ export function FeedProfileHeader({
       };
 
   return (
-    <div className="flex items-center justify-between px-4 pt-3">
+    <div className="flex items-center justify-between px-4 pt-2 pb-0.5">
       <Link
         href={`/home/profiles/${handle}`}
         className="flex min-w-0 items-center gap-2"
       >
         <div
           aria-hidden
-          className="h-9 w-9 shrink-0 rounded-full"
+          className="h-8 w-8 shrink-0 rounded-full"
           style={avatarStyle}
         />
         <span className="truncate text-sm font-bold text-brand-purple">

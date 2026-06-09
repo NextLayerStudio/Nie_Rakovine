@@ -36,13 +36,13 @@ body {
 @layer components {
   /* Mobile shell - simulates the phone canvas on desktops, full-bleed on mobile */
   .phone-shell {
-    @apply mx-auto w-full bg-white sm:my-6 sm:max-w-[420px] sm:rounded-[36px] sm:shadow-card sm:overflow-hidden;
-    min-height: 100dvh;
+    @apply mx-auto flex h-[100dvh] max-h-[100dvh] w-full flex-col overflow-hidden bg-white sm:my-4 sm:max-w-[460px] sm:rounded-[36px] sm:shadow-card;
   }
 
   @media (min-width: 640px) {
     .phone-shell {
-      min-height: min(900px, calc(100dvh - 48px));
+      height: min(960px, calc(100dvh - 32px));
+      max-height: min(960px, calc(100dvh - 32px));
     }
   }
 

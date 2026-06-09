@@ -63,7 +63,7 @@ export default async function HomeFeedPage() {
     <>
       <FeedHeaderWrapper />
 
-      <section className="pt-1">
+      <section>
         {feed.length === 0 ? (
           <EmptyState message="Zatiaľ žiadny obsah. Admin môže pridať príspevky v profiloch." />
         ) : (
