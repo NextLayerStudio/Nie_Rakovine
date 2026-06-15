@@ -8,6 +8,7 @@ import {
   rejectThreadAction,
 } from "@/lib/actions/admin-forums";
 import { prisma } from "@/lib/prisma";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 
 export const dynamic = "force-dynamic";
 
@@ -43,12 +44,14 @@ export default async function ForumModerationPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Schvaľovanie fóra</h1>
-      <p className="mt-1 text-sm text-brand-purple/70">
-        Nové fóra od používateľov sa zobrazia ostatným až po schválení.
-      </p>
+      <AdminPageHeader
+        title="Schvaľovanie fóra"
+        description="Nové fóra od používateľov sa zobrazia ostatným až po schválení."
+        backHref="/admin/forums"
+        backLabel="Späť na fóra"
+      />
 
-      <section className="mt-8">
+      <section className="mt-2">
         <h2 className="text-sm font-bold uppercase tracking-wide text-brand-purple/60">
           Nové fóra na schválenie ({pendingForums.length})
         </h2>

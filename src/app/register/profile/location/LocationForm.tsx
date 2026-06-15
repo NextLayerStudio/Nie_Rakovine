@@ -66,7 +66,7 @@ export function LocationForm({
       />
 
       <p className="my-3 text-center text-xs text-brand-purple/60">
-        alebo označte miesto kde bývate na mape
+        Alebo vyberte miesto na mape:
       </p>
 
       <LocationPicker

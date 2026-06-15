@@ -113,6 +113,10 @@ model UserProfile {
   expectations   String[] @default([])
   hearAboutUs    String[] @default([])
 
+  // Registration consents (step 4)
+  consentMembership Boolean @default(false)
+  consentNewsletter Boolean @default(false)
+
   // Radius (km) used for "activities near me" + nearby-event notifications
   notifyRadiusKm Int      @default(50)
 

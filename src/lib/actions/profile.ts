@@ -146,15 +146,30 @@ export async function saveExpectationsAction(
   const user = await requireUser();
   const expectations = getStringArray(formData, "expectations");
   const help = getStringArray(formData, "help");
+  const consentMembership = formData.get("consentMembership") === "on";
+  const consentNewsletter = formData.get("consentNewsletter") === "on";
+
+  if (!consentMembership) {
+    return {
+      ok: false,
+      message:
+        "Pre pokračovanie je potrebný súhlas so spracovaním osobných údajov (členstvo).",
+    };
+  }
+
   // 'help' is stored under expectations array for now (separate label)
   await prisma.userProfile.upsert({
     where: { userId: user.id },
     create: {
       userId: user.id,
       expectations: [...expectations, ...help.map((h) => `pomoc: ${h}`)],
+      consentMembership,
+      consentNewsletter,
     },
     update: {
       expectations: [...expectations, ...help.map((h) => `pomoc: ${h}`)],
+      consentMembership,
+      consentNewsletter,
     },
   });
 

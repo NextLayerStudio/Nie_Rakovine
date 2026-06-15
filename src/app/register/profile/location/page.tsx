@@ -16,8 +16,12 @@ export default async function LocationStep() {
       />
 
       <div className="px-6 text-center">
-        <h2 className="text-base font-semibold text-brand-purple">
-          Zvoľte si miesto v ktorom sa nachádzate
+        <p className="text-sm leading-relaxed text-brand-purple/75">
+          Pomôžte nám spoznať vás o niečo lepšie, aby sme vám mohli prinášať
+          informácie o aktivitách a stretnutiach vo vašom okolí.
+        </p>
+        <h2 className="mt-4 text-base font-semibold text-brand-purple">
+          Zvoľte mesto, v ktorom sa nachádzate:
         </h2>
       </div>
 

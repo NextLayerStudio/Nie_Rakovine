@@ -6,6 +6,7 @@ import {
   deleteForumCommentAction,
   deleteForumThreadAction,
 } from "@/lib/actions/admin-forums";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 
 export const dynamic = "force-dynamic";
 
@@ -35,11 +36,16 @@ export default async function EditForumPage({
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Upraviť fórum</h1>
+      <AdminPageHeader
+        title="Upraviť fórum"
+        description={forum.title}
+        backHref="/admin/forums"
+        backLabel="Späť na fóra"
+      />
       <ForumAdminForm mode="edit" forum={forum} />
 
       <section className="mt-10">
-        <h2 className="text-lg font-bold">Príspevky vo fóre</h2>
+        <h2 className="text-lg font-bold text-brand-purple">Príspevky vo fóre</h2>
         <p className="mt-1 text-sm text-brand-purple/70">
           Len administrátor publikuje príspevky. Používatelia ich môžu len
           čítať po zapojení sa do fóra.
@@ -49,15 +55,12 @@ export default async function EditForumPage({
 
         <ul className="mt-6 space-y-4">
           {forum.threads.length === 0 && (
-            <li className="text-sm text-brand-purple/60">
+            <li className="rounded-xl border border-dashed border-brand-purple/20 p-5 text-center text-sm text-brand-purple/55">
               Zatiaľ žiadne príspevky.
             </li>
           )}
           {forum.threads.map((t) => (
-            <li
-              key={t.id}
-              className="rounded-2xl border border-brand-purple/10 bg-white p-4"
-            >
+            <li key={t.id} className="admin-card p-4">
               <div className="flex justify-between gap-2">
                 <div>
                   {t.title && (

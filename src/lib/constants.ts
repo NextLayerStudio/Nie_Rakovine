@@ -57,7 +57,7 @@ export const SUBSCRIPTION_PLANS = [
     id: "YEARLY" as const,
     name: "Ročné predplatné",
     description:
-      "Zaplatíte raz ročne za predplatné a máte neobmedzený prístup.",
+      "Zaplatíte raz ročne. Predplatné môžete kedykoľvek zrušiť.",
     price: "60€ / rok",
     accent: "secondary" as const,
   },
@@ -65,7 +65,7 @@ export const SUBSCRIPTION_PLANS = [
     id: "MONTHLY" as const,
     name: "Mesačné predplatné",
     description:
-      "Každý mesiac zaplatíte platbu, ľubovoľne môžete predplatné zrušiť.",
+      "Zaplatíte raz mesačne. Predplatné môžete kedykoľvek zrušiť.",
     price: "5€ / mesiac",
     accent: "primary" as const,
   },

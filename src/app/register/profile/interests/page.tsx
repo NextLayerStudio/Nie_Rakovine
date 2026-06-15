@@ -17,7 +17,10 @@ export default async function InterestsStep() {
       />
 
       <div className="px-6 text-center">
-        <h2 className="text-base font-semibold text-brand-purple">
+        <p className="text-sm leading-relaxed text-brand-purple/75">
+          Sme tu pre vás. Dajte nám vedieť, o aké aktivity máte záujem.
+        </p>
+        <h2 className="mt-4 text-base font-semibold text-brand-purple">
           O čo máte záujem?
         </h2>
       </div>

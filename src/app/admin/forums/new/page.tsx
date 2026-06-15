@@ -1,12 +1,15 @@
 import { ForumAdminForm } from "../ForumAdminForm";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 
 export default function NewForumPage() {
   return (
     <div>
-      <h1 className="text-2xl font-bold">Nové fórum</h1>
-      <p className="mt-1 text-sm text-brand-purple/70">
-        Vytvorte novú tému, do ktorej sa môžu používatelia zapojiť.
-      </p>
+      <AdminPageHeader
+        title="Nové fórum"
+        description="Vytvorte novú tému, do ktorej sa môžu používatelia zapojiť."
+        backHref="/admin/forums"
+        backLabel="Späť na fóra"
+      />
       <ForumAdminForm mode="create" />
     </div>
   );

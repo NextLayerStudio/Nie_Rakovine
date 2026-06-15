@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { subscriptionPlanLabel } from "@/lib/user-profile-display";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 
 export const dynamic = "force-dynamic";
 
@@ -30,30 +31,29 @@ export default async function AdminUsersPage({
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Používatelia</h1>
-      <p className="mt-1 text-sm text-brand-purple/70">
-        Vyhľadajte člena a kliknite na riadok pre kompletné údaje z registrácie.
-      </p>
+      <AdminPageHeader
+        title="Používatelia"
+        description="Vyhľadajte člena a kliknite na riadok pre kompletné údaje z registrácie."
+        actions={
+          <Link href="/admin/statistics" className="admin-btn-outline">
+            Štatistiky →
+          </Link>
+        }
+      />
 
-      <form method="get" className="mt-6 flex flex-wrap gap-2">
+      <form method="get" className="flex flex-wrap gap-2">
         <input
           name="q"
           type="search"
           defaultValue={query}
           placeholder="Meno alebo e-mail…"
-          className="min-w-[220px] flex-1 rounded-xl border border-brand-purple/20 px-4 py-2 text-sm focus:border-brand-purple focus:outline-none"
+          className="admin-input min-w-[220px] flex-1"
         />
-        <button
-          type="submit"
-          className="rounded-pill bg-brand-purple px-5 py-2 text-sm font-semibold text-white"
-        >
+        <button type="submit" className="admin-btn-primary">
           Hľadať
         </button>
         {query && (
-          <Link
-            href="/admin/users"
-            className="rounded-pill border border-brand-purple/30 px-4 py-2 text-sm font-semibold text-brand-purple"
-          >
+          <Link href="/admin/users" className="admin-btn-outline">
             Zrušiť filter
           </Link>
         )}
@@ -66,7 +66,7 @@ export default async function AdminUsersPage({
         </p>
       )}
 
-      <div className="mt-4 overflow-hidden rounded-2xl border border-brand-purple/10 bg-white">
+      <div className="admin-card mt-4 overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-brand-purple/5 text-left text-xs uppercase tracking-wide text-brand-purple/70">
             <tr>
@@ -94,7 +94,7 @@ export default async function AdminUsersPage({
             {users.map((u) => (
               <tr
                 key={u.id}
-                className="border-t border-brand-purple/10 hover:bg-brand-purple/5"
+                className="border-t border-brand-purple/10 transition hover:bg-brand-purple/5"
               >
                 <td className="px-4 py-3 font-medium">
                   <Link
@@ -106,7 +106,9 @@ export default async function AdminUsersPage({
                 </td>
                 <td className="px-4 py-3 text-brand-purple/80">{u.email}</td>
                 <td className="px-4 py-3">
-                  {subscriptionPlanLabel(u.subscriptionPlan)}
+                  <span className="admin-badge bg-brand-purple/8 text-brand-purple/80">
+                    {subscriptionPlanLabel(u.subscriptionPlan)}
+                  </span>
                 </td>
                 <td className="px-4 py-3 text-brand-purple/80">
                   {u.profile?.diagnosis ?? "—"}

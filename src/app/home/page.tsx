@@ -1,7 +1,7 @@
 import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
 import { FeedProfileHeader } from "@/components/FeedProfileHeader";
 import { LikeButton } from "@/components/LikeButton";
-import { EventCard, PostCard } from "@/components/PostCard";
+import { FeedEventItem, FeedPostItem } from "@/components/FeedPostItem";
 import { buildHomeFeed, defaultProfileLabel } from "@/lib/feed";
 import { relevantWhere } from "@/lib/cancer-personalization";
 import { prisma } from "@/lib/prisma";
@@ -80,7 +80,7 @@ export default async function HomeFeedPage() {
                     }
                     {...label}
                   />
-                  <EventCard
+                  <FeedEventItem
                     id={e.id}
                     title={e.title}
                     description={e.description}
@@ -110,7 +110,7 @@ export default async function HomeFeedPage() {
                   }
                   {...label}
                 />
-                <PostCard
+                <FeedPostItem
                   href={href}
                   type={p.type}
                   title={p.title}
@@ -121,6 +121,7 @@ export default async function HomeFeedPage() {
                       postId={p.id}
                       liked={likedIds.has(p.id)}
                       count={p._count.likes}
+                      variant="feed"
                     />
                   }
                 />

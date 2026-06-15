@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { PostForm } from "../PostForm";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 
 export const dynamic = "force-dynamic";
 
@@ -14,8 +15,15 @@ export default async function EditPostPage({
   if (!post) notFound();
 
   return (
-    <div className="max-w-xl">
-      <h1 className="text-2xl font-bold">Upraviť obsah</h1>
+    <div className="max-w-2xl">
+      <AdminPageHeader
+        title="Upraviť obsah"
+        description={post.title}
+        backHref={
+          post.profileId ? `/admin/profiles/${post.profileId}` : "/admin/profiles"
+        }
+        backLabel="Späť na profil"
+      />
       <PostForm mode="edit" post={post} />
     </div>
   );

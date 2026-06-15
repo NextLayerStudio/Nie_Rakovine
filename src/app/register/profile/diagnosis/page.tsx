@@ -16,8 +16,12 @@ export default async function DiagnosisStep() {
       />
 
       <div className="px-6 text-center">
-        <h2 className="text-base font-semibold text-brand-purple">
-          Vaša diagnóza
+        <p className="text-sm leading-relaxed text-brand-purple/75">
+          Každý príbeh je iný. Informácia o vašej diagnóze nám umožní ponúkať
+          obsah a aktivity, ktoré môžu byť pre vás najviac užitočné.
+        </p>
+        <h2 className="mt-4 text-base font-semibold text-brand-purple">
+          Prosím, uveďte svoju diagnózu.
         </h2>
       </div>
 

@@ -26,10 +26,10 @@ export function SubscriptionForm({
   );
 
   return (
-    <form action={formAction} className="flex flex-1 flex-col">
+    <form action={formAction} className="flex min-h-0 flex-1 flex-col">
       <input type="hidden" name="plan" value={selected ?? ""} />
 
-      <div className="mt-3 flex flex-1 flex-col gap-4 px-5">
+      <div className="mt-3 flex flex-col gap-4 px-5 pb-4">
         {SUBSCRIPTION_PLANS.map((plan) => {
           const active = selected === plan.id;
           const isPrimary = plan.accent === "primary";
@@ -39,28 +39,37 @@ export function SubscriptionForm({
               key={plan.id}
               onClick={() => setSelected(plan.id)}
               className={cn(
-                "rounded-3xl p-5 text-left text-white shadow-soft transition",
-                isPrimary ? "bg-brand-purple" : "bg-brand-pink-soft",
-                active && "ring-4 ring-brand-purple/30",
+                "w-full rounded-[28px] border-2 p-5 text-white shadow-soft transition",
+                isPrimary
+                  ? "border-brand-purple/30 bg-brand-purple"
+                  : "border-sky-400 bg-brand-pink",
+                active &&
+                  (isPrimary
+                    ? "ring-4 ring-brand-purple/25"
+                    : "ring-4 ring-sky-300/40"),
               )}
             >
-              <h2 className="text-lg font-extrabold">{plan.name}</h2>
-              <p className="mt-1 text-[11px] leading-relaxed text-white/90">
+              <h2 className="text-left font-serif text-xl font-extrabold leading-tight">
+                {plan.name}
+              </h2>
+              <p className="mt-2 text-left text-sm leading-relaxed text-white/95">
                 {plan.description}
               </p>
-              <p className="mt-3 text-sm font-bold">{plan.price}</p>
-              <p className="text-[11px] text-white/80">Zrušte kedykoľvek</p>
+              <p className="mt-4 text-left font-serif text-lg font-extrabold leading-none">
+                {plan.price}
+              </p>
+              <p className="mt-2 text-left text-sm text-white/90">
+                Zrušte kedykoľvek
+              </p>
 
-              <div className="mt-3">
-                <span
-                  className={cn(
-                    "block rounded-pill bg-white py-2 text-center text-xs font-bold",
-                    isPrimary ? "text-brand-purple" : "text-brand-pink",
-                  )}
-                >
-                  {active ? "Zvolené" : "Vybrať balíček"}
-                </span>
-              </div>
+              <span
+                className={cn(
+                  "mt-4 flex w-full items-center justify-center rounded-pill bg-white py-3 text-sm font-bold",
+                  isPrimary ? "text-brand-purple" : "text-brand-pink",
+                )}
+              >
+                {active ? "Zvolené" : "Vybrať balíček"}
+              </span>
             </button>
           );
         })}
@@ -68,9 +77,9 @@ export function SubscriptionForm({
 
       <FormError message={state.message} />
 
-      <div className="flex items-center justify-center px-6 py-6">
+      <div className="sticky bottom-0 shrink-0 border-t border-brand-purple/5 bg-white px-6 py-5">
         <SubmitButton
-          className="flex w-64 items-center justify-center gap-2 rounded-pill border border-brand-pink bg-brand-pink-soft px-6 py-3 text-sm font-semibold text-white shadow-soft transition hover:bg-brand-pink disabled:opacity-60"
+          className="mx-auto flex w-full max-w-[280px] items-center justify-center gap-2 rounded-pill border border-brand-pink bg-brand-pink-soft px-6 py-3 text-sm font-semibold text-white shadow-soft transition hover:bg-brand-pink disabled:opacity-60"
           pendingLabel="Ukladám…"
         >
           <>

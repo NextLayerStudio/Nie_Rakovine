@@ -21,32 +21,34 @@ export function ForumThreadForm({ forumId }: { forumId: string }) {
   return (
     <form
       action={formAction}
-      className="mt-6 space-y-3 rounded-2xl border border-brand-purple/10 bg-brand-purple/5 p-4"
+      className="mt-6 space-y-3 rounded-2xl border border-brand-purple/15 bg-brand-purple/[0.04] p-5"
     >
       <input type="hidden" name="forumId" value={forumId} />
-      <h3 className="text-sm font-bold">Nový príspevok (admin)</h3>
+      <h3 className="text-sm font-bold text-brand-purple">
+        Nový príspevok (admin)
+      </h3>
       <input
         name="title"
         placeholder="Nadpis (voliteľné)"
-        className="w-full rounded-xl border border-brand-purple/20 px-3 py-2 text-sm"
+        className="admin-input"
       />
       <textarea
         name="body"
         required
         rows={4}
         placeholder="Text príspevku"
-        className="w-full rounded-xl border border-brand-purple/20 px-3 py-2 text-sm"
+        className="admin-input"
       />
       <input
         name="coverUrl"
         placeholder="Cover URL (voliteľné)"
-        className="w-full rounded-xl border border-brand-purple/20 px-3 py-2 text-sm"
+        className="admin-input"
       />
       <FormError message={state.message} />
       {state.ok && state.message && (
-        <p className="text-xs text-green-700">{state.message}</p>
+        <p className="text-xs font-medium text-emerald-700">{state.message}</p>
       )}
-      <SubmitButton className="rounded-pill bg-brand-purple px-4 py-2 text-xs font-semibold text-white">
+      <SubmitButton className="admin-btn-primary">
         Publikovať príspevok
       </SubmitButton>
     </form>

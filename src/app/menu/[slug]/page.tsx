@@ -9,6 +9,7 @@ const LABELS: Record<string, string> = {
   aktivity: "Aktivity",
   informacie: "Informácie",
   nastavenia: "Nastavenia",
+  cookies: "Zásady cookies",
 };
 
 export default async function MenuItemPage({

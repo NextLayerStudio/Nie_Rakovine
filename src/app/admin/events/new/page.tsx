@@ -1,4 +1,5 @@
 import { EventForm } from "../EventForm";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 
 export default async function NewEventPage({
   searchParams,
@@ -8,11 +9,13 @@ export default async function NewEventPage({
   const { profileId } = await searchParams;
 
   return (
-    <div className="max-w-xl">
-      <h1 className="text-2xl font-bold">Nové podujatie</h1>
-      <p className="mt-1 text-sm text-brand-purple/70">
-        Vytvorte podujatie, ktoré sa zobrazí v aplikácii.
-      </p>
+    <div className="max-w-2xl">
+      <AdminPageHeader
+        title="Nové podujatie"
+        description="Vytvorte podujatie, ktoré sa zobrazí v aplikácii."
+        backHref={profileId ? `/admin/profiles/${profileId}` : "/admin/profiles"}
+        backLabel="Späť na profil"
+      />
       <EventForm mode="create" profileId={profileId} />
     </div>
   );

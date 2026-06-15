@@ -26,86 +26,80 @@ export function ForumAdminForm({
   );
 
   return (
-    <form
-      action={formAction}
-      className="mt-6 max-w-lg space-y-4 rounded-2xl border border-brand-purple/10 bg-white p-6 shadow-card"
-    >
+    <form action={formAction} className="max-w-2xl space-y-6">
       {forum && <input type="hidden" name="id" value={forum.id} />}
 
-      <label className="block">
-        <span className="mb-1 block text-xs font-semibold text-brand-purple/80">
-          Názov fóra
-        </span>
-        <input
-          name="title"
-          required
-          defaultValue={forum?.title}
-          className="w-full rounded-xl border border-brand-purple/20 px-3 py-2 text-sm"
+      <fieldset className="admin-card space-y-4 p-6">
+        <legend className="admin-section-title px-1">Detail fóra</legend>
+        <label className="block">
+          <span className="admin-label">Názov fóra</span>
+          <input
+            name="title"
+            required
+            defaultValue={forum?.title}
+            className="admin-input"
+          />
+        </label>
+
+        <label className="block">
+          <span className="admin-label">Popis</span>
+          <textarea
+            name="description"
+            rows={3}
+            defaultValue={forum?.description ?? ""}
+            className="admin-input"
+          />
+        </label>
+
+        <div>
+          <span className="admin-label">Pre typ rakoviny</span>
+          <CancerTypeSelect
+            variant="admin"
+            defaultValue={forum?.cancerTypes ?? []}
+            helpText="Prázdne = fórum pre všetkých. Inak sa zobrazí najmä týmto používateľom."
+          />
+        </div>
+      </fieldset>
+
+      <fieldset className="admin-card space-y-4 p-6">
+        <legend className="admin-section-title px-1">Vzhľad</legend>
+        <AdminImageField
+          name="imageUrl"
+          label="Profilová fotka fóra"
+          hint="Zobrazí sa v zozname fór v aplikácii. Ak prázdne, použije sa farba nižšie."
+          defaultValue={forum?.imageUrl ?? ""}
+          shape="circle"
         />
-      </label>
 
-      <label className="block">
-        <span className="mb-1 block text-xs font-semibold text-brand-purple/80">
-          Popis
-        </span>
-        <textarea
-          name="description"
-          rows={3}
-          defaultValue={forum?.description ?? ""}
-          className="w-full rounded-xl border border-brand-purple/20 px-3 py-2 text-sm"
-        />
-      </label>
+        <label className="block">
+          <span className="admin-label">Farba zálohy (hex)</span>
+          <p className="mb-2 text-[11px] text-brand-purple/55">
+            Použije sa, keď nie je nastavená profilová fotka.
+          </p>
+          <input
+            name="accentColor"
+            defaultValue={forum?.accentColor ?? "#6F2380"}
+            className="admin-input"
+          />
+        </label>
+      </fieldset>
 
-      <AdminImageField
-        name="imageUrl"
-        label="Profilová fotka fóra"
-        hint="Zobrazí sa v zozname fór v aplikácii. Ak prázdne, použije sa farba nižšie."
-        defaultValue={forum?.imageUrl ?? ""}
-        shape="circle"
-      />
-
-      <label className="block">
-        <span className="mb-1 block text-xs font-semibold text-brand-purple/80">
-          Farba zálohy (hex)
-        </span>
-        <p className="mb-2 text-[11px] text-brand-purple/55">
-          Použije sa, keď nie je nastavená profilová fotka.
-        </p>
-        <input
-          name="accentColor"
-          defaultValue={forum?.accentColor ?? "#6F2380"}
-          className="w-full rounded-xl border border-brand-purple/20 px-3 py-2 text-sm"
-        />
-      </label>
-
-      <div>
-        <span className="mb-1 block text-xs font-semibold text-brand-purple/80">
-          Pre typ rakoviny
-        </span>
-        <CancerTypeSelect
-          variant="admin"
-          defaultValue={forum?.cancerTypes ?? []}
-          helpText="Prázdne = fórum pre všetkých. Inak sa zobrazí najmä týmto používateľom."
-        />
-      </div>
-
-      <label className="flex items-center gap-2 text-sm">
+      <label className="flex items-center gap-3 rounded-2xl bg-brand-purple/5 px-4 py-3 text-sm font-medium text-brand-purple">
         <input
           type="checkbox"
           name="published"
           defaultChecked={forum?.published ?? true}
+          className="h-4 w-4 accent-brand-purple"
         />
         Publikované (viditeľné v aplikácii)
       </label>
 
-      <FormError message={state.message} />
-
-      <SubmitButton
-        className="rounded-pill bg-brand-purple px-5 py-2 text-sm font-semibold text-white"
-        pendingLabel="Ukladám…"
-      >
-        {mode === "create" ? "Vytvoriť fórum" : "Uložiť"}
-      </SubmitButton>
+      <div className="flex items-center gap-3">
+        <SubmitButton className="admin-btn-primary" pendingLabel="Ukladám…">
+          {mode === "create" ? "Vytvoriť fórum" : "Uložiť"}
+        </SubmitButton>
+        <FormError message={state.message} />
+      </div>
     </form>
   );
 }

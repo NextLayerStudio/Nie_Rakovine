@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import {
   saveExpectationsAction,
@@ -7,6 +8,7 @@ import {
 } from "@/lib/actions/profile";
 import { FormError, SubmitButton } from "@/components/FormError";
 import { CheckboxList } from "@/components/CheckboxList";
+import { ConsentCheckbox } from "@/components/ConsentCheckbox";
 
 const INITIAL: ActionState = { ok: false };
 
@@ -15,21 +17,25 @@ export function ExpectationsForm({
   helpOptions,
   defaultExpectations,
   defaultHelp,
+  defaultConsentMembership,
+  defaultConsentNewsletter,
 }: {
   expectationsOptions: string[];
   helpOptions: string[];
   defaultExpectations: string[];
   defaultHelp: string[];
+  defaultConsentMembership: boolean;
+  defaultConsentNewsletter: boolean;
 }) {
   const [state, formAction] = useActionState(saveExpectationsAction, INITIAL);
 
   return (
     <form
       action={formAction}
-      className="flex flex-1 flex-col gap-5 overflow-y-auto px-5 pb-2"
+      className="mt-4 flex flex-1 flex-col gap-5 overflow-y-auto px-5 pb-2"
     >
       <h2 className="text-center text-base font-semibold text-brand-purple">
-        Čo od ONKO KLUBU očakávate?
+        Čo očakávate od členstva v ONKO KLUBE?
       </h2>
       <CheckboxList
         name="expectations"
@@ -38,13 +44,39 @@ export function ExpectationsForm({
       />
 
       <h3 className="text-center text-sm font-semibold text-brand-purple">
-        S čím by sme Vám vedeli pomôcť?
+        Čo by vám v tejto chvíli najviac pomohlo?
       </h3>
       <CheckboxList
         name="help"
         options={helpOptions}
         defaultSelected={defaultHelp}
       />
+
+      <div className="space-y-1 border-t border-brand-purple/10 pt-4">
+        <ConsentCheckbox
+          name="consentMembership"
+          required
+          defaultChecked={defaultConsentMembership}
+        >
+          súhlas so spracovaním osobných údajov – členstvo
+        </ConsentCheckbox>
+        <ConsentCheckbox
+          name="consentNewsletter"
+          defaultChecked={defaultConsentNewsletter}
+        >
+          súhlas s posielaním newsletterov
+        </ConsentCheckbox>
+        <p className="pt-1 text-[11px] text-brand-purple/55">
+          Viac o cookies:{" "}
+          <Link
+            href="/cookies"
+            className="underline underline-offset-2"
+            onClick={(e) => e.stopPropagation()}
+          >
+            Zásady cookies
+          </Link>
+        </p>
+      </div>
 
       <FormError message={state.message} />
 

@@ -27,10 +27,7 @@ export function PostForm({
   );
 
   return (
-    <form
-      action={formAction}
-      className="mt-6 space-y-4 rounded-2xl border border-brand-purple/10 bg-white p-6 shadow-card"
-    >
+    <form action={formAction} className="space-y-6">
       {post && <input type="hidden" name="id" value={post.id} />}
       {(profileId || post?.profileId) && (
         <input
@@ -40,71 +37,71 @@ export function PostForm({
         />
       )}
 
-      <label className="block">
-        <span className="mb-1 block text-xs font-semibold text-brand-purple/80">
-          Typ
-        </span>
-        <select
-          name="type"
-          defaultValue={post?.type ?? "ARTICLE"}
-          className="w-full rounded-xl border border-brand-purple/20 bg-white px-3 py-2 text-sm focus:border-brand-purple focus:outline-none"
-        >
-          <option value="VIDEO">Video</option>
-          <option value="ARTICLE">Článok</option>
-          <option value="RECIPE">Recept</option>
-        </select>
-      </label>
+      <fieldset className="admin-card space-y-4 p-6">
+        <legend className="admin-section-title px-1">Obsah</legend>
+        <label className="block">
+          <span className="admin-label">Typ</span>
+          <select
+            name="type"
+            defaultValue={post?.type ?? "ARTICLE"}
+            className="admin-input"
+          >
+            <option value="VIDEO">Video</option>
+            <option value="ARTICLE">Článok</option>
+            <option value="RECIPE">Recept</option>
+          </select>
+        </label>
 
-      <Field label="Názov" name="title" defaultValue={post?.title} />
-      <Field
-        label="Krátky výňatok"
-        name="excerpt"
-        defaultValue={post?.excerpt ?? ""}
-      />
-      <Field
-        label="Obsah (markdown / text)"
-        name="body"
-        defaultValue={post?.body ?? ""}
-        textarea
-      />
-      <Field
-        label="Cover (URL obrázka)"
-        name="coverUrl"
-        defaultValue={post?.coverUrl ?? ""}
-      />
-      <Field
-        label="Video (URL, len ak typ = Video)"
-        name="videoUrl"
-        defaultValue={post?.videoUrl ?? ""}
-      />
-
-      <div>
-        <span className="mb-1 block text-xs font-semibold text-brand-purple/80">
-          Pre typ rakoviny
-        </span>
-        <CancerTypeSelect
-          variant="admin"
-          defaultValue={post?.cancerTypes ?? []}
-          helpText="Prázdne = pre všetkých. Inak sa zobrazí najmä týmto používateľom."
+        <Field label="Názov" name="title" defaultValue={post?.title} />
+        <Field
+          label="Krátky výňatok"
+          name="excerpt"
+          defaultValue={post?.excerpt ?? ""}
         />
-      </div>
+        <Field
+          label="Obsah (markdown / text)"
+          name="body"
+          defaultValue={post?.body ?? ""}
+          textarea
+        />
+      </fieldset>
 
-      <label className="flex items-center gap-2 text-sm">
+      <fieldset className="admin-card space-y-4 p-6">
+        <legend className="admin-section-title px-1">Médiá a cielenie</legend>
+        <Field
+          label="Cover (URL obrázka)"
+          name="coverUrl"
+          defaultValue={post?.coverUrl ?? ""}
+        />
+        <Field
+          label="Video (URL, len ak typ = Video)"
+          name="videoUrl"
+          defaultValue={post?.videoUrl ?? ""}
+        />
+        <div>
+          <span className="admin-label">Pre typ rakoviny</span>
+          <CancerTypeSelect
+            variant="admin"
+            defaultValue={post?.cancerTypes ?? []}
+            helpText="Prázdne = pre všetkých. Inak sa zobrazí najmä týmto používateľom."
+          />
+        </div>
+      </fieldset>
+
+      <label className="flex items-center gap-3 rounded-2xl bg-brand-purple/5 px-4 py-3 text-sm font-medium text-brand-purple">
         <input
           type="checkbox"
           name="published"
           defaultChecked={post?.published ?? true}
+          className="h-4 w-4 accent-brand-purple"
         />
         Publikované (viditeľné v aplikácii)
       </label>
 
       <FormError message={state.message} />
 
-      <div className="flex justify-end gap-2 pt-2">
-        <SubmitButton
-          className="rounded-pill bg-brand-purple px-5 py-2 text-sm font-semibold text-white"
-          pendingLabel="Ukladám…"
-        >
+      <div className="flex justify-end gap-2">
+        <SubmitButton className="admin-btn-primary" pendingLabel="Ukladám…">
           {mode === "create" ? "Vytvoriť" : "Uložiť zmeny"}
         </SubmitButton>
       </div>
@@ -125,22 +122,16 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-xs font-semibold text-brand-purple/80">
-        {label}
-      </span>
+      <span className="admin-label">{label}</span>
       {textarea ? (
         <textarea
           name={name}
           defaultValue={defaultValue}
           rows={5}
-          className="w-full rounded-xl border border-brand-purple/20 bg-white px-3 py-2 text-sm focus:border-brand-purple focus:outline-none"
+          className="admin-input"
         />
       ) : (
-        <input
-          name={name}
-          defaultValue={defaultValue}
-          className="w-full rounded-xl border border-brand-purple/20 bg-white px-3 py-2 text-sm focus:border-brand-purple focus:outline-none"
-        />
+        <input name={name} defaultValue={defaultValue} className="admin-input" />
       )}
     </label>
   );

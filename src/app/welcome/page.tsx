@@ -15,11 +15,13 @@ export default function WelcomePage() {
           <OnkoLogo size="lg" priority />
         </div>
 
-        <div className="mt-auto flex shrink-0 flex-col items-center gap-4 px-8 pb-8 pt-2">
-          <p className="max-w-[300px] text-center text-xs leading-relaxed text-brand-purple/70">
-            uvodne slovo ktore sme uz napisali tisickrat
+        <div className="flex flex-1 flex-col items-center justify-center px-8 py-2">
+          <p className="max-w-[280px] text-center text-sm leading-relaxed text-brand-purple/80">
+            Miesto podpory a porozumenia na ceste s onkologickým ochorením.
           </p>
+        </div>
 
+        <div className="mt-auto flex shrink-0 flex-col items-center gap-4 px-8 pb-8 pt-2">
           <div className="flex w-full max-w-[300px] flex-col items-stretch gap-3">
             <Link
               href="/login"
