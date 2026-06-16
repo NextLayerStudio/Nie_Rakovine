@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
-import { saveForumImage, saveUploadedImage } from "@/lib/forum-image";
+import { saveForumImage } from "@/lib/forum-image";
 
 export type ActionState = { ok: boolean; message?: string };
 
@@ -117,10 +117,8 @@ export async function createThreadAction(
 
   let coverUrl: string | null = null;
   try {
-    coverUrl = await saveUploadedImage(
+    coverUrl = await saveForumImage(
       imageFile instanceof File ? imageFile : null,
-      "threads",
-      "thread",
     );
   } catch (err) {
     return {

@@ -1,6 +1,8 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
+import { maxImageUploadBytes } from "@/lib/image-upload-limits";
+import { optimizeImage } from "@/lib/image-processing";
 
 const IMAGE_TYPES = new Map([
   ["image/jpeg", ".jpg"],
@@ -15,7 +17,6 @@ const VIDEO_TYPES = new Map([
   ["video/quicktime", ".mov"],
 ]);
 
-const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
 const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
 
 export type UploadFolder = "posts" | "events" | "profiles" | "forums" | "videos";
@@ -44,15 +45,19 @@ async function saveUploadedFile(
     );
   }
 
-  const buffer = Buffer.from(await file.arrayBuffer());
+  const raw = Buffer.from(await file.arrayBuffer());
+  const optimized =
+    allowedTypes === IMAGE_TYPES
+      ? await optimizeImage(raw, file.type)
+      : { buffer: raw, mimeType: file.type, size: raw.length };
 
   const asset = await prisma.mediaAsset.create({
     data: {
-      mimeType: file.type,
+      mimeType: optimized.mimeType,
       filename: file.name || null,
       category,
-      size: file.size,
-      data: buffer,
+      size: optimized.size,
+      data: optimized.buffer,
     },
     select: { id: true },
   });
@@ -65,7 +70,12 @@ export async function saveUploadedImage(
   file: File,
   folder: UploadFolder,
 ): Promise<string> {
-  return saveUploadedFile(file, folder, IMAGE_TYPES, MAX_IMAGE_BYTES);
+  return saveUploadedFile(
+    file,
+    folder,
+    IMAGE_TYPES,
+    maxImageUploadBytes(),
+  );
 }
 
 /** Save an uploaded video to the database and return its API URL. */

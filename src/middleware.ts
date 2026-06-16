@@ -42,6 +42,7 @@ function redirectToLogin(req: NextRequest) {
 }
 
 export const config = {
-  // Run on everything except static assets, _next, etc.
-  matcher: ["/((?!_next|favicon.ico|logo|manifest.webmanifest|.*\\..*).*)"],
+  matcher: [
+    "/((?!_next|api/media|favicon.ico|logo|manifest.webmanifest|.*\\..*).*)",
+  ],
 };

@@ -94,7 +94,7 @@ export function AdminImageField({
                 </p>
               )}
               <p className="mt-1 text-[11px] text-brand-purple/50">
-                JPG, PNG, WebP alebo GIF · max. 4 MB
+                JPG, PNG, WebP alebo GIF · do 20 MB · automaticky zmenšené
               </p>
             </div>
           )}

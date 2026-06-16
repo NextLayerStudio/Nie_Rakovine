@@ -36,11 +36,14 @@ export function EventDetailModal({
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+
+    const scrollEl = document.querySelector<HTMLElement>("[data-app-scroll]");
+    const prev = scrollEl?.style.overflow ?? "";
+    if (scrollEl) scrollEl.style.overflow = "hidden";
+
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
+      if (scrollEl) scrollEl.style.overflow = prev;
     };
   }, [onClose]);
 

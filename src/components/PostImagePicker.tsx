@@ -1,11 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { maxImageUploadBytes } from "@/lib/image-upload-limits";
 
 export function PostImagePicker() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const maxMb = Math.round(maxImageUploadBytes() / (1024 * 1024));
 
   function handleFile(file: File | null) {
     if (!file) return;
@@ -15,8 +17,8 @@ export function PostImagePicker() {
       setError("Vyberte obrázok (JPG, PNG…).");
       return;
     }
-    if (file.size > 3 * 1024 * 1024) {
-      setError("Obrázok je príliš veľký (max. 3 MB).");
+    if (file.size > maxImageUploadBytes()) {
+      setError(`Obrázok je príliš veľký (max. ${maxMb} MB).`);
       return;
     }
 
@@ -82,6 +84,11 @@ export function PostImagePicker() {
         className="hidden"
         onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
       />
+
+      <p className="mt-2 text-[11px] text-brand-purple/55">
+        Môžete nahrať väčšiu fotku (do {maxMb} MB) — systém ju automaticky
+        zmenší.
+      </p>
 
       {error && <p className="mt-2 text-[11px] text-red-600">{error}</p>}
     </div>

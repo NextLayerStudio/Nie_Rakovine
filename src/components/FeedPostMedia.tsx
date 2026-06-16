@@ -40,7 +40,7 @@ export function FeedPostMedia({
         <div
           ref={scrollRef}
           onScroll={updateIndex}
-          className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto scroll-smooth touch-pan-x"
+          className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth"
           aria-label={multi ? "Galéria — potiahnite do strán" : undefined}
         >
           {slides.map((slide, index) => (

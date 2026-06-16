@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { maxImageUploadBytes } from "@/lib/image-upload-limits";
 
 export function ForumImagePicker({
   accentColor = "#6F2380",
@@ -10,6 +11,7 @@ export function ForumImagePicker({
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const maxMb = Math.round(maxImageUploadBytes() / (1024 * 1024));
 
   function handleFile(file: File | null) {
     if (!file) return;
@@ -19,8 +21,8 @@ export function ForumImagePicker({
       setError("Vyberte obrázok (JPG, PNG…).");
       return;
     }
-    if (file.size > 3 * 1024 * 1024) {
-      setError("Obrázok je príliš veľký (max. 3 MB).");
+    if (file.size > maxImageUploadBytes()) {
+      setError(`Obrázok je príliš veľký (max. ${maxMb} MB).`);
       return;
     }
 
@@ -42,7 +44,8 @@ export function ForumImagePicker({
         Profilová fotka fóra
       </span>
       <p className="mb-3 text-[11px] text-brand-purple/55">
-        Voliteľné. Zobrazí sa ako avatar fóra po schválení.
+        Voliteľné. Zobrazí sa ako avatar fóra po schválení. Väčšie fotky (do{" "}
+        {maxMb} MB) sa automaticky zmenšia.
       </p>
 
       <div className="flex items-center gap-4">

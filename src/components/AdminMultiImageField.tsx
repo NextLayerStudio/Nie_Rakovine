@@ -93,7 +93,7 @@ export function AdminMultiImageField({
         Pridať obrázky
       </button>
       <p className="mt-1 text-[11px] text-brand-purple/50">
-        JPG, PNG, WebP alebo GIF · max. 4 MB na súbor · viac súborov naraz
+        JPG, PNG, WebP alebo GIF · do 20 MB · automaticky zmenšené
       </p>
 
       {newPreviews.length > 0 && (
