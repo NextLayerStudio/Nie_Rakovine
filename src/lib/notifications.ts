@@ -3,6 +3,7 @@ import "server-only";
 import { cache } from "react";
 import type { Event, NotificationType, Post } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { postPublicHref } from "@/lib/post-display";
 import { distanceKm, hasCoords } from "@/lib/geo";
 
 type NotifyInput = {
@@ -51,12 +52,7 @@ export async function notifyProfileFollowersNewPost(
     select: { userId: true },
   });
 
-  const href =
-    post.type === "VIDEO"
-      ? post.videoUrl ?? "/home"
-      : post.type === "ARTICLE"
-        ? `/home/articles/${post.id}`
-        : `/home/recipes/${post.id}`;
+  const href = postPublicHref(post);
 
   const typeLabel =
     post.type === "VIDEO" ? "video" : post.type === "RECIPE" ? "recept" : "článok";

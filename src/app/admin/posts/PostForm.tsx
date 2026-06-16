@@ -1,16 +1,21 @@
 "use client";
 
 import { useActionState } from "react";
-import type { Post } from "@prisma/client";
+import type { Post, PostImage } from "@prisma/client";
 import {
   createPostAction,
   updatePostAction,
   type ActionState,
 } from "@/lib/actions/posts";
 import { CancerTypeSelect } from "@/components/CancerTypeSelect";
+import { AdminImageField } from "@/components/AdminImageField";
+import { AdminMultiImageField } from "@/components/AdminMultiImageField";
+import { AdminVideoField } from "@/components/AdminVideoField";
 import { FormError, SubmitButton } from "@/components/FormError";
 
 const INITIAL: ActionState = { ok: false };
+
+type PostWithImages = Post & { images?: PostImage[] };
 
 export function PostForm({
   mode,
@@ -18,7 +23,7 @@ export function PostForm({
   profileId,
 }: {
   mode: "create" | "edit";
-  post?: Post;
+  post?: PostWithImages;
   profileId?: string;
 }) {
   const [state, formAction] = useActionState(
@@ -68,16 +73,17 @@ export function PostForm({
 
       <fieldset className="admin-card space-y-4 p-6">
         <legend className="admin-section-title px-1">Médiá a cielenie</legend>
-        <Field
-          label="Cover (URL obrázka)"
+        <AdminImageField
           name="coverUrl"
+          uploadName="coverFile"
+          label="Titulný obrázok"
+          hint="Hlavný náhľad v feede. Nahrajte z počítača alebo vložte odkaz."
           defaultValue={post?.coverUrl ?? ""}
+          shape="rounded"
+          previewAspect="video"
         />
-        <Field
-          label="Video (URL, len ak typ = Video)"
-          name="videoUrl"
-          defaultValue={post?.videoUrl ?? ""}
-        />
+        <AdminMultiImageField existingImages={post?.images ?? []} />
+        <AdminVideoField defaultValue={post?.videoUrl ?? ""} />
         <div>
           <span className="admin-label">Pre typ rakoviny</span>
           <CancerTypeSelect

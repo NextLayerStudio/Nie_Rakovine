@@ -36,7 +36,7 @@ body {
 @layer components {
   /* Mobile shell - simulates the phone canvas on desktops, full-bleed on mobile */
   .phone-shell {
-    @apply mx-auto flex h-[100dvh] max-h-[100dvh] w-full flex-col overflow-hidden bg-white sm:my-4 sm:max-w-[460px] sm:rounded-[36px] sm:shadow-card;
+    @apply relative mx-auto flex h-[100dvh] max-h-[100dvh] w-full flex-col overflow-hidden bg-white sm:my-4 sm:max-w-[460px] sm:rounded-[36px] sm:shadow-card;
   }
 
   @media (min-width: 640px) {
@@ -44,6 +44,10 @@ body {
       height: min(960px, calc(100dvh - 32px));
       max-height: min(960px, calc(100dvh - 32px));
     }
+  }
+
+  .phone-shell:has([data-route-loading]) .bottom-nav {
+    @apply invisible pointer-events-none;
   }
 
   .btn {
@@ -74,6 +78,47 @@ body {
 
   .card {
     @apply rounded-3xl bg-white shadow-card;
+  }
+
+  /* ---------------- Forum design system ---------------- */
+  .forum-page {
+    @apply bg-gradient-to-b from-[#fdf5f8] via-white to-white;
+  }
+  .forum-section-label {
+    @apply text-[11px] font-bold uppercase tracking-[0.14em] text-brand-purple/50;
+  }
+  .forum-card {
+    @apply overflow-hidden rounded-3xl border border-brand-purple/10 bg-white shadow-card transition-shadow hover:shadow-md;
+  }
+  .forum-search {
+    @apply w-full rounded-full border border-brand-purple/10 bg-white py-3.5 pl-5 pr-12 text-sm text-brand-purple shadow-sm outline-none transition placeholder:text-brand-purple/40 focus:border-brand-pink/40 focus:ring-4 focus:ring-brand-pink/10;
+  }
+  .forum-banner {
+    @apply rounded-2xl border border-brand-pink/20 bg-gradient-to-br from-brand-pink-soft/30 to-white px-4 py-3.5 text-sm leading-relaxed text-brand-purple shadow-sm;
+  }
+  .forum-banner-info {
+    @apply rounded-2xl border border-brand-purple/10 bg-brand-purple/5 px-4 py-3.5 text-xs leading-relaxed text-brand-purple/75;
+  }
+  .forum-chip {
+    @apply inline-flex items-center gap-1 rounded-full bg-brand-purple/10 px-2.5 py-1 text-[10px] font-semibold text-brand-purple/70;
+  }
+  .forum-input {
+    @apply w-full rounded-2xl border border-brand-purple/10 bg-white px-4 py-3 text-sm text-brand-purple shadow-sm outline-none transition placeholder:text-brand-purple/40 focus:border-brand-pink/50 focus:ring-4 focus:ring-brand-pink/10;
+  }
+  .forum-btn-primary {
+    @apply w-full rounded-full bg-brand-pink py-3.5 text-sm font-semibold text-white shadow-soft transition hover:brightness-105 active:scale-[0.99];
+  }
+  .forum-btn-outline {
+    @apply flex w-full items-center justify-center gap-2 rounded-full border-2 border-dashed border-brand-pink/40 bg-white/80 py-3.5 text-sm font-semibold text-brand-pink transition hover:border-brand-pink hover:bg-brand-pink/5;
+  }
+  .forum-header-btn {
+    @apply grid h-10 w-10 place-items-center rounded-full bg-white text-brand-purple shadow-sm ring-1 ring-brand-purple/10 transition hover:bg-brand-pink-soft/20 active:scale-95;
+  }
+  .forum-chat-bubble {
+    @apply rounded-2xl rounded-tl-sm bg-white p-4 shadow-sm ring-1 ring-brand-purple/10;
+  }
+  .forum-empty {
+    @apply rounded-3xl border border-dashed border-brand-purple/20 bg-white/80 p-8 text-center text-sm leading-relaxed text-brand-purple/60;
   }
 
   .pill-tab {

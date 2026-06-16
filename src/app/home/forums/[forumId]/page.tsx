@@ -35,6 +35,7 @@ export default async function ForumDetailPage({
   if (!forum || !forum.published) notFound();
 
   const joined = forum.members.length > 0;
+  const accent = forum.accentColor ?? "#6F2380";
 
   const threads = await prisma.forumThread.findMany({
     where: { forumId, ...visibleThreadsWhere(user.id) },
@@ -52,7 +53,7 @@ export default async function ForumDetailPage({
   const likedThreadIds = new Set(userLikes.map((l) => l.threadId));
 
   return (
-    <>
+    <div className="forum-page min-h-full">
       <ForumDetailHeader
         backHref="/home/forums"
         imageUrl={forum.imageUrl}
@@ -61,72 +62,84 @@ export default async function ForumDetailPage({
         newPostHref={joined ? `/home/forums/${forum.id}/new` : undefined}
       />
 
-      <section className="px-5 pb-4 pt-2">
-        <div className="flex items-start gap-3">
-          <div
-            aria-hidden
-            className="h-16 w-16 shrink-0 rounded-full bg-cover bg-center"
-            style={forumAvatarStyle(forum)}
-          />
-          <div className="min-w-0 flex-1">
-            <div className="flex items-start justify-between gap-2">
-              <h1 className="text-sm font-bold uppercase tracking-wide text-brand-purple">
-                {forum.title}
-              </h1>
-              <ForumFollowButton
-                forumId={forum.id}
-                isFollowing={joined}
-                size="md"
-              />
+      <section
+        className="mx-5 mt-3 overflow-hidden rounded-3xl border border-brand-purple/[0.06] shadow-card"
+        style={{
+          background: `linear-gradient(145deg, ${accent}22 0%, ${accent}08 45%, white 100%)`,
+        }}
+      >
+        <div className="p-5">
+          <div className="flex items-start gap-4">
+            <div
+              aria-hidden
+              className="h-[72px] w-[72px] shrink-0 rounded-2xl bg-cover bg-center ring-[3px] ring-white shadow-md"
+              style={forumAvatarStyle(forum)}
+            />
+            <div className="min-w-0 flex-1">
+              <div className="flex items-start justify-between gap-2">
+                <h1 className="text-base font-bold leading-snug text-brand-purple">
+                  {forum.title}
+                </h1>
+                <ForumFollowButton
+                  forumId={forum.id}
+                  isFollowing={joined}
+                  size="md"
+                />
+              </div>
+              <span className="forum-chip mt-2">
+                {forum._count.members} členov
+              </span>
             </div>
-            <p className="mt-0.5 text-[11px] font-medium text-brand-purple/60">
-              {forum._count.members} členov
-            </p>
           </div>
+          {forum.description && (
+            <p className="mt-4 text-sm leading-relaxed text-brand-purple/80">
+              {forum.description}
+            </p>
+          )}
         </div>
-        {forum.description && (
-          <p className="mt-3 text-xs font-semibold leading-relaxed text-brand-purple">
-            {forum.description}
-          </p>
-        )}
       </section>
 
       {pending === "1" && (
-        <div className="mx-5 mb-4 rounded-2xl border border-brand-pink bg-brand-pink-soft/40 p-4 text-center text-sm text-brand-purple">
-          Príspevok odoslaný. Čaká na overenie administrátorom — po schválení sa
-          zobrazí ostatným.
+        <div className="forum-banner mx-5 mt-4 text-center">
+          Príspevok bol odoslaný a čaká na schválenie administrátorom.
         </div>
       )}
 
       {!joined && (
-        <div className="mx-5 mb-4 rounded-2xl bg-brand-pink-soft/40 p-4 text-center text-xs text-brand-purple">
+        <div className="forum-banner-info mx-5 mt-4 text-center">
           Zapojte sa do fóra, aby ste mohli prispievať do diskusie.
         </div>
       )}
 
-      <div className="flex flex-col gap-4 px-5 pb-24">
+      <section className="px-5 pb-24 pt-5">
+        <h2 className="forum-section-label mb-4">
+          Príspevky {threads.length > 0 && `(${threads.length})`}
+        </h2>
+
         {threads.length === 0 ? (
-          <div className="rounded-3xl bg-white p-6 text-center text-sm text-brand-purple/70 shadow-card">
+          <div className="forum-empty">
             Zatiaľ žiadne príspevky. {joined ? "Buďte prvý/á!" : ""}
           </div>
         ) : (
-          threads.map((thread) => (
-            <ForumPostCard
-              key={thread.id}
-              forumId={forum.id}
-              threadId={thread.id}
-              authorName={thread.author.fullName}
-              title={thread.title}
-              body={thread.body}
-              coverUrl={thread.coverUrl}
-              liked={likedThreadIds.has(thread.id)}
-              likeCount={thread.likeCount}
-              commentCount={thread._count.comments}
-              isPending={thread.status !== APPROVED}
-            />
-          ))
+          <div className="flex flex-col gap-3">
+            {threads.map((thread) => (
+              <ForumPostCard
+                key={thread.id}
+                forumId={forum.id}
+                threadId={thread.id}
+                authorName={thread.author.fullName}
+                title={thread.title}
+                body={thread.body}
+                coverUrl={thread.coverUrl}
+                liked={likedThreadIds.has(thread.id)}
+                likeCount={thread.likeCount}
+                commentCount={thread._count.comments}
+                isPending={thread.status !== APPROVED}
+              />
+            ))}
+          </div>
         )}
-      </div>
-    </>
+      </section>
+    </div>
   );
 }

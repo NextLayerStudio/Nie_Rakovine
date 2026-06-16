@@ -4,6 +4,7 @@ import { LikeButton } from "@/components/LikeButton";
 import { PostCard } from "@/components/PostCard";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
+import { buildPostGallery, postPublicHref } from "@/lib/post-display";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +13,10 @@ export default async function HomeArticlesPage() {
   const articles = await prisma.post.findMany({
     where: { type: "ARTICLE", published: true },
     orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
-    include: { _count: { select: { likes: true } } },
+    include: {
+      images: { orderBy: { sortOrder: "asc" } },
+      _count: { select: { likes: true } },
+    },
   });
 
   const userLikes = await prisma.articleLike.findMany({
@@ -38,11 +42,11 @@ export default async function HomeArticlesPage() {
           articles.map((a) => (
             <PostCard
               key={a.id}
-              href={`/home/articles/${a.id}`}
+              href={postPublicHref(a)}
               type={a.type}
               title={a.title}
               excerpt={a.excerpt}
-              coverUrl={a.coverUrl}
+              imageUrls={buildPostGallery(a.coverUrl, a.images)}
               likeSlot={
                 <LikeButton
                   postId={a.id}

@@ -25,9 +25,9 @@ export default async function NewForumThreadPage({
   if (forum.members.length === 0) notFound();
 
   return (
-    <>
+    <div className="forum-page min-h-full">
       <ForumSubHeader backHref={`/home/forums/${forumId}`} title="Nový príspevok" />
       <NewThreadForm forumId={forumId} />
-    </>
+    </div>
   );
 }

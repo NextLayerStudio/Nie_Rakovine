@@ -49,7 +49,7 @@ export default async function ForumThreadPage({
   if (!thread) notFound();
 
   const isPending = thread.status !== APPROVED;
-  const canComment = !!membership;
+  const canComment = !!membership && !isPending;
 
   const cover = thread.coverUrl
     ? {
@@ -63,35 +63,43 @@ export default async function ForumThreadPage({
       };
 
   return (
-    <>
+    <div className="forum-page min-h-full">
       <ForumSubHeader
         backHref={`/home/forums/${forumId}`}
         title={thread.forum.title}
       />
 
       {isPending && (
-        <div className="mx-5 mb-4 rounded-2xl border border-brand-pink bg-brand-pink-soft/40 p-3 text-center text-xs text-brand-purple">
+        <div className="forum-banner mx-5 mt-3 text-center text-xs">
           Táto správa čaká na overenie. Vidíte ju len vy, kým ju admin
           neschváli.
         </div>
       )}
 
-      <article className="px-5 pb-32">
-        <div className="overflow-hidden rounded-3xl bg-white shadow-card">
+      <article className="px-5 pb-[calc(7.5rem+env(safe-area-inset-bottom))] pt-3">
+        <div className="forum-card overflow-hidden">
           <div className="aspect-[4/3] w-full" style={cover} />
-          <div className="p-4">
-            <p className="text-sm font-semibold text-brand-purple">
-              {thread.author.fullName}
-            </p>
+          <div className="p-5">
+            <div className="flex items-center gap-3">
+              <div
+                aria-hidden
+                className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-brand-pink to-brand-purple text-xs font-bold text-white"
+              >
+                {initials(thread.author.fullName)}
+              </div>
+              <p className="text-sm font-semibold text-brand-purple">
+                {thread.author.fullName}
+              </p>
+            </div>
             {thread.title && (
-              <h1 className="mt-1 text-base font-bold text-brand-purple">
+              <h1 className="mt-3 text-lg font-bold leading-snug text-brand-purple">
                 {thread.title}
               </h1>
             )}
-            <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-brand-purple/90">
+            <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-brand-purple/85">
               {thread.body}
             </p>
-            <div className="mt-4 flex items-center gap-5 border-t border-brand-purple/10 pt-3 text-brand-purple/70">
+            <div className="mt-5 flex items-center gap-4 border-t border-brand-purple/[0.06] pt-4">
               <ForumThreadLikeButton
                 threadId={thread.id}
                 forumId={forumId}
@@ -99,45 +107,72 @@ export default async function ForumThreadPage({
                 count={thread.likeCount}
                 variant="pill"
               />
-              <span className="flex items-center gap-1.5 text-xs">
-                <CommentIcon /> {thread.comments.length}
+              <span className="forum-chip">
+                <CommentIcon /> {thread.comments.length} komentárov
               </span>
             </div>
           </div>
         </div>
 
-        <ul className="mt-6 space-y-4">
-          {thread.comments.map((c) => (
-            <li
-              key={c.id}
-              className="rounded-2xl bg-brand-pink-soft/40 p-4"
-            >
-              {c.status !== APPROVED && (
-                <span className="mb-2 inline-block text-[10px] font-semibold text-brand-pink">
-                  Čaká na overenie
-                </span>
-              )}
-              <p className="text-xs font-semibold text-brand-purple">
-                {c.author.fullName}
-              </p>
-              <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-brand-purple/90">
-                {c.body}
-              </p>
-            </li>
-          ))}
-        </ul>
+        {thread.comments.length > 0 && (
+          <>
+            <h2 className="forum-section-label mb-3 mt-6">Chat</h2>
+            <ul className="space-y-3">
+              {thread.comments.map((c) => (
+                <li key={c.id} className="forum-chat-bubble">
+                  {c.status !== APPROVED && (
+                    <span className="mb-2 inline-flex rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
+                      Čaká na overenie
+                    </span>
+                  )}
+                  <div className="flex items-center gap-2">
+                    <div
+                      aria-hidden
+                      className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-brand-purple/10 text-[10px] font-bold text-brand-purple"
+                    >
+                      {initials(c.author.fullName)}
+                    </div>
+                    <p className="text-xs font-semibold text-brand-purple">
+                      {c.author.fullName}
+                    </p>
+                  </div>
+                  <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-brand-purple/85">
+                    {c.body}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </article>
 
-      {canComment && (
+      {canComment ? (
         <CommentForm forumId={forumId} threadId={threadId} />
+      ) : (
+        <div
+          className="fixed inset-x-0 bottom-0 z-30 border-t border-brand-purple/10 bg-white/95 px-5 py-4 text-center text-xs text-brand-purple/70 backdrop-blur-md"
+          style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
+        >
+          {isPending
+            ? "Chat bude dostupný po schválení príspevku administrátorom."
+            : "Zapojte sa do fóra, aby ste mohli písať komentáre."}
+        </div>
       )}
-    </>
+    </div>
   );
+}
+
+function initials(name: string) {
+  return name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
 }
 
 function CommentIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden>
+    <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" aria-hidden>
       <path
         d="M4 12a7 7 0 0112-4.95A7 7 0 0118 20H9l-4 3 1-4A7 7 0 014 12z"
         stroke="currentColor"

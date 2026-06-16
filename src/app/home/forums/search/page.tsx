@@ -66,8 +66,12 @@ export default async function ForumSearchPage({
   };
 
   return (
-    <>
+    <div className="forum-page min-h-full">
       <FeedHeaderWrapper />
+
+      <section className="px-5 pb-2 pt-1">
+        <h2 className="text-lg font-bold text-brand-purple">Hľadať fóra</h2>
+      </section>
 
       <section className="px-5 pb-2">
         <form action="/home/forums/search" method="get" className="relative">
@@ -78,14 +82,14 @@ export default async function ForumSearchPage({
             name="q"
             type="search"
             defaultValue={query}
-            placeholder="Hľadať"
+            placeholder="Názov alebo popis fóra…"
             autoFocus
-            className="w-full rounded-full border-0 bg-brand-pink-soft/60 py-3.5 pl-5 pr-12 text-sm text-brand-purple placeholder-brand-purple/50 outline-none focus:bg-brand-pink-soft"
+            className="forum-search"
           />
           <button
             type="submit"
             aria-label="Hľadať"
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-purple"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-purple/60"
           >
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
               <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
@@ -99,26 +103,16 @@ export default async function ForumSearchPage({
           </button>
         </form>
 
-        <div className="no-scrollbar mt-3 flex items-center gap-2 overflow-x-auto pb-1">
-          <span className="flex shrink-0 items-center gap-1 text-xs font-semibold text-brand-purple/70">
-            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden>
-              <path
-                d="M4 6h16M7 12h10M10 18h4"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-            Filtrovať
-          </span>
+        <div className="no-scrollbar mt-4 flex items-center gap-2 overflow-x-auto pb-1">
+          <span className="forum-section-label shrink-0">Filter</span>
           {FILTERS.map((opt) => (
             <Link
               key={opt.id}
               href={buildHref(opt.id)}
-              className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-semibold ${
+              className={`shrink-0 rounded-full px-4 py-2 text-xs font-semibold transition ${
                 filter === opt.id
-                  ? "bg-brand-pink text-white"
-                  : "border border-brand-purple/20 text-brand-purple"
+                  ? "bg-brand-purple text-white shadow-soft"
+                  : "border border-brand-purple/15 bg-white text-brand-purple hover:border-brand-purple/30"
               }`}
             >
               {opt.label}
@@ -128,26 +122,24 @@ export default async function ForumSearchPage({
       </section>
 
       {forums.length === 0 ? (
-        <div className="mx-5 mt-4 rounded-3xl bg-white p-6 text-center text-sm text-brand-purple/70 shadow-card">
-          Nenašli sa žiadne fóra.
-        </div>
+        <div className="forum-empty mx-5 mt-4">Nenašli sa žiadne fóra.</div>
       ) : (
-        <ul className="flex flex-col divide-y divide-brand-purple/10 px-5 pt-1">
+        <ul className="flex flex-col gap-3 px-5 pb-6 pt-2">
           {forums.map((forum) => (
-            <li key={forum.id} className="flex items-center gap-3 py-3">
+            <li key={forum.id} className="forum-card flex items-center gap-3 p-3">
               <Link
                 href={`/home/forums/${forum.id}`}
-                className="h-12 w-12 shrink-0 rounded-full bg-cover bg-center"
+                className="h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-cover bg-center ring-2 ring-white"
                 style={forumAvatarStyle(forum)}
                 aria-label={forum.title}
               />
               <Link href={`/home/forums/${forum.id}`} className="min-w-0 flex-1">
-                <h2 className="truncate text-sm font-bold uppercase tracking-wide text-brand-purple">
+                <h2 className="truncate text-sm font-bold text-brand-purple">
                   {forum.title}
                 </h2>
-                <p className="text-[11px] text-brand-purple/55">
+                <span className="forum-chip mt-1">
                   {forum._count.members} členov
-                </p>
+                </span>
               </Link>
               <ForumFollowButton
                 forumId={forum.id}
@@ -158,6 +150,6 @@ export default async function ForumSearchPage({
           ))}
         </ul>
       )}
-    </>
+    </div>
   );
 }

@@ -1,8 +1,10 @@
 import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
 import { FeedProfileHeader } from "@/components/FeedProfileHeader";
 import { LikeButton } from "@/components/LikeButton";
-import { FeedEventItem, FeedPostItem } from "@/components/FeedPostItem";
+import { FeedEventItem } from "@/components/FeedEventItem";
+import { FeedPostItem } from "@/components/FeedPostItem";
 import { buildHomeFeed, defaultProfileLabel } from "@/lib/feed";
+import { buildPostGallery, postPublicHref } from "@/lib/post-display";
 import { relevantWhere } from "@/lib/cancer-personalization";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
@@ -20,6 +22,7 @@ export default async function HomeFeedPage() {
       orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
       include: {
         profile: true,
+        images: { orderBy: { sortOrder: "asc" } },
         _count: { select: { likes: true } },
       },
     }),
@@ -40,7 +43,7 @@ export default async function HomeFeedPage() {
     ),
   ];
 
-  const [userLikes, follows] = await Promise.all([
+  const [userLikes, follows, eventRegistrations] = await Promise.all([
     prisma.articleLike.findMany({
       where: {
         userId: user.id,
@@ -52,10 +55,22 @@ export default async function HomeFeedPage() {
       where: { userId: user.id, profileId: { in: profileIds } },
       select: { profileId: true },
     }),
+    prisma.eventRegistration.findMany({
+      where: {
+        userId: user.id,
+        eventId: { in: events.map((e) => e.id) },
+      },
+      select: { eventId: true },
+    }),
   ]);
 
   const likedIds = new Set(userLikes.map((l) => l.postId));
   const followingIds = new Set(follows.map((f) => f.profileId));
+  const registeredEventIds = new Set(
+    eventRegistrations.map((r) => r.eventId),
+  );
+  const [defaultName, ...restName] = user.fullName.split(" ");
+  const defaultSurname = restName.join(" ");
 
   const feed = buildHomeFeed(posts, events, userTypes);
 
@@ -84,9 +99,13 @@ export default async function HomeFeedPage() {
                     id={e.id}
                     title={e.title}
                     description={e.description}
-                    startsAt={e.startsAt}
+                    startsAt={e.startsAt.toISOString()}
+                    endsAt={e.endsAt?.toISOString() ?? null}
                     location={e.location}
                     coverUrl={e.coverUrl}
+                    isRegistered={registeredEventIds.has(e.id)}
+                    defaultName={defaultName ?? ""}
+                    defaultSurname={defaultSurname}
                   />
                 </div>
               );
@@ -94,12 +113,7 @@ export default async function HomeFeedPage() {
 
             const p = item.post;
             const label = defaultProfileLabel(p.profile);
-            const href =
-              p.type === "VIDEO"
-                ? p.videoUrl ?? "#"
-                : p.type === "ARTICLE"
-                  ? `/home/articles/${p.id}`
-                  : `/home/recipes/${p.id}`;
+            const href = postPublicHref(p);
 
             return (
               <div key={`post-${p.id}`}>
@@ -115,7 +129,7 @@ export default async function HomeFeedPage() {
                   type={p.type}
                   title={p.title}
                   excerpt={p.excerpt}
-                  coverUrl={p.coverUrl}
+                  imageUrls={buildPostGallery(p.coverUrl, p.images)}
                   likeSlot={
                     <LikeButton
                       postId={p.id}

@@ -2,6 +2,7 @@ import { FeedTabs } from "@/components/FeedHeader";
 import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
 import { LikeButton } from "@/components/LikeButton";
 import { PostCard } from "@/components/PostCard";
+import { buildPostGallery, postPublicHref } from "@/lib/post-display";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 
@@ -12,7 +13,10 @@ export default async function HomeRecipesPage() {
   const recipes = await prisma.post.findMany({
     where: { type: "RECIPE", published: true },
     orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
-    include: { _count: { select: { likes: true } } },
+    include: {
+      images: { orderBy: { sortOrder: "asc" } },
+      _count: { select: { likes: true } },
+    },
   });
 
   const userLikes = await prisma.articleLike.findMany({
@@ -38,11 +42,11 @@ export default async function HomeRecipesPage() {
           recipes.map((r) => (
             <PostCard
               key={r.id}
-              href={`/home/recipes/${r.id}`}
+              href={postPublicHref(r)}
               type={r.type}
               title={r.title}
               excerpt={r.excerpt}
-              coverUrl={r.coverUrl}
+              imageUrls={buildPostGallery(r.coverUrl, r.images)}
               likeSlot={
                 <LikeButton
                   postId={r.id}

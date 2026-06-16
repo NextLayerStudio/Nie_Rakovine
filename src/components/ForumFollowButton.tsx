@@ -16,17 +16,17 @@ export function ForumFollowButton({
   joinedLabel?: string;
 }) {
   const sizing =
-    size === "md" ? "px-4 py-1.5 text-xs" : "px-3 py-1 text-[10px]";
+    size === "md" ? "px-4 py-2 text-xs" : "px-3 py-1.5 text-[10px]";
 
   return (
     <form action={toggleForumFollowAction}>
       <input type="hidden" name="forumId" value={forumId} />
       <button
         type="submit"
-        className={`shrink-0 rounded-pill font-semibold ${sizing} ${
+        className={`shrink-0 rounded-full font-semibold shadow-sm transition active:scale-95 ${sizing} ${
           isFollowing
-            ? "border border-brand-purple/30 bg-brand-purple/10 text-brand-purple"
-            : "border border-brand-pink text-brand-pink"
+            ? "bg-brand-purple/10 text-brand-purple ring-1 ring-brand-purple/20"
+            : "bg-brand-pink text-white hover:brightness-105"
         }`}
       >
         {isFollowing ? joinedLabel : joinLabel}

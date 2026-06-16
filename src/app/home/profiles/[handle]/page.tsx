@@ -6,6 +6,7 @@ import { LikeButton } from "@/components/LikeButton";
 import { EventCard, PostCard } from "@/components/PostCard";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
+import { buildPostGallery, postPublicHref } from "@/lib/post-display";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +24,10 @@ export default async function ClubProfilePage({
       posts: {
         where: { published: true },
         orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
-        include: { _count: { select: { likes: true } } },
+        include: {
+          images: { orderBy: { sortOrder: "asc" } },
+          _count: { select: { likes: true } },
+        },
       },
       events: {
         where: { published: true },
@@ -142,17 +146,11 @@ export default async function ClubProfilePage({
               profile.posts.map((post) => (
                 <PostCard
                   key={post.id}
-                  href={
-                    post.type === "VIDEO"
-                      ? post.videoUrl ?? "#"
-                      : post.type === "ARTICLE"
-                        ? `/home/articles/${post.id}`
-                        : `/home/recipes/${post.id}`
-                  }
+                  href={postPublicHref(post)}
                   type={post.type}
                   title={post.title}
                   excerpt={post.excerpt}
-                  coverUrl={post.coverUrl}
+                  imageUrls={buildPostGallery(post.coverUrl, post.images)}
                   likeSlot={
                     <LikeButton
                       postId={post.id}

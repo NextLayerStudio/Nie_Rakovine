@@ -15,8 +15,8 @@ export default async function AdminDashboard() {
     events,
     newThisWeek,
     activeSubs,
+    pendingForums,
     pendingThreads,
-    pendingComments,
     recentUsers,
   ] = await Promise.all([
     prisma.clubProfile.count(),
@@ -30,8 +30,10 @@ export default async function AdminDashboard() {
     prisma.user.count({
       where: { role: "USER", subscriptionStatus: "ACTIVE" },
     }),
+    prisma.forum.count({
+      where: { published: false, createdById: { not: null } },
+    }),
     prisma.forumThread.count({ where: { status: "PENDING" } }),
-    prisma.forumComment.count({ where: { status: "PENDING" } }),
     prisma.user.findMany({
       where: { role: "USER" },
       orderBy: { createdAt: "desc" },
@@ -46,7 +48,7 @@ export default async function AdminDashboard() {
     }),
   ]);
 
-  const pending = pendingThreads + pendingComments;
+  const pending = pendingForums + pendingThreads;
 
   return (
     <div>
@@ -73,7 +75,7 @@ export default async function AdminDashboard() {
         <Kpi
           label="Na schválenie"
           value={pending}
-          sub="fóra — témy a komentáre"
+          sub="fóra a príspevky vo fóre"
           accent={pending > 0 ? "pink" : "purple"}
           href={pending > 0 ? "/admin/forums/moderation" : undefined}
         />

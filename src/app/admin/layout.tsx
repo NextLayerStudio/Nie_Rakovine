@@ -21,9 +21,13 @@ export default async function AdminLayout({
 }) {
   const user = await requireAdmin();
 
-  const pendingCount =
-    (await prisma.forumThread.count({ where: { status: "PENDING" } })) +
-    (await prisma.forumComment.count({ where: { status: "PENDING" } }));
+  const [pendingForums, pendingThreads] = await Promise.all([
+    prisma.forum.count({
+      where: { published: false, createdById: { not: null } },
+    }),
+    prisma.forumThread.count({ where: { status: "PENDING" } }),
+  ]);
+  const pendingCount = pendingForums + pendingThreads;
 
   return (
     <div className="min-h-[100dvh] bg-[#f7f4f6] text-brand-purple">

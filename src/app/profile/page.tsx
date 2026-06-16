@@ -11,7 +11,7 @@ export default async function ProfilePage() {
 
   return (
     <PhoneShell>
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto pb-[calc(5.5rem+env(safe-area-inset-bottom))]">
         <TopBar backHref="/home" title="Môj profil" />
 
         <section className="px-6 py-3">

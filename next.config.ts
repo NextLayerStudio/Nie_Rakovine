@@ -3,7 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
-      bodySizeLimit: "4mb",
+      // Cover + gallery images (4 MB each) and videos (up to 50 MB)
+      bodySizeLimit: "52mb",
     },
   },
   images: {

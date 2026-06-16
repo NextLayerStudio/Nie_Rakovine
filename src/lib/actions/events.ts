@@ -155,5 +155,11 @@ export async function registerForEventAction(
   });
 
   revalidatePath(`/home/events/${eventId}`);
+  revalidatePath("/home");
+
+  if (formData.get("stayOnPage") === "1") {
+    return { ok: true };
+  }
+
   redirect(`/home/events/${eventId}/registered`);
 }

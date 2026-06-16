@@ -11,15 +11,25 @@ const items = [
   { href: "/home/calendar", label: "Kalendár", icon: CalendarIcon },
 ];
 
+/** Hide nav on forum thread chat so the comment bar has full focus. */
+function isForumThreadChat(pathname: string | null): boolean {
+  if (!pathname) return false;
+  const match = pathname.match(/^\/home\/forums\/([^/]+)\/([^/]+)$/);
+  if (!match) return false;
+  return match[2] !== "new";
+}
+
 export function BottomNav() {
   const pathname = usePathname();
 
+  if (isForumThreadChat(pathname)) return null;
+
   return (
     <nav
-      className="z-20 shrink-0 bg-white px-6 pt-2"
+      className="bottom-nav pointer-events-none absolute inset-x-0 bottom-0 z-20 px-6 pt-2"
       style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
     >
-      <ul className="mx-auto grid h-[64px] w-full max-w-[340px] grid-cols-4 items-center rounded-full bg-brand-pink px-2 shadow-soft">
+      <ul className="pointer-events-auto mx-auto grid h-[64px] w-full max-w-[340px] grid-cols-4 items-center rounded-full bg-brand-pink px-2 shadow-soft">
         {items.map(({ href, label, icon: Icon }) => {
           const active =
             href === "/home"

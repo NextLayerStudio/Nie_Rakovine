@@ -6,13 +6,13 @@ import { requireUser } from "@/lib/auth";
 import { logoutAction } from "@/lib/actions/auth";
 
 const MAIN_ITEMS = [
-  { href: "/menu/zlavova-karta", label: "Moja zľavová karta", icon: "card" },
-  { href: "/home/notifications", label: "Oznámenia", icon: "bell" },
-  { href: "/profile", label: "Môj profil", icon: "user" },
-  { href: "/menu/kontent-kniznica", label: "Kontent knižnica", icon: "library" },
-  { href: "/menu/zlavy", label: "Zľavy", icon: "percent" },
-  { href: "/menu/aktivity", label: "Aktivity", icon: "calendar" },
-  { href: "/home/forums", label: "Fóra", icon: "forum" },
+  { href: "/menu/zlavova-karta", label: "Moja zľavová karta", icon: "card" as const },
+  { href: "/home/notifications", label: "Oznámenia", icon: "bell" as const },
+  { href: "/profile", label: "Môj profil", icon: "user" as const },
+  { href: "/menu/kontent-kniznica", label: "Kontent knižnica", icon: "library" as const },
+  { href: "/menu/zlavy", label: "Zľavy", icon: "percent" as const, comingSoon: true },
+  { href: "/menu/aktivity", label: "Aktivity", icon: "calendar" as const },
+  { href: "/home/forums", label: "Fóra", icon: "forum" as const },
 ] as const;
 
 export const dynamic = "force-dynamic";
@@ -23,7 +23,7 @@ export default async function MenuPage() {
 
   return (
     <PhoneShell>
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-brand-pink text-white">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-brand-pink pb-[calc(5.5rem+env(safe-area-inset-bottom))] text-white">
         <header className="flex items-center justify-between px-5 pt-6 pb-4">
           <Link href="/profile" className="flex items-center gap-3">
             <div
@@ -98,13 +98,33 @@ export default async function MenuPage() {
             )}
             {MAIN_ITEMS.map((item) => (
               <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="flex items-center gap-4 rounded-2xl px-4 py-3 text-sm font-medium hover:bg-white/15"
-                >
-                  <MenuIcon name={item.icon} />
-                  <span>{item.label}</span>
-                </Link>
+                {"comingSoon" in item && item.comingSoon ? (
+                  <div
+                    aria-disabled="true"
+                    className="flex items-center gap-4 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 opacity-90"
+                  >
+                    <MenuIcon name={item.icon} muted />
+                    <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                      <span className="text-sm font-medium text-white/85">
+                        {item.label}
+                      </span>
+                      <span className="text-[10px] font-semibold uppercase tracking-wide text-white/55">
+                        Pripravujeme
+                      </span>
+                    </span>
+                    <span className="shrink-0 rounded-pill bg-white/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
+                      Čoskoro
+                    </span>
+                  </div>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className="flex items-center gap-4 rounded-2xl px-4 py-3 text-sm font-medium transition hover:bg-white/15"
+                  >
+                    <MenuIcon name={item.icon} />
+                    <span>{item.label}</span>
+                  </Link>
+                )}
               </li>
             ))}
             <MenuInformacie />
@@ -137,7 +157,13 @@ export default async function MenuPage() {
   );
 }
 
-function MenuIcon({ name }: { name: (typeof MAIN_ITEMS)[number]["icon"] | "settings" | "info" }) {
+function MenuIcon({
+  name,
+  muted = false,
+}: {
+  name: (typeof MAIN_ITEMS)[number]["icon"] | "settings" | "info";
+  muted?: boolean;
+}) {
   const path: Record<string, React.ReactNode> = {
     card: (
       <>
@@ -188,7 +214,11 @@ function MenuIcon({ name }: { name: (typeof MAIN_ITEMS)[number]["icon"] | "setti
     ),
   };
   return (
-    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/20">
+    <span
+      className={`grid h-9 w-9 shrink-0 place-items-center rounded-full ${
+        muted ? "bg-white/10" : "bg-white/20"
+      }`}
+    >
       <svg
         viewBox="0 0 24 24"
         className="h-5 w-5"

@@ -145,7 +145,7 @@ export async function createThreadAction(
     return { ok: false, message: "Najprv sa zapojte do fóra." };
   }
 
-  await prisma.forumThread.create({
+  const thread = await prisma.forumThread.create({
     data: {
       forumId,
       authorId: user.id,
@@ -158,7 +158,7 @@ export async function createThreadAction(
 
   revalidatePath("/admin/forums/moderation");
   revalidatePath(`/home/forums/${forumId}`);
-  redirect(`/home/forums/${forumId}?pending=1`);
+  redirect(`/home/forums/${forumId}/${thread.id}`);
 }
 
 /** A regular user proposes a new forum. It stays hidden until an admin approves it. */
@@ -225,10 +225,7 @@ export async function createCommentAction(
     where: {
       id: threadId,
       forumId: forumId || undefined,
-      OR: [
-        { status: "APPROVED" },
-        { status: "PENDING", authorId: user.id },
-      ],
+      status: "APPROVED",
       NOT: { status: "REJECTED" },
     },
     select: { id: true, forumId: true },
@@ -251,15 +248,11 @@ export async function createCommentAction(
       threadId,
       authorId: user.id,
       body,
-      status: "PENDING",
+      status: "APPROVED",
     },
   });
 
-  revalidatePath("/admin/forums/moderation");
   revalidatePath(`/home/forums/${forumId}/${threadId}`);
-  return {
-    ok: true,
-    message:
-      "Správa odoslaná. Čaká na overenie administrátorom — po schválení sa zobrazí ostatným.",
-  };
+  revalidatePath(`/home/forums/${forumId}`);
+  return { ok: true, message: "Správa odoslaná." };
 }

@@ -18,6 +18,7 @@ export function LoadingScreen({
         className,
       )}
       style={{ backgroundColor: "#CA6A8AE3" }}
+      data-route-loading=""
       role="status"
       aria-live="polite"
       aria-busy="true"

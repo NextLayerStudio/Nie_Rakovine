@@ -6,9 +6,59 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin, requireUser } from "@/lib/auth";
 import { notifyProfileFollowersNewPost } from "@/lib/notifications";
 import { parseCancerTypes } from "@/lib/cancer-type";
-import type { PostType } from "@prisma/client";
+import {
+  resolveImageField,
+  resolveVideoField,
+  saveUploadedImages,
+} from "@/lib/uploads";
+import type { PostType, Prisma } from "@prisma/client";
 
 export type ActionState = { ok: boolean; message?: string };
+
+type DbClient = Prisma.TransactionClient | typeof prisma;
+
+async function syncPostGallery(
+  postId: string,
+  formData: FormData,
+  db: DbClient = prisma,
+): Promise<void> {
+  const removeIds = formData
+    .getAll("removeImageIds")
+    .map(String)
+    .filter(Boolean);
+
+  if (removeIds.length > 0) {
+    await db.postImage.deleteMany({
+      where: { id: { in: removeIds }, postId },
+    });
+  }
+
+  const newUrls = await saveUploadedImages(formData, "galleryFiles", "posts");
+  if (newUrls.length === 0) return;
+
+  const existingCount = await db.postImage.count({ where: { postId } });
+
+  await db.postImage.createMany({
+    data: newUrls.map((url, index) => ({
+      postId,
+      url,
+      sortOrder: existingCount + index,
+    })),
+  });
+}
+
+function galleryErrorMessage(err: unknown): string {
+  if (
+    err instanceof TypeError &&
+    (String(err.message).includes("findFirst") ||
+      String(err.message).includes("createMany") ||
+      String(err.message).includes("deleteMany") ||
+      String(err.message).includes("count"))
+  ) {
+    return "Galéria obrázkov nie je pripravená. Spustite npx prisma migrate deploy, npx prisma generate a reštartujte dev server.";
+  }
+  return err instanceof Error ? err.message : "Nepodarilo sa nahrať galériu.";
+}
 
 // ------ Admin: create post ---------------------------------------------
 export async function createPostAction(
@@ -20,8 +70,6 @@ export async function createPostAction(
   const title = String(formData.get("title") ?? "").trim();
   const excerpt = String(formData.get("excerpt") ?? "").trim() || null;
   const body = String(formData.get("body") ?? "").trim() || null;
-  const coverUrl = String(formData.get("coverUrl") ?? "").trim() || null;
-  const videoUrl = String(formData.get("videoUrl") ?? "").trim() || null;
   const published = formData.get("published") === "on";
   const profileId = String(formData.get("profileId") ?? "").trim() || null;
   const cancerTypes = parseCancerTypes(formData.getAll("cancerTypes"));
@@ -30,21 +78,59 @@ export async function createPostAction(
     return { ok: false, message: "Vyplňte názov a typ obsahu." };
   }
 
-  const post = await prisma.post.create({
-    data: {
-      type,
-      title,
-      excerpt,
-      body,
-      coverUrl,
-      videoUrl,
-      published,
-      publishedAt: published ? new Date() : null,
-      profileId,
-      cancerTypes,
-    },
-    include: { profile: { select: { id: true, displayName: true } } },
-  });
+  let coverUrl: string | null;
+  try {
+    coverUrl = await resolveImageField(
+      formData,
+      "coverFile",
+      "coverUrl",
+      "posts",
+    );
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Nepodarilo sa nahrať obrázok.",
+    };
+  }
+
+  let videoUrl: string | null;
+  try {
+    videoUrl = (await resolveVideoField(formData, "videoFile", "videoUrl")) ?? null;
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Nepodarilo sa nahrať video.",
+    };
+  }
+
+  let post;
+  try {
+    post = await prisma.$transaction(async (tx) => {
+      const created = await tx.post.create({
+        data: {
+          type,
+          title,
+          excerpt,
+          body,
+          coverUrl,
+          videoUrl,
+          published,
+          publishedAt: published ? new Date() : null,
+          profileId,
+          cancerTypes,
+        },
+        include: { profile: { select: { id: true, displayName: true } } },
+      });
+
+      await syncPostGallery(created.id, formData, tx);
+      return created;
+    });
+  } catch (err) {
+    return {
+      ok: false,
+      message: galleryErrorMessage(err),
+    };
+  }
 
   if (published) {
     await notifyProfileFollowersNewPost(post);
@@ -66,14 +152,46 @@ export async function updatePostAction(
   const title = String(formData.get("title") ?? "").trim();
   const excerpt = String(formData.get("excerpt") ?? "").trim() || null;
   const body = String(formData.get("body") ?? "").trim() || null;
-  const coverUrl = String(formData.get("coverUrl") ?? "").trim() || null;
-  const videoUrl = String(formData.get("videoUrl") ?? "").trim() || null;
   const published = formData.get("published") === "on";
 
   const profileId = String(formData.get("profileId") ?? "").trim() || null;
   const cancerTypes = parseCancerTypes(formData.getAll("cancerTypes"));
 
   const existing = await prisma.post.findUnique({ where: { id } });
+
+  let coverUrl: string | null;
+  try {
+    coverUrl = await resolveImageField(
+      formData,
+      "coverFile",
+      "coverUrl",
+      "posts",
+    );
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Nepodarilo sa nahrať obrázok.",
+    };
+  }
+
+  if (coverUrl === null && existing?.coverUrl) {
+    coverUrl = existing.coverUrl;
+  }
+
+  let videoUrl: string | null | undefined;
+  try {
+    videoUrl = await resolveVideoField(
+      formData,
+      "videoFile",
+      "videoUrl",
+      existing?.videoUrl,
+    );
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Nepodarilo sa nahrať video.",
+    };
+  }
 
   const post = await prisma.post.update({
     where: { id },
@@ -83,7 +201,7 @@ export async function updatePostAction(
       excerpt,
       body,
       coverUrl,
-      videoUrl,
+      videoUrl: videoUrl ?? null,
       published,
       publishedAt: published ? new Date() : null,
       profileId,
@@ -91,6 +209,12 @@ export async function updatePostAction(
     },
     include: { profile: { select: { id: true, displayName: true } } },
   });
+
+  try {
+    await syncPostGallery(post.id, formData);
+  } catch (err) {
+    return { ok: false, message: galleryErrorMessage(err) };
+  }
 
   if (published && !existing?.published) {
     await notifyProfileFollowersNewPost(post);
@@ -125,6 +249,7 @@ function revalidatePaths(profileId: string | null) {
   revalidatePath("/home/recipes");
   revalidatePath("/home/profiles");
   revalidatePath("/home/notifications");
+  revalidatePath("/home/posts");
 }
 
 // ------ Public: like / unlike a post -----------------------------------
@@ -152,4 +277,5 @@ export async function togglePostLikeAction(formData: FormData): Promise<void> {
   revalidatePath("/home/recipes");
   revalidatePath("/home/forums");
   revalidatePath("/home/profiles");
+  revalidatePath("/home/posts");
 }

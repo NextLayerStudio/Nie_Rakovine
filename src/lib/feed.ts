@@ -1,4 +1,4 @@
-import type { CancerType, Event, Post, ClubProfile } from "@prisma/client";
+import type { CancerType, Event, Post, PostImage, ClubProfile } from "@prisma/client";
 import { relevanceScore } from "@/lib/cancer-personalization";
 
 export type FeedPostItem = {
@@ -6,6 +6,7 @@ export type FeedPostItem = {
   sortAt: Date;
   post: Post & {
     profile: ClubProfile | null;
+    images: PostImage[];
     _count: { likes: number };
   };
 };

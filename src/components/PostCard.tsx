@@ -1,32 +1,24 @@
+"use client";
+
 import Link from "next/link";
 import type { PostType } from "@prisma/client";
+import { PostImageCarousel } from "@/components/PostImageCarousel";
 
 export function PostCard({
   href,
   type,
   title,
   excerpt,
-  coverUrl,
+  imageUrls,
   likeSlot,
 }: {
   href: string;
   type: PostType;
   title: string;
   excerpt: string | null;
-  coverUrl: string | null;
+  imageUrls: string[];
   likeSlot?: React.ReactNode;
 }) {
-  const bg =
-    coverUrl ??
-    (type === "VIDEO"
-      ? "linear-gradient(180deg, #f3c3a2 0%, #d98c80 100%)"
-      : type === "ARTICLE"
-        ? "linear-gradient(180deg, #f5e0c8 0%, #d8a079 100%)"
-        : "linear-gradient(180deg, #ffcdb2 0%, #e07a5f 100%)");
-  const coverStyle = coverUrl
-    ? { backgroundImage: `url(${coverUrl})`, backgroundSize: "cover", backgroundPosition: "center" }
-    : { background: bg };
-
   return (
     <article className="card mx-4 mb-3 overflow-hidden">
       <div className="flex items-center justify-between px-4 pt-2">
@@ -35,7 +27,14 @@ export function PostCard({
         </span>
       </div>
 
-      <div className="mt-2 aspect-[16/9] w-full" style={coverStyle} />
+      <div className="mt-2">
+        <PostImageCarousel
+          images={imageUrls}
+          type={type}
+          aspectClass="aspect-[16/9]"
+          maxHeightClass=""
+        />
+      </div>
 
       <div className="px-4 py-2">
         <h3 className="line-clamp-1 text-sm font-semibold text-brand-purple">

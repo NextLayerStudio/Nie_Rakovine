@@ -1,9 +1,7 @@
 import { forumAvatarStyle } from "@/lib/avatar-style";
 import {
-  approveCommentAction,
   approveForumAction,
   approveThreadAction,
-  rejectCommentAction,
   rejectForumAction,
   rejectThreadAction,
 } from "@/lib/actions/admin-forums";
@@ -13,7 +11,7 @@ import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 export const dynamic = "force-dynamic";
 
 export default async function ForumModerationPage() {
-  const [pendingForums, pendingThreads, pendingComments] = await Promise.all([
+  const [pendingForums, pendingThreads] = await Promise.all([
     prisma.forum.findMany({
       where: { published: false, createdById: { not: null } },
       orderBy: { createdAt: "asc" },
@@ -27,17 +25,7 @@ export default async function ForumModerationPage() {
       orderBy: { createdAt: "asc" },
       include: {
         author: { select: { fullName: true, email: true } },
-        forum: { select: { title: true } },
-      },
-    }),
-    prisma.forumComment.findMany({
-      where: { status: "PENDING" },
-      orderBy: { createdAt: "asc" },
-      include: {
-        author: { select: { fullName: true, email: true } },
-        thread: {
-          include: { forum: { select: { title: true } } },
-        },
+        forum: { select: { id: true, title: true } },
       },
     }),
   ]);
@@ -46,7 +34,7 @@ export default async function ForumModerationPage() {
     <div>
       <AdminPageHeader
         title="Schvaľovanie fóra"
-        description="Nové fóra od používateľov sa zobrazia ostatným až po schválení."
+        description="Schvaľujte nové fóra a príspevky od používateľov. Komentáre v chate sa zobrazujú hneď."
         backHref="/admin/forums"
         backLabel="Späť na fóra"
       />
@@ -111,7 +99,7 @@ export default async function ForumModerationPage() {
 
       <section className="mt-10">
         <h2 className="text-sm font-bold uppercase tracking-wide text-brand-purple/60">
-          Príspevky ({pendingThreads.length})
+          Príspevky na schválenie ({pendingThreads.length})
         </h2>
         <ul className="mt-3 space-y-4">
           {pendingThreads.length === 0 && (
@@ -124,80 +112,39 @@ export default async function ForumModerationPage() {
               key={t.id}
               className="rounded-2xl border border-brand-purple/10 bg-white p-4 shadow-card"
             >
-              <p className="text-xs text-brand-purple/60">
-                {t.forum.title} · {t.author.fullName} ({t.author.email})
-              </p>
-              {t.title && (
-                <h3 className="mt-1 font-bold text-brand-purple">{t.title}</h3>
-              )}
-              <p className="mt-2 whitespace-pre-wrap text-sm text-brand-purple/90">
-                {t.body}
-              </p>
-              <div className="mt-4 flex gap-2">
-                <form action={approveThreadAction}>
-                  <input type="hidden" name="id" value={t.id} />
-                  <button
-                    type="submit"
-                    className="rounded-pill bg-brand-purple px-4 py-1.5 text-xs font-semibold text-white"
-                  >
-                    Schváliť
-                  </button>
-                </form>
-                <form action={rejectThreadAction}>
-                  <input type="hidden" name="id" value={t.id} />
-                  <button
-                    type="submit"
-                    className="rounded-pill border border-red-300 px-4 py-1.5 text-xs font-semibold text-red-600"
-                  >
-                    Zamietnuť
-                  </button>
-                </form>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="mt-10">
-        <h2 className="text-sm font-bold uppercase tracking-wide text-brand-purple/60">
-          Komentáre ({pendingComments.length})
-        </h2>
-        <ul className="mt-3 space-y-4">
-          {pendingComments.length === 0 && (
-            <li className="rounded-2xl border border-dashed border-brand-purple/20 p-6 text-center text-sm text-brand-purple/60">
-              Žiadne komentáre na schválenie.
-            </li>
-          )}
-          {pendingComments.map((c) => (
-            <li
-              key={c.id}
-              className="rounded-2xl border border-brand-purple/10 bg-white p-4 shadow-card"
-            >
-              <p className="text-xs text-brand-purple/60">
-                {c.thread.forum.title} · {c.author.fullName}
-              </p>
-              <p className="mt-2 whitespace-pre-wrap text-sm text-brand-purple/90">
-                {c.body}
-              </p>
-              <div className="mt-4 flex gap-2">
-                <form action={approveCommentAction}>
-                  <input type="hidden" name="id" value={c.id} />
-                  <button
-                    type="submit"
-                    className="rounded-pill bg-brand-purple px-4 py-1.5 text-xs font-semibold text-white"
-                  >
-                    Schváliť
-                  </button>
-                </form>
-                <form action={rejectCommentAction}>
-                  <input type="hidden" name="id" value={c.id} />
-                  <button
-                    type="submit"
-                    className="rounded-pill border border-red-300 px-4 py-1.5 text-xs font-semibold text-red-600"
-                  >
-                    Zamietnuť
-                  </button>
-                </form>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs text-brand-purple/60">
+                  Fórum: {t.forum.title}
+                </p>
+                {t.title && (
+                  <h3 className="mt-1 font-bold text-brand-purple">{t.title}</h3>
+                )}
+                <p className="mt-1 line-clamp-3 text-sm text-brand-purple/80">
+                  {t.body}
+                </p>
+                <p className="mt-1 text-xs text-brand-purple/60">
+                  Od: {t.author.fullName} ({t.author.email})
+                </p>
+                <div className="mt-4 flex gap-2">
+                  <form action={approveThreadAction}>
+                    <input type="hidden" name="id" value={t.id} />
+                    <button
+                      type="submit"
+                      className="rounded-pill bg-brand-purple px-4 py-1.5 text-xs font-semibold text-white"
+                    >
+                      Schváliť
+                    </button>
+                  </form>
+                  <form action={rejectThreadAction}>
+                    <input type="hidden" name="id" value={t.id} />
+                    <button
+                      type="submit"
+                      className="rounded-pill border border-red-300 px-4 py-1.5 text-xs font-semibold text-red-600"
+                    >
+                      Zamietnuť
+                    </button>
+                  </form>
+                </div>
               </div>
             </li>
           ))}

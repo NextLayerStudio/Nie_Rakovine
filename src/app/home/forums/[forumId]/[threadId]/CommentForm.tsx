@@ -26,40 +26,41 @@ export function CommentForm({
 
   return (
     <div
-      className="fixed bottom-[88px] left-0 right-0 z-10 px-5"
-      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      className="fixed inset-x-0 bottom-0 z-30 border-t border-brand-purple/10 bg-white/95 px-5 pt-3 backdrop-blur-md shadow-[0_-4px_24px_rgba(111,35,128,0.08)]"
+      style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
     >
-      <form
-        action={formAction}
-        className="mx-auto flex max-w-[340px] flex-col gap-2 rounded-full bg-brand-pink p-2 pl-5 shadow-soft"
-      >
+      <form action={formAction} className="mx-auto max-w-[460px]">
         <input type="hidden" name="forumId" value={forumId} />
         <input type="hidden" name="threadId" value={threadId} />
-        <div className="flex items-center gap-2">
-          <input
+
+        <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wide text-brand-purple/60">
+          Napíšte komentár
+        </label>
+
+        <div className="flex items-end gap-2 rounded-[28px] bg-brand-pink p-2 pl-4 shadow-soft">
+          <textarea
             name="body"
-            type="text"
             required
+            rows={1}
             placeholder="Napíšte správu…"
-            className="min-w-0 flex-1 bg-transparent py-2 text-sm text-white placeholder-white/80 outline-none"
+            className="max-h-28 min-h-[40px] min-w-0 flex-1 resize-none bg-transparent py-2 text-sm leading-snug text-white placeholder-white/75 outline-none"
+            onInput={(e) => {
+              const el = e.currentTarget;
+              el.style.height = "auto";
+              el.style.height = `${Math.min(el.scrollHeight, 112)}px`;
+            }}
           />
           <SubmitButton
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/20 text-white"
+            aria-label="Odoslať"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white text-brand-pink transition hover:brightness-95"
             pendingLabel="…"
           >
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
-              <path
-                d="M4 16l6-6 6 6M10 10V4h4v6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <SendIcon />
           </SubmitButton>
         </div>
+
         {state.ok && state.message ? (
-          <p className="px-2 text-center text-[11px] font-medium text-white/95">
+          <p className="mt-2 text-center text-[11px] font-medium text-emerald-700">
             {state.message}
           </p>
         ) : (
@@ -67,5 +68,18 @@ export function CommentForm({
         )}
       </form>
     </div>
+  );
+}
+
+function SendIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+      <path
+        d="M5 12l14-7-4 14-2-5-5-2z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
