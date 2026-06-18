@@ -150,7 +150,10 @@ export async function createThreadAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  const user = await requireUser();
+  const auth = await requireActionUser();
+  if (!auth.ok) return { ok: false, message: auth.message };
+  const user = auth.user;
+
   const forumId = String(formData.get("forumId") ?? "");
   const body = String(formData.get("body") ?? "").trim();
   const title = String(formData.get("title") ?? "").trim() || null;
@@ -161,48 +164,59 @@ export async function createThreadAction(
   }
 
   let coverUrl: string | null = null;
+  if (imageFile instanceof File && imageFile.size > 0) {
+    try {
+      const { saveForumImage } = await import("@/lib/forum-image");
+      coverUrl = await saveForumImage(imageFile);
+    } catch (err) {
+      return {
+        ok: false,
+        message:
+          err instanceof Error ? err.message : "Obrázok sa nepodarilo uložiť.",
+      };
+    }
+  }
+
+  let threadId: string;
   try {
-    const { saveForumImage } = await import("@/lib/forum-image");
-    coverUrl = await saveForumImage(
-      imageFile instanceof File ? imageFile : null,
-    );
+    const [forum, membership] = await Promise.all([
+      prisma.forum.findFirst({
+        where: { id: forumId, published: true },
+        select: { id: true },
+      }),
+      prisma.forumMembership.findUnique({
+        where: { forumId_userId: { forumId, userId: user.id } },
+      }),
+    ]);
+
+    if (!forum) {
+      return { ok: false, message: "Fórum nie je dostupné." };
+    }
+    if (!membership) {
+      return { ok: false, message: "Najprv sa zapojte do fóra." };
+    }
+
+    const thread = await prisma.forumThread.create({
+      data: {
+        forumId,
+        authorId: user.id,
+        title,
+        body,
+        coverUrl,
+        status: "PENDING",
+      },
+    });
+    threadId = thread.id;
   } catch (err) {
     return {
       ok: false,
-      message: err instanceof Error ? err.message : "Obrázok sa nepodarilo uložiť.",
+      message: prismaActionError(err, "Príspevok sa nepodarilo uložiť."),
     };
   }
 
-  // Only published (admin-approved) forums accept posts.
-  const forum = await prisma.forum.findFirst({
-    where: { id: forumId, published: true },
-    select: { id: true },
-  });
-  if (!forum) {
-    return { ok: false, message: "Fórum nie je dostupné." };
-  }
-
-  const membership = await prisma.forumMembership.findUnique({
-    where: { forumId_userId: { forumId, userId: user.id } },
-  });
-  if (!membership) {
-    return { ok: false, message: "Najprv sa zapojte do fóra." };
-  }
-
-  const thread = await prisma.forumThread.create({
-    data: {
-      forumId,
-      authorId: user.id,
-      title,
-      body,
-      coverUrl,
-      status: "PENDING",
-    },
-  });
-
   revalidatePath("/admin/forums/moderation");
   revalidatePath(`/home/forums/${forumId}`);
-  redirect(`/home/forums/${forumId}/${thread.id}`);
+  redirect(`/home/forums/${forumId}/${threadId}`);
 }
 
 /** A regular user proposes a new forum. It stays hidden until an admin approves it. */
