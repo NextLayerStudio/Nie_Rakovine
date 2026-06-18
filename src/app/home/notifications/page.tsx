@@ -1,9 +1,9 @@
 import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
-import { notificationTypeLabel } from "@/lib/notifications";
 import {
-  markAllNotificationsReadAction,
-  openNotificationAction,
-} from "@/lib/actions/notifications";
+  MarkAllReadButton,
+  NotificationOpenButton,
+} from "@/components/notifications/NotificationActions";
+import { notificationTypeLabel } from "@/lib/notifications";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 
@@ -27,16 +27,7 @@ export default async function NotificationsPage() {
       <section className="px-5 pb-24">
         <div className="flex items-center justify-between">
           <h2 className="text-base font-bold text-brand-purple">Notifikácie</h2>
-          {unreadCount > 0 && (
-            <form action={markAllNotificationsReadAction}>
-              <button
-                type="submit"
-                className="text-xs font-semibold text-brand-pink"
-              >
-                Označiť všetko ako prečítané
-              </button>
-            </form>
-          )}
+          {unreadCount > 0 && <MarkAllReadButton />}
         </div>
 
         <ul className="mt-4 space-y-3">
@@ -98,13 +89,9 @@ function NotificationItem({
 
   if (n.href) {
     return (
-      <form action={openNotificationAction}>
-        <input type="hidden" name="id" value={n.id} />
-        <input type="hidden" name="href" value={n.href} />
-        <button type="submit" className={className}>
-          {content}
-        </button>
-      </form>
+      <NotificationOpenButton id={n.id} href={n.href} className={className}>
+        {content}
+      </NotificationOpenButton>
     );
   }
 
