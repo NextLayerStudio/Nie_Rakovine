@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { togglePostLikeAction } from "@/lib/actions/posts";
+import { togglePostLikeAction } from "@/lib/actions/post-likes";
 
 export function LikeButton({
   postId,

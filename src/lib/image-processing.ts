@@ -1,11 +1,15 @@
 import "server-only";
 
-import sharp from "sharp";
 import { maxImageUploadBytes } from "@/lib/image-upload-limits";
 
 const MAX_INPUT_BYTES = maxImageUploadBytes();
 const MAX_DIMENSION = 1600;
 const WEBP_QUALITY = 82;
+
+async function loadSharp() {
+  const mod = await import("sharp");
+  return mod.default;
+}
 
 /** Resize and compress large photos before storing them. */
 export async function optimizeImage(
@@ -22,6 +26,7 @@ export async function optimizeImage(
     return { buffer: input, mimeType, size: input.length };
   }
 
+  const sharp = await loadSharp();
   const image = sharp(input, { failOn: "none" }).rotate();
   const meta = await image.metadata();
   const needsResize =

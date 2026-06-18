@@ -6,7 +6,6 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { prismaActionError, requireActionUser } from "@/lib/safe-action";
-import { saveForumImage } from "@/lib/forum-image";
 
 export type ActionState = { ok: boolean; message?: string };
 
@@ -168,6 +167,7 @@ export async function createThreadAction(
 
   let coverUrl: string | null = null;
   try {
+    const { saveForumImage } = await import("@/lib/forum-image");
     coverUrl = await saveForumImage(
       imageFile instanceof File ? imageFile : null,
     );
@@ -228,6 +228,7 @@ export async function createForumByUserAction(
 
   let imageUrl: string | null = null;
   try {
+    const { saveForumImage } = await import("@/lib/forum-image");
     imageUrl = await saveForumImage(
       imageFile instanceof File ? imageFile : null,
     );
