@@ -3,8 +3,9 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import type { EventCategory } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { requireAdmin, requireUser } from "@/lib/auth";
+import { getSessionUserForAction, requireAdmin } from "@/lib/auth";
 import { notifyNearbyUsersNewEvent } from "@/lib/notifications";
 import { EVENT_CATEGORIES } from "@/lib/event-category";
 import { parseCancerTypes } from "@/lib/cancer-type";
@@ -142,17 +143,33 @@ export async function registerForEventAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  const user = await requireUser();
+  const user = await getSessionUserForAction();
+  if (!user) {
+    return { ok: false, message: "Prihláste sa prosím znova." };
+  }
+
   const eventId = String(formData.get("eventId") ?? "");
   const name = String(formData.get("name") ?? "").trim() || null;
   const surname = String(formData.get("surname") ?? "").trim() || null;
   if (!eventId) return { ok: false, message: "Chýba podujatie." };
 
-  await prisma.eventRegistration.upsert({
-    where: { eventId_userId: { eventId, userId: user.id } },
-    create: { eventId, userId: user.id, name, surname },
-    update: { name, surname },
-  });
+  try {
+    await prisma.eventRegistration.upsert({
+      where: { eventId_userId: { eventId, userId: user.id } },
+      create: { eventId, userId: user.id, name, surname },
+      update: { name, surname },
+    });
+  } catch (err) {
+    console.error("[registerForEventAction]", err);
+    return {
+      ok: false,
+      message:
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === "P2021"
+          ? "Databáza nie je pripravená. Skontrolujte migrácie na Verceli."
+          : "Registrácia zlyhala. Skúste to znova.",
+    };
+  }
 
   revalidatePath(`/home/events/${eventId}`);
   revalidatePath("/home");

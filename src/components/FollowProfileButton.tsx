@@ -20,8 +20,10 @@ export function FollowProfileButton({
     <form
       action={(formData) => {
         startTransition(async () => {
-          await toggleProfileFollowAction(formData);
-          router.refresh();
+          const result = await toggleProfileFollowAction(formData);
+          if (result.ok) {
+            router.refresh();
+          }
         });
       }}
     >

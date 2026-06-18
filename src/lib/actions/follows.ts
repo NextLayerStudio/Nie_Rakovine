@@ -3,23 +3,29 @@
 import { revalidatePath } from "next/cache";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/auth";
+import { getSessionUserForAction } from "@/lib/auth";
 
 export async function toggleProfileFollowAction(
   formData: FormData,
-): Promise<void> {
-  const user = await getCurrentUser();
-  if (!user) return;
+): Promise<{ ok: boolean; message?: string }> {
+  const user = await getSessionUserForAction();
+  if (!user) {
+    return { ok: false, message: "Prihláste sa prosím znova." };
+  }
 
   const profileId = String(formData.get("profileId") ?? "").trim();
   const handle = String(formData.get("handle") ?? "").trim();
-  if (!profileId) return;
+  if (!profileId) {
+    return { ok: false, message: "Chýba profil." };
+  }
 
   const profile = await prisma.clubProfile.findUnique({
     where: { id: profileId },
     select: { id: true, handle: true },
   });
-  if (!profile) return;
+  if (!profile) {
+    return { ok: false, message: "Profil neexistuje." };
+  }
 
   try {
     const existing = await prisma.profileFollow.findUnique({
@@ -36,15 +42,21 @@ export async function toggleProfileFollowAction(
       });
     }
   } catch (err) {
-    // Double-click / race: second create hits unique constraint — treat as success.
     if (
       err instanceof Prisma.PrismaClientKnownRequestError &&
       err.code === "P2002"
     ) {
-      // already following
+      // already following (double click)
     } else {
       console.error("[toggleProfileFollowAction]", err);
-      return;
+      return {
+        ok: false,
+        message:
+          err instanceof Prisma.PrismaClientKnownRequestError &&
+          err.code === "P2021"
+            ? "Databáza nie je pripravená. Skontrolujte migrácie na Verceli."
+            : "Nepodarilo sa zmeniť sledovanie. Skúste to znova.",
+      };
     }
   }
 
@@ -54,4 +66,6 @@ export async function toggleProfileFollowAction(
   revalidatePath("/home/profiles");
   revalidatePath("/home/notifications");
   revalidatePath(`/home/profiles/${profileHandle}`);
+
+  return { ok: true };
 }

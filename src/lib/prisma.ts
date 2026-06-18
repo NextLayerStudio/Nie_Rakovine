@@ -15,7 +15,10 @@ function getRawDatabaseUrl(): string {
   );
 }
 
-/** Tune Neon pooler URL — avoids P2024 pool exhaustion in Next.js dev. */
+/**
+ * Neon on Vercel: use the *pooler* URL for runtime (host contains "-pooler").
+ * Only then add pgbouncer=true — never add it to the direct / unpooled URL.
+ */
 function getDatabaseUrl(): string {
   const raw = getRawDatabaseUrl();
 
@@ -23,12 +26,17 @@ function getDatabaseUrl(): string {
     const normalized = raw.replace(/^postgresql:/, "postgres:");
     const url = new URL(normalized);
 
-    // channel_binding often breaks Prisma + PgBouncer on Neon
+    // channel_binding breaks Prisma + PgBouncer on Neon
     url.searchParams.delete("channel_binding");
 
-    if (!url.searchParams.has("pgbouncer")) {
+    const isPooler =
+      url.hostname.includes("-pooler") ||
+      url.searchParams.get("pgbouncer") === "true";
+
+    if (isPooler && url.searchParams.get("pgbouncer") !== "true") {
       url.searchParams.set("pgbouncer", "true");
     }
+
     if (!url.searchParams.has("connection_limit")) {
       url.searchParams.set("connection_limit", "5");
     }
@@ -37,6 +45,9 @@ function getDatabaseUrl(): string {
     }
     if (!url.searchParams.has("connect_timeout")) {
       url.searchParams.set("connect_timeout", "15");
+    }
+    if (!url.searchParams.has("sslmode")) {
+      url.searchParams.set("sslmode", "require");
     }
 
     return url.toString().replace(/^postgres:/, "postgresql:");
@@ -55,8 +66,6 @@ function createPrismaClient() {
   });
 }
 
+/** Reuse one client per serverless instance (required for Neon pooler on Vercel). */
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
-}
+globalForPrisma.prisma = prisma;

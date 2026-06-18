@@ -75,6 +75,16 @@ export async function readSession(): Promise<SessionPayload | null> {
   }
 }
 
+/** Lightweight user lookup for server actions (no redirect, minimal fields). */
+export async function getSessionUserForAction() {
+  const session = await readSession();
+  if (!session) return null;
+  return prisma.user.findUnique({
+    where: { id: session.userId },
+    select: { id: true, fullName: true },
+  });
+}
+
 /** One DB round-trip per request (dedupes layout + page + header). */
 export const getCurrentUser = cache(async () => {
   const session = await readSession();
