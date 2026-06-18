@@ -3,6 +3,7 @@ import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
 import { LikeButton } from "@/components/LikeButton";
 import { PostCard } from "@/components/PostCard";
 import { buildPostGallery, postPublicHref } from "@/lib/post-display";
+import { LIST_POST_LIMIT, listPostSelect } from "@/lib/feed-queries";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 
@@ -10,22 +11,24 @@ export const dynamic = "force-dynamic";
 
 export default async function HomeRecipesPage() {
   const user = await requireUser();
+
   const recipes = await prisma.post.findMany({
     where: { type: "RECIPE", published: true },
     orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
-    include: {
-      images: { orderBy: { sortOrder: "asc" } },
-      _count: { select: { likes: true } },
-    },
+    take: LIST_POST_LIMIT,
+    select: listPostSelect,
   });
 
-  const userLikes = await prisma.articleLike.findMany({
-    where: {
-      userId: user.id,
-      postId: { in: recipes.map((r) => r.id) },
-    },
-    select: { postId: true },
-  });
+  const userLikes = recipes.length
+    ? await prisma.articleLike.findMany({
+        where: {
+          userId: user.id,
+          postId: { in: recipes.map((r) => r.id) },
+        },
+        select: { postId: true },
+      })
+    : [];
+
   const likedIds = new Set(userLikes.map((l) => l.postId));
 
   return (

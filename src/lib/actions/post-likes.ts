@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { prismaActionError, requireActionUser } from "@/lib/safe-action";
@@ -44,13 +43,6 @@ export async function togglePostLikeAction(
     }
   }
 
-  revalidatePath("/home");
-  revalidatePath("/home/search");
-  revalidatePath("/home/articles");
-  revalidatePath("/home/recipes");
-  revalidatePath("/home/forums");
-  revalidatePath("/home/profiles");
-  revalidatePath("/home/posts");
-
+  // Client calls router.refresh() — avoid invalidating the whole app on every tap.
   return { ok: true };
 }

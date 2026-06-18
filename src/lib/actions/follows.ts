@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getSessionUserForAction } from "@/lib/auth";
@@ -58,13 +57,6 @@ export async function toggleProfileFollowAction(
       };
     }
   }
-
-  const profileHandle = handle || profile.handle;
-  revalidatePath("/home");
-  revalidatePath("/home/search");
-  revalidatePath("/home/profiles");
-  revalidatePath("/home/notifications");
-  revalidatePath(`/home/profiles/${profileHandle}`);
 
   return { ok: true };
 }

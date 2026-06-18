@@ -3,6 +3,7 @@ import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { relevantWhere, sortByRelevance } from "@/lib/cancer-personalization";
+import { PROFILES_LIST_LIMIT } from "@/lib/feed-queries";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +14,16 @@ export default async function ProfilesListPage() {
   const profilesRaw = await prisma.clubProfile.findMany({
     where: { published: true, ...relevantWhere(userTypes) },
     orderBy: [{ sortOrder: "asc" }, { displayName: "asc" }],
-    include: { _count: { select: { posts: true } } },
+    take: PROFILES_LIST_LIMIT,
+    select: {
+      id: true,
+      handle: true,
+      displayName: true,
+      avatarUrl: true,
+      bio: true,
+      cancerTypes: true,
+      _count: { select: { posts: true } },
+    },
   });
   const profiles = sortByRelevance(profilesRaw, userTypes);
 

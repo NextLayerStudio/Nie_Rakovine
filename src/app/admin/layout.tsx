@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { logoutAction } from "@/lib/actions/auth";
-import { prisma } from "@/lib/prisma";
+import { getPendingModerationCounts } from "@/lib/admin-metrics";
 import { AdminNav } from "@/components/admin/AdminNav";
 
 export const dynamic = "force-dynamic";
@@ -20,14 +20,7 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const user = await requireAdmin();
-
-  const [pendingForums, pendingThreads] = await Promise.all([
-    prisma.forum.count({
-      where: { published: false, createdById: { not: null } },
-    }),
-    prisma.forumThread.count({ where: { status: "PENDING" } }),
-  ]);
-  const pendingCount = pendingForums + pendingThreads;
+  const { total: pendingCount } = await getPendingModerationCounts();
 
   return (
     <div className="min-h-[100dvh] bg-[#f7f4f6] text-brand-purple">

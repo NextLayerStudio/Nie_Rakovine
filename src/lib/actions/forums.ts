@@ -45,7 +45,9 @@ export async function joinForumAction(
   }
 
   revalidatePath("/home/forums");
-  revalidatePath(`/home/forums/${forumId}`);
+  if (forumId) {
+    revalidatePath(`/home/forums/${forumId}`);
+  }
   return { ok: true };
 }
 
@@ -91,8 +93,7 @@ export async function toggleForumFollowAction(
     }
   }
 
-  revalidatePath("/home/forums");
-  revalidatePath(`/home/forums/${forumId}`);
+  // Client refresh updates the current forum page.
   return { ok: true };
 }
 
@@ -104,7 +105,6 @@ export async function toggleForumThreadLikeAction(
   const user = auth.user;
 
   const threadId = String(formData.get("threadId") ?? "");
-  const forumId = String(formData.get("forumId") ?? "");
   if (!threadId) return { ok: false, message: "Chýba príspevok." };
 
   try {
@@ -143,11 +143,6 @@ export async function toggleForumThreadLikeAction(
     }
   }
 
-  revalidatePath("/home/forums");
-  if (forumId) {
-    revalidatePath(`/home/forums/${forumId}`);
-    revalidatePath(`/home/forums/${forumId}/${threadId}`);
-  }
   return { ok: true };
 }
 

@@ -5,6 +5,14 @@ import { FeedEventItem } from "@/components/FeedEventItem";
 import { FeedPostItem } from "@/components/FeedPostItem";
 import { LikeButton } from "@/components/LikeButton";
 import { defaultProfileLabel, type FeedItem } from "@/lib/feed";
+import { loadFeedEngagement } from "@/lib/feed-engagement";
+import {
+  FEED_EVENT_LIMIT,
+  LIST_POST_LIMIT,
+  SEARCH_PROFILE_LIMIT,
+  feedEventSelect,
+  feedPostSelect,
+} from "@/lib/feed-queries";
 import { buildPostGallery, postPublicHref } from "@/lib/post-display";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
@@ -55,49 +63,46 @@ export default async function SearchPage({
     prisma.clubProfile.findMany({
       where: profileWhere,
       orderBy: [{ sortOrder: "asc" }, { displayName: "asc" }],
-      include: { _count: { select: { posts: true, events: true } } },
+      take: SEARCH_PROFILE_LIMIT,
+      select: {
+        id: true,
+        handle: true,
+        displayName: true,
+        avatarUrl: true,
+        _count: { select: { posts: true, events: true } },
+      },
     }),
     prisma.post.findMany({
       where: postWhere,
       orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
-      take: 40,
-      include: {
-        profile: true,
-        images: { orderBy: { sortOrder: "asc" } },
-        _count: { select: { likes: true } },
-      },
+      take: LIST_POST_LIMIT,
+      select: feedPostSelect,
     }),
     prisma.event.findMany({
       where: eventWhere,
       orderBy: { startsAt: "desc" },
-      take: 20,
-      include: { profile: true },
+      take: FEED_EVENT_LIMIT,
+      select: feedEventSelect,
     }),
   ]);
 
-  const [userLikes, follows, eventRegistrations] = await Promise.all([
-    prisma.articleLike.findMany({
-      where: { userId: user.id, postId: { in: posts.map((p) => p.id) } },
-      select: { postId: true },
-    }),
-    prisma.profileFollow.findMany({
-      where: { userId: user.id },
-      select: { profileId: true },
-    }),
-    prisma.eventRegistration.findMany({
-      where: {
-        userId: user.id,
-        eventId: { in: events.map((e) => e.id) },
-      },
-      select: { eventId: true },
-    }),
-  ]);
+  const profileIds = [
+    ...new Set(
+      [
+        ...posts.map((p) => p.profileId),
+        ...events.map((e) => e.profileId),
+        ...profiles.map((p) => p.id),
+      ].filter((id): id is string => !!id),
+    ),
+  ];
 
-  const likedIds = new Set(userLikes.map((l) => l.postId));
-  const followingIds = new Set(follows.map((f) => f.profileId));
-  const registeredEventIds = new Set(
-    eventRegistrations.map((r) => r.eventId),
-  );
+  const { likedIds, followingIds, registeredEventIds } =
+    await loadFeedEngagement(
+      user.id,
+      posts.map((p) => p.id),
+      profileIds,
+      events.map((e) => e.id),
+    );
   const [defaultName, ...restName] = user.fullName.split(" ");
   const defaultSurname = restName.join(" ");
 

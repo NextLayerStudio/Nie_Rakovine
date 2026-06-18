@@ -4,6 +4,14 @@ import { LikeButton } from "@/components/LikeButton";
 import { FeedEventItem } from "@/components/FeedEventItem";
 import { FeedPostItem } from "@/components/FeedPostItem";
 import { buildHomeFeed, defaultProfileLabel } from "@/lib/feed";
+import { loadFeedEngagement } from "@/lib/feed-engagement";
+import {
+  FEED_DISPLAY_LIMIT,
+  FEED_EVENT_LIMIT,
+  FEED_POST_POOL,
+  feedEventSelect,
+  feedPostSelect,
+} from "@/lib/feed-queries";
 import { buildPostGallery, postPublicHref } from "@/lib/post-display";
 import { relevantWhere } from "@/lib/cancer-personalization";
 import { prisma } from "@/lib/prisma";
@@ -20,17 +28,14 @@ export default async function HomeFeedPage() {
     prisma.post.findMany({
       where: { published: true, ...relevant },
       orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
-      include: {
-        profile: true,
-        images: { orderBy: { sortOrder: "asc" } },
-        _count: { select: { likes: true } },
-      },
+      take: FEED_POST_POOL,
+      select: feedPostSelect,
     }),
     prisma.event.findMany({
       where: { published: true, ...relevant },
       orderBy: { startsAt: "desc" },
-      take: 20,
-      include: { profile: true },
+      take: FEED_EVENT_LIMIT,
+      select: feedEventSelect,
     }),
   ]);
 
@@ -43,36 +48,18 @@ export default async function HomeFeedPage() {
     ),
   ];
 
-  const [userLikes, follows, eventRegistrations] = await Promise.all([
-    prisma.articleLike.findMany({
-      where: {
-        userId: user.id,
-        postId: { in: posts.map((p) => p.id) },
-      },
-      select: { postId: true },
-    }),
-    prisma.profileFollow.findMany({
-      where: { userId: user.id, profileId: { in: profileIds } },
-      select: { profileId: true },
-    }),
-    prisma.eventRegistration.findMany({
-      where: {
-        userId: user.id,
-        eventId: { in: events.map((e) => e.id) },
-      },
-      select: { eventId: true },
-    }),
-  ]);
+  const { likedIds, followingIds, registeredEventIds } =
+    await loadFeedEngagement(
+      user.id,
+      posts.map((p) => p.id),
+      profileIds,
+      events.map((e) => e.id),
+    );
 
-  const likedIds = new Set(userLikes.map((l) => l.postId));
-  const followingIds = new Set(follows.map((f) => f.profileId));
-  const registeredEventIds = new Set(
-    eventRegistrations.map((r) => r.eventId),
-  );
   const [defaultName, ...restName] = user.fullName.split(" ");
   const defaultSurname = restName.join(" ");
 
-  const feed = buildHomeFeed(posts, events, userTypes);
+  const feed = buildHomeFeed(posts, events, userTypes, FEED_DISPLAY_LIMIT);
 
   return (
     <>

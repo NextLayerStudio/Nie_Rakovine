@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { distanceKm } from "@/lib/geo";
 import { relevantWhere } from "@/lib/cancer-personalization";
+import { CALENDAR_EVENT_LIMIT, feedEventSelect } from "@/lib/feed-queries";
 
 export const dynamic = "force-dynamic";
 
@@ -11,11 +12,25 @@ export default async function CalendarPage() {
   const user = await requireUser();
   const userTypes = user.profile?.cancerTypes ?? [];
 
+  const sixMonthsAgo = new Date();
+  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+
   const [events, registrations] = await Promise.all([
     prisma.event.findMany({
-      where: { published: true, ...relevantWhere(userTypes) },
+      where: {
+        published: true,
+        startsAt: { gte: sixMonthsAgo },
+        ...relevantWhere(userTypes),
+      },
       orderBy: { startsAt: "asc" },
-      include: { profile: { select: { displayName: true, handle: true } } },
+      take: CALENDAR_EVENT_LIMIT,
+      select: {
+        ...feedEventSelect,
+        category: true,
+        latitude: true,
+        longitude: true,
+        profile: { select: { displayName: true, handle: true } },
+      },
     }),
     prisma.eventRegistration.findMany({
       where: { userId: user.id },

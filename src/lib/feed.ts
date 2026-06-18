@@ -1,28 +1,26 @@
-import type { CancerType, Event, Post, PostImage, ClubProfile } from "@prisma/client";
+import type { CancerType, ClubProfile } from "@prisma/client";
+import type { FeedEventRow, FeedPostRow } from "@/lib/feed-queries";
 import { relevanceScore } from "@/lib/cancer-personalization";
 
 export type FeedPostItem = {
   kind: "post";
   sortAt: Date;
-  post: Post & {
-    profile: ClubProfile | null;
-    images: PostImage[];
-    _count: { likes: number };
-  };
+  post: FeedPostRow;
 };
 
 export type FeedEventItem = {
   kind: "event";
   sortAt: Date;
-  event: Event & { profile: ClubProfile | null };
+  event: FeedEventRow;
 };
 
 export type FeedItem = FeedPostItem | FeedEventItem;
 
 export function buildHomeFeed(
-  posts: FeedPostItem["post"][],
-  events: FeedEventItem["event"][],
+  posts: FeedPostRow[],
+  events: FeedEventRow[],
   userTypes: CancerType[] = [],
+  displayLimit = 50,
 ): FeedItem[] {
   const items: FeedItem[] = [
     ...posts.map((post) => ({
@@ -48,10 +46,12 @@ export function buildHomeFeed(
     const byScore = score(b) - score(a);
     if (byScore !== 0) return byScore;
     return b.sortAt.getTime() - a.sortAt.getTime();
-  });
+  }).slice(0, displayLimit);
 }
 
-export function defaultProfileLabel(profile: ClubProfile | null): {
+export function defaultProfileLabel(
+  profile: Pick<ClubProfile, "displayName" | "handle" | "avatarUrl"> | null,
+): {
   displayName: string;
   handle: string;
   avatarUrl: string | null;

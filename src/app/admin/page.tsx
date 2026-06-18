@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { getPendingModerationCounts } from "@/lib/admin-metrics";
 
 export const dynamic = "force-dynamic";
 
@@ -15,8 +16,7 @@ export default async function AdminDashboard() {
     events,
     newThisWeek,
     activeSubs,
-    pendingForums,
-    pendingThreads,
+    { total: pending },
     recentUsers,
   ] = await Promise.all([
     prisma.clubProfile.count(),
@@ -30,10 +30,7 @@ export default async function AdminDashboard() {
     prisma.user.count({
       where: { role: "USER", subscriptionStatus: "ACTIVE" },
     }),
-    prisma.forum.count({
-      where: { published: false, createdById: { not: null } },
-    }),
-    prisma.forumThread.count({ where: { status: "PENDING" } }),
+    getPendingModerationCounts(),
     prisma.user.findMany({
       where: { role: "USER" },
       orderBy: { createdAt: "desc" },
@@ -47,8 +44,6 @@ export default async function AdminDashboard() {
       },
     }),
   ]);
-
-  const pending = pendingForums + pendingThreads;
 
   return (
     <div>

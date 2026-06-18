@@ -144,6 +144,8 @@ model ClubProfile {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([published, sortOrder])
 }
 
 model ProfileFollow {
@@ -155,6 +157,7 @@ model ProfileFollow {
   createdAt DateTime @default(now())
 
   @@unique([userId, profileId])
+  @@index([profileId])
 }
 
 // ---------------- Notifications ----------------
@@ -220,6 +223,10 @@ model Post {
   images      PostImage[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([published, publishedAt(sort: Desc)])
+  @@index([type, published, publishedAt(sort: Desc)])
+  @@index([profileId, published, publishedAt(sort: Desc)])
 }
 
 model PostImage {
@@ -277,6 +284,8 @@ model Event {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([published, startsAt])
 }
 
 model EventRegistration {
@@ -347,6 +356,8 @@ model ForumThread {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([forumId, status, createdAt(sort: Desc)])
 }
 
 model ForumThreadLike {
@@ -372,4 +383,6 @@ model ForumComment {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([threadId, status, createdAt])
 }

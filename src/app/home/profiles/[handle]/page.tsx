@@ -7,6 +7,11 @@ import { EventCard, PostCard } from "@/components/PostCard";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { buildPostGallery, postPublicHref } from "@/lib/post-display";
+import {
+  PROFILE_EVENT_LIMIT,
+  PROFILE_POST_LIMIT,
+  listPostSelect,
+} from "@/lib/feed-queries";
 
 export const dynamic = "force-dynamic";
 
@@ -20,37 +25,55 @@ export default async function ClubProfilePage({
 
   const profile = await prisma.clubProfile.findFirst({
     where: { handle, published: true },
-    include: {
+    select: {
+      id: true,
+      handle: true,
+      displayName: true,
+      bio: true,
+      avatarUrl: true,
+      coverUrl: true,
       posts: {
         where: { published: true },
         orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
-        include: {
-          images: { orderBy: { sortOrder: "asc" } },
-          _count: { select: { likes: true } },
-        },
+        take: PROFILE_POST_LIMIT,
+        select: listPostSelect,
       },
       events: {
         where: { published: true },
         orderBy: { startsAt: "asc" },
+        take: PROFILE_EVENT_LIMIT,
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          startsAt: true,
+          location: true,
+          coverUrl: true,
+        },
       },
     },
   });
 
   if (!profile) notFound();
 
-  const follow = await prisma.profileFollow.findUnique({
-    where: {
-      userId_profileId: { userId: user.id, profileId: profile.id },
-    },
-  });
+  const postIds = profile.posts.map((p) => p.id);
 
-  const userLikes = await prisma.articleLike.findMany({
-    where: {
-      userId: user.id,
-      postId: { in: profile.posts.map((p) => p.id) },
-    },
-    select: { postId: true },
-  });
+  const [follow, userLikes] = await Promise.all([
+    prisma.profileFollow.findUnique({
+      where: {
+        userId_profileId: { userId: user.id, profileId: profile.id },
+      },
+    }),
+    postIds.length
+      ? prisma.articleLike.findMany({
+          where: {
+            userId: user.id,
+            postId: { in: postIds },
+          },
+          select: { postId: true },
+        })
+      : [],
+  ]);
   const likedIds = new Set(userLikes.map((l) => l.postId));
 
   const coverStyle = profile.coverUrl
