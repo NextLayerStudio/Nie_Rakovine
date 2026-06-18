@@ -6,6 +6,7 @@ import type { EventCategory } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getSessionUserForAction, requireAdmin } from "@/lib/auth";
+import { prismaActionError, requireActionUser } from "@/lib/safe-action";
 import { notifyNearbyUsersNewEvent } from "@/lib/notifications";
 import { EVENT_CATEGORIES } from "@/lib/event-category";
 import { parseCancerTypes } from "@/lib/cancer-type";
@@ -143,10 +144,9 @@ export async function registerForEventAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  const user = await getSessionUserForAction();
-  if (!user) {
-    return { ok: false, message: "Prihláste sa prosím znova." };
-  }
+  const auth = await requireActionUser();
+  if (!auth.ok) return { ok: false, message: auth.message };
+  const user = auth.user;
 
   const eventId = String(formData.get("eventId") ?? "");
   const name = String(formData.get("name") ?? "").trim() || null;
@@ -160,14 +160,9 @@ export async function registerForEventAction(
       update: { name, surname },
     });
   } catch (err) {
-    console.error("[registerForEventAction]", err);
     return {
       ok: false,
-      message:
-        err instanceof Prisma.PrismaClientKnownRequestError &&
-        err.code === "P2021"
-          ? "Databáza nie je pripravená. Skontrolujte migrácie na Verceli."
-          : "Registrácia zlyhala. Skúste to znova.",
+      message: prismaActionError(err, "Registrácia zlyhala. Skúste to znova."),
     };
   }
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { togglePostLikeAction } from "@/lib/actions/posts";
 
 export function LikeButton({
@@ -13,27 +15,42 @@ export function LikeButton({
   count: number;
   variant?: "pill" | "feed";
 }) {
-  const pillClass = `flex items-center gap-1 rounded-pill px-3 py-1 text-xs font-semibold ${
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+
+  const pillClass = `flex items-center gap-1 rounded-pill px-3 py-1 text-xs font-semibold disabled:opacity-60 ${
     liked
       ? "bg-brand-pink text-white"
       : "bg-brand-purple/10 text-brand-purple"
   }`;
-  const feedClass = `flex items-center gap-1.5 text-sm ${
+  const feedClass = `flex items-center gap-1.5 text-sm disabled:opacity-60 ${
     liked ? "text-brand-pink" : "text-brand-purple/80"
   }`;
 
   return (
-    <form action={togglePostLikeAction}>
+    <form
+      action={(formData) => {
+        startTransition(async () => {
+          const result = await togglePostLikeAction(formData);
+          if (result.ok) {
+            router.refresh();
+          }
+        });
+      }}
+    >
       <input type="hidden" name="postId" value={postId} />
       <button
         type="submit"
+        disabled={pending}
         className={variant === "feed" ? feedClass : pillClass}
       >
         <HeartIcon filled={liked} large={variant === "feed"} />
         {variant === "feed" ? (
           <span className="text-xs font-medium">
-            {count > 0 ? count : "Páči sa mi"}
+            {pending ? "…" : count > 0 ? count : "Páči sa mi"}
           </span>
+        ) : pending ? (
+          "…"
         ) : count > 0 ? (
           count
         ) : (

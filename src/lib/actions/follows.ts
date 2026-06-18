@@ -4,14 +4,14 @@ import { revalidatePath } from "next/cache";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getSessionUserForAction } from "@/lib/auth";
+import { prismaActionError, requireActionUser } from "@/lib/safe-action";
 
 export async function toggleProfileFollowAction(
   formData: FormData,
 ): Promise<{ ok: boolean; message?: string }> {
-  const user = await getSessionUserForAction();
-  if (!user) {
-    return { ok: false, message: "Prihláste sa prosím znova." };
-  }
+  const auth = await requireActionUser();
+  if (!auth.ok) return auth;
+  const user = auth.user;
 
   const profileId = String(formData.get("profileId") ?? "").trim();
   const handle = String(formData.get("handle") ?? "").trim();
@@ -51,11 +51,10 @@ export async function toggleProfileFollowAction(
       console.error("[toggleProfileFollowAction]", err);
       return {
         ok: false,
-        message:
-          err instanceof Prisma.PrismaClientKnownRequestError &&
-          err.code === "P2021"
-            ? "Databáza nie je pripravená. Skontrolujte migrácie na Verceli."
-            : "Nepodarilo sa zmeniť sledovanie. Skúste to znova.",
+        message: prismaActionError(
+          err,
+          "Nepodarilo sa zmeniť sledovanie. Skúste to znova.",
+        ),
       };
     }
   }

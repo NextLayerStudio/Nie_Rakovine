@@ -2,8 +2,10 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
+import { prismaActionError, requireActionUser } from "@/lib/safe-action";
 import { saveForumImage } from "@/lib/forum-image";
 
 export type ActionState = { ok: boolean; message?: string };
@@ -16,82 +18,130 @@ async function isPublishedForum(forumId: string) {
   return !!forum;
 }
 
-export async function joinForumAction(formData: FormData): Promise<void> {
-  const user = await requireUser();
+export async function joinForumAction(
+  formData: FormData,
+): Promise<{ ok: boolean; message?: string }> {
+  const auth = await requireActionUser();
+  if (!auth.ok) return auth;
+  const user = auth.user;
+
   const forumId = String(formData.get("forumId") ?? "");
-  if (!forumId) return;
+  if (!forumId) return { ok: false, message: "Chýba fórum." };
 
-  if (!(await isPublishedForum(forumId))) return;
+  if (!(await isPublishedForum(forumId))) {
+    return { ok: false, message: "Fórum nie je dostupné." };
+  }
 
-  await prisma.forumMembership.upsert({
-    where: { forumId_userId: { forumId, userId: user.id } },
-    create: { forumId, userId: user.id },
-    update: {},
-  });
+  try {
+    await prisma.forumMembership.upsert({
+      where: { forumId_userId: { forumId, userId: user.id } },
+      create: { forumId, userId: user.id },
+      update: {},
+    });
+  } catch (err) {
+    return {
+      ok: false,
+      message: prismaActionError(err, "Nepodarilo sa zapojiť do fóra."),
+    };
+  }
 
   revalidatePath("/home/forums");
   revalidatePath(`/home/forums/${forumId}`);
+  return { ok: true };
 }
 
 /** Follow = join the forum; following again leaves it. */
 export async function toggleForumFollowAction(
   formData: FormData,
-): Promise<void> {
-  const user = await requireUser();
+): Promise<{ ok: boolean; message?: string }> {
+  const auth = await requireActionUser();
+  if (!auth.ok) return auth;
+  const user = auth.user;
+
   const forumId = String(formData.get("forumId") ?? "");
-  if (!forumId) return;
+  if (!forumId) return { ok: false, message: "Chýba fórum." };
 
-  const existing = await prisma.forumMembership.findUnique({
-    where: { forumId_userId: { forumId, userId: user.id } },
-  });
-
-  if (existing) {
-    await prisma.forumMembership.delete({
+  try {
+    const existing = await prisma.forumMembership.findUnique({
       where: { forumId_userId: { forumId, userId: user.id } },
     });
-  } else {
-    if (!(await isPublishedForum(forumId))) return;
-    await prisma.forumMembership.create({
-      data: { forumId, userId: user.id },
-    });
+
+    if (existing) {
+      await prisma.forumMembership.delete({
+        where: { forumId_userId: { forumId, userId: user.id } },
+      });
+    } else {
+      if (!(await isPublishedForum(forumId))) {
+        return { ok: false, message: "Fórum nie je dostupné." };
+      }
+      await prisma.forumMembership.create({
+        data: { forumId, userId: user.id },
+      });
+    }
+  } catch (err) {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === "P2002"
+    ) {
+      // already joined
+    } else {
+      return {
+        ok: false,
+        message: prismaActionError(err, "Nepodarilo sa zmeniť sledovanie."),
+      };
+    }
   }
 
   revalidatePath("/home/forums");
   revalidatePath(`/home/forums/${forumId}`);
+  return { ok: true };
 }
 
 export async function toggleForumThreadLikeAction(
   formData: FormData,
-): Promise<void> {
-  const user = await requireUser();
+): Promise<{ ok: boolean; message?: string }> {
+  const auth = await requireActionUser();
+  if (!auth.ok) return auth;
+  const user = auth.user;
+
   const threadId = String(formData.get("threadId") ?? "");
   const forumId = String(formData.get("forumId") ?? "");
-  if (!threadId) return;
+  if (!threadId) return { ok: false, message: "Chýba príspevok." };
 
-  const existing = await prisma.forumThreadLike.findUnique({
-    where: { userId_threadId: { userId: user.id, threadId } },
-  });
+  try {
+    const existing = await prisma.forumThreadLike.findUnique({
+      where: { userId_threadId: { userId: user.id, threadId } },
+    });
 
-  if (existing) {
-    await prisma.$transaction([
-      prisma.forumThreadLike.delete({
+    if (existing) {
+      await prisma.forumThreadLike.delete({
         where: { userId_threadId: { userId: user.id, threadId } },
-      }),
-      prisma.forumThread.update({
+      });
+      await prisma.forumThread.update({
         where: { id: threadId },
         data: { likeCount: { decrement: 1 } },
-      }),
-    ]);
-  } else {
-    await prisma.$transaction([
-      prisma.forumThreadLike.create({
+      });
+    } else {
+      await prisma.forumThreadLike.create({
         data: { userId: user.id, threadId },
-      }),
-      prisma.forumThread.update({
+      });
+      await prisma.forumThread.update({
         where: { id: threadId },
         data: { likeCount: { increment: 1 } },
-      }),
-    ]);
+      });
+    }
+  } catch (err) {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === "P2002"
+    ) {
+      // already liked
+    } else {
+      return {
+        ok: false,
+        message: prismaActionError(err, "Nepodarilo sa uložiť reakciu."),
+      };
+    }
   }
 
   revalidatePath("/home/forums");
@@ -99,6 +149,7 @@ export async function toggleForumThreadLikeAction(
     revalidatePath(`/home/forums/${forumId}`);
     revalidatePath(`/home/forums/${forumId}/${threadId}`);
   }
+  return { ok: true };
 }
 
 export async function createThreadAction(

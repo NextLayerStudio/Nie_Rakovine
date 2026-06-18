@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { toggleForumThreadLikeAction } from "@/lib/actions/forums";
 
 export function ForumThreadLikeButton({
@@ -15,25 +17,44 @@ export function ForumThreadLikeButton({
   count: number;
   variant?: "pill" | "inline";
 }) {
-  const pillClass = `flex items-center gap-1 rounded-pill px-3 py-1 text-xs font-semibold ${
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+
+  const pillClass = `flex items-center gap-1 rounded-pill px-3 py-1 text-xs font-semibold disabled:opacity-60 ${
     liked
       ? "bg-brand-pink text-white"
       : "bg-brand-purple/10 text-brand-purple"
   }`;
-  const inlineClass = `flex items-center gap-1.5 text-xs ${
+  const inlineClass = `flex items-center gap-1.5 text-xs disabled:opacity-60 ${
     liked ? "text-brand-pink" : "text-brand-purple/70"
   }`;
 
   return (
-    <form action={toggleForumThreadLikeAction}>
+    <form
+      action={(formData) => {
+        startTransition(async () => {
+          const result = await toggleForumThreadLikeAction(formData);
+          if (result.ok) {
+            router.refresh();
+          }
+        });
+      }}
+    >
       <input type="hidden" name="threadId" value={threadId} />
       <input type="hidden" name="forumId" value={forumId} />
       <button
         type="submit"
+        disabled={pending}
         className={variant === "pill" ? pillClass : inlineClass}
       >
         <HeartIcon filled={liked} />
-        {count > 0 ? count : variant === "pill" ? "Páči sa" : "0"}
+        {pending
+          ? "…"
+          : count > 0
+            ? count
+            : variant === "pill"
+              ? "Páči sa"
+              : "0"}
       </button>
     </form>
   );

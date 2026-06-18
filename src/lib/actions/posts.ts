@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin, requireUser } from "@/lib/auth";
+import { requireActionUser, prismaActionError } from "@/lib/safe-action";
 import { notifyProfileFollowersNewPost } from "@/lib/notifications";
 import { parseCancerTypes } from "@/lib/cancer-type";
 import {
@@ -11,7 +12,8 @@ import {
   resolveVideoField,
   saveUploadedImages,
 } from "@/lib/uploads";
-import type { PostType, Prisma } from "@prisma/client";
+import type { PostType } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 export type ActionState = { ok: boolean; message?: string };
 
@@ -253,29 +255,51 @@ function revalidatePaths(profileId: string | null) {
 }
 
 // ------ Public: like / unlike a post -----------------------------------
-export async function togglePostLikeAction(formData: FormData): Promise<void> {
-  const user = await requireUser();
+export async function togglePostLikeAction(
+  formData: FormData,
+): Promise<{ ok: boolean; message?: string }> {
+  const auth = await requireActionUser();
+  if (!auth.ok) return auth;
+  const user = auth.user;
+
   const postId = String(formData.get("postId") ?? "");
-  if (!postId) return;
+  if (!postId) return { ok: false, message: "Chýba príspevok." };
 
-  const existing = await prisma.articleLike.findUnique({
-    where: { userId_postId: { userId: user.id, postId } },
-  });
-
-  if (existing) {
-    await prisma.articleLike.delete({
+  try {
+    const existing = await prisma.articleLike.findUnique({
       where: { userId_postId: { userId: user.id, postId } },
     });
-  } else {
-    await prisma.articleLike.create({
-      data: { userId: user.id, postId },
-    });
+
+    if (existing) {
+      await prisma.articleLike.delete({
+        where: { userId_postId: { userId: user.id, postId } },
+      });
+    } else {
+      await prisma.articleLike.create({
+        data: { userId: user.id, postId },
+      });
+    }
+  } catch (err) {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === "P2002"
+    ) {
+      // already liked
+    } else {
+      return {
+        ok: false,
+        message: prismaActionError(err, "Nepodarilo sa uložiť reakciu."),
+      };
+    }
   }
 
   revalidatePath("/home");
+  revalidatePath("/home/search");
   revalidatePath("/home/articles");
   revalidatePath("/home/recipes");
   revalidatePath("/home/forums");
   revalidatePath("/home/profiles");
   revalidatePath("/home/posts");
+
+  return { ok: true };
 }
