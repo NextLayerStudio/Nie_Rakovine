@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
 import { parseCancerTypes } from "@/lib/cancer-type";
+import { resolveImageField } from "@/lib/uploads";
 
 export type ActionState = { ok: boolean; message?: string };
 
@@ -27,13 +28,33 @@ export async function createClubProfileAction(
   const handleRaw = String(formData.get("handle") ?? "").trim();
   const handle = slugify(handleRaw || displayName);
   const bio = String(formData.get("bio") ?? "").trim() || null;
-  const avatarUrl = String(formData.get("avatarUrl") ?? "").trim() || null;
-  const coverUrl = String(formData.get("coverUrl") ?? "").trim() || null;
   const published = formData.get("published") === "on";
   const cancerTypes = parseCancerTypes(formData.getAll("cancerTypes"));
 
   if (!displayName || !handle) {
     return { ok: false, message: "Zadajte meno a identifikátor profilu." };
+  }
+
+  let avatarUrl: string | null;
+  let coverUrl: string | null;
+  try {
+    avatarUrl = await resolveImageField(
+      formData,
+      "avatarFile",
+      "avatarUrl",
+      "profiles",
+    );
+    coverUrl = await resolveImageField(
+      formData,
+      "coverFile",
+      "coverUrl",
+      "profiles",
+    );
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Nepodarilo sa nahrať obrázok.",
+    };
   }
 
   const exists = await prisma.clubProfile.findUnique({ where: { handle } });
@@ -60,13 +81,42 @@ export async function updateClubProfileAction(
   const handleRaw = String(formData.get("handle") ?? "").trim();
   const handle = slugify(handleRaw);
   const bio = String(formData.get("bio") ?? "").trim() || null;
-  const avatarUrl = String(formData.get("avatarUrl") ?? "").trim() || null;
-  const coverUrl = String(formData.get("coverUrl") ?? "").trim() || null;
   const published = formData.get("published") === "on";
   const cancerTypes = parseCancerTypes(formData.getAll("cancerTypes"));
 
   if (!id || !displayName || !handle) {
     return { ok: false, message: "Vyplňte povinné polia." };
+  }
+
+  const existing = await prisma.clubProfile.findUnique({ where: { id } });
+
+  let avatarUrl: string | null;
+  let coverUrl: string | null;
+  try {
+    avatarUrl = await resolveImageField(
+      formData,
+      "avatarFile",
+      "avatarUrl",
+      "profiles",
+    );
+    coverUrl = await resolveImageField(
+      formData,
+      "coverFile",
+      "coverUrl",
+      "profiles",
+    );
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Nepodarilo sa nahrať obrázok.",
+    };
+  }
+
+  if (avatarUrl === null && existing?.avatarUrl) {
+    avatarUrl = existing.avatarUrl;
+  }
+  if (coverUrl === null && existing?.coverUrl) {
+    coverUrl = existing.coverUrl;
   }
 
   const conflict = await prisma.clubProfile.findFirst({
@@ -83,6 +133,7 @@ export async function updateClubProfileAction(
 
   revalidatePath("/admin/profiles");
   revalidatePath(`/admin/profiles/${id}`);
+  revalidatePath(`/admin/profiles/${id}/edit`);
   revalidatePath("/home/profiles");
   revalidatePath(`/home/profiles/${handle}`);
   redirect(`/admin/profiles/${id}`);

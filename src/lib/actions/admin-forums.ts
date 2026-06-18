@@ -67,8 +67,11 @@ export async function updateForumAction(
   });
 
   revalidatePath("/admin/forums");
+  revalidatePath(`/admin/forums/${id}`);
+  revalidatePath(`/admin/forums/${id}/edit`);
   revalidatePath("/home/forums");
-  redirect("/admin/forums");
+  revalidatePath(`/home/forums/${id}`);
+  redirect(`/admin/forums/${id}`);
 }
 
 export async function deleteForumAction(formData: FormData): Promise<void> {
@@ -108,6 +111,7 @@ async function revalidateForumPaths(forumId: string, threadId?: string) {
   revalidatePath("/admin/forums");
   revalidatePath("/admin/forums/moderation");
   revalidatePath(`/admin/forums/${forumId}`);
+  revalidatePath(`/admin/forums/${forumId}/edit`);
   revalidatePath("/home/forums");
   revalidatePath(`/home/forums/${forumId}`);
   revalidatePath("/home/notifications");

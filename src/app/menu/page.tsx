@@ -6,7 +6,7 @@ import { requireUser } from "@/lib/auth";
 import { logoutAction } from "@/lib/actions/auth";
 
 const MAIN_ITEMS = [
-  { href: "/menu/zlavova-karta", label: "Moja zľavová karta", icon: "card" as const },
+  { href: "/menu/zlavova-karta", label: "Moja zľavová karta", icon: "card" as const, comingSoon: true },
   { href: "/home/notifications", label: "Oznámenia", icon: "bell" as const },
   { href: "/profile", label: "Môj profil", icon: "user" as const },
   { href: "/menu/kontent-kniznica", label: "Kontent knižnica", icon: "library" as const },

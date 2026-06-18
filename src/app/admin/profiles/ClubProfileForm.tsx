@@ -65,15 +65,17 @@ export function ClubProfileForm({
         <legend className="admin-section-title px-1">Obrázky</legend>
         <AdminImageField
           name="avatarUrl"
+          uploadName="avatarFile"
           label="Profilová fotka"
-          hint="Odkaz na obrázok (napr. z Cloudinary, Imgur alebo váš hosting)."
+          hint="Nahrajte z počítača alebo vložte odkaz."
           defaultValue={profile?.avatarUrl ?? ""}
           shape="circle"
         />
         <AdminImageField
           name="coverUrl"
+          uploadName="coverFile"
           label="Titulná fotka profilu"
-          hint="Širší banner v hornej časti profilu v aplikácii."
+          hint="Širší banner v hornej časti profilu. Nahrajte z počítača alebo vložte odkaz."
           defaultValue={profile?.coverUrl ?? ""}
           shape="rounded"
         />

@@ -1,16 +1,43 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { prisma } from "@/lib/prisma";
-import { ForumAdminForm } from "../ForumAdminForm";
-import { ForumThreadForm } from "../ForumThreadForm";
-import {
-  deleteForumCommentAction,
-  deleteForumThreadAction,
-} from "@/lib/actions/admin-forums";
+import { ForumPostCard } from "@/components/ForumPostCard";
+import { AdminItemActions } from "@/components/admin/AdminItemActions";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { deleteForumThreadAction } from "@/lib/actions/admin-forums";
+import { prisma } from "@/lib/prisma";
+import { ForumOverviewCard } from "../ForumOverviewCard";
+import { ForumThreadForm } from "../ForumThreadForm";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditForumPage({
+function ThreadStatusBadge({
+  status,
+}: {
+  status: "PENDING" | "APPROVED" | "REJECTED";
+}) {
+  switch (status) {
+    case "APPROVED":
+      return (
+        <span className="rounded-pill bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+          Schválené
+        </span>
+      );
+    case "PENDING":
+      return (
+        <span className="rounded-pill bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
+          Čaká
+        </span>
+      );
+    case "REJECTED":
+      return (
+        <span className="rounded-pill bg-red-50 px-2 py-0.5 text-[10px] font-semibold text-red-700">
+          Zamietnuté
+        </span>
+      );
+  }
+}
+
+export default async function AdminForumDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -19,15 +46,12 @@ export default async function EditForumPage({
   const forum = await prisma.forum.findUnique({
     where: { id },
     include: {
+      _count: { select: { members: true, threads: true } },
       threads: {
-        where: { status: "APPROVED" },
         orderBy: { createdAt: "desc" },
         include: {
           author: { select: { fullName: true } },
-          comments: {
-            orderBy: { createdAt: "asc" },
-            include: { author: { select: { fullName: true } } },
-          },
+          _count: { select: { comments: true } },
         },
       },
     },
@@ -37,80 +61,73 @@ export default async function EditForumPage({
   return (
     <div>
       <AdminPageHeader
-        title="Upraviť fórum"
-        description={forum.title}
+        title={forum.title}
+        description="Správa fóra a príspevkov"
         backHref="/admin/forums"
         backLabel="Späť na fóra"
+        actions={
+          <Link
+            href={`/home/forums/${forum.id}`}
+            className="admin-btn-outline"
+          >
+            Náhľad v aplikácii →
+          </Link>
+        }
       />
-      <ForumAdminForm mode="edit" forum={forum} />
+
+      <ForumOverviewCard
+        forum={forum}
+        memberCount={forum._count.members}
+        threadCount={forum._count.threads}
+      />
 
       <section className="mt-10">
-        <h2 className="text-lg font-bold text-brand-purple">Príspevky vo fóre</h2>
-        <p className="mt-1 text-sm text-brand-purple/70">
-          Len administrátor publikuje príspevky. Používatelia ich môžu len
-          čítať po zapojení sa do fóra.
-        </p>
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div>
+            <h2 className="admin-section-title text-sm">Príspevky vo fóre</h2>
+            <p className="mt-1 text-xs text-brand-purple/60">
+              Náhľad ako v aplikácii · max. 2 v riadku
+            </p>
+          </div>
+        </div>
 
         <ForumThreadForm forumId={forum.id} />
 
-        <ul className="mt-6 space-y-4">
-          {forum.threads.length === 0 && (
-            <li className="rounded-xl border border-dashed border-brand-purple/20 p-5 text-center text-sm text-brand-purple/55">
-              Zatiaľ žiadne príspevky.
-            </li>
-          )}
-          {forum.threads.map((t) => (
-            <li key={t.id} className="admin-card p-4">
-              <div className="flex justify-between gap-2">
-                <div>
-                  {t.title && (
-                    <h3 className="font-bold text-brand-purple">{t.title}</h3>
-                  )}
-                  <p className="mt-1 whitespace-pre-wrap text-sm text-brand-purple/90">
-                    {t.body}
-                  </p>
-                  <p className="mt-2 text-xs text-brand-purple/50">
-                    {t.author.fullName}
-                  </p>
-                </div>
-                <form action={deleteForumThreadAction}>
-                  <input type="hidden" name="id" value={t.id} />
-                  <input type="hidden" name="forumId" value={forum.id} />
-                  <button
-                    type="submit"
-                    className="text-xs text-red-600 hover:underline"
-                  >
-                    Zmazať
-                  </button>
-                </form>
-              </div>
-              {t.comments.length > 0 && (
-                <ul className="mt-3 space-y-2 border-t border-brand-purple/10 pt-3">
-                  {t.comments.map((c) => (
-                    <li
-                      key={c.id}
-                      className="flex justify-between gap-2 text-xs"
-                    >
-                      <span>
-                        <strong>{c.author.fullName}:</strong> {c.body}
-                      </span>
-                      <form action={deleteForumCommentAction}>
-                        <input type="hidden" name="id" value={c.id} />
-                        <input type="hidden" name="forumId" value={forum.id} />
-                        <button
-                          type="submit"
-                          className="text-red-600 hover:underline"
-                        >
-                          ×
-                        </button>
-                      </form>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          ))}
-        </ul>
+        {forum.threads.length === 0 ? (
+          <div className="mt-4 rounded-xl border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/55">
+            Zatiaľ žiadne príspevky.
+          </div>
+        ) : (
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {forum.threads.map((thread) => (
+              <ForumPostCard
+                key={thread.id}
+                forumId={forum.id}
+                threadId={thread.id}
+                authorName={thread.author.fullName}
+                title={thread.title}
+                body={thread.body}
+                coverUrl={thread.coverUrl}
+                liked={false}
+                likeCount={thread.likeCount}
+                commentCount={thread._count.comments}
+                compact
+                className="h-full"
+                statusBadge={<ThreadStatusBadge status={thread.status} />}
+                footerSlot={
+                  <AdminItemActions
+                    editHref={`/home/forums/${forum.id}/${thread.id}`}
+                    deleteAction={deleteForumThreadAction}
+                    id={thread.id}
+                    editLabel="Náhľad"
+                    compact
+                    hiddenFields={{ forumId: forum.id }}
+                  />
+                }
+              />
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );
