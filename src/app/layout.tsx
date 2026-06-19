@@ -18,6 +18,9 @@ export const metadata: Metadata = {
     title: "ONKO KLUB",
     statusBarStyle: "black-translucent",
   },
+  icons: {
+    apple: "/icons/apple-touch-icon.png",
+  },
 };
 
 export const viewport: Viewport = {
