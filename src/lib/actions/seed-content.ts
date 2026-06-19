@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
+import type { CancerType } from "@prisma/client";
 
 export async function seedContentAction(): Promise<{ ok: boolean; message: string }> {
   await requireAdmin();
@@ -26,7 +27,7 @@ export async function seedContentAction(): Promise<{ ok: boolean; message: strin
       body: null,
       coverUrl: "https://picsum.photos/seed/onko-tabor/800/800",
       videoUrl: null,
-      cancerTypes: [] as string[],
+      cancerTypes: [] as CancerType[],
     },
     {
       id: "seed-photo-2",
@@ -36,7 +37,7 @@ export async function seedContentAction(): Promise<{ ok: boolean; message: strin
       body: null,
       coverUrl: "https://picsum.photos/seed/onko-joga/800/1000",
       videoUrl: null,
-      cancerTypes: [] as string[],
+      cancerTypes: [] as CancerType[],
     },
     {
       id: "seed-photo-3",
@@ -46,7 +47,7 @@ export async function seedContentAction(): Promise<{ ok: boolean; message: strin
       body: null,
       coverUrl: "https://picsum.photos/seed/onko-food/800/800",
       videoUrl: null,
-      cancerTypes: [] as string[],
+      cancerTypes: [] as CancerType[],
     },
     {
       id: "seed-photo-4",
@@ -56,7 +57,7 @@ export async function seedContentAction(): Promise<{ ok: boolean; message: strin
       body: null,
       coverUrl: "https://picsum.photos/seed/onko-hiking/800/600",
       videoUrl: null,
-      cancerTypes: [] as string[],
+      cancerTypes: [] as CancerType[],
     },
     // --- VIDEO príspevky ---
     {
@@ -67,7 +68,7 @@ export async function seedContentAction(): Promise<{ ok: boolean; message: strin
       body: "Táto lekcia je špeciálne navrhnutá pre pacientky v liečbe. Zameráva sa na dychové cvičenia a jemné pohyby, ktoré pomáhajú s únavou a stresom.\n\nCvičenie vždy prispôsobte svojmu aktuálnemu stavu. Ak niečo bolí, preskočte to.",
       coverUrl: "https://picsum.photos/seed/onko-yoga-video/800/450",
       videoUrl: "https://www.youtube.com/watch?v=v7AYKMP6rOE",
-      cancerTypes: [] as string[],
+      cancerTypes: [] as CancerType[],
     },
     {
       id: "seed-video-2",
@@ -77,7 +78,7 @@ export async function seedContentAction(): Promise<{ ok: boolean; message: strin
       body: "V tomto rozhovore sa dozviete:\n- Aké potraviny podporujú imunitu\n- Čomu sa vyhnúť počas chemo\n- Ako prekonať nechutenstvo\n- Tipy na ľahké jedlá, keď vám je zle",
       coverUrl: "https://picsum.photos/seed/onko-nutrition-video/800/450",
       videoUrl: "https://www.youtube.com/watch?v=UItWltVZZmE",
-      cancerTypes: [] as string[],
+      cancerTypes: [] as CancerType[],
     },
     // --- ČLÁNOK príspevky ---
     {
@@ -88,7 +89,7 @@ export async function seedContentAction(): Promise<{ ok: boolean; message: strin
       body: "## Prvý mesiac\n\nPo skončení liečby je prirodzené cítiť zmes úľavy, strachu a neistoty. Telo potrebuje čas na zotavenie.\n\n**Čo je normálne:**\n- Únava, ktorá môže trvať týždne až mesiace\n- Emocionálne výkyvy\n- Strach z návratu choroby\n\n## Pohyb a rehabilitácia\n\nZačnite pomaly. Aj 10-minútová prechádzka denne má obrovský vplyv na vašu pohodu a fyzickú kondíciu.\n\n## Psychická podpora\n\nNebojte sa vyhľadať pomoc psychológa alebo sa pripojiť k podpornej skupine — práve na to tu sme.",
       coverUrl: "https://picsum.photos/seed/onko-article-1/800/500",
       videoUrl: null,
-      cancerTypes: [] as string[],
+      cancerTypes: [] as CancerType[],
     },
     {
       id: "seed-article-2",
@@ -98,7 +99,7 @@ export async function seedContentAction(): Promise<{ ok: boolean; message: strin
       body: "## Prečo chemo kradne spánok\n\nChemoterapia, hormóny a stres spôsobujú, že mozog nedokáže prepnúť do spánkového režimu. Nie ste sami — až 75 % pacientov hlási problémy so spánkom.\n\n## Čo pomáha\n\n**Spánková hygiena:**\n- Chodiť spať a vstávať v rovnaký čas\n- Vyhnúť sa obrazovkám hodinu pred spaním\n- Chladná a tmavá miestnosť\n\n**Relaxačné techniky:**\n- Progresívna svalová relaxácia\n- Dychové cvičenia 4-7-8\n- Meditácia (aplikácie Calm, Headspace)\n\n## Kedy vyhľadať pomoc\n\nAk nespíte viac ako 3 týždne, povedzte to svojmu lekárovi.",
       coverUrl: "https://picsum.photos/seed/onko-sleep/800/500",
       videoUrl: null,
-      cancerTypes: [] as string[],
+      cancerTypes: [] as CancerType[],
     },
     {
       id: "seed-article-3",
@@ -108,7 +109,7 @@ export async function seedContentAction(): Promise<{ ok: boolean; message: strin
       body: "## Prvé dni doma\n\nPo prepustení budete potrebovať pomoc s bežnými aktivitami. Nebojte sa o to požiadať.\n\n## Starostlivosť o jazvu\n\n- Jemná masáž jazvy po zahojení pomáha s citlivosťou\n- Používajte silikónové náplasti alebo gél\n- Chráňte jazvu pred slnkom aspoň rok\n\n## Rehabilitácia ramena\n\nŠpeciálne cvičenia pomáhajú obnoviť pohyblivosť a predchádzajú lymfedému. Váš fyzioterapeut vám ukáže správnu techniku.",
       coverUrl: "https://picsum.photos/seed/onko-breast/800/500",
       videoUrl: null,
-      cancerTypes: ["PRSNIK"] as string[],
+      cancerTypes: ["PRSNIK"] as CancerType[],
     },
     // --- RECEPT príspevky ---
     {
@@ -119,7 +120,7 @@ export async function seedContentAction(): Promise<{ ok: boolean; message: strin
       body: "## Suroviny (na 20 kusov)\n\n- 1 hrnček ovsených vločiek\n- ½ hrnčeka arašidového masla\n- 3 lyžice medu\n- ½ hrnčeka tmavej čokolády (kúsky)\n- 2 lyžice chia semienok\n- 1 lyžička vanilkového extraktu\n\n## Postup\n\n1. Zmiešajte všetky suroviny v miske\n2. Nechajte 30 minút v chladničke\n3. Tvarujte guľôčky veľkosti vlašského orecha\n4. Uchovávajte v chladničke až 2 týždne\n\n**Tip:** Môžete nahradiť arašidové maslo mandľovým alebo slnečnicovým.",
       coverUrl: "https://picsum.photos/seed/onko-balls/800/800",
       videoUrl: null,
-      cancerTypes: [] as string[],
+      cancerTypes: [] as CancerType[],
     },
     {
       id: "seed-recipe-2",
@@ -129,7 +130,7 @@ export async function seedContentAction(): Promise<{ ok: boolean; message: strin
       body: "## Suroviny (4 porcie)\n\n- 1 väčší zeler (koreňový)\n- 2 zemiaky\n- 1 cibuľa\n- 500 ml zeleninovej polievky\n- 200 ml smotany (alebo kokosového mlieka)\n- Soľ, biele korenie, muškátový orech\n- Čerstvá petržlenová vňať\n\n## Postup\n\n1. Nakrájajte zeler a zemiaky na kúsky\n2. Osmažte cibuľu na trochu olivového oleja\n3. Pridajte zeleninu a polievku, varte 20 minút\n4. Rozmixujte dohladka, pridajte smotanu\n5. Dochuťte a podávajte s petržlenkou\n\n**Prečo je dobrá počas liečby:** Zeler je bohatý na vitamín C a draslík, ľahko stráviteľný a šetrný k žalúdku.",
       coverUrl: "https://picsum.photos/seed/onko-soup/800/600",
       videoUrl: null,
-      cancerTypes: [] as string[],
+      cancerTypes: [] as CancerType[],
     },
   ];
 
