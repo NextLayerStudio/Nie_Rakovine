@@ -24,7 +24,7 @@ export function LikeButton({
     setCount((c) => c + (newLiked ? 1 : -1));
     const fd = new FormData();
     fd.set("postId", postId);
-    startTransition(() => togglePostLikeAction(fd));
+    startTransition(() => { void togglePostLikeAction(fd); });
   };
 
   const pillClass = `flex items-center gap-1 rounded-pill px-3 py-1 text-xs font-semibold disabled:opacity-60 transition-colors ${

@@ -48,7 +48,7 @@ export function PostCommentDrawer({
     const fd = new FormData();
     fd.set("postId", postId);
     fd.set("body", optimistic.body);
-    startTransition(() => addPostCommentAction(fd));
+    startTransition(() => { void addPostCommentAction(fd); });
     setTimeout(() => listRef.current?.scrollTo({ top: 9999, behavior: "smooth" }), 50);
   };
 
