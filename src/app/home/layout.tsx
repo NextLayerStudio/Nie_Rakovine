@@ -1,7 +1,11 @@
 import { BottomNav } from "@/components/BottomNav";
+import { MenuDrawer } from "@/components/MenuDrawer";
 import { PhoneShell } from "@/components/PhoneShell";
+import { requireUser } from "@/lib/auth";
 
-export default function HomeLayout({ children }: { children: React.ReactNode }) {
+export default async function HomeLayout({ children }: { children: React.ReactNode }) {
+  const user = await requireUser();
+
   return (
     <PhoneShell>
       <div
@@ -11,6 +15,7 @@ export default function HomeLayout({ children }: { children: React.ReactNode }) 
         {children}
       </div>
       <BottomNav />
+      <MenuDrawer userName={user.fullName} isAdmin={user.role === "ADMIN"} />
     </PhoneShell>
   );
 }

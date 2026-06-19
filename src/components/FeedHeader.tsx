@@ -81,9 +81,10 @@ export function FeedHeader({
               />
             </svg>
           </Link>
-          <Link
-            href="/menu"
+          <button
+            type="button"
             aria-label="Menu"
+            onClick={() => document.dispatchEvent(new CustomEvent("open-menu"))}
             className="grid h-11 w-11 place-items-center rounded-full bg-brand-pink-soft text-black"
           >
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
@@ -94,7 +95,7 @@ export function FeedHeader({
                 strokeLinecap="round"
               />
             </svg>
-          </Link>
+          </button>
         </div>
       </div>
     </header>
