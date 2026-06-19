@@ -1,45 +1,55 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { toggleProfileFollowAction } from "@/lib/actions/follows";
 
 export function FollowProfileButton({
   profileId,
   handle,
-  isFollowing,
+  isFollowing: initialFollowing,
 }: {
   profileId: string;
   handle: string;
   isFollowing: boolean;
 }) {
-  const router = useRouter();
-  const [pending, startTransition] = useTransition();
+  const [following, setFollowing] = useState(initialFollowing);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [, startTransition] = useTransition();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
+
+  // Already following → show nothing
+  if (following && !showConfirm) return null;
+
+  if (showConfirm) {
+    return (
+      <span className="inline-flex items-center gap-1 text-xs font-medium text-brand-purple/60">
+        <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none">
+          <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        Sledované
+      </span>
+    );
+  }
+
+  const handleFollow = () => {
+    setFollowing(true);
+    setShowConfirm(true);
+    timerRef.current = setTimeout(() => setShowConfirm(false), 1400);
+    const fd = new FormData();
+    fd.set("profileId", profileId);
+    fd.set("handle", handle);
+    startTransition(() => { void toggleProfileFollowAction(fd); });
+  };
 
   return (
-    <form
-      action={(formData) => {
-        startTransition(async () => {
-          const result = await toggleProfileFollowAction(formData);
-          if (result.ok) {
-            router.refresh();
-          }
-        });
-      }}
+    <button
+      type="button"
+      onClick={handleFollow}
+      className="rounded-xl border border-brand-pink px-3.5 py-1 text-sm font-semibold text-brand-pink transition hover:bg-brand-pink/5 active:scale-95"
     >
-      <input type="hidden" name="profileId" value={profileId} />
-      <input type="hidden" name="handle" value={handle} />
-      <button
-        type="submit"
-        disabled={pending}
-        className={`shrink-0 rounded-pill px-3 py-1 text-[10px] font-semibold disabled:opacity-60 ${
-          isFollowing
-            ? "border border-brand-purple/30 bg-brand-purple/10 text-brand-purple"
-            : "border border-brand-pink text-brand-pink"
-        }`}
-      >
-        {pending ? "…" : isFollowing ? "Sledujem" : "Sledovať"}
-      </button>
-    </form>
+      Sledovať
+    </button>
   );
 }

@@ -84,9 +84,9 @@ export function FeedPostItem({
 
         <div className="px-4 pb-7">
           <Link href={href}>
-            <h3 className="text-sm font-semibold text-brand-purple">{title}</h3>
+            <h3 className="text-base font-bold text-brand-purple">{title}</h3>
             {excerpt && (
-              <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-brand-purple/70">
+              <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-brand-purple/70">
                 {excerpt}
               </p>
             )}

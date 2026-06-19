@@ -25,30 +25,33 @@ export function FeedProfileHeader({
       };
 
   return (
-    <div className="flex items-start gap-3 px-4 py-2.5">
+    <div className="flex items-center gap-3 px-4 py-3">
       <Link href={`/home/profiles/${handle}`} className="shrink-0">
         <div
           aria-hidden
-          className="h-10 w-10 rounded-full"
+          className="h-14 w-14 rounded-full ring-2 ring-brand-purple/10"
           style={avatarStyle}
         />
       </Link>
+
       <div className="min-w-0 flex-1">
         <Link href={`/home/profiles/${handle}`}>
-          <span className="block truncate text-sm font-bold text-brand-purple">
+          <span className="block truncate text-base font-bold text-brand-purple leading-tight">
             {displayName}
           </span>
         </Link>
-        {profileId ? (
-          <div className="mt-1">
-            <FollowProfileButton
-              profileId={profileId}
-              handle={handle}
-              isFollowing={isFollowing}
-            />
-          </div>
-        ) : null}
+        <span className="block text-xs text-brand-purple/50">@{handle}</span>
       </div>
+
+      {profileId && (
+        <div className="shrink-0">
+          <FollowProfileButton
+            profileId={profileId}
+            handle={handle}
+            isFollowing={isFollowing}
+          />
+        </div>
+      )}
     </div>
   );
 }
