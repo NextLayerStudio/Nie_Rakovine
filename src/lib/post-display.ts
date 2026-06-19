@@ -22,6 +22,8 @@ export function postCoverFallback(type: PostType): string {
       return "linear-gradient(180deg, #f3c3a2 0%, #d98c80 100%)";
     case "ARTICLE":
       return "linear-gradient(180deg, #f5e0c8 0%, #d8a079 100%)";
+    case "PHOTO":
+      return "linear-gradient(180deg, #e0d4f5 0%, #9b72cf 100%)";
     default:
       return "linear-gradient(180deg, #ffcdb2 0%, #e07a5f 100%)";
   }
@@ -29,12 +31,10 @@ export function postCoverFallback(type: PostType): string {
 
 export function postKindLabel(type: PostType) {
   switch (type) {
-    case "VIDEO":
-      return "Video";
-    case "ARTICLE":
-      return "Článok";
-    case "RECIPE":
-      return "Recept";
+    case "VIDEO": return "Video";
+    case "ARTICLE": return "Článok";
+    case "RECIPE": return "Recept";
+    case "PHOTO": return "Fotka";
   }
 }
 

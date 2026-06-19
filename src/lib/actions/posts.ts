@@ -75,7 +75,7 @@ export async function createPostAction(
   const profileId = String(formData.get("profileId") ?? "").trim() || null;
   const cancerTypes = parseCancerTypes(formData.getAll("cancerTypes"));
 
-  if (!title || !["VIDEO", "ARTICLE", "RECIPE"].includes(type)) {
+  if (!title || !["VIDEO", "ARTICLE", "RECIPE", "PHOTO"].includes(type)) {
     return { ok: false, message: "Vyplňte názov a typ obsahu." };
   }
 

@@ -3,7 +3,6 @@ import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
 import { FeedProfileHeader } from "@/components/FeedProfileHeader";
 import { FeedEventItem } from "@/components/FeedEventItem";
 import { FeedPostItem } from "@/components/FeedPostItem";
-import { LikeButton } from "@/components/LikeButton";
 import { defaultProfileLabel, type FeedItem } from "@/lib/feed";
 import { loadFeedEngagement } from "@/lib/feed-engagement";
 import {
@@ -255,19 +254,14 @@ export default async function SearchPage({
                     {...label}
                   />
                   <FeedPostItem
+                    postId={p.id}
                     href={href}
                     type={p.type}
                     title={p.title}
                     excerpt={p.excerpt}
                     imageUrls={buildPostGallery(p.coverUrl, p.images)}
-                    likeSlot={
-                      <LikeButton
-                        postId={p.id}
-                        liked={likedIds.has(p.id)}
-                        count={p._count.likes}
-                        variant="feed"
-                      />
-                    }
+                    liked={likedIds.has(p.id)}
+                    likeCount={p._count.likes}
                   />
                 </div>
               );

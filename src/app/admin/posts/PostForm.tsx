@@ -51,6 +51,7 @@ export function PostForm({
             defaultValue={post?.type ?? "ARTICLE"}
             className="admin-input"
           >
+            <option value="PHOTO">Fotka</option>
             <option value="VIDEO">Video</option>
             <option value="ARTICLE">Článok</option>
             <option value="RECIPE">Recept</option>

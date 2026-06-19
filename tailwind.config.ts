@@ -47,6 +47,16 @@ export default {
       screens: {
         xs: "375px",
       },
+      keyframes: {
+        "ping-once": {
+          "0%":   { transform: "scale(0.6)", opacity: "0" },
+          "40%":  { transform: "scale(1.1)", opacity: "1" },
+          "100%": { transform: "scale(1.4)", opacity: "0" },
+        },
+      },
+      animation: {
+        "ping-once": "ping-once 0.7s ease-out forwards",
+      },
     },
   },
   plugins: [],

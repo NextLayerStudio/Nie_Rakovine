@@ -78,6 +78,7 @@ model User {
   // Relations
   eventRegistrations EventRegistration[]
   articleLikes       ArticleLike[]
+  postComments       PostComment[]
   forumMemberships   ForumMembership[]
   createdForums      Forum[]             @relation("ForumCreator")
   forumThreads       ForumThread[]
@@ -195,6 +196,7 @@ enum PostType {
   VIDEO
   ARTICLE
   RECIPE
+  PHOTO
 }
 
 enum EventCategory {
@@ -220,6 +222,7 @@ model Post {
   publishedAt DateTime?
   cancerTypes CancerType[] @default([])
   likes       ArticleLike[]
+  comments    PostComment[]
   images      PostImage[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -259,6 +262,18 @@ model ArticleLike {
   createdAt DateTime @default(now())
 
   @@unique([userId, postId])
+}
+
+model PostComment {
+  id        String   @id @default(cuid())
+  postId    String
+  authorId  String
+  body      String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([postId, createdAt])
 }
 
 // ---------------- Events ----------------

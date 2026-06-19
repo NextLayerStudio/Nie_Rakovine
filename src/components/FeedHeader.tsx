@@ -68,9 +68,7 @@ export function FeedHeader({
             className="relative grid h-11 w-11 place-items-center rounded-full bg-brand-pink-soft text-black"
           >
             {unreadCount > 0 && (
-              <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-pink px-1 text-[9px] font-bold text-white">
-                {unreadCount > 9 ? "9+" : unreadCount}
-              </span>
+              <span className="absolute right-1.5 top-1.5 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" />
             )}
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
               <path

@@ -1,6 +1,5 @@
 import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
 import { FeedProfileHeader } from "@/components/FeedProfileHeader";
-import { LikeButton } from "@/components/LikeButton";
 import { FeedEventItem } from "@/components/FeedEventItem";
 import { FeedPostItem } from "@/components/FeedPostItem";
 import { buildHomeFeed, defaultProfileLabel } from "@/lib/feed";
@@ -112,19 +111,14 @@ export default async function HomeFeedPage() {
                   {...label}
                 />
                 <FeedPostItem
+                  postId={p.id}
                   href={href}
                   type={p.type}
                   title={p.title}
                   excerpt={p.excerpt}
                   imageUrls={buildPostGallery(p.coverUrl, p.images)}
-                  likeSlot={
-                    <LikeButton
-                      postId={p.id}
-                      liked={likedIds.has(p.id)}
-                      count={p._count.likes}
-                      variant="feed"
-                    />
-                  }
+                  liked={likedIds.has(p.id)}
+                  likeCount={p._count.likes}
                 />
               </div>
             );
