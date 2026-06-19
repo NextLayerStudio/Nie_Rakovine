@@ -26,6 +26,7 @@ export const feedPostSelect = {
   excerpt: true,
   coverUrl: true,
   videoUrl: true,
+  audioUrl: true,
   publishedAt: true,
   createdAt: true,
   cancerTypes: true,

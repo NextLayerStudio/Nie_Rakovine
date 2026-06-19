@@ -123,6 +123,7 @@ export function FeedTabPanel() {
               excerpt={p.excerpt}
               imageUrls={buildPostGallery(p.coverUrl, p.images)}
               videoUrl={p.videoUrl ?? null}
+              audioUrl={p.audioUrl ?? null}
               liked={likedIds.has(p.id)}
               likeCount={p._count.likes}
               saved={savedIds.has(p.id)}

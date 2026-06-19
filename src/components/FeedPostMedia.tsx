@@ -5,6 +5,7 @@ import { useCallback, useRef, useState } from "react";
 import type { PostType } from "@prisma/client";
 import { postCoverFallback } from "@/lib/post-display";
 import { FeedVideoPlayer } from "@/components/FeedVideoPlayer";
+import { FeedAudioPlayer } from "@/components/FeedAudioPlayer";
 
 export function FeedPostMedia({
   href,
@@ -13,6 +14,7 @@ export function FeedPostMedia({
   likeSlot,
   postId,
   videoUrl,
+  audioUrl,
   onCommentOpen,
   onDoubleTapLike,
   saved,
@@ -24,6 +26,7 @@ export function FeedPostMedia({
   likeSlot?: React.ReactNode;
   postId: string;
   videoUrl?: string | null;
+  audioUrl?: string | null;
   onCommentOpen: () => void;
   onDoubleTapLike: () => void;
   saved: boolean;
@@ -37,6 +40,7 @@ export function FeedPostMedia({
   const slides = imageUrls.length > 0 ? imageUrls : [postCoverFallback(type)];
   const multi = slides.length > 1;
   const isVideo = type === "VIDEO" && !!videoUrl;
+  const isAudio = type === "AUDIO" && !!audioUrl;
 
   const updateIndex = useCallback(() => {
     const el = scrollRef.current;
@@ -61,6 +65,8 @@ export function FeedPostMedia({
       {/* Media area */}
       {isVideo ? (
         <FeedVideoPlayer videoUrl={videoUrl!} coverUrl={imageUrls[0] ?? null} />
+      ) : isAudio ? (
+        <FeedAudioPlayer audioUrl={audioUrl!} coverUrl={imageUrls[0] ?? null} />
       ) : (
         <div className="relative overflow-hidden" onClick={handleTap}>
           <div
@@ -119,7 +125,7 @@ export function FeedPostMedia({
           <CommentIcon />
         </button>
         <span className="flex flex-1 items-center justify-center gap-1.5" aria-hidden>
-          {!isVideo && multi &&
+          {!isVideo && !isAudio && multi &&
             slides.map((_, index) => (
               <span
                 key={index}

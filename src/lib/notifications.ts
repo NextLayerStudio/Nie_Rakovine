@@ -3,7 +3,7 @@ import "server-only";
 import { cache } from "react";
 import type { Event, NotificationType, Post } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { postPublicHref } from "@/lib/post-display";
+import { postPublicHref, postKindLabel } from "@/lib/post-display";
 import { distanceKm, hasCoords } from "@/lib/geo";
 
 type NotifyInput = {
@@ -54,8 +54,7 @@ export async function notifyProfileFollowersNewPost(
 
   const href = postPublicHref(post);
 
-  const typeLabel =
-    post.type === "VIDEO" ? "video" : post.type === "RECIPE" ? "recept" : "článok";
+  const typeLabel = postKindLabel(post.type).toLowerCase();
 
   await prisma.notification.createMany({
     data: followers.map((f) => ({

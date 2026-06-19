@@ -54,6 +54,7 @@ export default async function SavedPostsPage() {
             excerpt={p.excerpt}
             imageUrls={buildPostGallery(p.coverUrl, p.images)}
             videoUrl={p.videoUrl ?? null}
+            audioUrl={p.audioUrl ?? null}
             liked={likedSet.has(p.id)}
             likeCount={p._count.likes}
             saved={true}

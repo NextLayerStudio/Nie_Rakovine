@@ -17,6 +17,7 @@ export function FeedPostItem({
   excerpt,
   imageUrls,
   videoUrl,
+  audioUrl,
   liked: initialLiked,
   likeCount: initialLikeCount,
   saved: initialSaved,
@@ -28,6 +29,7 @@ export function FeedPostItem({
   excerpt: string | null;
   imageUrls: string[];
   videoUrl?: string | null;
+  audioUrl?: string | null;
   liked: boolean;
   likeCount: number;
   saved: boolean;
@@ -84,6 +86,7 @@ export function FeedPostItem({
           excerpt={excerpt}
           imageUrls={imageUrls}
           videoUrl={videoUrl}
+          audioUrl={audioUrl}
           liked={liked}
           likeCount={likeCount}
           saved={saved}
@@ -207,6 +210,7 @@ function MediaCard({
   excerpt,
   imageUrls,
   videoUrl,
+  audioUrl,
   liked,
   likeCount,
   saved,
@@ -222,6 +226,7 @@ function MediaCard({
   excerpt: string | null;
   imageUrls: string[];
   videoUrl?: string | null;
+  audioUrl?: string | null;
   liked: boolean;
   likeCount: number;
   saved: boolean;
@@ -247,6 +252,7 @@ function MediaCard({
         type={type}
         imageUrls={imageUrls}
         videoUrl={videoUrl}
+        audioUrl={audioUrl}
         postId={postId}
         onCommentOpen={onCommentOpen}
         onDoubleTapLike={onDoubleTap}

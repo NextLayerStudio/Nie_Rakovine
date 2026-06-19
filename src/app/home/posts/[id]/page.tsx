@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
+import { FeedAudioPlayer } from "@/components/FeedAudioPlayer";
 import { LikeButton } from "@/components/LikeButton";
 import { PostImageCarousel } from "@/components/PostImageCarousel";
 import { prisma } from "@/lib/prisma";
@@ -74,6 +75,10 @@ export default async function PostDetailPage({
 
           {post.type === "VIDEO" && post.videoUrl ? (
             <VideoBlock url={post.videoUrl} coverUrl={post.coverUrl} />
+          ) : post.type === "AUDIO" && post.audioUrl ? (
+            <div className="mt-3 px-4">
+              <FeedAudioPlayer audioUrl={post.audioUrl} coverUrl={post.coverUrl} />
+            </div>
           ) : (
             <div className="mt-3 px-4">
               <PostImageCarousel

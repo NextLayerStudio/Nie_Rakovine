@@ -11,6 +11,7 @@ import { CancerTypeSelect } from "@/components/CancerTypeSelect";
 import { AdminImageField } from "@/components/AdminImageField";
 import { AdminMultiImageField } from "@/components/AdminMultiImageField";
 import { AdminVideoField } from "@/components/AdminVideoField";
+import { AdminAudioField } from "@/components/AdminAudioField";
 import { FormError, SubmitButton } from "@/components/FormError";
 
 const INITIAL: ActionState = { ok: false };
@@ -53,6 +54,7 @@ export function PostForm({
           >
             <option value="PHOTO">Fotka</option>
             <option value="VIDEO">Video</option>
+            <option value="AUDIO">Audio</option>
             <option value="ARTICLE">Článok</option>
             <option value="RECIPE">Recept</option>
           </select>
@@ -85,6 +87,7 @@ export function PostForm({
         />
         <AdminMultiImageField existingImages={post?.images ?? []} />
         <AdminVideoField defaultValue={post?.videoUrl ?? ""} />
+        <AdminAudioField defaultValue={post?.audioUrl ?? ""} />
         <div>
           <span className="admin-label">Pre typ rakoviny</span>
           <CancerTypeSelect

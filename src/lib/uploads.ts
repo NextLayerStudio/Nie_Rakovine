@@ -17,7 +17,16 @@ const VIDEO_TYPES = new Map([
   ["video/quicktime", ".mov"],
 ]);
 
+const AUDIO_TYPES = new Map([
+  ["audio/mpeg", ".mp3"],
+  ["audio/mp4", ".m4a"],
+  ["audio/wav", ".wav"],
+  ["audio/ogg", ".ogg"],
+  ["audio/webm", ".webm"],
+]);
+
 const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
+const MAX_AUDIO_BYTES = 25 * 1024 * 1024;
 
 export type UploadFolder = "posts" | "events" | "profiles" | "forums" | "videos";
 
@@ -83,6 +92,11 @@ export async function saveUploadedVideo(file: File): Promise<string> {
   return saveUploadedFile(file, "videos", VIDEO_TYPES, MAX_VIDEO_BYTES);
 }
 
+/** Save an uploaded audio file to the database and return its API URL. */
+export async function saveUploadedAudio(file: File): Promise<string> {
+  return saveUploadedFile(file, "videos", AUDIO_TYPES, MAX_AUDIO_BYTES);
+}
+
 /**
  * Prefer a newly uploaded file; fall back to an explicit URL field.
  * Returns null when neither is provided.
@@ -116,6 +130,28 @@ export async function resolveVideoField(
   const file = formData.get(fileField);
   if (file instanceof File && file.size > 0) {
     return saveUploadedVideo(file);
+  }
+
+  const url = String(formData.get(urlField) ?? "").trim();
+  if (url) return url;
+  if (keepExisting !== undefined) return keepExisting ?? null;
+  return null;
+}
+
+/**
+ * Prefer a newly uploaded audio file; fall back to an explicit URL field.
+ * When keepExisting is set and nothing new is provided, returns undefined
+ * so callers can preserve the previous value.
+ */
+export async function resolveAudioField(
+  formData: FormData,
+  fileField: string,
+  urlField: string,
+  keepExisting?: string | null,
+): Promise<string | null | undefined> {
+  const file = formData.get(fileField);
+  if (file instanceof File && file.size > 0) {
+    return saveUploadedAudio(file);
   }
 
   const url = String(formData.get(urlField) ?? "").trim();

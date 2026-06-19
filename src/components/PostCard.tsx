@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { PostType } from "@prisma/client";
 import { PostImageCarousel } from "@/components/PostImageCarousel";
+import { postKindLabel } from "@/lib/post-display";
 
 export function PostCard({
   href,
@@ -42,7 +43,7 @@ export function PostCard({
         }`}
       >
         <span className="rounded-pill bg-brand-purple/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-brand-purple sm:px-3 sm:text-[10px]">
-          {kindLabel(type)}
+          {postKindLabel(type)}
         </span>
         {statusBadge}
       </div>
@@ -89,7 +90,9 @@ export function PostCard({
                 ? "Pozrieť"
                 : type === "RECIPE"
                   ? "Recept"
-                  : "Prečítať"}
+                  : type === "AUDIO"
+                    ? "Počúvať"
+                    : "Prečítať"}
             </Link>
           </div>
         )}
@@ -202,15 +205,4 @@ export function EventCard({
       {footerSlot}
     </article>
   );
-}
-
-function kindLabel(type: PostType) {
-  switch (type) {
-    case "VIDEO":
-      return "Video";
-    case "ARTICLE":
-      return "Článok";
-    case "RECIPE":
-      return "Recept";
-  }
 }

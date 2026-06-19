@@ -1,7 +1,10 @@
 import { PrismaClient } from "@prisma/client";
+import { existsSync, statSync } from "node:fs";
+import { join } from "node:path";
 
 const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
+  prisma?: PrismaClient;
+  prismaClientVersion?: string;
 };
 
 /** Vercel Storage / Neon may expose STORAGE_DATABASE_URL instead of DATABASE_URL. */
@@ -66,6 +69,54 @@ function createPrismaClient() {
   });
 }
 
-/** Reuse one client per serverless instance (required for Neon pooler on Vercel). */
-export const prisma = globalForPrisma.prisma ?? createPrismaClient();
-globalForPrisma.prisma = prisma;
+/** Fingerprint of the generated client on disk — changes after `prisma generate`. */
+function resolveClientVersion(): string {
+  if (process.env.NODE_ENV === "production") {
+    return "production";
+  }
+
+  const clientPath = join(
+    process.cwd(),
+    "node_modules/.prisma/client/index.d.ts",
+  );
+  if (!existsSync(clientPath)) return "missing";
+
+  const stat = statSync(clientPath);
+  return `${stat.mtimeMs}:${stat.size}`;
+}
+
+/**
+ * Reuse one client per serverless instance (required for Neon pooler on Vercel).
+ * In development, recreate the client automatically when `prisma generate` runs
+ * so schema changes do not require manually restarting `npm run dev`.
+ */
+function getPrismaClient(): PrismaClient {
+  const version = resolveClientVersion();
+
+  if (
+    globalForPrisma.prisma &&
+    globalForPrisma.prismaClientVersion === version
+  ) {
+    return globalForPrisma.prisma;
+  }
+
+  if (globalForPrisma.prisma) {
+    void globalForPrisma.prisma.$disconnect();
+  }
+
+  const client = createPrismaClient();
+  globalForPrisma.prisma = client;
+  globalForPrisma.prismaClientVersion = version;
+  return client;
+}
+
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_target, prop) {
+    const client = getPrismaClient();
+    const value = client[prop as keyof PrismaClient];
+    if (typeof value === "function") {
+      return (value as (...args: unknown[]) => unknown).bind(client);
+    }
+    return value;
+  },
+});

@@ -9,6 +9,7 @@ import { parseCancerTypes } from "@/lib/cancer-type";
 import {
   resolveImageField,
   resolveVideoField,
+  resolveAudioField,
   saveUploadedImages,
 } from "@/lib/uploads";
 import type { PostType } from "@prisma/client";
@@ -75,7 +76,7 @@ export async function createPostAction(
   const profileId = String(formData.get("profileId") ?? "").trim() || null;
   const cancerTypes = parseCancerTypes(formData.getAll("cancerTypes"));
 
-  if (!title || !["VIDEO", "ARTICLE", "RECIPE", "PHOTO"].includes(type)) {
+  if (!title || !["VIDEO", "ARTICLE", "RECIPE", "PHOTO", "AUDIO"].includes(type)) {
     return { ok: false, message: "Vyplňte názov a typ obsahu." };
   }
 
@@ -104,6 +105,16 @@ export async function createPostAction(
     };
   }
 
+  let audioUrl: string | null;
+  try {
+    audioUrl = (await resolveAudioField(formData, "audioFile", "audioUrl")) ?? null;
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Nepodarilo sa nahrať audio.",
+    };
+  }
+
   let post;
   try {
     post = await prisma.$transaction(async (tx) => {
@@ -115,6 +126,7 @@ export async function createPostAction(
           body,
           coverUrl,
           videoUrl,
+          audioUrl,
           published,
           publishedAt: published ? new Date() : null,
           profileId,
@@ -194,6 +206,21 @@ export async function updatePostAction(
     };
   }
 
+  let audioUrl: string | null | undefined;
+  try {
+    audioUrl = await resolveAudioField(
+      formData,
+      "audioFile",
+      "audioUrl",
+      existing?.audioUrl,
+    );
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Nepodarilo sa nahrať audio.",
+    };
+  }
+
   const post = await prisma.post.update({
     where: { id },
     data: {
@@ -203,6 +230,7 @@ export async function updatePostAction(
       body,
       coverUrl,
       videoUrl: videoUrl ?? null,
+      audioUrl: audioUrl ?? null,
       published,
       publishedAt: published ? new Date() : null,
       profileId,
