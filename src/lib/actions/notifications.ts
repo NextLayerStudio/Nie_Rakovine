@@ -5,6 +5,23 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireActionUser, prismaActionError } from "@/lib/safe-action";
 
+export async function fetchNotificationsAction() {
+  const auth = await requireActionUser();
+  if (!auth.ok) return { ok: false as const, notifications: [] as never[] };
+
+  const notifications = await prisma.notification.findMany({
+    where: { userId: auth.user.id },
+    orderBy: { createdAt: "desc" },
+    take: 30,
+    select: { id: true, type: true, title: true, body: true, href: true, read: true, createdAt: true },
+  });
+
+  return {
+    ok: true as const,
+    notifications: notifications.map((n) => ({ ...n, createdAt: n.createdAt.toISOString() })),
+  };
+}
+
 export async function markNotificationReadAction(
   formData: FormData,
 ): Promise<{ ok: boolean; message?: string }> {

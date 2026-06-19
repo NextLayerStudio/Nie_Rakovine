@@ -1,5 +1,6 @@
 import { BottomNav } from "@/components/BottomNav";
 import { MenuDrawer } from "@/components/MenuDrawer";
+import { NotificationsDrawer } from "@/components/NotificationsDrawer";
 import { PhoneShell } from "@/components/PhoneShell";
 import { requireUser } from "@/lib/auth";
 
@@ -16,6 +17,7 @@ export default async function HomeLayout({ children }: { children: React.ReactNo
       </div>
       <BottomNav />
       <MenuDrawer userName={user.fullName} isAdmin={user.role === "ADMIN"} />
+      <NotificationsDrawer />
     </PhoneShell>
   );
 }

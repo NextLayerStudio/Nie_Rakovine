@@ -61,9 +61,10 @@ export function FeedHeader({
         </Link>
 
         <div className="flex shrink-0 items-center gap-2">
-          <Link
-            href="/home/notifications"
+          <button
+            type="button"
             aria-label="Notifikácie"
+            onClick={() => document.dispatchEvent(new CustomEvent("open-notifications"))}
             className="relative grid h-11 w-11 place-items-center rounded-full bg-brand-pink-soft text-black"
           >
             {unreadCount > 0 && (
@@ -80,7 +81,7 @@ export function FeedHeader({
                 strokeLinecap="round"
               />
             </svg>
-          </Link>
+          </button>
           <button
             type="button"
             aria-label="Menu"
