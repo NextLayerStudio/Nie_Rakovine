@@ -16,7 +16,7 @@ export default async function LoginPage({
 
   return (
     <PhoneShell>
-      <TopBar backHref="/welcome" />
+      <TopBar backHref="/welcome" className="login-topbar" />
 
       <div className="px-6">
         <h1 className="text-3xl font-bold text-brand-purple">

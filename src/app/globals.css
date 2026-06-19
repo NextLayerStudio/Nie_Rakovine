@@ -67,6 +67,10 @@ body {
   .welcome-buttons {
     margin-top: 2.5rem;
   }
+
+  .login-topbar {
+    padding-top: 4rem;
+  }
 }
 
 @layer components {

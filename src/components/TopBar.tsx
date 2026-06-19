@@ -27,7 +27,7 @@ export function TopBar({
         <Link
           href={backHref}
           aria-label="Späť"
-          className="grid h-9 w-9 place-items-center rounded-full text-brand-purple hover:bg-brand-purple/10"
+          className="grid h-12 w-12 place-items-center rounded-full text-brand-purple hover:bg-brand-purple/10"
         >
           <ChevronLeft />
         </Link>
@@ -36,7 +36,7 @@ export function TopBar({
           type="button"
           aria-label="Späť"
           onClick={() => router.back()}
-          className="grid h-9 w-9 place-items-center rounded-full text-brand-purple hover:bg-brand-purple/10"
+          className="grid h-12 w-12 place-items-center rounded-full text-brand-purple hover:bg-brand-purple/10"
         >
           <ChevronLeft />
         </button>
@@ -57,11 +57,11 @@ export function TopBar({
 
 function ChevronLeft() {
   return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+    <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" aria-hidden>
       <path
         d="M15 6l-6 6 6 6"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="2.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
