@@ -6,32 +6,33 @@ import { PhoneShell } from "@/components/PhoneShell";
 export default function WelcomePage() {
   return (
     <PhoneShell>
-      <div className="flex min-h-0 flex-1 flex-col bg-white px-8 pt-12 pb-28">
-        <div className="flex justify-center">
+      <div className="flex min-h-0 flex-1 flex-col bg-white">
+        <div className="flex justify-center px-8 pt-12 pb-2">
           <NieRakovineMark priority />
         </div>
 
-        <div className="flex flex-1 items-center justify-center">
+        <div className="flex flex-1 items-center justify-center px-8">
           <OnkoLogo size="lg" priority />
         </div>
 
-        <p className="mb-6 text-center text-lg leading-relaxed text-brand-purple/80">
-          Miesto podpory a porozumenia na ceste s onkologickým ochorením.
-        </p>
-
-        <div className="flex flex-col gap-3">
-          <Link
-            href="/login"
-            className="rounded-pill bg-brand-pink py-5 text-center text-xl font-bold text-white shadow-soft transition hover:brightness-105 active:scale-[0.99]"
-          >
-            Prihlásiť sa
-          </Link>
-          <Link
-            href="/register"
-            className="rounded-pill bg-brand-pink-register py-5 text-center text-xl font-bold text-white shadow-soft transition hover:brightness-105 active:scale-[0.99]"
-          >
-            Registrovať sa
-          </Link>
+        <div className="px-8 pt-4" style={{ paddingBottom: "max(2.5rem, env(safe-area-inset-bottom))" }}>
+          <p className="mb-6 text-center text-lg leading-relaxed text-brand-purple/80">
+            Miesto podpory a porozumenia na ceste s onkologickým ochorením.
+          </p>
+          <div className="flex flex-col gap-3">
+            <Link
+              href="/login"
+              className="rounded-pill bg-brand-pink py-5 text-center text-xl font-bold text-white shadow-soft transition hover:brightness-105 active:scale-[0.99]"
+            >
+              Prihlásiť sa
+            </Link>
+            <Link
+              href="/register"
+              className="rounded-pill bg-brand-pink-register py-5 text-center text-xl font-bold text-white shadow-soft transition hover:brightness-105 active:scale-[0.99]"
+            >
+              Registrovať sa
+            </Link>
+          </div>
         </div>
       </div>
     </PhoneShell>
