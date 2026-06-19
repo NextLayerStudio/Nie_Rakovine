@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 export function FeedHeader({
   name,
@@ -7,13 +11,25 @@ export function FeedHeader({
   name: string;
   unreadCount?: number;
 }) {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const el = document.querySelector("[data-app-scroll]");
+    if (!el) return;
+    const onScroll = () => setScrolled(el.scrollTop > 40);
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="px-5 pb-1.5 pt-3 font-sans">
+    <header
+      className={cn(
+        "sticky top-0 z-10 bg-white px-5 font-sans transition-all duration-300",
+        scrolled ? "pb-2 pt-2 shadow-sm" : "pb-1.5 pt-3",
+      )}
+    >
       <div className="flex items-center justify-between gap-3">
-        <Link
-          href="/profile"
-          className="flex min-w-0 flex-1 items-center gap-3"
-        >
+        <Link href="/profile" className="flex min-w-0 flex-1 items-center gap-3">
           <div
             aria-hidden
             className="h-12 w-12 shrink-0 rounded-full bg-cover bg-center ring-2 ring-brand-purple/15"
@@ -22,11 +38,25 @@ export function FeedHeader({
                 "linear-gradient(135deg, #b8c0c4 0%, #6f2380 100%)",
             }}
           />
-          <div className="min-w-0">
-            <p className="text-sm leading-none text-brand-pink">Ahoj!</p>
-            <p className="mt-0.5 truncate text-xl font-bold leading-tight text-black">
-              {name}
-            </p>
+
+          {/* Meno + Ahoj — animovaný collapse smerom do avatara */}
+          <div
+            className={cn(
+              "grid transition-all duration-300 ease-in-out",
+              scrolled ? "grid-cols-[0fr] opacity-0" : "grid-cols-[1fr] opacity-100",
+            )}
+          >
+            <div
+              className={cn(
+                "overflow-hidden transition-transform duration-300 ease-in-out",
+                scrolled ? "-translate-x-3" : "translate-x-0",
+              )}
+            >
+              <p className="text-sm leading-none text-brand-pink">Ahoj!</p>
+              <p className="mt-0.5 truncate text-xl font-bold leading-tight text-black">
+                {name}
+              </p>
+            </div>
           </div>
         </Link>
 
