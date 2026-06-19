@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useCallback, useRef, useState } from "react";
 import type { PostType } from "@prisma/client";
 import { postCoverFallback } from "@/lib/post-display";
-import { HeartIcon } from "@/components/LikeButton";
 
 export function FeedPostMedia({
   href,
@@ -81,13 +80,13 @@ export function FeedPostMedia({
         {/* Double-tap heart flash */}
         {heartFlash && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <div className="animate-ping-once text-white drop-shadow-lg">
-              <svg viewBox="0 0 24 24" className="h-20 w-20" aria-hidden>
+            <div className="animate-ping-once text-white drop-shadow-2xl">
+              <svg viewBox="0 0 24 24" className="h-24 w-24" aria-hidden>
                 <path
-                  d="M12 21s-7-4-7-10a4.5 4.5 0 019-2.2A4.5 4.5 0 0119 11c0 6-7 10-7 10z"
+                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
                   fill="currentColor"
-                  stroke="currentColor"
-                  strokeWidth="1"
+                  stroke="white"
+                  strokeWidth="0.5"
                 />
               </svg>
             </div>
@@ -110,18 +109,18 @@ export function FeedPostMedia({
         )}
       </div>
 
-      <div className="flex items-center gap-4 px-4 py-2.5">
+      <div className="flex items-center gap-5 px-4 py-3">
         {likeSlot}
         <button
           type="button"
           aria-label="Komentáre"
           onClick={onCommentOpen}
-          className="text-brand-purple/80"
+          className="text-brand-purple/60"
         >
           <CommentIcon />
         </button>
         <span className="flex flex-1 items-center justify-center gap-1.5" aria-hidden>
-          {multi ? (
+          {multi &&
             slides.map((_, index) => (
               <span
                 key={index}
@@ -129,10 +128,9 @@ export function FeedPostMedia({
                   index === activeIndex ? "bg-brand-purple" : "bg-brand-purple/25"
                 }`}
               />
-            ))
-          ) : null}
+            ))}
         </span>
-        <span aria-hidden className="text-brand-purple/80">
+        <span aria-hidden className="text-brand-purple/60">
           <BookmarkIcon />
         </span>
       </div>
@@ -150,16 +148,28 @@ function PlayIcon() {
 
 function CommentIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden>
-      <path d="M4 12a7 7 0 0112-4.95A7 7 0 0118 20H9l-4 3 1-4A7 7 0 014 12z" stroke="currentColor" strokeWidth="1.8" />
+    <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" aria-hidden>
+      <path
+        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
 
 function BookmarkIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden>
-      <path d="M6 4h12v16l-6-4-6 4V4z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+    <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" aria-hidden>
+      <path
+        d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

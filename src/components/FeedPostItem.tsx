@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import type { PostType } from "@prisma/client";
 import { FeedPostMedia } from "@/components/FeedPostMedia";
 import { LikeButton } from "@/components/LikeButton";
 import { PostCommentDrawer } from "@/components/PostCommentDrawer";
+import { togglePostLikeAction } from "@/lib/actions/post-likes";
 
 export function FeedPostItem({
   postId,
@@ -14,8 +15,8 @@ export function FeedPostItem({
   title,
   excerpt,
   imageUrls,
-  liked,
-  likeCount,
+  liked: initialLiked,
+  likeCount: initialLikeCount,
 }: {
   postId: string;
   href: string;
@@ -26,15 +27,22 @@ export function FeedPostItem({
   liked: boolean;
   likeCount: number;
 }) {
+  const [liked, setLiked] = useState(initialLiked);
+  const [likeCount, setLikeCount] = useState(initialLikeCount);
   const [commentOpen, setCommentOpen] = useState(false);
-  const [liked_, setLiked] = useState(liked);
-  const [likeCount_, setLikeCount] = useState(likeCount);
+  const [, startTransition] = useTransition();
 
-  const handleDoubleTapLike = () => {
-    if (!liked_) {
-      setLiked(true);
-      setLikeCount((c) => c + 1);
-    }
+  const toggleLike = () => {
+    const newLiked = !liked;
+    setLiked(newLiked);
+    setLikeCount((c) => c + (newLiked ? 1 : -1));
+    const fd = new FormData();
+    fd.set("postId", postId);
+    startTransition(() => { void togglePostLikeAction(fd); });
+  };
+
+  const handleDoubleTap = () => {
+    if (!liked) toggleLike();
   };
 
   return (
@@ -46,13 +54,14 @@ export function FeedPostItem({
           imageUrls={imageUrls}
           postId={postId}
           onCommentOpen={() => setCommentOpen(true)}
-          onDoubleTapLike={handleDoubleTapLike}
+          onDoubleTapLike={handleDoubleTap}
           likeSlot={
             <LikeButton
               postId={postId}
-              liked={liked_}
-              count={likeCount_}
+              liked={liked}
+              count={likeCount}
               variant="feed"
+              onToggle={toggleLike}
             />
           }
         />
