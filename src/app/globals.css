@@ -50,6 +50,19 @@ body {
     @apply invisible pointer-events-none;
   }
 
+  .welcome-content {
+    padding-top: 3rem;
+  }
+}
+
+@media (display-mode: standalone) {
+  .welcome-content {
+    padding-top: 6rem;
+  }
+}
+
+@layer components {
+
   .btn {
     @apply inline-flex select-none items-center justify-center gap-2 rounded-pill px-6 py-3 text-sm font-semibold transition active:scale-[0.98] disabled:opacity-60 disabled:pointer-events-none;
   }

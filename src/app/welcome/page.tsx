@@ -7,10 +7,7 @@ export default function WelcomePage() {
   return (
     <PhoneShell>
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-white">
-        <div
-          className="flex flex-col items-center px-8 pb-12"
-          style={{ paddingTop: "calc(env(safe-area-inset-top) + 2rem)" }}
-        >
+        <div className="welcome-content flex flex-col items-center px-8 pb-12">
           <NieRakovineMark priority />
 
           <OnkoLogo size="lg" priority className="max-h-[300px] w-auto mt-4" />
