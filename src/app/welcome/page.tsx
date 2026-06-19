@@ -6,12 +6,9 @@ import { PhoneShell } from "@/components/PhoneShell";
 export default function WelcomePage() {
   return (
     <PhoneShell>
-      <div className="flex min-h-0 flex-1 flex-col bg-white">
-        <div className="flex justify-center px-8 pt-12 pb-2">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-white">
+        <div className="flex flex-col items-center gap-6 px-8 pt-12 pb-16">
           <NieRakovineMark priority />
-        </div>
-
-        <div className="flex flex-1 flex-col items-center justify-center gap-6 px-8 pb-24">
           <OnkoLogo size="lg" priority />
 
           <p className="text-center text-lg leading-relaxed text-brand-purple/80">
@@ -33,8 +30,6 @@ export default function WelcomePage() {
             </Link>
           </div>
         </div>
-
-        <div className="shrink-0" style={{ height: "max(2.5rem, env(safe-area-inset-bottom))" }} />
       </div>
     </PhoneShell>
   );
