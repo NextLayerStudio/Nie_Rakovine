@@ -11,7 +11,7 @@ export default function WelcomePage() {
           <NieRakovineMark priority />
         </div>
 
-        <div className="flex flex-1 flex-col items-center justify-center gap-6 px-8">
+        <div className="flex flex-1 flex-col items-center justify-center gap-6 px-8 pb-24">
           <OnkoLogo size="lg" priority />
 
           <p className="text-center text-lg leading-relaxed text-brand-purple/80">
