@@ -34,15 +34,14 @@ export function HomeTabShell({
   const tab = pathnameToTab(pathname);
   const isMainTab = tab !== null;
 
-  // Which tab is currently showing (drives CSS show/hide)
   const [activeTab, setActiveTab] = useState<Tab>(tab ?? "home");
 
-  // Track which tabs have been mounted at least once (don't unmount them)
+  // Track which tabs have ever been activated (keep them in the DOM once mounted)
   const [mountedTabs, setMountedTabs] = useState<Set<Tab>>(
     () => new Set([tab ?? "home"]),
   );
 
-  // Sync active tab when URL changes (e.g., BottomNav Link click or browser back)
+  // Sync when pathname changes (Link navigation or browser back/forward)
   useEffect(() => {
     if (tab) {
       setActiveTab(tab);
@@ -50,45 +49,48 @@ export function HomeTabShell({
     }
   }, [tab]);
 
-  // Reset scroll to top on tab switch
+  // Reset scroll to top when switching between main tabs
   useEffect(() => {
+    if (!isMainTab) return;
     const el = document.querySelector("[data-app-scroll]");
     if (el) el.scrollTop = 0;
-  }, [activeTab]);
+  }, [activeTab, isMainTab]);
+
+  // Visibility helper: panel is visible when on a main tab AND it's the active one
+  const visible = (t: Tab) => isMainTab && activeTab === t;
 
   return (
     <>
-      {/* ── Main tab area ── */}
-      {isMainTab && (
-        <>
-          {/* Single shared header across all tabs */}
-          <FeedHeader name={userName} unreadCount={unreadCount} />
+      {/* ── Shared header — only while on a main tab ── */}
+      {isMainTab && <FeedHeader name={userName} unreadCount={unreadCount} />}
 
-          {/* Each tab stays in DOM once visited — CSS hides inactive ones */}
-          {mountedTabs.has("home") && (
-            <div className={activeTab === "home" ? "" : "hidden"} aria-hidden={activeTab !== "home"}>
-              <FeedTabPanel />
-            </div>
-          )}
-          {mountedTabs.has("forums") && (
-            <div className={activeTab === "forums" ? "" : "hidden"} aria-hidden={activeTab !== "forums"}>
-              <ForumsTabPanel />
-            </div>
-          )}
-          {mountedTabs.has("search") && (
-            <div className={activeTab === "search" ? "" : "hidden"} aria-hidden={activeTab !== "search"}>
-              <SearchTabPanel />
-            </div>
-          )}
-          {mountedTabs.has("calendar") && (
-            <div className={activeTab === "calendar" ? "" : "hidden"} aria-hidden={activeTab !== "calendar"}>
-              <CalendarTabPanel />
-            </div>
-          )}
-        </>
+      {/*
+       * Tab panels live outside the isMainTab guard so they stay mounted
+       * when the user navigates to subpages. CSS hides them; their state
+       * (fetched data, scroll position) is preserved for instant return.
+       */}
+      {mountedTabs.has("home") && (
+        <div className={visible("home") ? "" : "hidden"} aria-hidden={!visible("home")}>
+          <FeedTabPanel />
+        </div>
+      )}
+      {mountedTabs.has("forums") && (
+        <div className={visible("forums") ? "" : "hidden"} aria-hidden={!visible("forums")}>
+          <ForumsTabPanel />
+        </div>
+      )}
+      {mountedTabs.has("search") && (
+        <div className={visible("search") ? "" : "hidden"} aria-hidden={!visible("search")}>
+          <SearchTabPanel />
+        </div>
+      )}
+      {mountedTabs.has("calendar") && (
+        <div className={visible("calendar") ? "" : "hidden"} aria-hidden={!visible("calendar")}>
+          <CalendarTabPanel />
+        </div>
       )}
 
-      {/* ── Subpages (post detail, profile, forum thread, etc.) ── */}
+      {/* ── Subpage content — forums threads, post detail, profile, etc. ── */}
       {!isMainTab && children}
     </>
   );

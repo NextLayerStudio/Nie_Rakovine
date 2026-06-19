@@ -35,12 +35,23 @@ function TabSkeleton() {
 
 export function FeedTabPanel() {
   const [data, setData] = useState<FeedData | null>(null);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    fetchFeedTabAction().then((res) => {
-      if (res.ok) setData(res as FeedData);
-    });
+    fetchFeedTabAction()
+      .then((res) => {
+        if (res.ok) setData(res as FeedData);
+        else setFailed(true);
+      })
+      .catch(() => setFailed(true));
   }, []);
+
+  if (failed)
+    return (
+      <div className="px-5 py-8 text-center text-sm text-brand-purple/50">
+        Obsah sa nepodarilo načítať. Skúste obnoviť stránku.
+      </div>
+    );
 
   if (!data) return <TabSkeleton />;
 

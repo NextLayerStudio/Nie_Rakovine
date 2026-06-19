@@ -21,13 +21,23 @@ function TabSkeleton() {
 
 export function CalendarTabPanel() {
   const [data, setData] = useState<CalendarData | null>(null);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    fetchCalendarTabAction().then((res) => {
-      if (res.ok) setData(res as CalendarData);
-    });
+    fetchCalendarTabAction()
+      .then((res) => {
+        if (res.ok) setData(res as CalendarData);
+        else setFailed(true);
+      })
+      .catch(() => setFailed(true));
   }, []);
 
+  if (failed)
+    return (
+      <div className="px-5 py-8 text-center text-sm text-brand-purple/50">
+        Obsah sa nepodarilo načítať. Skúste obnoviť stránku.
+      </div>
+    );
   if (!data) return <TabSkeleton />;
 
   return (
