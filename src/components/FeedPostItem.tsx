@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import type { PostType } from "@prisma/client";
 import { FeedPostMedia } from "@/components/FeedPostMedia";
 import { LikeButton } from "@/components/LikeButton";
@@ -36,7 +36,15 @@ export function FeedPostItem({
   const [likeCount, setLikeCount] = useState(initialLikeCount);
   const [saved, setSaved] = useState(initialSaved);
   const [commentOpen, setCommentOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [isClamped, setIsClamped] = useState(false);
+  const excerptRef = useRef<HTMLParagraphElement>(null);
   const [, startTransition] = useTransition();
+
+  useEffect(() => {
+    const el = excerptRef.current;
+    if (el) setIsClamped(el.scrollHeight > el.clientHeight + 2);
+  }, [excerpt]);
 
   const toggleLike = () => {
     const newLiked = !liked;
@@ -85,12 +93,27 @@ export function FeedPostItem({
         <div className="px-4 pb-7">
           <Link href={href}>
             <h3 className="text-base font-bold text-brand-purple">{title}</h3>
-            {excerpt && (
-              <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-brand-purple/70">
+          </Link>
+
+          {excerpt && (
+            <div className="mt-0.5">
+              <p
+                ref={excerptRef}
+                className={`text-sm leading-relaxed text-brand-purple/70 ${expanded ? "" : "line-clamp-2"}`}
+              >
                 {excerpt}
               </p>
-            )}
-          </Link>
+              {(isClamped || expanded) && (
+                <button
+                  type="button"
+                  onClick={() => setExpanded((e) => !e)}
+                  className="mt-0.5 text-xs font-semibold text-brand-purple/50 hover:text-brand-purple/80"
+                >
+                  {expanded ? "Zobraziť menej" : "čítať viac"}
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </article>
 
