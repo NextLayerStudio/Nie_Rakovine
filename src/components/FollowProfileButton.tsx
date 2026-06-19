@@ -7,10 +7,12 @@ export function FollowProfileButton({
   profileId,
   handle,
   isFollowing: initialFollowing,
+  fullWidth = false,
 }: {
   profileId: string;
   handle: string;
   isFollowing: boolean;
+  fullWidth?: boolean;
 }) {
   const [following, setFollowing] = useState(initialFollowing);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -19,8 +21,15 @@ export function FollowProfileButton({
 
   useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
 
-  // Already following → show nothing
-  if (following && !showConfirm) return null;
+  // Already following → show nothing (unless fullWidth, then show disabled state)
+  if (following && !showConfirm) {
+    if (!fullWidth) return null;
+    return (
+      <div className="w-full rounded-xl border border-brand-purple/20 py-1.5 text-center text-sm font-semibold text-brand-purple/40">
+        Sledované
+      </div>
+    );
+  }
 
   if (showConfirm) {
     return (
@@ -47,7 +56,9 @@ export function FollowProfileButton({
     <button
       type="button"
       onClick={handleFollow}
-      className="rounded-xl border border-brand-pink px-3.5 py-1 text-sm font-semibold text-brand-pink transition hover:bg-brand-pink/5 active:scale-95"
+      className={`rounded-xl border border-brand-pink text-sm font-semibold text-brand-pink transition hover:bg-brand-pink/5 active:scale-95 ${
+        fullWidth ? "w-full py-1.5" : "px-3.5 py-1"
+      }`}
     >
       Sledovať
     </button>
