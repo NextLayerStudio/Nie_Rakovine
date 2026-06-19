@@ -11,16 +11,15 @@ export default async function SavedPostsPage() {
   const user = await requireUser();
 
   const saved = await prisma.savedPost.findMany({
-    where: { userId: user.id },
+    where: { userId: user.id, post: { published: true } },
     orderBy: { createdAt: "desc" },
     take: 60,
     select: {
-      postId: true,
       post: { select: feedPostSelect },
     },
   });
 
-  const posts = saved.map((s) => s.post).filter((p) => p.published);
+  const posts = saved.map((s) => s.post);
 
   const likedSet = posts.length
     ? new Set(
