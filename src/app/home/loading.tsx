@@ -1,5 +1,4 @@
-import { LoadingScreen } from "@/components/LoadingScreen";
-
+// Tab content loads internally via HomeTabShell — no route-level loading needed
 export default function HomeLoading() {
-  return <LoadingScreen fixed />;
+  return null;
 }
