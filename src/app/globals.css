@@ -59,6 +59,14 @@ body {
   .welcome-content {
     padding-top: 6rem;
   }
+
+  .welcome-logo {
+    max-height: 360px;
+  }
+
+  .welcome-buttons {
+    margin-top: 2.5rem;
+  }
 }
 
 @layer components {
