@@ -11,15 +11,14 @@ export default function WelcomePage() {
           <NieRakovineMark priority />
         </div>
 
-        <div className="flex flex-1 items-center justify-center px-8">
+        <div className="flex flex-1 flex-col items-center justify-center gap-6 px-8">
           <OnkoLogo size="lg" priority />
-        </div>
 
-        <div className="px-8 pt-4" style={{ paddingBottom: "max(2.5rem, env(safe-area-inset-bottom))" }}>
-          <p className="mb-6 text-center text-lg leading-relaxed text-brand-purple/80">
+          <p className="text-center text-lg leading-relaxed text-brand-purple/80">
             Miesto podpory a porozumenia na ceste s onkologickým ochorením.
           </p>
-          <div className="flex flex-col gap-3">
+
+          <div className="w-full flex flex-col gap-3">
             <Link
               href="/login"
               className="rounded-pill bg-brand-pink py-5 text-center text-xl font-bold text-white shadow-soft transition hover:brightness-105 active:scale-[0.99]"
@@ -34,6 +33,8 @@ export default function WelcomePage() {
             </Link>
           </div>
         </div>
+
+        <div className="shrink-0" style={{ height: "max(2.5rem, env(safe-area-inset-bottom))" }} />
       </div>
     </PhoneShell>
   );
