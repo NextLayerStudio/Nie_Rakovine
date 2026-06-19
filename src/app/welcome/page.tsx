@@ -6,7 +6,7 @@ import { PhoneShell } from "@/components/PhoneShell";
 export default function WelcomePage() {
   return (
     <PhoneShell>
-      <div className="flex min-h-0 flex-1 flex-col bg-white px-8 pt-12 pb-16">
+      <div className="flex min-h-0 flex-1 flex-col bg-white px-8 pt-12 pb-28">
         <div className="flex justify-center">
           <NieRakovineMark priority />
         </div>
