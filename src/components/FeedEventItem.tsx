@@ -86,7 +86,7 @@ export function FeedEventItem({
           </button>
         </div>
 
-        <div className="px-4 pb-4">
+        <div className="px-4 pb-7">
           <button
             type="button"
             onClick={() => setOpen(true)}

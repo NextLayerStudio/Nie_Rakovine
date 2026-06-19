@@ -26,7 +26,7 @@ export function FeedPostItem({
         likeSlot={likeSlot}
       />
 
-      <div className="px-4 pb-4">
+      <div className="px-4 pb-7">
         <Link href={href}>
           <h3 className="text-sm font-semibold text-brand-purple">{title}</h3>
           {excerpt && (
