@@ -26,10 +26,10 @@ export function BottomNav() {
 
   return (
     <nav
-      className="bottom-nav pointer-events-none absolute inset-x-0 bottom-0 z-20 px-6 pt-2"
+      className="bottom-nav pointer-events-none absolute inset-x-0 bottom-0 z-20 px-4 pt-2"
       style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
     >
-      <ul className="pointer-events-auto mx-auto grid h-[64px] w-full max-w-[340px] grid-cols-4 items-center rounded-full bg-brand-pink px-2 shadow-soft">
+      <ul className="pointer-events-auto mx-auto grid h-[54px] w-full max-w-[390px] grid-cols-4 items-center rounded-full bg-brand-pink px-2 shadow-soft">
         {items.map(({ href, label, icon: Icon }) => {
           const active =
             href === "/home"
@@ -42,7 +42,7 @@ export function BottomNav() {
                 href={href}
                 aria-label={label}
                 className={cn(
-                  "grid h-12 w-12 place-items-center rounded-full text-white transition",
+                  "grid h-10 w-10 place-items-center rounded-full text-white transition",
                   active ? "bg-white/20" : "hover:bg-white/10",
                 )}
               >
