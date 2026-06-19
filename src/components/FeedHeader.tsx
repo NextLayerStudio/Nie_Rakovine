@@ -24,8 +24,8 @@ export function FeedHeader({
   return (
     <header
       className={cn(
-        "sticky top-0 z-10 bg-white px-5 font-sans transition-all duration-300",
-        scrolled ? "pb-2 pt-2 shadow-sm" : "pb-1.5 pt-3",
+        "sticky top-0 z-10 px-5 font-sans transition-all duration-300",
+        scrolled ? "pb-2 pt-2" : "pb-1.5 pt-3",
       )}
     >
       <div className="flex items-center justify-between gap-3">
