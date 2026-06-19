@@ -1,5 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import { League_Spartan } from "next/font/google";
 import "./globals.css";
+
+const leagueSpartan = League_Spartan({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "ONKO KLUB",
@@ -27,7 +33,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="sk">
+    <html lang="sk" className={leagueSpartan.className}>
       <body>{children}</body>
     </html>
   );
