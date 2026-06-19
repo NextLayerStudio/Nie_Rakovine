@@ -85,7 +85,7 @@ export async function seedContentAction(): Promise<{ ok: boolean; message: strin
       id: "seed-article-1",
       type: "ARTICLE" as const,
       title: "Čo robiť po skončení liečby — sprievodca prvými 100 dňami",
-      excerpt: "Praktické rady, ako sa vrátiť do bežného života po onkologickej liečbe. Po skončení liečby mnohí pacienti zistia, že návrat do „normálu" nie je taký jednoduchý, ako očakávali. Telo potrebuje čas, emócie sú rozkolísané a okolie niekedy nerozumie, prečo vám ešte stále nie je dobre. V tomto článku vás prevedieme prvými 100 dňami krok za krokom — od pohybu a výživy až po psychickú pohodu a vzťahy.",
+      excerpt: "Praktické rady, ako sa vrátiť do bežného života po onkologickej liečbe. Po skončení liečby mnohí pacienti zistia, že návrat do normálu nie je taký jednoduchý, ako očakávali. Telo potrebuje čas, emócie sú rozkolísané a okolie niekedy nerozumie, prečo vám ešte stále nie je dobre. V tomto článku vás prevedieme prvými 100 dňami krok za krokom — od pohybu a výživy až po psychickú pohodu a vzťahy.",
       body: "## Prvý mesiac\n\nPo skončení liečby je prirodzené cítiť zmes úľavy, strachu a neistoty. Telo potrebuje čas na zotavenie.\n\n**Čo je normálne:**\n- Únava, ktorá môže trvať týždne až mesiace\n- Emocionálne výkyvy\n- Strach z návratu choroby\n\n## Pohyb a rehabilitácia\n\nZačnite pomaly. Aj 10-minútová prechádzka denne má obrovský vplyv na vašu pohodu a fyzickú kondíciu.\n\n## Psychická podpora\n\nNebojte sa vyhľadať pomoc psychológa alebo sa pripojiť k podpornej skupine — práve na to tu sme.",
       coverUrl: "https://picsum.photos/seed/onko-article-1/800/500",
       videoUrl: null,
