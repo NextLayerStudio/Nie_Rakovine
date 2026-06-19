@@ -7,6 +7,7 @@ import { FeedPostMedia } from "@/components/FeedPostMedia";
 import { LikeButton } from "@/components/LikeButton";
 import { PostCommentDrawer } from "@/components/PostCommentDrawer";
 import { togglePostLikeAction } from "@/lib/actions/post-likes";
+import { toggleSavedPostAction } from "@/lib/actions/post-saves";
 
 export function FeedPostItem({
   postId,
@@ -15,8 +16,10 @@ export function FeedPostItem({
   title,
   excerpt,
   imageUrls,
+  videoUrl,
   liked: initialLiked,
   likeCount: initialLikeCount,
+  saved: initialSaved,
 }: {
   postId: string;
   href: string;
@@ -24,11 +27,14 @@ export function FeedPostItem({
   title: string;
   excerpt: string | null;
   imageUrls: string[];
+  videoUrl?: string | null;
   liked: boolean;
   likeCount: number;
+  saved: boolean;
 }) {
   const [liked, setLiked] = useState(initialLiked);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
+  const [saved, setSaved] = useState(initialSaved);
   const [commentOpen, setCommentOpen] = useState(false);
   const [, startTransition] = useTransition();
 
@@ -39,6 +45,13 @@ export function FeedPostItem({
     const fd = new FormData();
     fd.set("postId", postId);
     startTransition(() => { void togglePostLikeAction(fd); });
+  };
+
+  const toggleSave = () => {
+    setSaved((s) => !s);
+    const fd = new FormData();
+    fd.set("postId", postId);
+    startTransition(() => { void toggleSavedPostAction(fd); });
   };
 
   const handleDoubleTap = () => {
@@ -52,9 +65,12 @@ export function FeedPostItem({
           href={href}
           type={type}
           imageUrls={imageUrls}
+          videoUrl={videoUrl}
           postId={postId}
           onCommentOpen={() => setCommentOpen(true)}
           onDoubleTapLike={handleDoubleTap}
+          saved={saved}
+          onSave={toggleSave}
           likeSlot={
             <LikeButton
               postId={postId}

@@ -2,16 +2,22 @@ import "server-only";
 
 import { prisma } from "@/lib/prisma";
 
-/** Batch-load likes, follows, and event registrations for feed pages. */
+/** Batch-load likes, saves, follows, and event registrations for feed pages. */
 export async function loadFeedEngagement(
   userId: string,
   postIds: string[],
   profileIds: string[],
   eventIds: string[],
 ) {
-  const [userLikes, follows, eventRegistrations] = await Promise.all([
+  const [userLikes, userSaves, follows, eventRegistrations] = await Promise.all([
     postIds.length
       ? prisma.articleLike.findMany({
+          where: { userId, postId: { in: postIds } },
+          select: { postId: true },
+        })
+      : [],
+    postIds.length
+      ? prisma.savedPost.findMany({
           where: { userId, postId: { in: postIds } },
           select: { postId: true },
         })
@@ -32,6 +38,7 @@ export async function loadFeedEngagement(
 
   return {
     likedIds: new Set(userLikes.map((l) => l.postId)),
+    savedIds: new Set(userSaves.map((s) => s.postId)),
     followingIds: new Set(follows.map((f) => f.profileId)),
     registeredEventIds: new Set(eventRegistrations.map((r) => r.eventId)),
   };

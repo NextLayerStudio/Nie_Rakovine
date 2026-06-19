@@ -47,7 +47,7 @@ export default async function HomeFeedPage() {
     ),
   ];
 
-  const { likedIds, followingIds, registeredEventIds } =
+  const { likedIds, savedIds, followingIds, registeredEventIds } =
     await loadFeedEngagement(
       user.id,
       posts.map((p) => p.id),
@@ -117,8 +117,10 @@ export default async function HomeFeedPage() {
                   title={p.title}
                   excerpt={p.excerpt}
                   imageUrls={buildPostGallery(p.coverUrl, p.images)}
+                  videoUrl={p.videoUrl ?? null}
                   liked={likedIds.has(p.id)}
                   likeCount={p._count.likes}
+                  saved={savedIds.has(p.id)}
                 />
               </div>
             );

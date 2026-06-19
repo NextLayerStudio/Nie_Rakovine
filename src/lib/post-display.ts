@@ -46,6 +46,34 @@ export function isEmbeddableVideo(url: string) {
   );
 }
 
+/** Converts a YouTube/Vimeo watch URL into an embeddable iframe src. */
+export function extractVideoEmbedUrl(url: string): string | null {
+  try {
+    const u = new URL(url);
+
+    // youtube.com/watch?v=ID
+    if (u.hostname.includes("youtube.com") && u.searchParams.get("v")) {
+      const id = u.searchParams.get("v")!;
+      return `https://www.youtube.com/embed/${id}?autoplay=1&playsinline=1&rel=0`;
+    }
+    // youtu.be/ID
+    if (u.hostname === "youtu.be") {
+      const id = u.pathname.slice(1);
+      return `https://www.youtube.com/embed/${id}?autoplay=1&playsinline=1&rel=0`;
+    }
+    // vimeo.com/ID
+    if (u.hostname.includes("vimeo.com")) {
+      const id = u.pathname.split("/").filter(Boolean).pop();
+      if (id) return `https://player.vimeo.com/video/${id}?autoplay=1&playsinline=1`;
+    }
+    // Already an embed URL — return as-is
+    if (url.includes("/embed/") || url.includes("player.vimeo.com")) return url;
+  } catch {
+    // invalid URL
+  }
+  return null;
+}
+
 export function isLocalMedia(url: string) {
   return url.startsWith("/api/media/") || url.startsWith("/uploads/");
 }

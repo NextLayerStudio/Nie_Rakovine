@@ -79,6 +79,7 @@ model User {
   eventRegistrations EventRegistration[]
   articleLikes       ArticleLike[]
   postComments       PostComment[]
+  savedPosts         SavedPost[]
   forumMemberships   ForumMembership[]
   createdForums      Forum[]             @relation("ForumCreator")
   forumThreads       ForumThread[]
@@ -224,6 +225,7 @@ model Post {
   likes       ArticleLike[]
   comments    PostComment[]
   images      PostImage[]
+  savedBy     SavedPost[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -262,6 +264,18 @@ model ArticleLike {
   createdAt DateTime @default(now())
 
   @@unique([userId, postId])
+}
+
+model SavedPost {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+  @@index([userId, createdAt(sort: Desc)])
 }
 
 model PostComment {

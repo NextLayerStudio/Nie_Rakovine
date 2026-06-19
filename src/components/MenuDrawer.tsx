@@ -8,6 +8,7 @@ import { logoutAction } from "@/lib/actions/auth";
 const MAIN_ITEMS = [
   { href: "/home/notifications", label: "Oznámenia", icon: "bell" as const },
   { href: "/profile", label: "Môj profil", icon: "user" as const },
+  { href: "/home/saved", label: "Uložené", icon: "bookmark" as const },
   { href: "/menu/kontent-kniznica", label: "Kontent knižnica", icon: "library" as const },
   { href: "/menu/aktivity", label: "Aktivity", icon: "calendar" as const },
   { href: "/home/forums", label: "Fóra", icon: "forum" as const },
@@ -180,6 +181,7 @@ function MenuIcon({ name, muted = false }: { name: string; muted?: boolean }) {
     percent: (<><circle cx="7.5" cy="7.5" r="2.5" /><circle cx="16.5" cy="16.5" r="2.5" /><path d="M19 5L5 19" /></>),
     calendar: (<><rect x="4" y="5.5" width="16" height="14" rx="2.5" /><path d="M4 9.5h16M8 4v2.5M16 4v2.5" /></>),
     forum: (<><path d="M6 9.5a5.5 5.5 0 0110.4-1.8A4.5 4.5 0 0119 12c0 2.4-2 4.3-4.5 4.3H12l-3.8 2.8V16.5A5.5 5.5 0 016 9.5z" /><circle cx="9" cy="11.5" r="0.9" fill="currentColor" stroke="none" /><circle cx="12" cy="11.5" r="0.9" fill="currentColor" stroke="none" /><circle cx="15" cy="11.5" r="0.9" fill="currentColor" stroke="none" /></>),
+    bookmark: <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" strokeLinejoin="round" />,
     settings: (<><circle cx="12" cy="12" r="3" /><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4l1.4-1.4M17 7l1.4-1.4" /></>),
   };
   return (
