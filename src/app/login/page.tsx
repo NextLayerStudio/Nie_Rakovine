@@ -19,10 +19,10 @@ export default async function LoginPage({
       <TopBar backHref="/welcome" />
 
       <div className="px-6">
-        <h1 className="text-2xl font-bold text-brand-purple">
+        <h1 className="text-3xl font-bold text-brand-purple">
           {isAdminLogin ? "Admin prihlásenie" : "Prihlásenie"}
         </h1>
-        <p className="mt-1 text-xs text-brand-purple/60">
+        <p className="mt-1 text-sm text-brand-purple/60">
           {isAdminLogin ? "Správa ONKO KLUBU" : "Vitajte späť"}
         </p>
       </div>

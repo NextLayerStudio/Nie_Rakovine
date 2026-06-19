@@ -42,7 +42,7 @@ export function LoginForm({
       )}
 
       <div>
-        <label className="label" htmlFor="email">
+        <label className="label !text-base" htmlFor="email">
           Email
         </label>
         <input
@@ -52,13 +52,13 @@ export function LoginForm({
           required
           placeholder={isAdminLogin ? "admin@onkoklub.sk" : "meno@email.sk"}
           defaultValue={isAdminLogin ? "admin@onkoklub.sk" : undefined}
-          className="input-light"
+          className="input-light !py-4 !text-base"
           autoComplete="email"
         />
       </div>
 
       <div>
-        <label className="label" htmlFor="password">
+        <label className="label !text-base" htmlFor="password">
           Heslo
         </label>
         <input
@@ -67,7 +67,7 @@ export function LoginForm({
           type="password"
           required
           placeholder="••••••••"
-          className="input-light"
+          className="input-light !py-4 !text-base"
           autoComplete="current-password"
         />
       </div>
@@ -76,38 +76,20 @@ export function LoginForm({
 
       <div className="mt-4 flex flex-col items-center gap-3">
         <SubmitButton
-          className="btn-secondary w-56"
+          className="rounded-pill bg-brand-pink w-full py-5 text-xl font-bold text-white shadow-soft transition hover:brightness-105 active:scale-[0.99]"
           pendingLabel="Prihlasujem…"
         >
           Prihlásiť sa
         </SubmitButton>
         <Link
           href="/reset-password"
-          className="text-xs font-medium text-brand-purple/70 hover:text-brand-purple"
+          className="text-sm font-medium text-brand-purple/70 hover:text-brand-purple"
         >
           Zabudli ste heslo?
         </Link>
       </div>
 
-      {!isAdminLogin ? (
-        <p className="text-center text-[11px] text-brand-purple/60">
-          Administrátor?{" "}
-          <Link
-            href="/login?next=/admin"
-            className="font-semibold text-brand-purple"
-          >
-            Prihlásiť sa do adminu
-          </Link>
-        </p>
-      ) : (
-        <p className="text-center text-[11px] text-brand-purple/60">
-          <Link href="/login" className="font-semibold text-brand-purple">
-            Späť na bežné prihlásenie
-          </Link>
-        </p>
-      )}
-
-      <p className="mt-1 text-center text-[11px] text-brand-purple/60">
+      <p className="mt-1 text-center text-sm text-brand-purple/60">
         Nemáte účet?{" "}
         <Link href="/register" className="font-semibold text-brand-purple">
           Registrujte sa
