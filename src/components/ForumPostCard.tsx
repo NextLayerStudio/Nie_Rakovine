@@ -112,7 +112,6 @@ export function ForumPostCard({
               forumId={forumId}
               liked={liked}
               count={likeCount}
-              variant="inline"
             />
             <Link
               href={threadHref}

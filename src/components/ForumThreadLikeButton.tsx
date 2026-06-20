@@ -1,74 +1,68 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
+import { HeartIcon } from "@/components/LikeButton";
 import { toggleForumThreadLikeAction } from "@/lib/actions/forums";
 
 export function ForumThreadLikeButton({
   threadId,
   forumId,
-  liked,
-  count,
-  variant = "pill",
+  liked: likedProp,
+  count: countProp,
+  variant = "feed",
 }: {
   threadId: string;
   forumId: string;
   liked: boolean;
   count: number;
-  variant?: "pill" | "inline";
+  variant?: "feed" | "pill";
 }) {
-  const router = useRouter();
+  const [liked, setLiked] = useState(likedProp);
+  const [count, setCount] = useState(countProp);
   const [pending, startTransition] = useTransition();
 
-  const pillClass = `flex items-center gap-1 rounded-pill px-3 py-1 text-xs font-semibold disabled:opacity-60 ${
-    liked
-      ? "bg-brand-pink text-white"
-      : "bg-brand-purple/10 text-brand-purple"
+  useEffect(() => {
+    setLiked(likedProp);
+    setCount(countProp);
+  }, [likedProp, countProp]);
+
+  const handleClick = () => {
+    const newLiked = !liked;
+    setLiked(newLiked);
+    setCount((c) => c + (newLiked ? 1 : -1));
+
+    const fd = new FormData();
+    fd.set("threadId", threadId);
+    fd.set("forumId", forumId);
+    startTransition(() => {
+      void toggleForumThreadLikeAction(fd);
+    });
+  };
+
+  const feedClass = `flex items-center gap-1.5 disabled:opacity-60 transition-colors ${
+    liked ? "text-brand-pink" : "text-brand-purple/60"
   }`;
-  const inlineClass = `flex items-center gap-1.5 text-xs disabled:opacity-60 ${
-    liked ? "text-brand-pink" : "text-brand-purple/70"
+  const pillClass = `flex items-center gap-1.5 rounded-pill px-3 py-1.5 text-xs font-semibold disabled:opacity-60 transition-colors ${
+    liked ? "bg-brand-pink text-white" : "bg-brand-purple/10 text-brand-purple"
   }`;
 
   return (
-    <form
-      action={(formData) => {
-        startTransition(async () => {
-          const result = await toggleForumThreadLikeAction(formData);
-          if (result.ok) {
-            router.refresh();
-          }
-        });
-      }}
+    <button
+      type="button"
+      disabled={pending}
+      onClick={handleClick}
+      className={variant === "feed" ? feedClass : pillClass}
     >
-      <input type="hidden" name="threadId" value={threadId} />
-      <input type="hidden" name="forumId" value={forumId} />
-      <button
-        type="submit"
-        disabled={pending}
-        className={variant === "pill" ? pillClass : inlineClass}
-      >
-        <HeartIcon filled={liked} />
-        {pending
-          ? "…"
-          : count > 0
-            ? count
-            : variant === "pill"
-              ? "Páči sa"
-              : "0"}
-      </button>
-    </form>
-  );
-}
-
-function HeartIcon({ filled }: { filled: boolean }) {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden>
-      <path
-        d="M12 21s-7-4-7-10a4.5 4.5 0 019-2.2A4.5 4.5 0 0119 11c0 6-7 10-7 10z"
-        fill={filled ? "currentColor" : "none"}
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-    </svg>
+      <HeartIcon filled={liked} large={variant === "feed"} />
+      {variant === "feed" ? (
+        <span className="text-sm font-semibold">
+          {count > 0 ? count : "Páči sa mi"}
+        </span>
+      ) : count > 0 ? (
+        count
+      ) : (
+        "Páči sa"
+      )}
+    </button>
   );
 }

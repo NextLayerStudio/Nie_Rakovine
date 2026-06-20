@@ -16,6 +16,7 @@ export function FeedPostMedia({
   videoUrl,
   audioUrl,
   onCommentOpen,
+  commentCount,
   onDoubleTapLike,
   saved,
   onSave,
@@ -28,6 +29,7 @@ export function FeedPostMedia({
   videoUrl?: string | null;
   audioUrl?: string | null;
   onCommentOpen: () => void;
+  commentCount: number;
   onDoubleTapLike: () => void;
   saved: boolean;
   onSave: () => void;
@@ -120,9 +122,12 @@ export function FeedPostMedia({
           type="button"
           aria-label="Komentáre"
           onClick={onCommentOpen}
-          className="text-brand-purple/60"
+          className="flex items-center gap-1.5 text-brand-purple/60"
         >
           <CommentIcon />
+          {commentCount > 0 && (
+            <span className="text-sm font-semibold">{commentCount}</span>
+          )}
         </button>
         <span className="flex flex-1 items-center justify-center gap-1.5" aria-hidden>
           {!isVideo && !isAudio && multi &&

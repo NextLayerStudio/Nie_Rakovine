@@ -57,6 +57,7 @@ export default async function SavedPostsPage() {
             audioUrl={p.audioUrl ?? null}
             liked={likedSet.has(p.id)}
             likeCount={p._count.likes}
+            commentCount={p._count.comments}
             saved={true}
           />
         ))}

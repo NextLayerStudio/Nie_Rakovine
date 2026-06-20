@@ -20,6 +20,7 @@ export function FeedPostItem({
   audioUrl,
   liked: initialLiked,
   likeCount: initialLikeCount,
+  commentCount: initialCommentCount,
   saved: initialSaved,
 }: {
   postId: string;
@@ -32,13 +33,19 @@ export function FeedPostItem({
   audioUrl?: string | null;
   liked: boolean;
   likeCount: number;
+  commentCount: number;
   saved: boolean;
 }) {
   const [liked, setLiked] = useState(initialLiked);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
+  const [commentCount, setCommentCount] = useState(initialCommentCount);
   const [saved, setSaved] = useState(initialSaved);
   const [commentOpen, setCommentOpen] = useState(false);
   const [, startTransition] = useTransition();
+
+  useEffect(() => {
+    setCommentCount(initialCommentCount);
+  }, [initialCommentCount]);
 
   const toggleLike = () => {
     const newLiked = !liked;
@@ -77,6 +84,7 @@ export function FeedPostItem({
           onLike={toggleLike}
           onSave={toggleSave}
           onCommentOpen={() => setCommentOpen(true)}
+          commentCount={commentCount}
         />
       ) : (
         <MediaCard
@@ -94,6 +102,7 @@ export function FeedPostItem({
           onLike={toggleLike}
           onSave={toggleSave}
           onCommentOpen={() => setCommentOpen(true)}
+          commentCount={commentCount}
           onDoubleTap={handleDoubleTap}
         />
       )}
@@ -102,6 +111,7 @@ export function FeedPostItem({
         postId={postId}
         open={commentOpen}
         onClose={() => setCommentOpen(false)}
+        onCommentAdded={() => setCommentCount((c) => c + 1)}
       />
     </>
   );
@@ -121,6 +131,7 @@ function ArticleCard({
   onLike,
   onSave,
   onCommentOpen,
+  commentCount,
 }: {
   href: string;
   title: string;
@@ -133,6 +144,7 @@ function ArticleCard({
   onLike: () => void;
   onSave: () => void;
   onCommentOpen: () => void;
+  commentCount: number;
 }) {
   const [expanded, setExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
@@ -184,8 +196,9 @@ function ArticleCard({
       {/* Action bar */}
       <div className="flex items-center gap-5 px-4 pb-4">
         <LikeButton postId={postId} liked={liked} count={likeCount} variant="feed" onToggle={onLike} />
-        <button type="button" aria-label="Komentáre" onClick={onCommentOpen} className="text-brand-purple/60">
+        <button type="button" aria-label="Komentáre" onClick={onCommentOpen} className="flex items-center gap-1.5 text-brand-purple/60">
           <CommentIcon />
+          {commentCount > 0 && <span className="text-sm font-semibold">{commentCount}</span>}
         </button>
         <span className="flex-1" />
         <button
@@ -218,6 +231,7 @@ function MediaCard({
   onLike,
   onSave,
   onCommentOpen,
+  commentCount,
   onDoubleTap,
 }: {
   href: string;
@@ -234,6 +248,7 @@ function MediaCard({
   onLike: () => void;
   onSave: () => void;
   onCommentOpen: () => void;
+  commentCount: number;
   onDoubleTap: () => void;
 }) {
   const [expanded, setExpanded] = useState(false);
@@ -255,6 +270,7 @@ function MediaCard({
         audioUrl={audioUrl}
         postId={postId}
         onCommentOpen={onCommentOpen}
+        commentCount={commentCount}
         onDoubleTapLike={onDoubleTap}
         saved={saved}
         onSave={onSave}

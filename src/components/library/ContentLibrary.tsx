@@ -10,6 +10,7 @@ import {
 } from "react";
 import { FeedProfileHeader } from "@/components/FeedProfileHeader";
 import { LikeButton } from "@/components/LikeButton";
+import { PostCommentDrawer } from "@/components/PostCommentDrawer";
 import { fetchLibraryAction } from "@/lib/actions/library";
 import {
   KNIZNICA_SCROLL_KEY,
@@ -307,7 +308,7 @@ function ArticleItem({
           count={post._count.likes}
           variant="feed"
         />
-        <CommentLink href={href} />
+        <LibraryCommentButton postId={post.id} count={post._count.comments} />
         <span className="flex-1" />
         <SaveButton postId={post.id} saved={saved} />
       </div>
@@ -365,7 +366,7 @@ function AudioItem({
           count={post._count.likes}
           variant="feed"
         />
-        <CommentLink href={href} />
+        <LibraryCommentButton postId={post.id} count={post._count.comments} />
         <span className="flex flex-1 items-center justify-end gap-2.5 text-xs font-medium text-brand-purple/60">
           <span>{date}</span>
           {duration && <span>{duration}</span>}
@@ -436,7 +437,7 @@ function VideoItem({
           count={post._count.likes}
           variant="feed"
         />
-        <CommentLink href={href} />
+        <LibraryCommentButton postId={post.id} count={post._count.comments} />
         <span className="flex-1" />
         <SaveButton postId={post.id} saved={saved} />
       </div>
@@ -490,11 +491,38 @@ function SaveButton({ postId, saved }: { postId: string; saved: boolean }) {
   );
 }
 
-function CommentLink({ href }: { href: string }) {
+function LibraryCommentButton({
+  postId,
+  count: initialCount,
+}: {
+  postId: string;
+  count: number;
+}) {
+  const [open, setOpen] = useState(false);
+  const [count, setCount] = useState(initialCount);
+
+  useEffect(() => {
+    setCount(initialCount);
+  }, [initialCount]);
+
   return (
-    <Link href={href} aria-label="Komentáre" className="text-brand-purple/60">
-      <CommentIcon />
-    </Link>
+    <>
+      <button
+        type="button"
+        aria-label="Komentáre"
+        onClick={() => setOpen(true)}
+        className="flex items-center gap-1.5 text-brand-purple/60"
+      >
+        <CommentIcon />
+        {count > 0 && <span className="text-sm font-semibold">{count}</span>}
+      </button>
+      <PostCommentDrawer
+        postId={postId}
+        open={open}
+        onClose={() => setOpen(false)}
+        onCommentAdded={() => setCount((c) => c + 1)}
+      />
+    </>
   );
 }
 

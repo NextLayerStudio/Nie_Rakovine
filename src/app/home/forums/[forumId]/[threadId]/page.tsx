@@ -105,7 +105,6 @@ export default async function ForumThreadPage({
                 forumId={forumId}
                 liked={!!userLike}
                 count={thread.likeCount}
-                variant="pill"
               />
               <span className="forum-chip">
                 <CommentIcon /> {thread.comments.length} komentárov

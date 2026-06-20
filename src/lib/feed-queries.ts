@@ -36,7 +36,7 @@ export const feedPostSelect = {
     orderBy: { sortOrder: "asc" as const },
     select: { id: true, url: true, sortOrder: true },
   },
-  _count: { select: { likes: true } },
+  _count: { select: { likes: true, comments: true } },
 } satisfies Prisma.PostSelect;
 
 export const feedEventSelect = {

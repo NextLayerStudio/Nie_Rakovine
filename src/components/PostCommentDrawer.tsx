@@ -13,10 +13,12 @@ export function PostCommentDrawer({
   postId,
   open,
   onClose,
+  onCommentAdded,
 }: {
   postId: string;
   open: boolean;
   onClose: () => void;
+  onCommentAdded?: () => void;
 }) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(false);
@@ -45,6 +47,7 @@ export function PostCommentDrawer({
     };
     setComments((prev) => [...prev, optimistic]);
     setBody("");
+    onCommentAdded?.();
     const fd = new FormData();
     fd.set("postId", postId);
     fd.set("body", optimistic.body);

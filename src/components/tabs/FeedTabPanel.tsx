@@ -126,6 +126,7 @@ export function FeedTabPanel() {
               audioUrl={p.audioUrl ?? null}
               liked={likedIds.has(p.id)}
               likeCount={p._count.likes}
+              commentCount={p._count.comments}
               saved={savedIds.has(p.id)}
             />
           </div>
