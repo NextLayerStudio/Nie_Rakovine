@@ -199,6 +199,7 @@ enum PostType {
   RECIPE
   PHOTO
   AUDIO
+  NEWS
 }
 
 enum EventCategory {
@@ -221,6 +222,8 @@ model Post {
   coverUrl    String?
   videoUrl    String?
   audioUrl    String?
+  durationSec Int?
+  isNovinka   Boolean  @default(false)
   published   Boolean  @default(false)
   publishedAt DateTime?
   cancerTypes CancerType[] @default([])
@@ -233,6 +236,7 @@ model Post {
 
   @@index([published, publishedAt(sort: Desc)])
   @@index([type, published, publishedAt(sort: Desc)])
+  @@index([isNovinka, published, publishedAt(sort: Desc)])
   @@index([profileId, published, publishedAt(sort: Desc)])
 }
 

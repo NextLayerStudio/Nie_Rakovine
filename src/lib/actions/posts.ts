@@ -49,6 +49,15 @@ async function syncPostGallery(
   });
 }
 
+/** Parse the optional "duration in minutes" field into stored seconds. */
+function parseDurationSec(formData: FormData): number | null {
+  const raw = String(formData.get("durationMin") ?? "").trim();
+  if (!raw) return null;
+  const minutes = Number(raw);
+  if (!Number.isFinite(minutes) || minutes <= 0) return null;
+  return Math.round(minutes * 60);
+}
+
 function galleryErrorMessage(err: unknown): string {
   if (
     err instanceof TypeError &&
@@ -73,10 +82,14 @@ export async function createPostAction(
   const excerpt = String(formData.get("excerpt") ?? "").trim() || null;
   const body = String(formData.get("body") ?? "").trim() || null;
   const published = formData.get("published") === "on";
+  const isNovinka = formData.get("isNovinka") === "on";
   const profileId = String(formData.get("profileId") ?? "").trim() || null;
   const cancerTypes = parseCancerTypes(formData.getAll("cancerTypes"));
 
-  if (!title || !["VIDEO", "ARTICLE", "RECIPE", "PHOTO", "AUDIO"].includes(type)) {
+  if (
+    !title ||
+    !["VIDEO", "ARTICLE", "RECIPE", "PHOTO", "AUDIO", "NEWS"].includes(type)
+  ) {
     return { ok: false, message: "Vyplňte názov a typ obsahu." };
   }
 
@@ -115,6 +128,8 @@ export async function createPostAction(
     };
   }
 
+  const durationSec = parseDurationSec(formData);
+
   let post;
   try {
     post = await prisma.$transaction(async (tx) => {
@@ -127,6 +142,8 @@ export async function createPostAction(
           coverUrl,
           videoUrl,
           audioUrl,
+          durationSec,
+          isNovinka,
           published,
           publishedAt: published ? new Date() : null,
           profileId,
@@ -166,6 +183,7 @@ export async function updatePostAction(
   const excerpt = String(formData.get("excerpt") ?? "").trim() || null;
   const body = String(formData.get("body") ?? "").trim() || null;
   const published = formData.get("published") === "on";
+  const isNovinka = formData.get("isNovinka") === "on";
 
   const profileId = String(formData.get("profileId") ?? "").trim() || null;
   const cancerTypes = parseCancerTypes(formData.getAll("cancerTypes"));
@@ -221,6 +239,8 @@ export async function updatePostAction(
     };
   }
 
+  const durationSec = parseDurationSec(formData);
+
   const post = await prisma.post.update({
     where: { id },
     data: {
@@ -231,6 +251,8 @@ export async function updatePostAction(
       coverUrl,
       videoUrl: videoUrl ?? null,
       audioUrl: audioUrl ?? null,
+      durationSec,
+      isNovinka,
       published,
       publishedAt: published ? new Date() : null,
       profileId,
@@ -279,5 +301,6 @@ function revalidatePaths(profileId: string | null) {
   revalidatePath("/home/profiles");
   revalidatePath("/home/notifications");
   revalidatePath("/home/posts");
+  revalidatePath("/home/kniznica");
 }
 

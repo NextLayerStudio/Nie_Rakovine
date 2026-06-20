@@ -5,6 +5,28 @@ export function postPublicHref(post: { id: string }) {
   return `/home/posts/${post.id}`;
 }
 
+/** Return path for Kontent knižnica (preserves active category tab). */
+export function libraryReturnPath(kind: string) {
+  return `/home/kniznica?kind=${kind}`;
+}
+
+/** Post detail URL that remembers where to go back (e.g. knižnica tab). */
+export function postHrefWithReturn(postId: string, returnPath: string) {
+  return `/home/posts/${postId}?from=${encodeURIComponent(returnPath)}`;
+}
+
+/** Only allow in-app relative return paths. */
+export function safeReturnHref(from: string | undefined, fallback: string): string {
+  if (!from) return fallback;
+  try {
+    const path = decodeURIComponent(from);
+    if (path.startsWith("/home/") && !path.includes("://")) return path;
+  } catch {
+    // invalid encoding
+  }
+  return fallback;
+}
+
 /** Ordered gallery: cover first, then extra images (no duplicates). */
 export function buildPostGallery(
   coverUrl: string | null,
@@ -26,6 +48,8 @@ export function postCoverFallback(type: PostType): string {
       return "linear-gradient(180deg, #e0d4f5 0%, #9b72cf 100%)";
     case "AUDIO":
       return "linear-gradient(180deg, #c8e6f5 0%, #5b9bd5 100%)";
+    case "NEWS":
+      return "linear-gradient(180deg, #f6d8c9 0%, #c97b8c 100%)";
     default:
       return "linear-gradient(180deg, #ffcdb2 0%, #e07a5f 100%)";
   }
@@ -38,7 +62,24 @@ export function postKindLabel(type: PostType) {
     case "RECIPE": return "Recept";
     case "PHOTO": return "Fotka";
     case "AUDIO": return "Audio";
+    case "NEWS": return "Novinka";
   }
+}
+
+/** Human-readable media length, e.g. 930 → "16 min", 45 → "1 min". */
+export function formatDuration(durationSec: number | null | undefined): string | null {
+  if (!durationSec || durationSec <= 0) return null;
+  const minutes = Math.max(1, Math.round(durationSec / 60));
+  return `${minutes} min`;
+}
+
+/** Short date for content cards, e.g. "25.5.2026". */
+export function formatPostDate(date: Date | string): string {
+  return new Intl.DateTimeFormat("sk-SK", {
+    day: "numeric",
+    month: "numeric",
+    year: "numeric",
+  }).format(new Date(date));
 }
 
 export function isEmbeddableVideo(url: string) {

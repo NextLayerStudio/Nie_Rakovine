@@ -11,17 +11,21 @@ import {
   isEmbeddableVideo,
   isLocalMedia,
   postKindLabel,
+  safeReturnHref,
 } from "@/lib/post-display";
 
 export const dynamic = "force-dynamic";
 
 export default async function PostDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ from?: string }>;
 }) {
   const user = await requireUser();
   const { id } = await params;
+  const { from } = await searchParams;
 
   const post = await prisma.post.findFirst({
     where: { id, published: true },
@@ -39,13 +43,24 @@ export default async function PostDetailPage({
   });
 
   const gallery = buildPostGallery(post.coverUrl, post.images);
-  const isEditorial = post.type === "ARTICLE" || post.type === "RECIPE";
+  const isEditorial =
+    post.type === "ARTICLE" || post.type === "RECIPE" || post.type === "NEWS";
+
+  const profileBack = post.profile
+    ? `/home/profiles/${post.profile.handle}`
+    : "/home";
+  const backHref = safeReturnHref(from, profileBack);
 
   if (isEditorial) {
     return (
       <>
         <FeedHeaderWrapper />
-        <EditorialArticle post={post} gallery={gallery} liked={!!like} />
+        <EditorialArticle
+          post={post}
+          gallery={gallery}
+          liked={!!like}
+          backHref={backHref}
+        />
       </>
     );
   }
@@ -55,7 +70,7 @@ export default async function PostDetailPage({
       <FeedHeaderWrapper />
       <article className="px-5 pb-24 pt-2">
         <Link
-          href={post.profile ? `/home/profiles/${post.profile.handle}` : "/home"}
+          href={backHref}
           className="text-xs font-semibold text-brand-purple"
         >
           ← Späť
@@ -126,16 +141,13 @@ function EditorialArticle({
   post,
   gallery,
   liked,
+  backHref,
 }: {
   post: NonNullable<PostWithProfile>;
   gallery: string[];
   liked: boolean;
+  backHref: string;
 }) {
-  const backHref =
-    post.profile && "handle" in (post.profile as object)
-      ? `/home/profiles/${(post.profile as { handle: string }).handle}`
-      : "/home";
-
   const publishedAt = post.publishedAt ?? post.createdAt;
   const dateStr = publishedAt.toLocaleDateString("sk-SK", {
     day: "numeric",

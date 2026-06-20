@@ -95,12 +95,18 @@ export function ForumsTabPanel() {
 
       {data.forums.length === 0 ? (
         <div className="forum-empty mx-5 mt-2">
-          Zatiaľ žiadne schválené fóra. Vytvorte prvé!
+          {data.userTypes.length > 0
+            ? "Zatiaľ žiadne fóra pre váš typ rakoviny."
+            : "Zatiaľ žiadne schválené fóra. Vytvorte prvé!"}
         </div>
       ) : (
         <>
           <h3 className="forum-section-label mb-3 px-5">
-            {followingIds.size > 0 ? "Všetky fóra" : "Objavte fóra"}
+            {data.userTypes.length > 0
+              ? "Fóra pre vás"
+              : followingIds.size > 0
+                ? "Všetky fóra"
+                : "Objavte fóra"}
           </h3>
           <ul className="flex flex-col gap-3 px-5 pb-4">
             {data.forums.map((forum) => (

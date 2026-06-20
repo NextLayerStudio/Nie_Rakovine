@@ -88,6 +88,19 @@ export function PostForm({
         <AdminMultiImageField existingImages={post?.images ?? []} />
         <AdminVideoField defaultValue={post?.videoUrl ?? ""} />
         <AdminAudioField defaultValue={post?.audioUrl ?? ""} />
+        <label className="block">
+          <span className="admin-label">Dĺžka (minúty)</span>
+          <input
+            name="durationMin"
+            type="number"
+            min="0"
+            defaultValue={post?.durationSec ? Math.round(post.durationSec / 60) : ""}
+            className="admin-input"
+          />
+          <p className="mt-1 text-[11px] text-brand-purple/55">
+            Voliteľné. Zobrazí sa pri audio a video obsahu (napr. „15 min“).
+          </p>
+        </label>
         <div>
           <span className="admin-label">Pre typ rakoviny</span>
           <CancerTypeSelect
@@ -97,6 +110,16 @@ export function PostForm({
           />
         </div>
       </fieldset>
+
+      <label className="flex items-center gap-3 rounded-2xl bg-brand-purple/5 px-4 py-3 text-sm font-medium text-brand-purple">
+        <input
+          type="checkbox"
+          name="isNovinka"
+          defaultChecked={post?.isNovinka ?? post?.type === "NEWS"}
+          className="h-4 w-4 accent-brand-purple"
+        />
+        Novinka (zobrazí sa aj v Kontent knižnici – Novinky)
+      </label>
 
       <label className="flex items-center gap-3 rounded-2xl bg-brand-purple/5 px-4 py-3 text-sm font-medium text-brand-purple">
         <input

@@ -14,7 +14,7 @@ export default async function HomeLayout({ children }: { children: React.ReactNo
     <PhoneShell>
       <div
         data-app-scroll
-        className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain pb-[calc(5.5rem+env(safe-area-inset-bottom))]"
+        className="flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto overscroll-y-contain pb-[calc(5.5rem+env(safe-area-inset-bottom))]"
       >
         <HomeTabShell userName={user.fullName} unreadCount={unreadCount}>
           {children}

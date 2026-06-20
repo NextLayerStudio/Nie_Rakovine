@@ -9,7 +9,7 @@ const MAIN_ITEMS = [
   { href: "/home/notifications", label: "Oznámenia", icon: "bell" as const },
   { href: "/profile", label: "Môj profil", icon: "user" as const },
   { href: "/home/saved", label: "Uložené", icon: "bookmark" as const },
-  { href: "/menu/kontent-kniznica", label: "Kontent knižnica", icon: "library" as const },
+  { href: "/home/kniznica", label: "Kontent knižnica", icon: "library" as const },
   { href: "/menu/aktivity", label: "Aktivity", icon: "calendar" as const },
   { href: "/home/forums", label: "Fóra", icon: "forum" as const },
   { href: "/menu/zlavova-karta", label: "Moja zľavová karta", icon: "card" as const, comingSoon: true },
@@ -49,10 +49,11 @@ export function MenuDrawer({
       {/* Drawer */}
       <div
         ref={drawerRef}
+        aria-hidden={!open}
         className={cn(
           "absolute inset-y-0 right-0 z-40 flex w-[88%] flex-col bg-brand-pink text-white",
           "transform transition-transform duration-300 ease-in-out overflow-y-auto",
-          open ? "translate-x-0" : "translate-x-full",
+          open ? "translate-x-0 visible" : "invisible translate-x-full",
         )}
         style={{ paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))" }}
       >

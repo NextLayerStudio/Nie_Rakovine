@@ -1,6 +1,12 @@
+import { redirect } from "next/navigation";
 import { BottomNav } from "@/components/BottomNav";
 import { PhoneShell } from "@/components/PhoneShell";
 import { TopBar } from "@/components/TopBar";
+
+/** Slugs that have moved to a dedicated route. */
+const REDIRECTS: Record<string, string> = {
+  "kontent-kniznica": "/home/kniznica",
+};
 
 const LABELS: Record<string, string> = {
   "zlavova-karta": "Moja zľavová karta",
@@ -18,6 +24,7 @@ export default async function MenuItemPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  if (REDIRECTS[slug]) redirect(REDIRECTS[slug]);
   const title = LABELS[slug] ?? "Sekcia";
 
   return (

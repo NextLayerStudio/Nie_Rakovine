@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { requireActionUser } from "@/lib/safe-action";
 import { loadFeedEngagement } from "@/lib/feed-engagement";
-import { relevantWhere } from "@/lib/cancer-personalization";
+import { relevantWhere, sortByRelevance } from "@/lib/cancer-personalization";
 import { distanceKm } from "@/lib/geo";
 import {
   FEED_POST_POOL,
@@ -86,9 +86,13 @@ export async function fetchForumsTabAction() {
   const auth = await requireActionUser();
   if (!auth.ok) return { ok: false as const };
 
-  const [forums, pendingForums, memberships] = await Promise.all([
+  const dbUser = await getTabUserProfile(auth.user.id);
+  const userTypes = (dbUser.profile?.cancerTypes ?? []) as CancerType[];
+  const relevant = relevantWhere(userTypes);
+
+  const [forumsRaw, pendingForums, memberships] = await Promise.all([
     prisma.forum.findMany({
-      where: { published: true },
+      where: { published: true, ...relevant },
       orderBy: { createdAt: "desc" },
       include: { _count: { select: { members: true } } },
     }),
@@ -104,9 +108,10 @@ export async function fetchForumsTabAction() {
 
   return {
     ok: true as const,
-    forums,
+    forums: sortByRelevance(forumsRaw, userTypes),
     pendingForums,
     followingForumIds: memberships.map((m) => m.forumId),
+    userTypes,
   };
 }
 
