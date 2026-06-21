@@ -233,9 +233,11 @@ export async function searchTabAction(query: string) {
   const postIds = posts.map((p) => p.id);
   const profileIds = [
     ...new Set(
-      [...posts.map((p) => p.profileId), ...events.map((e) => e.profileId)].filter(
-        (id): id is string => !!id,
-      ),
+      [
+        ...profiles.map((p) => p.id),
+        ...posts.map((p) => p.profileId),
+        ...events.map((e) => e.profileId),
+      ].filter((id): id is string => !!id),
     ),
   ];
   const { likedIds, savedIds, followingIds, registeredEventIds } =
