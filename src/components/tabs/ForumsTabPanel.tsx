@@ -25,18 +25,19 @@ function TabSkeleton() {
   );
 }
 
-export function ForumsTabPanel() {
-  const [data, setData] = useState<ForumsData | null>(null);
+export function ForumsTabPanel({ initialData }: { initialData?: ForumsData }) {
+  const [data, setData] = useState<ForumsData | null>(initialData ?? null);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
+    if (initialData) return;
     fetchForumsTabAction()
       .then((res) => {
         if (res.ok) setData(res as ForumsData);
         else setFailed(true);
       })
       .catch(() => setFailed(true));
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (failed)
     return (

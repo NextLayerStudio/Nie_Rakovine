@@ -33,18 +33,19 @@ function TabSkeleton() {
   );
 }
 
-export function FeedTabPanel() {
-  const [data, setData] = useState<FeedData | null>(null);
+export function FeedTabPanel({ initialData }: { initialData?: FeedData }) {
+  const [data, setData] = useState<FeedData | null>(initialData ?? null);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
+    if (initialData) return;
     fetchFeedTabAction()
       .then((res) => {
         if (res.ok) setData(res as FeedData);
         else setFailed(true);
       })
       .catch(() => setFailed(true));
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (failed)
     return (

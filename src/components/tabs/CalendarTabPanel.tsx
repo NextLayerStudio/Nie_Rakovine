@@ -19,18 +19,19 @@ function TabSkeleton() {
   );
 }
 
-export function CalendarTabPanel() {
-  const [data, setData] = useState<CalendarData | null>(null);
+export function CalendarTabPanel({ initialData }: { initialData?: CalendarData }) {
+  const [data, setData] = useState<CalendarData | null>(initialData ?? null);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
+    if (initialData) return;
     fetchCalendarTabAction()
       .then((res) => {
         if (res.ok) setData(res as CalendarData);
         else setFailed(true);
       })
       .catch(() => setFailed(true));
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (failed)
     return (

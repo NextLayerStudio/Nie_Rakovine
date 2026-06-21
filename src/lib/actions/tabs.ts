@@ -1,10 +1,10 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { requireActionUser } from "@/lib/safe-action";
 import { loadFeedEngagement } from "@/lib/feed-engagement";
 import { relevantWhere, sortByRelevance } from "@/lib/cancer-personalization";
 import { distanceKm } from "@/lib/geo";
+import { readSession } from "@/lib/auth";
 import {
   FEED_POST_POOL,
   FEED_EVENT_LIMIT,
@@ -16,10 +16,14 @@ import {
 } from "@/lib/feed-queries";
 import type { CancerType } from "@prisma/client";
 
-async function getTabUserProfile(userId: string) {
-  return prisma.user.findUniqueOrThrow({
-    where: { id: userId },
+/** Single DB call that combines auth + profile — replaces 2 sequential queries. */
+async function getTabUser() {
+  const session = await readSession();
+  if (!session) return null;
+  return prisma.user.findUnique({
+    where: { id: session.userId },
     select: {
+      id: true,
       fullName: true,
       profile: {
         select: {
@@ -34,11 +38,10 @@ async function getTabUserProfile(userId: string) {
 }
 
 export async function fetchFeedTabAction() {
-  const auth = await requireActionUser();
-  if (!auth.ok) return { ok: false as const };
+  const user = await getTabUser();
+  if (!user) return { ok: false as const };
 
-  const dbUser = await getTabUserProfile(auth.user.id);
-  const userTypes = (dbUser.profile?.cancerTypes ?? []) as CancerType[];
+  const userTypes = (user.profile?.cancerTypes ?? []) as CancerType[];
   const relevant = relevantWhere(userTypes);
 
   const [posts, events] = await Promise.all([
@@ -67,7 +70,7 @@ export async function fetchFeedTabAction() {
   const eventIds = events.map((e) => e.id);
 
   const { likedIds, savedIds, followingIds, registeredEventIds } =
-    await loadFeedEngagement(auth.user.id, postIds, profileIds, eventIds);
+    await loadFeedEngagement(user.id, postIds, profileIds, eventIds);
 
   return {
     ok: true as const,
@@ -78,16 +81,15 @@ export async function fetchFeedTabAction() {
     followingProfileIds: [...followingIds],
     registeredEventIds: [...registeredEventIds],
     userTypes,
-    userName: dbUser.fullName,
+    userName: user.fullName,
   };
 }
 
 export async function fetchForumsTabAction() {
-  const auth = await requireActionUser();
-  if (!auth.ok) return { ok: false as const };
+  const user = await getTabUser();
+  if (!user) return { ok: false as const };
 
-  const dbUser = await getTabUserProfile(auth.user.id);
-  const userTypes = (dbUser.profile?.cancerTypes ?? []) as CancerType[];
+  const userTypes = (user.profile?.cancerTypes ?? []) as CancerType[];
   const relevant = relevantWhere(userTypes);
 
   const [forumsRaw, pendingForums, memberships] = await Promise.all([
@@ -97,11 +99,11 @@ export async function fetchForumsTabAction() {
       include: { _count: { select: { members: true } } },
     }),
     prisma.forum.findMany({
-      where: { published: false, createdById: auth.user.id },
+      where: { published: false, createdById: user.id },
       orderBy: { createdAt: "desc" },
     }),
     prisma.forumMembership.findMany({
-      where: { userId: auth.user.id },
+      where: { userId: user.id },
       select: { forumId: true },
     }),
   ]);
@@ -116,12 +118,10 @@ export async function fetchForumsTabAction() {
 }
 
 export async function fetchCalendarTabAction() {
-  const auth = await requireActionUser();
-  if (!auth.ok) return { ok: false as const };
+  const user = await getTabUser();
+  if (!user) return { ok: false as const };
 
-  const dbUser = await getTabUserProfile(auth.user.id);
-  const userTypes = (dbUser.profile?.cancerTypes ?? []) as CancerType[];
-
+  const userTypes = (user.profile?.cancerTypes ?? []) as CancerType[];
   const sixMonthsAgo = new Date();
   sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
@@ -145,24 +145,22 @@ export async function fetchCalendarTabAction() {
       },
     }),
     prisma.eventRegistration.findMany({
-      where: { userId: auth.user.id },
+      where: { userId: user.id },
       select: { eventId: true },
     }),
   ]);
 
   const registeredIds = new Set(registrations.map((r) => r.eventId));
   const me = {
-    latitude: dbUser.profile?.latitude ?? null,
-    longitude: dbUser.profile?.longitude ?? null,
+    latitude: user.profile?.latitude ?? null,
+    longitude: user.profile?.longitude ?? null,
   };
-  const nameParts = dbUser.fullName.trim().split(/\s+/).filter(Boolean);
-  const defaultName = nameParts[0] ?? "";
-  const defaultSurname = nameParts.slice(1).join(" ");
+  const nameParts = user.fullName.trim().split(/\s+/).filter(Boolean);
 
   return {
     ok: true as const,
-    defaultName,
-    defaultSurname,
+    defaultName: nameParts[0] ?? "",
+    defaultSurname: nameParts.slice(1).join(" "),
     events: events.map((e) => ({
       id: e.id,
       title: e.title,
@@ -179,14 +177,11 @@ export async function fetchCalendarTabAction() {
       distanceKm: distanceKm(me, e),
     })),
     hasLocation: me.latitude !== null && me.longitude !== null,
-    radiusKm: dbUser.profile?.notifyRadiusKm ?? 50,
+    radiusKm: user.profile?.notifyRadiusKm ?? 50,
   };
 }
 
 export async function searchTabAction(query: string) {
-  const auth = await requireActionUser();
-  if (!auth.ok) return { ok: false as const };
-
   const q = query.trim();
   const ci = (field: string) =>
     ({ [field]: { contains: q, mode: "insensitive" as const } });
@@ -204,7 +199,9 @@ export async function searchTabAction(query: string) {
     ...(q ? { OR: [ci("title"), ci("description")] } : {}),
   };
 
-  const [profiles, posts, events] = await Promise.all([
+  // Run auth + all data queries in parallel (search doesn't need user types for filtering)
+  const [user, profiles, posts, events] = await Promise.all([
+    getTabUser(),
     prisma.clubProfile.findMany({
       where: profileWhere,
       orderBy: [{ sortOrder: "asc" }, { displayName: "asc" }],
@@ -231,6 +228,8 @@ export async function searchTabAction(query: string) {
     }),
   ]);
 
+  if (!user) return { ok: false as const };
+
   const postIds = posts.map((p) => p.id);
   const profileIds = [
     ...new Set(
@@ -241,13 +240,11 @@ export async function searchTabAction(query: string) {
   ];
   const { likedIds, savedIds, followingIds, registeredEventIds } =
     await loadFeedEngagement(
-      auth.user.id,
+      user.id,
       postIds,
       profileIds,
       events.map((e) => e.id),
     );
-
-  const dbUser = await getTabUserProfile(auth.user.id);
 
   return {
     ok: true as const,
@@ -258,6 +255,6 @@ export async function searchTabAction(query: string) {
     savedPostIds: [...savedIds],
     followingProfileIds: [...followingIds],
     registeredEventIds: [...registeredEventIds],
-    userName: dbUser.fullName,
+    userName: user.fullName,
   };
 }

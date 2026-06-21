@@ -7,8 +7,13 @@ import { FeedTabPanel } from "@/components/tabs/FeedTabPanel";
 import { ForumsTabPanel } from "@/components/tabs/ForumsTabPanel";
 import { SearchTabPanel } from "@/components/tabs/SearchTabPanel";
 import { CalendarTabPanel } from "@/components/tabs/CalendarTabPanel";
+import type { loadFeedTabData, loadForumsTabData, loadCalendarTabData } from "@/lib/tab-data";
 
 type Tab = "home" | "forums" | "search" | "calendar";
+
+type FeedInitialData = Awaited<ReturnType<typeof loadFeedTabData>>;
+type ForumsInitialData = Awaited<ReturnType<typeof loadForumsTabData>>;
+type CalendarInitialData = Awaited<ReturnType<typeof loadCalendarTabData>>;
 
 const MAIN_TAB_PATHS: Record<string, Tab> = {
   "/home": "home",
@@ -26,11 +31,17 @@ export function HomeTabShell({
   userName,
   avatarUrl,
   unreadCount,
+  initialFeedData,
+  initialForumsData,
+  initialCalendarData,
 }: {
   children: React.ReactNode;
   userName: string;
   avatarUrl?: string | null;
   unreadCount: number;
+  initialFeedData?: FeedInitialData;
+  initialForumsData?: ForumsInitialData;
+  initialCalendarData?: CalendarInitialData;
 }) {
   const pathname = usePathname();
   const tab = pathnameToTab(pathname);
@@ -79,12 +90,12 @@ export function HomeTabShell({
        */}
       {mountedTabs.has("home") && (
         <div className={visible("home") ? "" : "hidden"} aria-hidden={!visible("home")}>
-          <FeedTabPanel />
+          <FeedTabPanel initialData={initialFeedData} />
         </div>
       )}
       {mountedTabs.has("forums") && (
         <div className={visible("forums") ? "" : "hidden"} aria-hidden={!visible("forums")}>
-          <ForumsTabPanel />
+          <ForumsTabPanel initialData={initialForumsData} />
         </div>
       )}
       {mountedTabs.has("search") && (
@@ -94,7 +105,7 @@ export function HomeTabShell({
       )}
       {mountedTabs.has("calendar") && (
         <div className={visible("calendar") ? "" : "hidden"} aria-hidden={!visible("calendar")}>
-          <CalendarTabPanel />
+          <CalendarTabPanel initialData={initialCalendarData} />
         </div>
       )}
 
