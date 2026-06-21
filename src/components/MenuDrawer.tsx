@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { profileAvatarStyle } from "@/lib/avatar-style";
 import { cn } from "@/lib/utils";
 import { logoutAction } from "@/lib/actions/auth";
 
@@ -12,15 +13,17 @@ const MAIN_ITEMS = [
   { href: "/home/kniznica", label: "Kontent knižnica", icon: "library" as const },
   { href: "/menu/aktivity", label: "Aktivity", icon: "calendar" as const },
   { href: "/home/forums", label: "Fóra", icon: "forum" as const },
-  { href: "/menu/zlavova-karta", label: "Moja zľavová karta", icon: "card" as const, comingSoon: true },
-  { href: "/menu/zlavy", label: "Zľavy", icon: "percent" as const, comingSoon: true },
+  { href: "/menu/zlavova-karta", label: "Moja zľavová karta", icon: "card" as const },
+  { href: "/home/zlavy", label: "Zľavy", icon: "percent" as const },
 ] as const;
 
 export function MenuDrawer({
   userName,
+  avatarUrl,
   isAdmin,
 }: {
   userName: string;
+  avatarUrl?: string | null;
   isAdmin: boolean;
 }) {
   const [open, setOpen] = useState(false);
@@ -62,8 +65,8 @@ export function MenuDrawer({
           <Link href="/profile" onClick={close} className="flex items-center gap-3">
             <div
               aria-hidden
-              className="h-11 w-11 shrink-0 rounded-full ring-2 ring-white/40"
-              style={{ backgroundImage: "linear-gradient(135deg, #ffffff 0%, #f7d5e0 100%)" }}
+              className="h-11 w-11 shrink-0 rounded-full bg-cover bg-center ring-2 ring-white/40"
+              style={profileAvatarStyle(avatarUrl)}
             />
             <div>
               <p className="text-sm leading-none text-white/80">Ahoj!</p>

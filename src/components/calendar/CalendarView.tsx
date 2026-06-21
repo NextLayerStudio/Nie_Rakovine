@@ -1,8 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import type { EventCategory } from "@prisma/client";
+import {
+  EventDetailModal,
+  type EventModalData,
+} from "@/components/EventDetailModal";
 import {
   EVENT_CATEGORIES,
   EVENT_CATEGORY_META,
@@ -21,6 +24,8 @@ export type CalendarEvent = {
   endsAt: string | null;
   profileName: string;
   registered: boolean;
+  registrationCount: number;
+  capacity: number | null;
   distanceKm: number | null;
 };
 
@@ -49,12 +54,17 @@ export function CalendarView({
   events,
   hasLocation,
   radiusKm,
+  defaultName,
+  defaultSurname,
 }: {
   events: CalendarEvent[];
   hasLocation: boolean;
   radiusKm: number;
+  defaultName: string;
+  defaultSurname: string;
 }) {
   const now = new Date();
+  const [eventsState, setEventsState] = useState(events);
   const [viewMonth, setViewMonth] = useState(
     new Date(now.getFullYear(), now.getMonth(), 1),
   );
@@ -65,12 +75,56 @@ export function CalendarView({
   );
   const [search, setSearch] = useState("");
   const [locationOpen, setLocationOpen] = useState(false);
-  const [detail, setDetail] = useState<CalendarEvent | null>(null);
+  const [detail, setDetail] = useState<EventModalData | null>(null);
+
+  useEffect(() => {
+    setEventsState(events);
+  }, [events]);
+
+  function openEventDetail(event: CalendarEvent) {
+    setDetail({
+      id: event.id,
+      title: event.title,
+      description: event.description,
+      startsAt: event.startsAt,
+      endsAt: event.endsAt,
+      location: event.location,
+      coverUrl: event.coverUrl,
+      isRegistered: event.registered,
+      registrationCount: event.registrationCount,
+      capacity: event.capacity,
+      defaultName,
+      defaultSurname,
+    });
+  }
+
+  function handleRegistered(eventId: string) {
+    setEventsState((prev) =>
+      prev.map((e) =>
+        e.id === eventId
+          ? {
+              ...e,
+              registered: true,
+              registrationCount: e.registrationCount + 1,
+            }
+          : e,
+      ),
+    );
+    setDetail((prev) =>
+      prev && prev.id === eventId
+        ? {
+            ...prev,
+            isRegistered: true,
+            registrationCount: prev.registrationCount + 1,
+          }
+        : prev,
+    );
+  }
 
   // Apply location, search and category filters (but not the selected day).
   const baseFiltered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return events.filter((e) => {
+    return eventsState.filter((e) => {
       if (category && e.category !== category) return false;
 
       if (q) {
@@ -83,7 +137,7 @@ export function CalendarView({
       }
       return true;
     });
-  }, [events, category, search, locationMode, hasLocation, radiusKm]);
+  }, [eventsState, category, search, locationMode, hasLocation, radiusKm]);
 
   // Days in the visible month that have events, flagged by registration.
   const eventDays = useMemo(() => {
@@ -334,7 +388,7 @@ export function CalendarView({
             <button
               key={e.id}
               type="button"
-              onClick={() => setDetail(e)}
+              onClick={() => openEventDetail(e)}
               className="block w-full rounded-3xl bg-white p-4 text-left shadow-card"
             >
               <div className="flex items-center justify-between gap-2">
@@ -375,82 +429,13 @@ export function CalendarView({
       </div>
 
       {detail && (
-        <EventDetailModal event={detail} onClose={() => setDetail(null)} />
+        <EventDetailModal
+          event={detail}
+          onClose={() => setDetail(null)}
+          onRegistered={() => handleRegistered(detail.id)}
+        />
       )}
     </section>
-  );
-}
-
-function EventDetailModal({
-  event: e,
-  onClose,
-}: {
-  event: CalendarEvent;
-  onClose: () => void;
-}) {
-  const cover = e.coverUrl
-    ? { backgroundImage: `url(${e.coverUrl})`, backgroundSize: "cover", backgroundPosition: "center" }
-    : { background: "linear-gradient(180deg, #f3c3a2 0%, #d98c80 100%)" };
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-5"
-      onClick={onClose}
-    >
-      <div
-        className="relative w-full max-w-[360px] overflow-hidden rounded-[28px] bg-brand-pink-soft shadow-soft"
-        onClick={(ev) => ev.stopPropagation()}
-      >
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Zavrieť"
-          className="absolute right-3 top-3 z-10 grid h-8 w-8 place-items-center rounded-full bg-white/30 text-white"
-        >
-          ✕
-        </button>
-
-        <div className="px-5 pt-5 text-center">
-          <h2 className="text-2xl font-extrabold uppercase tracking-wide text-white">
-            {e.title}
-          </h2>
-        </div>
-
-        <div className="mx-5 mt-4 aspect-square overflow-hidden rounded-2xl" style={cover} />
-
-        <div className="px-5 py-4">
-          <Link
-            href={`/home/events/${e.id}`}
-            className="mx-auto block w-44 rounded-pill bg-white py-2.5 text-center text-sm font-bold text-brand-purple shadow"
-          >
-            {e.registered ? "Detail" : "Zaregistrovať sa"}
-          </Link>
-
-          <div className="mt-4 space-y-2 text-sm text-white">
-            {e.location && (
-              <p className="flex items-start gap-2">
-                <PinIcon /> <span>{e.location}</span>
-              </p>
-            )}
-            <p className="flex items-center gap-2">
-              <ClockIcon /> {formatEventDate(e.startsAt)}
-              {e.endsAt ? ` – ${formatTime(e.endsAt)}` : ""}
-            </p>
-            {e.distanceKm !== null && (
-              <p className="flex items-center gap-2">
-                <PinIcon /> {formatDistance(e.distanceKm)} od vás
-              </p>
-            )}
-            {e.description && (
-              <p className="flex items-start gap-2 leading-relaxed">
-                <InfoIcon />
-                <span>{e.description}</span>
-              </p>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -484,37 +469,12 @@ function formatEventDate(iso: string): string {
   }).format(new Date(iso));
 }
 
-function formatTime(iso: string): string {
-  return new Intl.DateTimeFormat("sk-SK", {
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(iso));
-}
-
 /* ---------------- icons ---------------- */
 
 function PinIcon() {
   return (
     <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="currentColor" aria-hidden>
       <path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7zm0 9.5A2.5 2.5 0 1012 6a2.5 2.5 0 000 5.5z" />
-    </svg>
-  );
-}
-
-function ClockIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="none" aria-hidden>
-      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
-      <path d="M12 7v5l3 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function InfoIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="none" aria-hidden>
-      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
-      <path d="M12 11v5M12 8h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
 }

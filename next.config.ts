@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
       // Cover + gallery images (4 MB each) and videos (up to 50 MB)
       bodySizeLimit: "52mb",
     },
+    // Route handlers (e.g. avatar upload API)
+    middlewareClientMaxBodySize: "52mb",
   },
   images: {
     remotePatterns: [

@@ -153,6 +153,28 @@ export async function registerForEventAction(
   const surname = String(formData.get("surname") ?? "").trim() || null;
   if (!eventId) return { ok: false, message: "Chýba podujatie." };
 
+  const event = await prisma.event.findFirst({
+    where: { id: eventId, published: true },
+    select: {
+      capacity: true,
+      _count: { select: { registrations: true } },
+    },
+  });
+  if (!event) return { ok: false, message: "Podujatie neexistuje." };
+
+  const alreadyRegistered = await prisma.eventRegistration.findUnique({
+    where: { eventId_userId: { eventId, userId: user.id } },
+    select: { id: true },
+  });
+
+  if (
+    !alreadyRegistered &&
+    event.capacity !== null &&
+    event._count.registrations >= event.capacity
+  ) {
+    return { ok: false, message: "Podujatie je plne obsadené." };
+  }
+
   try {
     await prisma.eventRegistration.upsert({
       where: { eventId_userId: { eventId, userId: user.id } },
@@ -168,6 +190,8 @@ export async function registerForEventAction(
 
   revalidatePath(`/home/events/${eventId}`);
   revalidatePath("/home");
+  revalidatePath("/home/calendar");
+  revalidatePath("/profile");
 
   if (formData.get("stayOnPage") === "1") {
     return { ok: true };

@@ -24,10 +24,12 @@ function pathnameToTab(p: string): Tab | null {
 export function HomeTabShell({
   children,
   userName,
+  avatarUrl,
   unreadCount,
 }: {
   children: React.ReactNode;
   userName: string;
+  avatarUrl?: string | null;
   unreadCount: number;
 }) {
   const pathname = usePathname();
@@ -62,7 +64,13 @@ export function HomeTabShell({
   return (
     <>
       {/* ── Shared header — only while on a main tab ── */}
-      {isMainTab && <FeedHeader name={userName} unreadCount={unreadCount} />}
+      {isMainTab && (
+        <FeedHeader
+          name={userName}
+          avatarUrl={avatarUrl}
+          unreadCount={unreadCount}
+        />
+      )}
 
       {/*
        * Tab panels live outside the isMainTab guard so they stay mounted

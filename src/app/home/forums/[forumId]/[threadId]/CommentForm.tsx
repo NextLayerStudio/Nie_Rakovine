@@ -6,6 +6,7 @@ import {
   createCommentAction,
   type ActionState,
 } from "@/lib/actions/forums";
+import type { ReplyTarget } from "@/components/ForumThreadChat";
 import { FormError, SubmitButton } from "@/components/FormError";
 
 const INITIAL: ActionState = { ok: false };
@@ -13,16 +14,23 @@ const INITIAL: ActionState = { ok: false };
 export function CommentForm({
   forumId,
   threadId,
+  replyTo,
+  onClearReply,
 }: {
   forumId: string;
   threadId: string;
+  replyTo?: ReplyTarget | null;
+  onClearReply?: () => void;
 }) {
   const router = useRouter();
   const [state, formAction] = useActionState(createCommentAction, INITIAL);
 
   useEffect(() => {
-    if (state.ok) router.refresh();
-  }, [state.ok, router]);
+    if (state.ok) {
+      onClearReply?.();
+      router.refresh();
+    }
+  }, [state.ok, onClearReply, router]);
 
   return (
     <div
@@ -32,9 +40,36 @@ export function CommentForm({
       <form action={formAction} className="mx-auto max-w-[460px]">
         <input type="hidden" name="forumId" value={forumId} />
         <input type="hidden" name="threadId" value={threadId} />
+        {replyTo && (
+          <input type="hidden" name="replyToCommentId" value={replyTo.commentId} />
+        )}
+
+        {replyTo ? (
+          <div className="mb-2 flex items-start gap-2 rounded-2xl border border-brand-pink/25 bg-brand-pink/8 px-3 py-2">
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-bold uppercase tracking-wide text-brand-pink">
+                Reakcia na správu
+              </p>
+              <p className="text-[11px] font-semibold text-brand-purple/75">
+                {replyTo.authorName}
+              </p>
+              <p className="line-clamp-2 text-xs leading-snug text-brand-purple/60">
+                {replyTo.body}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={onClearReply}
+              aria-label="Zrušiť reakciu"
+              className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-brand-purple/50 hover:bg-brand-purple/10 hover:text-brand-purple"
+            >
+              ×
+            </button>
+          </div>
+        ) : null}
 
         <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wide text-brand-purple/60">
-          Napíšte komentár
+          {replyTo ? "Vaša reakcia" : "Napíšte komentár"}
         </label>
 
         <div className="flex items-end gap-2 rounded-[28px] bg-brand-pink p-2 pl-4 shadow-soft">
@@ -42,7 +77,7 @@ export function CommentForm({
             name="body"
             required
             rows={1}
-            placeholder="Napíšte správu…"
+            placeholder={replyTo ? "Napíšte reakciu…" : "Napíšte správu…"}
             className="max-h-28 min-h-[40px] min-w-0 flex-1 resize-none bg-transparent py-2 text-sm leading-snug text-white placeholder-white/75 outline-none"
             onInput={(e) => {
               const el = e.currentTarget;

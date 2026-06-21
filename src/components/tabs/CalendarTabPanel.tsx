@@ -45,6 +45,8 @@ export function CalendarTabPanel() {
       events={data.events}
       hasLocation={data.hasLocation}
       radiusKm={data.radiusKm}
+      defaultName={data.defaultName}
+      defaultSurname={data.defaultSurname}
     />
   );
 }

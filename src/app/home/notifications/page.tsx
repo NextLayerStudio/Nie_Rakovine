@@ -53,7 +53,7 @@ function NotificationItem({
 }: {
   notification: {
     id: string;
-    type: Parameters<typeof notificationTypeLabel>[0];
+    type: string;
     title: string;
     body: string | null;
     href: string | null;

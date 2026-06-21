@@ -70,6 +70,10 @@ export async function updatePreferencesAction(
 ): Promise<SettingsActionState> {
   const user = await requireUser();
   const consentNewsletter = formData.get("consentNewsletter") === "on";
+  const notifyNewPosts = formData.get("notifyNewPosts") === "on";
+  const notifyForumApproved = formData.get("notifyForumApproved") === "on";
+  const notifyForumReactions = formData.get("notifyForumReactions") === "on";
+  const notifyEventsNearby = formData.get("notifyEventsNearby") === "on";
   const radiusRaw = Number(formData.get("notifyRadiusKm"));
   const notifyRadiusKm = Number.isFinite(radiusRaw)
     ? Math.min(200, Math.max(10, Math.round(radiusRaw)))
@@ -77,11 +81,26 @@ export async function updatePreferencesAction(
 
   await prisma.userProfile.upsert({
     where: { userId: user.id },
-    create: { userId: user.id, consentNewsletter, notifyRadiusKm },
-    update: { consentNewsletter, notifyRadiusKm },
+    create: {
+      userId: user.id,
+      consentNewsletter,
+      notifyRadiusKm,
+      notifyNewPosts,
+      notifyForumApproved,
+      notifyForumReactions,
+      notifyEventsNearby,
+    },
+    update: {
+      consentNewsletter,
+      notifyRadiusKm,
+      notifyNewPosts,
+      notifyForumApproved,
+      notifyForumReactions,
+      notifyEventsNearby,
+    },
   });
 
   revalidatePath("/menu/nastavenia");
   revalidatePath("/profile");
-  return { ok: true, message: "Nastavenia boli uložené." };
+  return { ok: true, message: "Notifikácie boli uložené." };
 }

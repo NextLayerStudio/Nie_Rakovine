@@ -13,6 +13,8 @@ export type EventModalData = {
   location: string | null;
   coverUrl: string | null;
   isRegistered: boolean;
+  registrationCount: number;
+  capacity: number | null;
   defaultName: string;
   defaultSurname: string;
 };
@@ -20,12 +22,22 @@ export type EventModalData = {
 export function EventDetailModal({
   event,
   onClose,
+  onRegistered,
 }: {
   event: EventModalData;
   onClose: () => void;
+  onRegistered?: () => void;
 }) {
   const [registered, setRegistered] = useState(event.isRegistered);
+  const [registrationCount, setRegistrationCount] = useState(
+    event.registrationCount,
+  );
   const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setRegistered(event.isRegistered);
+    setRegistrationCount(event.registrationCount);
+  }, [event.isRegistered, event.registrationCount]);
 
   useEffect(() => {
     setMounted(true);
@@ -53,6 +65,10 @@ export function EventDetailModal({
   const timeLabel = formatTimeRange(startsAt, endsAt);
   const dateLabel = formatDate(startsAt);
   const weekdayLabel = formatWeekday(startsAt);
+  const isFull =
+    event.capacity !== null &&
+    registrationCount >= event.capacity &&
+    !registered;
 
   const cover = event.coverUrl
     ? {
@@ -108,6 +124,10 @@ export function EventDetailModal({
             <p className="mx-auto mt-5 max-w-[280px] rounded-pill bg-white/15 py-2.5 text-center text-sm font-semibold text-white">
               Ste prihlásení na toto podujatie
             </p>
+          ) : isFull ? (
+            <p className="mx-auto mt-5 max-w-[280px] rounded-pill bg-white/15 py-2.5 text-center text-sm font-semibold text-white">
+              Podujatie je plne obsadené
+            </p>
           ) : (
             <EventRegistrationForm
               eventId={event.id}
@@ -115,11 +135,21 @@ export function EventDetailModal({
               defaultSurname={event.defaultSurname}
               variant="modal"
               stayOnPage
-              onSuccess={() => setRegistered(true)}
+              onSuccess={() => {
+                setRegistered(true);
+                setRegistrationCount((c) => c + 1);
+                onRegistered?.();
+              }}
             />
           )}
 
           <ul className="mt-6 space-y-4 text-sm leading-snug">
+            <li className="flex items-start gap-3">
+              <span className="mt-0.5 flex-none text-white/90">
+                <UsersIcon />
+              </span>
+              <span>{formatRegistrationCount(registrationCount, event.capacity)}</span>
+            </li>
             {event.location && (
               <li className="flex items-start gap-3">
                 <span className="mt-0.5 flex-none text-white/90">
@@ -187,6 +217,31 @@ function formatDate(date: Date) {
 
 function formatWeekday(date: Date) {
   return new Intl.DateTimeFormat("sk-SK", { weekday: "long" }).format(date);
+}
+
+function formatRegistrationCount(count: number, capacity: number | null) {
+  if (capacity !== null) {
+    return `${count} / ${capacity} prihlásených`;
+  }
+  return `${count} prihlásených`;
+}
+
+function UsersIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+      <path
+        d="M16 11a3 3 0 100-6 3 3 0 000 6zM8 12a3 3 0 100-6 3 3 0 000 6z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M3 20a5 5 0 0110 0M11 20a5 5 0 0110 0"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
 }
 
 function CloseIcon() {

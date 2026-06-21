@@ -55,6 +55,8 @@ export function FeedEventItem({
     location,
     coverUrl,
     isRegistered,
+    registrationCount: 0,
+    capacity: null,
     defaultName,
     defaultSurname,
   };

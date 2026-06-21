@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { ConsentCheckbox } from "@/components/ConsentCheckbox";
 import { FormError, SubmitButton } from "@/components/FormError";
+import { SettingSwitch } from "@/components/SettingSwitch";
 import {
   changePasswordAction,
   updateAccountAction,
@@ -14,17 +15,59 @@ import { cn } from "@/lib/utils";
 
 const INITIAL: SettingsActionState = { ok: false };
 
+const SCROLL_TOP_INSET = 72;
+const SCROLL_BOTTOM_INSET = 92;
+
+function scrollToSettingsSection(id: string) {
+  const el = document.getElementById(id);
+  const scroller = document.querySelector(
+    "[data-settings-scroll]",
+  ) as HTMLElement | null;
+  if (!el || !scroller) return;
+
+  const scrollerRect = scroller.getBoundingClientRect();
+  const elTopRelative =
+    el.getBoundingClientRect().top - scrollerRect.top + scroller.scrollTop;
+  const elBottomRelative = elTopRelative + el.offsetHeight;
+
+  const visibleTop = scroller.scrollTop + SCROLL_TOP_INSET;
+  const visibleBottom =
+    scroller.scrollTop + scroller.clientHeight - SCROLL_BOTTOM_INSET;
+
+  let target = scroller.scrollTop;
+  if (elTopRelative < visibleTop) {
+    target = elTopRelative - SCROLL_TOP_INSET;
+  } else if (elBottomRelative > visibleBottom) {
+    target = elBottomRelative - scroller.clientHeight + SCROLL_BOTTOM_INSET;
+  }
+
+  target = Math.max(
+    0,
+    Math.min(target, scroller.scrollHeight - scroller.clientHeight),
+  );
+  scroller.scrollTo({ top: target, behavior: "smooth" });
+}
+
+type NotificationPrefs = {
+  notifyNewPosts: boolean;
+  notifyForumApproved: boolean;
+  notifyForumReactions: boolean;
+  notifyEventsNearby: boolean;
+};
+
 export function SettingsForms({
   fullName,
   email,
   consentNewsletter,
   notifyRadiusKm,
+  notificationPrefs,
   subscriptionActive,
 }: {
   fullName: string;
   email: string;
   consentNewsletter: boolean;
   notifyRadiusKm: number;
+  notificationPrefs: NotificationPrefs;
   subscriptionActive: boolean;
 }) {
   const [accountState, accountAction] = useActionState(
@@ -40,13 +83,44 @@ export function SettingsForms({
     INITIAL,
   );
   const [radius, setRadius] = useState(notifyRadiusKm);
+  const [passwordOpen, setPasswordOpen] = useState(false);
+
+  const enabledCount = [
+    notificationPrefs.notifyNewPosts,
+    notificationPrefs.notifyForumApproved,
+    notificationPrefs.notifyForumReactions,
+    notificationPrefs.notifyEventsNearby,
+  ].filter(Boolean).length;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
+      <nav
+        aria-label="Rýchla navigácia v nastaveniach"
+        className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {[
+          { href: "#ucet", label: "Účet" },
+          { href: "#notifikacie", label: "Notifikácie" },
+          { href: "#predplatne", label: "Predplatné" },
+          { href: "#pravne", label: "Právne" },
+        ].map((item) => (
+          <button
+            key={item.href}
+            type="button"
+            onClick={() => scrollToSettingsSection(item.href.slice(1))}
+            className="shrink-0 rounded-pill border border-brand-purple/10 bg-white px-3.5 py-1.5 text-xs font-semibold text-brand-purple/75 transition hover:border-brand-pink/30 hover:text-brand-purple"
+          >
+            {item.label}
+          </button>
+        ))}
+      </nav>
+
       <SectionCard
+        id="ucet"
+        step="1"
         icon={<UserIcon />}
         title="Účet"
-        subtitle="Základné údaje prihlásenia"
+        subtitle="Meno a prihlasovací e-mail"
       >
         <form action={accountAction} className="space-y-4">
           <Field label="E-mail">
@@ -56,6 +130,9 @@ export function SettingsForms({
                 {email}
               </span>
             </div>
+            <p className="mt-1.5 text-[11px] text-brand-purple/45">
+              E-mail nie je možné zmeniť v aplikácii.
+            </p>
           </Field>
           <Field label="Meno a priezvisko">
             <input
@@ -72,61 +149,114 @@ export function SettingsForms({
             Uložiť meno
           </SubmitButton>
         </form>
+
+        <div className="mt-5 border-t border-brand-purple/8 pt-4">
+          <button
+            type="button"
+            onClick={() => setPasswordOpen((v) => !v)}
+            className="flex w-full items-center justify-between rounded-2xl bg-brand-purple/[0.03] px-4 py-3 text-left transition hover:bg-brand-purple/[0.06]"
+          >
+            <span className="flex items-center gap-3">
+              <span className="grid h-9 w-9 place-items-center rounded-full bg-brand-purple/10 text-brand-purple">
+                <LockIcon />
+              </span>
+              <span>
+                <span className="block text-sm font-semibold text-brand-purple">
+                  Zmena hesla
+                </span>
+                <span className="text-[11px] text-brand-purple/55">
+                  {passwordOpen ? "Skryť formulár" : "Kliknite pre zmenu hesla"}
+                </span>
+              </span>
+            </span>
+            <ChevronDown open={passwordOpen} />
+          </button>
+
+          {passwordOpen && (
+            <form action={passwordAction} className="mt-4 space-y-4">
+              <Field label="Súčasné heslo">
+                <input
+                  name="currentPassword"
+                  type="password"
+                  required
+                  autoComplete="current-password"
+                  className="input-light"
+                />
+              </Field>
+              <Field label="Nové heslo">
+                <input
+                  name="newPassword"
+                  type="password"
+                  required
+                  minLength={6}
+                  autoComplete="new-password"
+                  placeholder="Min. 6 znakov"
+                  className="input-light"
+                />
+              </Field>
+              <Field label="Potvrdiť nové heslo">
+                <input
+                  name="confirmPassword"
+                  type="password"
+                  required
+                  minLength={6}
+                  autoComplete="new-password"
+                  className="input-light"
+                />
+              </Field>
+              <Feedback state={passwordState} />
+              <SubmitButton className="btn-primary w-full py-2.5 text-sm">
+                Zmeniť heslo
+              </SubmitButton>
+            </form>
+          )}
+        </div>
       </SectionCard>
 
       <SectionCard
-        icon={<LockIcon />}
-        title="Zmena hesla"
-        subtitle="Pre bezpečnosť zadajte súčasné heslo"
-        highlight
-      >
-        <form action={passwordAction} className="space-y-4">
-          <Field label="Súčasné heslo">
-            <input
-              name="currentPassword"
-              type="password"
-              required
-              autoComplete="current-password"
-              className="input-light"
-            />
-          </Field>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Nové heslo">
-              <input
-                name="newPassword"
-                type="password"
-                required
-                minLength={6}
-                autoComplete="new-password"
-                placeholder="Min. 6 znakov"
-                className="input-light"
-              />
-            </Field>
-            <Field label="Potvrdiť heslo">
-              <input
-                name="confirmPassword"
-                type="password"
-                required
-                minLength={6}
-                autoComplete="new-password"
-                className="input-light"
-              />
-            </Field>
-          </div>
-          <Feedback state={passwordState} />
-          <SubmitButton className="btn-primary w-full py-2.5 text-sm">
-            Zmeniť heslo
-          </SubmitButton>
-        </form>
-      </SectionCard>
-
-      <SectionCard
+        id="notifikacie"
+        step="2"
         icon={<BellIcon />}
-        title="Oznámenia"
-        subtitle="Newsletter a podujatia vo vašom okolí"
+        title="Notifikácie"
+        subtitle={`${enabledCount} z 4 typov oznámení v aplikácii je zapnutých`}
       >
         <form action={prefsAction} className="space-y-5">
+          <div className="rounded-2xl bg-brand-purple/[0.03] p-4">
+            <p className="mb-3 text-xs font-bold uppercase tracking-wide text-brand-purple/45">
+              V aplikácii
+            </p>
+            <div className="divide-y divide-brand-purple/8">
+              <SettingSwitch
+                name="notifyNewPosts"
+                label="Nové príspevky"
+                description="Keď profil, ktorý sledujete, zverejní nový obsah."
+                defaultChecked={notificationPrefs.notifyNewPosts}
+              />
+              <SettingSwitch
+                name="notifyForumApproved"
+                label="Fórum — schválenie príspevku"
+                description="Keď moderátor schváli váš nový príspevok vo fóre."
+                defaultChecked={notificationPrefs.notifyForumApproved}
+              />
+              <SettingSwitch
+                name="notifyForumReactions"
+                label="Fórum — reakcie na správy"
+                description="Keď niekto reaguje srdiečkom alebo napíše textovú reakciu na váš príspevok či správu v chate."
+                defaultChecked={notificationPrefs.notifyForumReactions}
+              />
+              <SettingSwitch
+                name="notifyEventsNearby"
+                label="Aktivity v okolí"
+                description="Keď sa vo vašom okolí objaví nová aktivita alebo podujatie."
+                defaultChecked={notificationPrefs.notifyEventsNearby}
+              />
+            </div>
+          </div>
+
           <div className="rounded-2xl bg-brand-pink/5 p-4">
+            <p className="mb-3 text-xs font-bold uppercase tracking-wide text-brand-purple/45">
+              E-mail
+            </p>
             <ConsentCheckbox
               name="consentNewsletter"
               defaultChecked={consentNewsletter}
@@ -135,11 +265,14 @@ export function SettingsForms({
             </ConsentCheckbox>
           </div>
 
-          <div>
+          <div className="rounded-2xl border border-brand-purple/8 p-4">
+            <p className="mb-3 text-xs font-bold uppercase tracking-wide text-brand-purple/45">
+              Polomer pre aktivity
+            </p>
             <div className="mb-3 flex items-end justify-between">
-              <label className="text-xs font-semibold text-brand-purple/80">
-                Podujatia v okolí
-              </label>
+              <p className="max-w-[70%] text-xs text-brand-purple/60">
+                Vzdialenosť od vášho miesta pre upozornenia na aktivity v okolí.
+              </p>
               <span className="rounded-pill bg-brand-purple/10 px-3 py-1 text-xs font-bold text-brand-purple">
                 {radius} km
               </span>
@@ -162,12 +295,14 @@ export function SettingsForms({
 
           <Feedback state={prefsState} />
           <SubmitButton className="btn-secondary w-full py-2.5 text-sm">
-            Uložiť nastavenia
+            Uložiť notifikácie
           </SubmitButton>
         </form>
       </SectionCard>
 
       <SectionCard
+        id="predplatne"
+        step="3"
         icon={<CardIcon />}
         title="Predplatné"
         subtitle="Stav vášho členstva"
@@ -193,7 +328,13 @@ export function SettingsForms({
         </div>
       </SectionCard>
 
-      <SectionCard icon={<DocIcon />} title="Právne informácie">
+      <SectionCard
+        id="pravne"
+        step="4"
+        icon={<DocIcon />}
+        title="Právne informácie"
+        subtitle="Dokumenty a zásady"
+      >
         <Link
           href="/cookies"
           className="flex items-center gap-3 rounded-2xl px-1 py-2 transition hover:bg-brand-purple/5"
@@ -212,40 +353,42 @@ export function SettingsForms({
           <ChevronRight />
         </Link>
       </SectionCard>
+
+      <div aria-hidden className="h-6 shrink-0" />
     </div>
   );
 }
 
 function SectionCard({
+  id,
+  step,
   icon,
   title,
   subtitle,
-  highlight,
   children,
 }: {
+  id?: string;
+  step?: string;
   icon: React.ReactNode;
   title: string;
   subtitle?: string;
-  highlight?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <section
-      className={cn(
-        "overflow-hidden rounded-3xl bg-white shadow-card",
-        highlight && "ring-2 ring-brand-pink/25",
-      )}
+      id={id}
+      className="scroll-mt-24 overflow-hidden rounded-3xl bg-white shadow-card"
     >
-      <div
-        className={cn(
-          "flex items-center gap-3 border-b border-brand-purple/8 px-4 py-3.5",
-          highlight && "bg-gradient-to-r from-brand-pink/10 to-brand-purple/5",
+      <div className="flex items-center gap-3 border-b border-brand-purple/8 px-4 py-3.5">
+        {step && (
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-brand-purple/10 text-[11px] font-bold text-brand-purple">
+            {step}
+          </span>
         )}
-      >
         <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand-pink/15 text-brand-pink">
           {icon}
         </span>
-        <div>
+        <div className="min-w-0">
           <h2 className="text-sm font-bold text-brand-purple">{title}</h2>
           {subtitle && (
             <p className="text-[11px] text-brand-purple/55">{subtitle}</p>
@@ -289,6 +432,19 @@ function ChevronRight() {
   return (
     <svg viewBox="0 0 24 24" className="h-5 w-5 text-brand-purple/30" fill="none" aria-hidden>
       <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function ChevronDown({ open }: { open: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={cn("h-5 w-5 text-brand-purple/40 transition-transform", open && "rotate-180")}
+      fill="none"
+      aria-hidden
+    >
+      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
 }

@@ -6,6 +6,7 @@ import { TopBar } from "@/components/TopBar";
 /** Slugs that have moved to a dedicated route. */
 const REDIRECTS: Record<string, string> = {
   "kontent-kniznica": "/home/kniznica",
+  "zlavova-karta": "/menu/zlavova-karta",
 };
 
 const LABELS: Record<string, string> = {

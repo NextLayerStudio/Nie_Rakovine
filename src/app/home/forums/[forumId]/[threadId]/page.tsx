@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import { ForumSubHeader } from "@/components/ForumSubHeader";
+import { ForumThreadChat } from "@/components/ForumThreadChat";
 import { ForumThreadLikeButton } from "@/components/ForumThreadLikeButton";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
-import { CommentForm } from "./CommentForm";
 import {
   APPROVED,
   visibleCommentsWhere,
@@ -34,7 +34,20 @@ export default async function ForumThreadPage({
         comments: {
           where: visibleCommentsWhere(user.id),
           orderBy: { createdAt: "asc" },
-          include: { author: { select: { fullName: true } } },
+          include: {
+            author: { select: { fullName: true } },
+            likes: {
+              where: { userId: user.id },
+              select: { id: true },
+              take: 1,
+            },
+            replyTo: {
+              select: {
+                body: true,
+                author: { select: { fullName: true } },
+              },
+            },
+          },
         },
       },
     }),
@@ -61,6 +74,21 @@ export default async function ForumThreadPage({
         background:
           "linear-gradient(135deg, #f5e0c8 0%, #d8a079 50%, #6f2380 100%)",
       };
+
+  const chatMessages = thread.comments.map((c) => ({
+    id: c.id,
+    authorName: c.author.fullName,
+    body: c.body,
+    pendingModeration: c.status !== APPROVED,
+    liked: c.likes.length > 0,
+    likeCount: c.likeCount ?? 0,
+    replyTo: c.replyTo
+      ? {
+          authorName: c.replyTo.author.fullName,
+          body: c.replyTo.body,
+        }
+      : null,
+  }));
 
   return (
     <div className="forum-page min-h-full">
@@ -107,47 +135,21 @@ export default async function ForumThreadPage({
                 count={thread.likeCount}
               />
               <span className="forum-chip">
-                <CommentIcon /> {thread.comments.length} komentárov
+                <CommentIcon /> {thread.comments.length} v chate
               </span>
             </div>
           </div>
         </div>
 
-        {thread.comments.length > 0 && (
-          <>
-            <h2 className="forum-section-label mb-3 mt-6">Chat</h2>
-            <ul className="space-y-3">
-              {thread.comments.map((c) => (
-                <li key={c.id} className="forum-chat-bubble">
-                  {c.status !== APPROVED && (
-                    <span className="mb-2 inline-flex rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
-                      Čaká na overenie
-                    </span>
-                  )}
-                  <div className="flex items-center gap-2">
-                    <div
-                      aria-hidden
-                      className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-brand-purple/10 text-[10px] font-bold text-brand-purple"
-                    >
-                      {initials(c.author.fullName)}
-                    </div>
-                    <p className="text-xs font-semibold text-brand-purple">
-                      {c.author.fullName}
-                    </p>
-                  </div>
-                  <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-brand-purple/85">
-                    {c.body}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
+        <ForumThreadChat
+          forumId={forumId}
+          threadId={threadId}
+          canComment={canComment}
+          comments={chatMessages}
+        />
       </article>
 
-      {canComment ? (
-        <CommentForm forumId={forumId} threadId={threadId} />
-      ) : (
+      {!canComment && (
         <div
           className="fixed inset-x-0 bottom-0 z-30 border-t border-brand-purple/10 bg-white/95 px-5 py-4 text-center text-xs text-brand-purple/70 backdrop-blur-md"
           style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}

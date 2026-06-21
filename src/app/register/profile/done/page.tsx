@@ -19,7 +19,7 @@ export default function DonePage() {
 
       <div className="flex items-center justify-center pb-10">
         <Link
-          href="/home"
+          href="/home?setupAvatar=1"
           className="rounded-pill bg-white px-8 py-3 text-sm font-bold text-brand-purple shadow-soft hover:brightness-105"
         >
           Pokračovať

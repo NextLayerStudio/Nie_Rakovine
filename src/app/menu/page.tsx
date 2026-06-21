@@ -4,13 +4,14 @@ import { MenuInformacie } from "@/components/MenuInformacie";
 import { PhoneShell } from "@/components/PhoneShell";
 import { requireUser } from "@/lib/auth";
 import { logoutAction } from "@/lib/actions/auth";
+import { profileAvatarStyle } from "@/lib/avatar-style";
 
 const MAIN_ITEMS = [
-  { href: "/menu/zlavova-karta", label: "Moja zľavová karta", icon: "card" as const, comingSoon: true },
+  { href: "/menu/zlavova-karta", label: "Moja zľavová karta", icon: "card" as const },
   { href: "/home/notifications", label: "Oznámenia", icon: "bell" as const },
   { href: "/profile", label: "Môj profil", icon: "user" as const },
-  { href: "/menu/kontent-kniznica", label: "Kontent knižnica", icon: "library" as const },
-  { href: "/menu/zlavy", label: "Zľavy", icon: "percent" as const, comingSoon: true },
+  { href: "/home/kniznica", label: "Kontent knižnica", icon: "library" as const },
+  { href: "/home/zlavy", label: "Zľavy", icon: "percent" as const },
   { href: "/menu/aktivity", label: "Aktivity", icon: "calendar" as const },
   { href: "/home/forums", label: "Fóra", icon: "forum" as const },
 ] as const;
@@ -20,6 +21,7 @@ export const dynamic = "force-dynamic";
 export default async function MenuPage() {
   const user = await requireUser();
   const isAdmin = user.role === "ADMIN";
+  const avatarUrl = user.profile?.avatarUrl ?? null;
 
   return (
     <PhoneShell>
@@ -29,10 +31,7 @@ export default async function MenuPage() {
             <div
               aria-hidden
               className="h-11 w-11 shrink-0 rounded-full bg-cover bg-center ring-2 ring-white/40"
-              style={{
-                backgroundImage:
-                  "linear-gradient(135deg, #ffffff 0%, #f7d5e0 100%)",
-              }}
+              style={profileAvatarStyle(avatarUrl)}
             />
             <div>
               <p className="text-sm leading-none text-white/90">Ahoj!</p>

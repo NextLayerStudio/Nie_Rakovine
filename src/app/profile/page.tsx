@@ -1,83 +1,276 @@
+import { Suspense } from "react";
 import { BottomNav } from "@/components/BottomNav";
+import { MenuDrawer } from "@/components/MenuDrawer";
+import { NotificationsDrawer } from "@/components/NotificationsDrawer";
 import { PhoneShell } from "@/components/PhoneShell";
-import { TopBar } from "@/components/TopBar";
+import { ProfileView } from "@/components/profile/ProfileView";
 import { requireUser } from "@/lib/auth";
-import { formatCancerTypes } from "@/lib/cancer-type";
+import { visibleCommentsWhere, visibleThreadsWhere } from "@/lib/forum-moderation";
+import { getUnreadNotificationCount } from "@/lib/notifications";
+import { parseProfileTab } from "@/lib/profile-page";
+import { buildPostGallery, postPublicHref } from "@/lib/post-display";
+import { feedPostSelect } from "@/lib/feed-queries";
+import { membershipSubscriptionInfo } from "@/lib/membership-card";
+import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-export default async function ProfilePage() {
+export default async function ProfilePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string; setupAvatar?: string }>;
+}) {
   const user = await requireUser();
+  const params = await searchParams;
+  const initialTab = parseProfileTab(params.tab);
+  const forceAvatarPrompt = params.setupAvatar === "1";
+
+  const activityCutoff = new Date();
+  activityCutoff.setDate(activityCutoff.getDate() - 14);
+
+  const conversationCutoff = new Date();
+  conversationCutoff.setDate(conversationCutoff.getDate() - 60);
+
+  const [
+    unreadCount,
+    registrations,
+    memberships,
+    featuredBrands,
+    savedDiscountRows,
+    savedPostRows,
+  ] = await Promise.all([
+    getUnreadNotificationCount(user.id),
+    prisma.eventRegistration.findMany({
+      where: { userId: user.id, event: { published: true } },
+      orderBy: { event: { startsAt: "asc" } },
+      select: {
+        event: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            coverUrl: true,
+            startsAt: true,
+            endsAt: true,
+            location: true,
+            capacity: true,
+            _count: { select: { registrations: true } },
+          },
+        },
+      },
+    }),
+    prisma.forumMembership.findMany({
+      where: { userId: user.id, forum: { published: true } },
+      orderBy: { createdAt: "desc" },
+      select: {
+        forum: {
+          select: {
+            id: true,
+            title: true,
+            imageUrl: true,
+            accentColor: true,
+          },
+        },
+      },
+    }),
+    prisma.discountPartner.findMany({
+      where: { published: true, featured: true },
+      orderBy: [{ sortOrder: "asc" }, { displayName: "asc" }],
+      take: 6,
+      select: {
+        id: true,
+        handle: true,
+        displayName: true,
+        avatarUrl: true,
+      },
+    }),
+    prisma.savedDiscountOffer.findMany({
+      where: {
+        userId: user.id,
+        offer: { published: true, partner: { published: true } },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 12,
+      select: {
+        offer: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            discountText: true,
+            promoCode: true,
+            accentColor: true,
+            imageUrl: true,
+            validUntil: true,
+            partner: { select: { handle: true } },
+          },
+        },
+      },
+    }),
+    prisma.savedPost.findMany({
+      where: { userId: user.id, post: { published: true } },
+      orderBy: { createdAt: "desc" },
+      take: 60,
+      select: {
+        post: { select: feedPostSelect },
+      },
+    }),
+  ]);
+
+  const followedForumIds = memberships.map((m) => m.forum.id);
+
+  const [recentActivity, forumThreads] = await Promise.all([
+    followedForumIds.length > 0
+      ? prisma.forumThread.findMany({
+          where: {
+            forumId: { in: followedForumIds },
+            status: "APPROVED",
+            createdAt: { gte: activityCutoff },
+          },
+          select: { forumId: true },
+          distinct: ["forumId"],
+        })
+      : Promise.resolve([]),
+    followedForumIds.length > 0
+      ? prisma.forumThread.findMany({
+          where: {
+            forumId: { in: followedForumIds },
+            createdAt: { gte: conversationCutoff },
+            ...visibleThreadsWhere(user.id),
+          },
+          orderBy: { createdAt: "desc" },
+          take: 15,
+          select: {
+            id: true,
+            body: true,
+            title: true,
+            forum: {
+              select: {
+                id: true,
+                title: true,
+                imageUrl: true,
+                accentColor: true,
+              },
+            },
+            comments: {
+              where: visibleCommentsWhere(user.id),
+              orderBy: { createdAt: "asc" },
+              take: 1,
+              select: { body: true },
+            },
+          },
+        })
+      : Promise.resolve([]),
+  ]);
+
+  const activeForumIds = new Set(recentActivity.map((t) => t.forumId));
+
+  const savedPosts = savedPostRows.map((row) => row.post);
+  const likedSet =
+    savedPosts.length > 0
+      ? new Set(
+          (
+            await prisma.articleLike.findMany({
+              where: {
+                userId: user.id,
+                postId: { in: savedPosts.map((p) => p.id) },
+              },
+              select: { postId: true },
+            })
+          ).map((l) => l.postId),
+        )
+      : new Set<string>();
+
+  const nameParts = user.fullName.trim().split(/\s+/).filter(Boolean);
+
+  const data = {
+    fullName: user.fullName,
+    userId: user.id,
+    defaultName: nameParts[0] ?? "",
+    defaultSurname: nameParts.slice(1).join(" "),
+    profile: user.profile
+      ? {
+          diagnosis: user.profile.diagnosis,
+          diagnosisPhase: user.profile.diagnosisPhase,
+          cancerTypes: user.profile.cancerTypes,
+        }
+      : null,
+    unreadCount,
+    subscription: membershipSubscriptionInfo(user),
+    avatarUrl: user.profile?.avatarUrl ?? null,
+    registeredEvents: registrations.map((r) => ({
+      id: r.event.id,
+      title: r.event.title,
+      description: r.event.description,
+      coverUrl: r.event.coverUrl,
+      startsAt: r.event.startsAt.toISOString(),
+      endsAt: r.event.endsAt?.toISOString() ?? null,
+      location: r.event.location,
+      registrationCount: r.event._count.registrations,
+      capacity: r.event.capacity,
+    })),
+    forums: memberships.map((m) => ({
+      id: m.forum.id,
+      title: m.forum.title,
+      imageUrl: m.forum.imageUrl,
+      accentColor: m.forum.accentColor,
+      hasRecentActivity: activeForumIds.has(m.forum.id),
+    })),
+    forumConversations: forumThreads.map((t) => ({
+      forumId: t.forum.id,
+      forumTitle: t.forum.title,
+      forumImageUrl: t.forum.imageUrl,
+      forumAccentColor: t.forum.accentColor,
+      threadId: t.id,
+      question: (t.title?.trim() || t.body).trim(),
+      answer: t.comments[0]?.body?.trim() ?? null,
+    })),
+    featuredBrands: featuredBrands.map((b) => ({
+      id: b.id,
+      handle: b.handle,
+      displayName: b.displayName,
+      avatarUrl: b.avatarUrl,
+    })),
+    savedDiscounts: savedDiscountRows.map((row) => ({
+      offerId: row.offer.id,
+      title: row.offer.title,
+      description: row.offer.description,
+      discountText: row.offer.discountText,
+      promoCode: row.offer.promoCode,
+      accentColor: row.offer.accentColor ?? "#F5D5E0",
+      imageUrl: row.offer.imageUrl,
+      validUntil: row.offer.validUntil?.toISOString() ?? null,
+      partnerHandle: row.offer.partner.handle,
+    })),
+    savedPosts: savedPosts.map((p) => ({
+      id: p.id,
+      href: postPublicHref(p),
+      type: p.type,
+      title: p.title,
+      excerpt: p.excerpt,
+      imageUrls: buildPostGallery(p.coverUrl, p.images),
+      videoUrl: p.videoUrl ?? null,
+      audioUrl: p.audioUrl ?? null,
+      liked: likedSet.has(p.id),
+      likeCount: p._count.likes,
+      commentCount: p._count.comments,
+    })),
+  };
 
   return (
     <PhoneShell>
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto pb-[calc(5.5rem+env(safe-area-inset-bottom))]">
-        <TopBar backHref="/home" title="Môj profil" />
-
-        <section className="px-6 py-3">
-          <div className="card flex flex-col items-center p-6 text-center">
-            <div
-              aria-hidden
-              className="h-20 w-20 rounded-full ring-4 ring-brand-pink/30"
-              style={{
-                backgroundImage:
-                  "linear-gradient(135deg, #CA6A8A 0%, #6F2380 100%)",
-              }}
-            />
-            <h2 className="mt-3 text-base font-bold text-brand-purple">
-              {user.fullName}
-            </h2>
-            <p className="text-xs text-brand-purple/60">{user.email}</p>
-
-            <p className="mt-2 rounded-pill bg-brand-purple/10 px-3 py-1 text-[11px] font-semibold text-brand-purple">
-              {planLabel(user.subscriptionPlan)}
-            </p>
-          </div>
-        </section>
-
-        {user.profile && (
-          <section className="px-6 pb-4">
-            <h3 className="mb-2 px-1 text-xs font-bold uppercase tracking-wide text-brand-purple/70">
-              Profil
-            </h3>
-            <div className="card divide-y divide-brand-purple/10">
-              <Row label="Lokalita" value={[user.profile.region, user.profile.city].filter(Boolean).join(", ") || "—"} />
-              <Row
-                label="Typ ochorenia"
-                value={formatCancerTypes(user.profile.cancerTypes)}
-              />
-              <Row
-                label="Diagnóza"
-                value={user.profile.diagnosis || "—"}
-              />
-              <Row label="Fáza" value={user.profile.diagnosisPhase || "—"} />
-              <Row label="Rok diagnózy" value={user.profile.diagnosisYear?.toString() || "—"} />
-              <Row label="Záujmy" value={user.profile.interests.join(", ") || "—"} />
-            </div>
-          </section>
-        )}
+        <Suspense fallback={null}>
+          <ProfileView
+            data={data}
+            initialTab={initialTab}
+            forceAvatarPrompt={forceAvatarPrompt}
+          />
+        </Suspense>
       </div>
       <BottomNav />
+      <MenuDrawer userName={user.fullName} isAdmin={user.role === "ADMIN"} />
+      <NotificationsDrawer />
     </PhoneShell>
   );
-}
-
-function Row({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-start justify-between gap-3 px-4 py-3 text-xs">
-      <span className="font-semibold text-brand-purple/70">{label}</span>
-      <span className="text-right text-brand-purple">{value}</span>
-    </div>
-  );
-}
-
-function planLabel(plan: string): string {
-  switch (plan) {
-    case "MONTHLY":
-      return "Mesačné predplatné";
-    case "YEARLY":
-      return "Ročné predplatné";
-    default:
-      return "Bez predplatného";
-  }
 }

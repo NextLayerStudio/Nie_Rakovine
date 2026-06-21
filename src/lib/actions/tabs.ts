@@ -139,6 +139,8 @@ export async function fetchCalendarTabAction() {
         category: true,
         latitude: true,
         longitude: true,
+        capacity: true,
+        _count: { select: { registrations: true } },
         profile: { select: { displayName: true, handle: true } },
       },
     }),
@@ -153,9 +155,14 @@ export async function fetchCalendarTabAction() {
     latitude: dbUser.profile?.latitude ?? null,
     longitude: dbUser.profile?.longitude ?? null,
   };
+  const nameParts = dbUser.fullName.trim().split(/\s+/).filter(Boolean);
+  const defaultName = nameParts[0] ?? "";
+  const defaultSurname = nameParts.slice(1).join(" ");
 
   return {
     ok: true as const,
+    defaultName,
+    defaultSurname,
     events: events.map((e) => ({
       id: e.id,
       title: e.title,
@@ -167,6 +174,8 @@ export async function fetchCalendarTabAction() {
       endsAt: e.endsAt ? e.endsAt.toISOString() : null,
       profileName: e.profile?.displayName ?? "ONKO KLUB",
       registered: registeredIds.has(e.id),
+      registrationCount: e._count.registrations,
+      capacity: e.capacity,
       distanceKm: distanceKm(me, e),
     })),
     hasLocation: me.latitude !== null && me.longitude !== null,

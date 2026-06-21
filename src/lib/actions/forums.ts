@@ -6,6 +6,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { prismaActionError, requireActionUser } from "@/lib/safe-action";
+import { notifyForumReaction } from "@/lib/notifications";
 
 export type ActionState = { ok: boolean; message?: string };
 
@@ -105,6 +106,7 @@ export async function toggleForumThreadLikeAction(
   const user = auth.user;
 
   const threadId = String(formData.get("threadId") ?? "");
+  const forumId = String(formData.get("forumId") ?? "");
   if (!threadId) return { ok: false, message: "Chýba príspevok." };
 
   try {
@@ -128,6 +130,25 @@ export async function toggleForumThreadLikeAction(
         where: { id: threadId },
         data: { likeCount: { increment: 1 } },
       });
+
+      const thread = await prisma.forumThread.findUnique({
+        where: { id: threadId },
+        select: {
+          authorId: true,
+          forumId: true,
+          forum: { select: { title: true } },
+        },
+      });
+      if (thread) {
+        await notifyForumReaction({
+          authorId: thread.authorId,
+          reactorId: user.id,
+          reactorName: user.fullName,
+          forumId: thread.forumId,
+          forumTitle: thread.forum.title,
+          threadId,
+        });
+      }
     }
   } catch (err) {
     if (
@@ -143,7 +164,193 @@ export async function toggleForumThreadLikeAction(
     }
   }
 
+  if (forumId) {
+    revalidatePath(`/home/forums/${forumId}/${threadId}`);
+    revalidatePath(`/home/forums/${forumId}`);
+  }
+
   return { ok: true };
+}
+
+export async function toggleForumCommentLikeAction(
+  formData: FormData,
+): Promise<{ ok: boolean; message?: string }> {
+  const auth = await requireActionUser();
+  if (!auth.ok) return auth;
+  const user = auth.user;
+
+  const commentId = String(formData.get("commentId") ?? "");
+  const threadId = String(formData.get("threadId") ?? "");
+  const forumId = String(formData.get("forumId") ?? "");
+  if (!commentId) return { ok: false, message: "Chýba správa." };
+
+  try {
+    const existing = await prisma.forumCommentLike.findUnique({
+      where: { userId_commentId: { userId: user.id, commentId } },
+    });
+
+    if (existing) {
+      await prisma.forumCommentLike.delete({
+        where: { userId_commentId: { userId: user.id, commentId } },
+      });
+      await prisma.forumComment.update({
+        where: { id: commentId },
+        data: { likeCount: { decrement: 1 } },
+      });
+    } else {
+      await prisma.forumCommentLike.create({
+        data: { userId: user.id, commentId },
+      });
+      await prisma.forumComment.update({
+        where: { id: commentId },
+        data: { likeCount: { increment: 1 } },
+      });
+
+      const comment = await prisma.forumComment.findUnique({
+        where: { id: commentId },
+        select: {
+          authorId: true,
+          threadId: true,
+          thread: {
+            select: {
+              forumId: true,
+              forum: { select: { title: true } },
+            },
+          },
+        },
+      });
+      if (comment) {
+        await notifyForumReaction({
+          authorId: comment.authorId,
+          reactorId: user.id,
+          reactorName: user.fullName,
+          forumId: comment.thread.forumId,
+          forumTitle: comment.thread.forum.title,
+          threadId: comment.threadId,
+          commentId,
+        });
+      }
+    }
+  } catch (err) {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === "P2002"
+    ) {
+      // already liked
+    } else {
+      return {
+        ok: false,
+        message: prismaActionError(err, "Nepodarilo sa uložiť reakciu."),
+      };
+    }
+  }
+
+  if (forumId && threadId) {
+    revalidatePath(`/home/forums/${forumId}/${threadId}`);
+  }
+
+  return { ok: true };
+}
+
+export async function createCommentAction(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const auth = await requireActionUser();
+  if (!auth.ok) return { ok: false, message: auth.message };
+  const user = auth.user;
+
+  const threadId = String(formData.get("threadId") ?? "");
+  const forumId = String(formData.get("forumId") ?? "");
+  const body = String(formData.get("body") ?? "").trim();
+  const replyToCommentId =
+    String(formData.get("replyToCommentId") ?? "").trim() || null;
+
+  if (!threadId || !body) {
+    return { ok: false, message: "Napíšte komentár." };
+  }
+
+  const thread = await prisma.forumThread.findFirst({
+    where: {
+      id: threadId,
+      forumId: forumId || undefined,
+      status: "APPROVED",
+      NOT: { status: "REJECTED" },
+    },
+    select: { id: true, forumId: true },
+  });
+  if (!thread) {
+    return { ok: false, message: "Príspevok nie je dostupný." };
+  }
+
+  const membership = await prisma.forumMembership.findUnique({
+    where: {
+      forumId_userId: { forumId: thread.forumId, userId: user.id },
+    },
+  });
+  if (!membership) {
+    return { ok: false, message: "Najprv sa zapojte do fóra." };
+  }
+
+  let replyTarget: {
+    authorId: string;
+    forumTitle: string;
+  } | null = null;
+
+  if (replyToCommentId) {
+    const parent = await prisma.forumComment.findFirst({
+      where: {
+        id: replyToCommentId,
+        threadId,
+        status: "APPROVED",
+      },
+      select: {
+        authorId: true,
+        thread: {
+          select: {
+            forum: { select: { title: true } },
+          },
+        },
+      },
+    });
+    if (!parent) {
+      return { ok: false, message: "Správa na reakciu nie je dostupná." };
+    }
+    replyTarget = {
+      authorId: parent.authorId,
+      forumTitle: parent.thread.forum.title,
+    };
+  }
+
+  await prisma.forumComment.create({
+    data: {
+      threadId,
+      authorId: user.id,
+      body,
+      replyToCommentId,
+      status: "APPROVED",
+    },
+  });
+
+  if (replyTarget) {
+    await notifyForumReaction({
+      authorId: replyTarget.authorId,
+      reactorId: user.id,
+      reactorName: user.fullName,
+      forumId: thread.forumId,
+      forumTitle: replyTarget.forumTitle,
+      threadId,
+      commentId: replyToCommentId,
+      reactionText: body,
+    });
+  }
+
+  revalidatePath(`/home/forums/${forumId}/${threadId}`);
+  revalidatePath(`/home/forums/${forumId}`);
+  return {
+    ok: true,
+    message: replyToCommentId ? "Reakcia odoslaná." : "Správa odoslaná.",
+  };
 }
 
 export async function createThreadAction(
@@ -248,7 +455,6 @@ export async function createForumByUserAction(
     };
   }
 
-  // User-created forums: published=false + createdById set → admin must approve.
   await prisma.forum.create({
     data: {
       title,
@@ -265,53 +471,4 @@ export async function createForumByUserAction(
   revalidatePath("/admin/forums/moderation");
   revalidatePath("/home/forums");
   redirect("/home/forums?submitted=1");
-}
-
-export async function createCommentAction(
-  _prev: ActionState,
-  formData: FormData,
-): Promise<ActionState> {
-  const user = await requireUser();
-  const threadId = String(formData.get("threadId") ?? "");
-  const forumId = String(formData.get("forumId") ?? "");
-  const body = String(formData.get("body") ?? "").trim();
-
-  if (!threadId || !body) {
-    return { ok: false, message: "Napíšte komentár." };
-  }
-
-  const thread = await prisma.forumThread.findFirst({
-    where: {
-      id: threadId,
-      forumId: forumId || undefined,
-      status: "APPROVED",
-      NOT: { status: "REJECTED" },
-    },
-    select: { id: true, forumId: true },
-  });
-  if (!thread) {
-    return { ok: false, message: "Príspevok nie je dostupný." };
-  }
-
-  const membership = await prisma.forumMembership.findUnique({
-    where: {
-      forumId_userId: { forumId: thread.forumId, userId: user.id },
-    },
-  });
-  if (!membership) {
-    return { ok: false, message: "Najprv sa zapojte do fóra." };
-  }
-
-  await prisma.forumComment.create({
-    data: {
-      threadId,
-      authorId: user.id,
-      body,
-      status: "APPROVED",
-    },
-  });
-
-  revalidatePath(`/home/forums/${forumId}/${threadId}`);
-  revalidatePath(`/home/forums/${forumId}`);
-  return { ok: true, message: "Správa odoslaná." };
 }

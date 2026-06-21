@@ -3,6 +3,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { PhoneShell } from "@/components/PhoneShell";
 import { TopBar } from "@/components/TopBar";
 import { requireUser } from "@/lib/auth";
+import { profileAvatarStyle } from "@/lib/avatar-style";
 import { SettingsForms } from "./SettingsForms";
 
 export const dynamic = "force-dynamic";
@@ -10,10 +11,14 @@ export const dynamic = "force-dynamic";
 export default async function SettingsPage() {
   const user = await requireUser();
   const subscription = planInfo(user.subscriptionPlan, user.subscriptionStatus);
+  const avatarUrl = user.profile?.avatarUrl ?? null;
 
   return (
     <PhoneShell>
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+      <div
+        data-settings-scroll
+        className="flex min-h-0 flex-1 flex-col overflow-y-auto scroll-pt-20 scroll-pb-24"
+      >
         <TopBar backHref="/menu" title="Nastavenia" />
 
         <section className="px-5 pt-1 pb-2">
@@ -21,11 +26,12 @@ export default async function SettingsPage() {
             <div className="flex items-center gap-4">
               <div
                 aria-hidden
-                className="grid h-16 w-16 shrink-0 place-items-center rounded-full bg-white/20 ring-2 ring-white/30"
+                className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-full bg-cover bg-center ring-2 ring-white/30"
+                style={profileAvatarStyle(avatarUrl)}
               >
-                <span className="text-xl font-bold">
-                  {initials(user.fullName)}
-                </span>
+                {!avatarUrl?.trim() && (
+                  <span className="text-xl font-bold">{initials(user.fullName)}</span>
+                )}
               </div>
               <div className="min-w-0">
                 <h2 className="truncate text-base font-bold">{user.fullName}</h2>
@@ -44,12 +50,18 @@ export default async function SettingsPage() {
           </div>
         </section>
 
-        <section className="px-5 pb-24">
+        <section className="px-5 pb-32">
           <SettingsForms
             fullName={user.fullName}
             email={user.email}
             consentNewsletter={user.profile?.consentNewsletter ?? false}
             notifyRadiusKm={user.profile?.notifyRadiusKm ?? 50}
+            notificationPrefs={{
+              notifyNewPosts: user.profile?.notifyNewPosts ?? true,
+              notifyForumApproved: user.profile?.notifyForumApproved ?? true,
+              notifyForumReactions: user.profile?.notifyForumReactions ?? true,
+              notifyEventsNearby: user.profile?.notifyEventsNearby ?? true,
+            }}
             subscriptionActive={subscription.active}
           />
         </section>

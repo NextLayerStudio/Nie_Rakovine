@@ -250,3 +250,31 @@ body {
 .loading-dot-delay-2 {
   animation-delay: 0.3s;
 }
+
+/* Membership discount card — discourage selection and drag on protected content */
+body.membership-no-screenshot {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.membership-protected,
+.membership-protected * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.membership-protected img {
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* Membership discount card — ID number groups */
+.membership-card-id {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.membership-card-id-group + .membership-card-id-group {
+  margin-left: 0.65em;
+}

@@ -84,9 +84,11 @@ model User {
   createdForums      Forum[]             @relation("ForumCreator")
   forumThreads       ForumThread[]
   forumThreadLikes   ForumThreadLike[]
+  forumCommentLikes  ForumCommentLike[]
   forumComments      ForumComment[]
   profileFollows     ProfileFollow[]
   notifications      Notification[]
+  savedDiscountOffers SavedDiscountOffer[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -122,6 +124,15 @@ model UserProfile {
   // Radius (km) used for "activities near me" + nearby-event notifications
   notifyRadiusKm Int      @default(50)
 
+  // In-app notification preferences (all enabled by default at registration)
+  notifyNewPosts       Boolean @default(true)
+  notifyForumApproved  Boolean @default(true)
+  notifyForumReactions Boolean @default(true)
+  notifyEventsNearby   Boolean @default(true)
+
+  // User's own profile photo (membership card, menu, etc.)
+  avatarUrl      String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -150,6 +161,66 @@ model ClubProfile {
   @@index([published, sortOrder])
 }
 
+// ---------------- Discount partners (Zľavy) ----------------
+
+enum DiscountCategory {
+  MODA
+  KOZMETIKA
+  JEDLO
+  ZAZITKY
+}
+
+model DiscountPartner {
+  id          String           @id @default(cuid())
+  handle      String           @unique
+  displayName String
+  bio         String?
+  avatarUrl   String?
+  coverUrl    String?
+  category    DiscountCategory
+  featured    Boolean          @default(false)
+  published   Boolean          @default(true)
+  sortOrder   Int              @default(0)
+  offers      DiscountOffer[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([published, featured, sortOrder])
+  @@index([category, published, sortOrder])
+}
+
+model DiscountOffer {
+  id           String   @id @default(cuid())
+  partnerId    String
+  partner      DiscountPartner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  title        String
+  description  String?
+  discountText String?
+  promoCode    String?
+  accentColor  String?  @default("#F5D5E0")
+  imageUrl     String?
+  validUntil   DateTime?
+  published    Boolean  @default(true)
+  sortOrder    Int      @default(0)
+  savedBy      SavedDiscountOffer[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([partnerId, published, sortOrder])
+}
+
+model SavedDiscountOffer {
+  id        String   @id @default(cuid())
+  userId    String
+  offerId   String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  offer     DiscountOffer @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, offerId])
+  @@index([userId, createdAt(sort: Desc)])
+}
+
 model ProfileFollow {
   id        String   @id @default(cuid())
   userId    String
@@ -168,6 +239,7 @@ enum NotificationType {
   NEW_POST
   FORUM_THREAD_APPROVED
   FORUM_COMMENT_APPROVED
+  FORUM_REACTION
   NEW_EVENT_NEARBY
 }
 
@@ -407,17 +479,33 @@ model ForumThreadLike {
 }
 
 model ForumComment {
-  id        String   @id @default(cuid())
-  threadId  String
-  authorId  String
-  body      String
-  status    ForumModerationStatus @default(PENDING)
+  id               String   @id @default(cuid())
+  threadId         String
+  authorId         String
+  body             String
+  likeCount        Int      @default(0)
+  replyToCommentId String?
+  status           ForumModerationStatus @default(PENDING)
 
-  thread ForumThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
-  author User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  thread  ForumThread   @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  author  User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  replyTo ForumComment? @relation("CommentReplies", fields: [replyToCommentId], references: [id], onDelete: SetNull)
+  replies ForumComment[] @relation("CommentReplies")
+  likes   ForumCommentLike[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([threadId, status, createdAt])
+}
+
+model ForumCommentLike {
+  id        String   @id @default(cuid())
+  userId    String
+  commentId String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment   ForumComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, commentId])
 }

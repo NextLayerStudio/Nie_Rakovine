@@ -141,7 +141,7 @@ export function NotificationsDrawer() {
               <>
                 <div className="flex items-start justify-between gap-2">
                   <span className="rounded-pill bg-brand-purple/10 px-2 py-0.5 text-[10px] font-semibold text-brand-purple">
-                    {notificationTypeLabel(n.type as Parameters<typeof notificationTypeLabel>[0])}
+                    {notificationTypeLabel(n.type)}
                   </span>
                   <span className="shrink-0 text-[10px] text-brand-purple/50">{time}</span>
                 </div>

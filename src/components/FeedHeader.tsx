@@ -2,13 +2,16 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { profileAvatarStyle } from "@/lib/avatar-style";
 import { cn } from "@/lib/utils";
 
 export function FeedHeader({
   name,
+  avatarUrl,
   unreadCount = 0,
 }: {
   name: string;
+  avatarUrl?: string | null;
   unreadCount?: number;
 }) {
   const [scrolled, setScrolled] = useState(false);
@@ -33,10 +36,7 @@ export function FeedHeader({
           <div
             aria-hidden
             className="h-12 w-12 shrink-0 rounded-full bg-cover bg-center ring-2 ring-brand-purple/15"
-            style={{
-              backgroundImage:
-                "linear-gradient(135deg, #b8c0c4 0%, #6f2380 100%)",
-            }}
+            style={profileAvatarStyle(avatarUrl)}
           />
 
           {/* Meno + Ahoj — animovaný collapse smerom do avatara */}
