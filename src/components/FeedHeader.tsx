@@ -65,7 +65,7 @@ export function FeedHeader({
             type="button"
             aria-label="Notifikácie"
             onClick={() => document.dispatchEvent(new CustomEvent("open-notifications"))}
-            className="relative grid h-11 w-11 place-items-center rounded-full bg-brand-pink-soft text-black"
+            className="relative grid h-11 w-11 place-items-center rounded-full bg-brand-pink text-white"
           >
             {unreadCount > 0 && (
               <span className="absolute right-1.5 top-1.5 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" />
@@ -84,7 +84,7 @@ export function FeedHeader({
             type="button"
             aria-label="Menu"
             onClick={() => document.dispatchEvent(new CustomEvent("open-menu"))}
-            className="grid h-11 w-11 place-items-center rounded-full bg-brand-pink-soft text-black"
+            className="grid h-11 w-11 place-items-center rounded-full bg-brand-pink text-white"
           >
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
               <path
