@@ -5,6 +5,7 @@ import { deleteDiscountPartnerAction } from "@/lib/actions/admin-discount-partne
 import { profileAvatarStyle } from "@/lib/avatar-style";
 import { categoryLabel } from "@/lib/discount-category";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { profileCategoryLabel } from "@/lib/profile-category";
 
 export const dynamic = "force-dynamic";
 
@@ -76,6 +77,11 @@ export default async function AdminProfilesPage() {
                 </div>
 
                 <div className="mt-2 flex flex-wrap gap-1.5">
+                  {p.category && (
+                    <span className="admin-badge bg-brand-pink/12 text-brand-pink">
+                      {profileCategoryLabel(p.category)}
+                    </span>
+                  )}
                   <span className="admin-badge bg-brand-purple/8 text-brand-purple/80">
                     {p._count.posts} príspevkov
                   </span>

@@ -10,6 +10,7 @@ import {
 import { AdminImageField } from "@/components/AdminImageField";
 import { CancerTypeSelect } from "@/components/CancerTypeSelect";
 import { FormError, SubmitButton } from "@/components/FormError";
+import { PROFILE_CATEGORY_LABELS } from "@/lib/profile-category";
 
 const INITIAL: ActionState = { ok: false };
 
@@ -50,6 +51,25 @@ export function ClubProfileForm({
           defaultValue={profile?.bio ?? ""}
           textarea
         />
+
+        <div>
+          <span className="admin-label">Kategória profilu</span>
+          <select
+            name="category"
+            defaultValue={profile?.category ?? ""}
+            className="admin-input"
+          >
+            <option value="">— Bez kategórie —</option>
+            {Object.entries(PROFILE_CATEGORY_LABELS).map(([val, label]) => (
+              <option key={val} value={val}>
+                {label}
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-brand-purple/50">
+            Kategória určuje, v ktorom filtri sa profil zobrazí vo vyhľadávaní.
+          </p>
+        </div>
 
         <div>
           <span className="admin-label">Pre typ rakoviny</span>

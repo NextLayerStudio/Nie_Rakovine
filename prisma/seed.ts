@@ -52,8 +52,62 @@ async function main() {
       bio: "Oficiálny profil klubu — videá, články, recepty a podujatia.",
       published: true,
       sortOrder: 0,
+      category: "NOVINKY",
     },
-    update: {},
+    update: { category: "NOVINKY" },
+  });
+
+  // Testovacie profily pre každú kategóriu
+  await prisma.clubProfile.upsert({
+    where: { handle: "zdrava-vyziva" },
+    create: {
+      handle: "zdrava-vyziva",
+      displayName: "ZDRAVÁ VÝŽIVA",
+      bio: "Recepty, tipy na stravu a zdravý životný štýl počas onkologickej liečby.",
+      published: true,
+      sortOrder: 1,
+      category: "ZDRAVA_VYZIVA",
+    },
+    update: { category: "ZDRAVA_VYZIVA" },
+  });
+
+  await prisma.clubProfile.upsert({
+    where: { handle: "partneri-nk" },
+    create: {
+      handle: "partneri-nk",
+      displayName: "SPONZORI A PARTNERI",
+      bio: "Firmy a organizácie, ktoré podporujú komunitu NIE RAKOVINE.",
+      published: true,
+      sortOrder: 2,
+      category: "SPONZORI",
+    },
+    update: { category: "SPONZORI" },
+  });
+
+  await prisma.clubProfile.upsert({
+    where: { handle: "diagnozy-nk" },
+    create: {
+      handle: "diagnozy-nk",
+      displayName: "DIAGNÓZY",
+      bio: "Informácie, príbehy a podpora pre jednotlivé onkologické diagnózy.",
+      published: true,
+      sortOrder: 3,
+      category: "DIAGNOZY",
+    },
+    update: { category: "DIAGNOZY" },
+  });
+
+  await prisma.clubProfile.upsert({
+    where: { handle: "akcie-nk" },
+    create: {
+      handle: "akcie-nk",
+      displayName: "AKCIE A PODUJATIA",
+      bio: "Prehľad podujatí, stretnutí a aktivít komunity po celom Slovensku.",
+      published: true,
+      sortOrder: 4,
+      category: "AKCIE",
+    },
+    update: { category: "AKCIE" },
   });
 
   const yogaSlug = "yoga-sample";

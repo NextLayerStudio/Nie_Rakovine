@@ -2,22 +2,26 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
-import { FeedProfileHeader } from "@/components/FeedProfileHeader";
-import { FeedPostItem } from "@/components/FeedPostItem";
-import { FeedEventItem } from "@/components/FeedEventItem";
 import { FollowProfileButton } from "@/components/FollowProfileButton";
 import { searchTabAction } from "@/lib/actions/tabs";
-import { buildPostGallery, postPublicHref } from "@/lib/post-display";
-import { defaultProfileLabel } from "@/lib/feed";
 
-type FilterType = "profily" | "prispevky" | "videa" | "akcie";
+type CategoryFilter =
+  | "ZDRAVA_VYZIVA"
+  | "SPONZORI"
+  | "DIAGNOZY"
+  | "NOVINKY"
+  | "AKCIE"
+  | null;
+
 type SearchResult = Awaited<ReturnType<typeof searchTabAction>> & { ok: true };
 
-const FILTERS: { id: FilterType; label: string }[] = [
-  { id: "profily", label: "Profily" },
-  { id: "prispevky", label: "Príspevky" },
-  { id: "videa", label: "Videá" },
-  { id: "akcie", label: "Akcie" },
+const CATEGORY_FILTERS: { id: CategoryFilter; label: string }[] = [
+  { id: null, label: "Všetky" },
+  { id: "ZDRAVA_VYZIVA", label: "Zdravá výživa" },
+  { id: "SPONZORI", label: "Sponzori" },
+  { id: "DIAGNOZY", label: "Diagnózy" },
+  { id: "NOVINKY", label: "Novinky" },
+  { id: "AKCIE", label: "Akcie" },
 ];
 
 function ProfileList({
@@ -30,7 +34,7 @@ function ProfileList({
   if (profiles.length === 0) {
     return (
       <p className="mx-5 mt-6 text-center text-sm text-brand-purple/50">
-        Žiadne profily
+        Žiadne profily v tejto kategórii.
       </p>
     );
   }
@@ -71,19 +75,14 @@ function ProfileList({
   );
 }
 
-function EmptyState({ query }: { query: string }) {
-  return (
-    <div className="mx-5 mt-4 rounded-3xl bg-white p-6 text-center text-xs text-brand-purple/70 shadow-card">
-      {query ? `Pre „${query}" sme nič nenašli.` : "Zatiaľ žiadny obsah."}
-    </div>
-  );
-}
-
 function LoadingSkeleton() {
   return (
     <div className="flex flex-col px-5 py-2">
       {[1, 2, 3, 4].map((i) => (
-        <div key={i} className="flex animate-pulse items-center gap-4 py-3.5 border-b border-brand-purple/6 last:border-0">
+        <div
+          key={i}
+          className="flex animate-pulse items-center gap-4 border-b border-brand-purple/6 py-3.5 last:border-0"
+        >
           <div className="h-14 w-14 shrink-0 rounded-full bg-brand-purple/10" />
           <div className="flex-1 space-y-2">
             <div className="h-3.5 w-32 rounded-full bg-brand-purple/10" />
@@ -97,51 +96,55 @@ function LoadingSkeleton() {
 
 export function SearchTabPanel() {
   const [query, setQuery] = useState("");
-  const [activeFilter, setActiveFilter] = useState<FilterType>("profily");
+  const [activeCategory, setActiveCategory] = useState<CategoryFilter>(null);
   const [result, setResult] = useState<SearchResult | null>(null);
   const [, startTransition] = useTransition();
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    searchTabAction("").then((res) => {
+    searchTabAction("", null).then((res) => {
       if (res.ok) setResult(res as SearchResult);
     });
   }, []);
 
-  const handleInput = (value: string) => {
-    setQuery(value);
+  const doSearch = (q: string, cat: CategoryFilter) => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       startTransition(() => {
-        void searchTabAction(value).then((res) => {
+        void searchTabAction(q, cat).then((res) => {
           if (res.ok) setResult(res as SearchResult);
         });
       });
     }, 300);
   };
 
-  const followingIds = new Set(result?.followingProfileIds ?? []);
-  const likedIds = new Set(result?.likedPostIds ?? []);
-  const savedIds = new Set(result?.savedPostIds ?? []);
-  const registeredIds = new Set(result?.registeredEventIds ?? []);
-  const [firstName, ...rest] = (result?.userName ?? " ").split(" ");
-  const lastName = rest.join(" ");
+  const handleInput = (value: string) => {
+    setQuery(value);
+    doSearch(value, activeCategory);
+  };
 
+  const handleCategory = (cat: CategoryFilter) => {
+    setActiveCategory(cat);
+    startTransition(() => {
+      void searchTabAction(query, cat).then((res) => {
+        if (res.ok) setResult(res as SearchResult);
+      });
+    });
+  };
+
+  const followingIds = new Set(result?.followingProfileIds ?? []);
   const profiles = result?.profiles ?? [];
-  const allPosts = result?.posts ?? [];
-  const events = result?.events ?? [];
-  const videoPosts = allPosts.filter((p) => p.type === "VIDEO");
 
   return (
     <>
-      {/* Searchbar — biely, výrazný */}
+      {/* Searchbar */}
       <section className="px-5 pb-4 pt-4">
         <div className="flex items-center gap-3 rounded-full border border-brand-purple/12 bg-white px-6 py-4 shadow-md">
           <input
             ref={inputRef}
             type="search"
-            placeholder="Hľadať..."
+            placeholder="Hľadať profily..."
             value={query}
             onChange={(e) => handleInput(e.target.value)}
             className="flex-1 bg-transparent text-base font-medium text-brand-purple placeholder-brand-purple/35 outline-none"
@@ -157,11 +160,21 @@ export function SearchTabPanel() {
               className="shrink-0 text-brand-purple/40"
             >
               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
-                <path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                <path
+                  d="M6 6l12 12M6 18L18 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
               </svg>
             </button>
           ) : (
-            <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-brand-purple/40" fill="none" aria-hidden>
+            <svg
+              viewBox="0 0 24 24"
+              className="h-5 w-5 shrink-0 text-brand-purple/40"
+              fill="none"
+              aria-hidden
+            >
               <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
               <path d="M21 21l-4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             </svg>
@@ -169,16 +182,16 @@ export function SearchTabPanel() {
         </div>
       </section>
 
-      {/* Filter chips */}
+      {/* Kategórie */}
       <section className="pb-4 pl-5">
         <div className="no-scrollbar flex items-center gap-2.5 overflow-x-auto pr-5">
-          {FILTERS.map((f) => (
+          {CATEGORY_FILTERS.map((f) => (
             <button
-              key={f.id}
+              key={f.id ?? "vsetky"}
               type="button"
-              onClick={() => setActiveFilter(f.id)}
+              onClick={() => handleCategory(f.id)}
               className={`shrink-0 rounded-full px-5 py-2.5 text-sm font-bold transition ${
-                activeFilter === f.id
+                activeCategory === f.id
                   ? "bg-brand-pink text-white shadow-sm"
                   : "border-2 border-brand-purple/15 text-brand-purple/70 hover:bg-brand-purple/5"
               }`}
@@ -189,104 +202,13 @@ export function SearchTabPanel() {
         </div>
       </section>
 
-      {/* Výsledky */}
+      {/* Zoznam profilov */}
       <section className="pb-6">
         {!result ? (
           <LoadingSkeleton />
-        ) : activeFilter === "profily" ? (
+        ) : (
           <ProfileList profiles={profiles} followingIds={followingIds} />
-        ) : activeFilter === "prispevky" ? (
-          allPosts.length === 0 ? (
-            <EmptyState query={query} />
-          ) : (
-            allPosts.map((p) => {
-              const label = defaultProfileLabel(p.profile);
-              return (
-                <div key={p.id}>
-                  <FeedProfileHeader
-                    profileId={p.profile?.id}
-                    isFollowing={p.profile ? followingIds.has(p.profile.id) : false}
-                    {...label}
-                  />
-                  <FeedPostItem
-                    postId={p.id}
-                    href={postPublicHref(p)}
-                    type={p.type}
-                    title={p.title}
-                    excerpt={p.excerpt}
-                    imageUrls={buildPostGallery(p.coverUrl, p.images)}
-                    videoUrl={p.videoUrl ?? null}
-                    audioUrl={p.audioUrl ?? null}
-                    liked={likedIds.has(p.id)}
-                    likeCount={p._count.likes}
-                    commentCount={p._count.comments}
-                    saved={savedIds.has(p.id)}
-                  />
-                </div>
-              );
-            })
-          )
-        ) : activeFilter === "videa" ? (
-          videoPosts.length === 0 ? (
-            <EmptyState query={query} />
-          ) : (
-            videoPosts.map((p) => {
-              const label = defaultProfileLabel(p.profile);
-              return (
-                <div key={p.id}>
-                  <FeedProfileHeader
-                    profileId={p.profile?.id}
-                    isFollowing={p.profile ? followingIds.has(p.profile.id) : false}
-                    {...label}
-                  />
-                  <FeedPostItem
-                    postId={p.id}
-                    href={postPublicHref(p)}
-                    type={p.type}
-                    title={p.title}
-                    excerpt={p.excerpt}
-                    imageUrls={buildPostGallery(p.coverUrl, p.images)}
-                    videoUrl={p.videoUrl ?? null}
-                    audioUrl={p.audioUrl ?? null}
-                    liked={likedIds.has(p.id)}
-                    likeCount={p._count.likes}
-                    commentCount={p._count.comments}
-                    saved={savedIds.has(p.id)}
-                  />
-                </div>
-              );
-            })
-          )
-        ) : activeFilter === "akcie" ? (
-          events.length === 0 ? (
-            <EmptyState query={query} />
-          ) : (
-            events.map((e) => {
-              const label = defaultProfileLabel(e.profile);
-              return (
-                <div key={e.id}>
-                  <FeedProfileHeader
-                    profileId={e.profile?.id}
-                    isFollowing={e.profile ? followingIds.has(e.profile.id) : false}
-                    {...label}
-                  />
-                  <FeedEventItem
-                    id={e.id}
-                    title={e.title}
-                    description={e.description}
-                    startsAt={e.startsAt.toISOString()}
-                    endsAt={e.endsAt?.toISOString() ?? null}
-                    location={e.location}
-                    coverUrl={e.coverUrl}
-                    isRegistered={registeredIds.has(e.id)}
-                    defaultName={firstName ?? ""}
-                    defaultSurname={lastName}
-                  />
-                </div>
-              );
-            })
-          )
-        ) : null}
+        )}
       </section>
     </>
   );

@@ -139,15 +139,24 @@ model UserProfile {
 
 // ---------------- Club profiles (Instagram-style, admin-managed) ----------------
 
+enum ProfileCategory {
+  ZDRAVA_VYZIVA
+  SPONZORI
+  DIAGNOZY
+  NOVINKY
+  AKCIE
+}
+
 model ClubProfile {
-  id          String   @id @default(cuid())
-  handle      String   @unique // URL slug, e.g. "onko-yoga"
+  id          String           @id @default(cuid())
+  handle      String           @unique // URL slug, e.g. "onko-yoga"
   displayName String
   bio         String?
   avatarUrl   String?
   coverUrl    String?
-  published   Boolean  @default(true)
-  sortOrder   Int      @default(0)
+  published   Boolean          @default(true)
+  sortOrder   Int              @default(0)
+  category    ProfileCategory?
   // Empty = general (everyone); otherwise targeted to these cancer types.
   cancerTypes CancerType[] @default([])
 
@@ -159,6 +168,7 @@ model ClubProfile {
   updatedAt DateTime @updatedAt
 
   @@index([published, sortOrder])
+  @@index([category, published])
 }
 
 // ---------------- Discount partners (Zľavy) ----------------

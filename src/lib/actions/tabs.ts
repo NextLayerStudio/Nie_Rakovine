@@ -14,7 +14,7 @@ import {
   feedPostSelect,
   feedEventSelect,
 } from "@/lib/feed-queries";
-import type { CancerType } from "@prisma/client";
+import type { CancerType, ProfileCategory } from "@prisma/client";
 
 /** Single DB call that combines auth + profile — replaces 2 sequential queries. */
 async function getTabUser() {
@@ -181,13 +181,14 @@ export async function fetchCalendarTabAction() {
   };
 }
 
-export async function searchTabAction(query: string) {
+export async function searchTabAction(query: string, category?: string | null) {
   const q = query.trim();
   const ci = (field: string) =>
     ({ [field]: { contains: q, mode: "insensitive" as const } });
 
   const profileWhere = {
     published: true,
+    ...(category ? { category: category as ProfileCategory } : {}),
     ...(q ? { OR: [ci("displayName"), ci("handle"), ci("bio")] } : {}),
   };
   const postWhere = {

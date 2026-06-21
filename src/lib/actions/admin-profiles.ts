@@ -6,6 +6,19 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
 import { parseCancerTypes } from "@/lib/cancer-type";
 import { resolveImageField } from "@/lib/uploads";
+import type { ProfileCategory } from "@prisma/client";
+
+const VALID_CATEGORIES = new Set<string>([
+  "ZDRAVA_VYZIVA",
+  "SPONZORI",
+  "DIAGNOZY",
+  "NOVINKY",
+  "AKCIE",
+]);
+
+function parseCategory(raw: string): ProfileCategory | null {
+  return VALID_CATEGORIES.has(raw) ? (raw as ProfileCategory) : null;
+}
 
 export type ActionState = { ok: boolean; message?: string };
 
@@ -30,6 +43,7 @@ export async function createClubProfileAction(
   const bio = String(formData.get("bio") ?? "").trim() || null;
   const published = formData.get("published") === "on";
   const cancerTypes = parseCancerTypes(formData.getAll("cancerTypes"));
+  const category = parseCategory(String(formData.get("category") ?? "").trim());
 
   if (!displayName || !handle) {
     return { ok: false, message: "Zadajte meno a identifikátor profilu." };
@@ -63,7 +77,7 @@ export async function createClubProfileAction(
   }
 
   await prisma.clubProfile.create({
-    data: { handle, displayName, bio, avatarUrl, coverUrl, published, cancerTypes },
+    data: { handle, displayName, bio, avatarUrl, coverUrl, published, cancerTypes, category },
   });
 
   revalidatePath("/admin/profiles");
@@ -83,6 +97,7 @@ export async function updateClubProfileAction(
   const bio = String(formData.get("bio") ?? "").trim() || null;
   const published = formData.get("published") === "on";
   const cancerTypes = parseCancerTypes(formData.getAll("cancerTypes"));
+  const category = parseCategory(String(formData.get("category") ?? "").trim());
 
   if (!id || !displayName || !handle) {
     return { ok: false, message: "Vyplňte povinné polia." };
@@ -128,7 +143,7 @@ export async function updateClubProfileAction(
 
   await prisma.clubProfile.update({
     where: { id },
-    data: { handle, displayName, bio, avatarUrl, coverUrl, published, cancerTypes },
+    data: { handle, displayName, bio, avatarUrl, coverUrl, published, cancerTypes, category },
   });
 
   revalidatePath("/admin/profiles");
