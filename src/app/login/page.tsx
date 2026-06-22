@@ -1,4 +1,4 @@
-import { NieRakovineMark, OnkoLogo } from "@/components/OnkoLogo";
+import { NieRakovineLogo, NieRakovineMark } from "@/components/OnkoLogo";
 import { PhoneShell } from "@/components/PhoneShell";
 import { TopBar } from "@/components/TopBar";
 import { LoginForm } from "./LoginForm";
@@ -30,7 +30,7 @@ export default async function LoginPage({
       <LoginForm next={next} isAdminLogin={isAdminLogin} />
 
       <div className="flex items-end justify-between gap-4 px-6 pb-8 pt-4">
-        <OnkoLogo showWordmark={false} size="sm" />
+        <NieRakovineLogo />
         <NieRakovineMark />
       </div>
     </PhoneShell>
