@@ -132,11 +132,11 @@ function CardFace({
         {/* Header row */}
         <div className="flex items-center justify-between">
           <Image
-            src="/logo/Nie_Rakovine_logo.webp"
-            alt="NIE RAKOVINE"
-            width={110}
-            height={38}
-            className="h-[20px] w-auto brightness-0 invert opacity-85"
+            src="/logo/onkoklub-horizontal.png"
+            alt="ONKO KLUB"
+            width={277}
+            height={91}
+            className="h-[18px] w-auto brightness-0 invert opacity-85"
           />
           <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-white/40">
             ONKO KLUB

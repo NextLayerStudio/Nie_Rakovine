@@ -1,80 +1,104 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-/** @deprecated variant is kept for API compatibility; same asset is used everywhere. */
-type Variant = "color" | "white";
+// vertical.png — 142×161 — hlavné logo (loading, welcome, register done)
+const VERTICAL_SRC = "/logo/onkoklub-vertical.png";
+// horizontal2.png — 232×110 — stredné logo (login footer, loading footer)
+const HORIZONTAL2_SRC = "/logo/onkoklub-horizontal2.png";
+// horizontal.png — 277×91 — najširšie logo (karta, wide header)
+const HORIZONTAL_SRC = "/logo/onkoklub-horizontal.png";
 
-const ONKO_SRC = "/logo/Onko_klub_logo.webp";
-const NIE_SRC = "/logo/Nie_Rakovine_logo.webp";
-
-const onkoSizeClass = {
-  sm: "w-[72px] max-w-[88px]",
-  md: "w-[min(72vw,260px)] max-w-[300px]",
-  lg: "w-[min(82vw,300px)] max-w-[360px]",
-  xl: "w-[min(88vw,340px)] max-w-[380px]",
+const verticalSizeClass = {
+  sm: "w-[64px]",
+  md: "w-[min(60vw,180px)]",
+  lg: "w-[min(72vw,240px)]",
+  xl: "w-[min(82vw,280px)]",
 } as const;
 
-const nieSizeClass = {
-  sm: "w-[100px] sm:w-[115px]",
-  md: "w-[120px] sm:w-[140px]",
+const horizontal2SizeClass = {
+  sm: "w-[110px]",
+  md: "w-[150px]",
 } as const;
 
+const horizontalSizeClass = {
+  sm: "w-[120px]",
+  md: "w-[180px]",
+  lg: "w-[min(70vw,220px)]",
+} as const;
+
+/** Hlavné logo — vertikálne (srdce + onkoklub pod sebou). Vhodné pre splash, welcome, veľké centrálne použitie. */
 export function OnkoLogo({
   className,
-  variant: _variant = "color",
   size = "md",
-  showWordmark: _showWordmark = true,
   priority = false,
+  // deprecated props kept for API compat
+  variant: _variant,
+  showWordmark: _showWordmark,
 }: {
   className?: string;
-  variant?: Variant;
-  size?: keyof typeof onkoSizeClass;
-  /** @deprecated Full logo asset always includes wordmark. */
-  showWordmark?: boolean;
+  size?: keyof typeof verticalSizeClass;
   priority?: boolean;
+  /** @deprecated */
+  variant?: string;
+  /** @deprecated */
+  showWordmark?: boolean;
 }) {
-  const dim =
-    size === "xl"
-      ? { w: 380, h: 435 }
-      : size === "lg"
-        ? { w: 360, h: 410 }
-        : size === "md"
-          ? { w: 300, h: 345 }
-          : { w: 88, h: 100 };
-
   return (
     <Image
-      src={ONKO_SRC}
+      src={VERTICAL_SRC}
       alt="ONKO KLUB"
-      width={dim.w}
-      height={dim.h}
+      width={142}
+      height={161}
       priority={priority}
-      className={cn("h-auto object-contain", onkoSizeClass[size], className)}
+      className={cn("h-auto object-contain", verticalSizeClass[size], className)}
     />
   );
 }
 
+/** Stredné horizontálne logo — srdce + text vedľa seba. Vhodné pre footer, login, loading bar. */
 export function NieRakovineMark({
   className,
-  variant: _variant = "color",
   size = "sm",
+  priority = false,
+  // deprecated
+  variant: _variant,
+}: {
+  className?: string;
+  size?: keyof typeof horizontal2SizeClass;
+  priority?: boolean;
+  /** @deprecated */
+  variant?: string;
+}) {
+  return (
+    <Image
+      src={HORIZONTAL2_SRC}
+      alt="ONKO KLUB"
+      width={232}
+      height={110}
+      priority={priority}
+      className={cn("h-auto object-contain", horizontal2SizeClass[size], className)}
+    />
+  );
+}
+
+/** Najširšie horizontálne logo — celý nápis "onkOKlub". Vhodné pre kartu a wide header. */
+export function OnkoLogoWide({
+  className,
+  size = "md",
   priority = false,
 }: {
   className?: string;
-  variant?: Variant;
-  size?: keyof typeof nieSizeClass;
+  size?: keyof typeof horizontalSizeClass;
   priority?: boolean;
 }) {
-  const dim = size === "md" ? { w: 140, h: 48 } : { w: 115, h: 40 };
-
   return (
     <Image
-      src={NIE_SRC}
-      alt="NIE RAKOVINE"
-      width={dim.w}
-      height={dim.h}
+      src={HORIZONTAL_SRC}
+      alt="ONKO KLUB"
+      width={277}
+      height={91}
       priority={priority}
-      className={cn("h-auto object-contain", nieSizeClass[size], className)}
+      className={cn("h-auto object-contain", horizontalSizeClass[size], className)}
     />
   );
 }
