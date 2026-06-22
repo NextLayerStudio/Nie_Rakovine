@@ -30,8 +30,8 @@ export function ClubProfileForm({
     <form action={formAction} className="max-w-2xl space-y-6">
       {profile && <input type="hidden" name="id" value={profile.id} />}
 
-      <fieldset className="admin-card space-y-4 p-6">
-        <legend className="admin-section-title px-1">Základné údaje</legend>
+      <fieldset className="admin-fieldset">
+        <legend>Základné údaje</legend>
         <Field
           label="Zobrazované meno"
           name="displayName"
@@ -81,8 +81,8 @@ export function ClubProfileForm({
         </div>
       </fieldset>
 
-      <fieldset className="admin-card space-y-4 p-6">
-        <legend className="admin-section-title px-1">Obrázky</legend>
+      <fieldset className="admin-fieldset">
+        <legend>Obrázky</legend>
         <AdminImageField
           name="avatarUrl"
           uploadName="avatarFile"

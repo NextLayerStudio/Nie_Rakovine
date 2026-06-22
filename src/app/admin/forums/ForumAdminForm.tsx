@@ -29,8 +29,8 @@ export function ForumAdminForm({
     <form action={formAction} className="max-w-2xl space-y-6">
       {forum && <input type="hidden" name="id" value={forum.id} />}
 
-      <fieldset className="admin-card space-y-4 p-6">
-        <legend className="admin-section-title px-1">Detail fóra</legend>
+      <fieldset className="admin-fieldset">
+        <legend>Detail fóra</legend>
         <label className="block">
           <span className="admin-label">Názov fóra</span>
           <input
@@ -61,8 +61,8 @@ export function ForumAdminForm({
         </div>
       </fieldset>
 
-      <fieldset className="admin-card space-y-4 p-6">
-        <legend className="admin-section-title px-1">Vzhľad</legend>
+      <fieldset className="admin-fieldset">
+        <legend>Vzhľad</legend>
         <AdminImageField
           name="imageUrl"
           label="Profilová fotka fóra"

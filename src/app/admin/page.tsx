@@ -70,7 +70,7 @@ export default async function AdminDashboard() {
         <Kpi
           label="Na schválenie"
           value={pending}
-          sub="fóra a príspevky vo fóre"
+          sub="príspevky vo fóre"
           accent={pending > 0 ? "pink" : "purple"}
           href={pending > 0 ? "/admin/forums/moderation" : undefined}
         />

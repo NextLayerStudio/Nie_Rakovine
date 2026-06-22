@@ -1,0 +1,202 @@
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
+import { fetchForumSearchHintsAction } from "@/lib/actions/forum-search";
+import { forumAvatarStyle } from "@/lib/avatar-style";
+
+type Filter = "all" | "following" | "popular";
+
+type Hint = {
+  id: string;
+  title: string;
+  imageUrl: string | null;
+  accentColor: string | null;
+  memberCount: number;
+};
+
+export function ForumSearchBar({
+  defaultQuery = "",
+  filter = "all",
+  autoFocus = false,
+}: {
+  defaultQuery?: string;
+  filter?: Filter;
+  autoFocus?: boolean;
+}) {
+  const router = useRouter();
+  const listId = useId();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [query, setQuery] = useState(defaultQuery);
+  const [hints, setHints] = useState<Hint[]>([]);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [, startTransition] = useTransition();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    setQuery(defaultQuery);
+  }, [defaultQuery]);
+
+  useEffect(() => {
+    const onPointerDown = (e: MouseEvent) => {
+      if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    return () => document.removeEventListener("mousedown", onPointerDown);
+  }, []);
+
+  const loadHints = (value: string) => {
+    const trimmed = value.trim();
+    if (trimmed.length < 1) {
+      setHints([]);
+      setOpen(false);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    setOpen(true);
+    startTransition(() => {
+      void fetchForumSearchHintsAction(trimmed).then((res) => {
+        if (res.ok) setHints(res.hints);
+        setLoading(false);
+      });
+    });
+  };
+
+  const handleChange = (value: string) => {
+    setQuery(value);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => loadHints(value), 200);
+  };
+
+  const goToForum = (id: string) => {
+    setOpen(false);
+    router.push(`/home/forums/${id}`);
+  };
+
+  const resultsHref = (() => {
+    const params = new URLSearchParams();
+    if (query.trim()) params.set("q", query.trim());
+    if (filter !== "all") params.set("f", filter);
+    const qs = params.toString();
+    return qs ? `/home/forums/search?${qs}` : "/home/forums/search";
+  })();
+
+  const showPanel = open && query.trim().length > 0;
+
+  return (
+    <form
+      action="/home/forums/search"
+      method="get"
+      className="relative"
+      onSubmit={() => setOpen(false)}
+    >
+      <div ref={rootRef} className="relative">
+        {filter !== "all" && <input type="hidden" name="f" value={filter} />}
+        <input
+          name="q"
+          type="search"
+          value={query}
+          onChange={(e) => handleChange(e.target.value)}
+          onFocus={() => {
+            if (query.trim().length > 0) {
+              setOpen(true);
+              loadHints(query);
+            }
+          }}
+          placeholder="Názov alebo popis fóra…"
+          autoFocus={autoFocus}
+          autoComplete="off"
+          aria-autocomplete="list"
+          aria-controls={showPanel ? listId : undefined}
+          aria-expanded={showPanel}
+          className="forum-search"
+        />
+        <button
+          type="submit"
+          aria-label="Hľadať"
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-purple/60"
+        >
+          <SearchIcon />
+        </button>
+
+        {showPanel && (
+          <ul
+            id={listId}
+            role="listbox"
+            className="absolute left-0 right-0 top-[calc(100%+6px)] z-20 max-h-64 overflow-y-auto rounded-2xl border border-brand-purple/10 bg-white py-1 shadow-card"
+          >
+            {loading && hints.length === 0 && (
+              <li className="px-4 py-3 text-sm text-brand-purple/50">
+                Hľadám…
+              </li>
+            )}
+            {!loading && hints.length === 0 && (
+              <li className="px-4 py-3 text-sm text-brand-purple/50">
+                Nenašli sme žiadne fóra.
+              </li>
+            )}
+            {hints.map((hint) => (
+              <li key={hint.id} role="option">
+                <button
+                  type="button"
+                  onClick={() => goToForum(hint.id)}
+                  className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition hover:bg-brand-purple/5"
+                >
+                  <div
+                    className="h-10 w-10 shrink-0 overflow-hidden rounded-xl bg-cover bg-center ring-1 ring-brand-purple/10"
+                    style={forumAvatarStyle(hint)}
+                    aria-hidden
+                  />
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-semibold text-brand-purple">
+                      {hint.title}
+                    </span>
+                    <span className="block text-[11px] text-brand-purple/55">
+                      {hint.memberCount}{" "}
+                      {hint.memberCount === 1 ? "člen" : "členov"}
+                    </span>
+                  </span>
+                </button>
+              </li>
+            ))}
+            {!loading && hints.length > 0 && (
+              <li className="border-t border-brand-purple/8 px-3 py-2">
+                <Link
+                  href={resultsHref}
+                  className="block text-center text-xs font-semibold text-brand-purple/70 hover:text-brand-purple"
+                  onClick={() => setOpen(false)}
+                >
+                  Zobraziť všetky výsledky
+                </Link>
+              </li>
+            )}
+          </ul>
+        )}
+      </div>
+    </form>
+  );
+}
+
+function SearchIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+      <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
+      <path
+        d="M21 21l-4-4"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}

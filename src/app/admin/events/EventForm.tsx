@@ -46,8 +46,8 @@ export function EventForm({
         />
       )}
 
-      <fieldset className="admin-card space-y-4 p-6">
-        <legend className="admin-section-title px-1">Detail podujatia</legend>
+      <fieldset className="admin-fieldset">
+        <legend>Detail podujatia</legend>
         <Field label="Názov" name="title" defaultValue={event?.title} />
         <Field
           label="Krátky popis"
@@ -88,8 +88,8 @@ export function EventForm({
         </div>
       </fieldset>
 
-      <fieldset className="admin-card space-y-4 p-6">
-        <legend className="admin-section-title px-1">Miesto</legend>
+      <fieldset className="admin-fieldset">
+        <legend>Miesto</legend>
         <label className="block">
           <span className="admin-label">Miesto (adresa)</span>
           <input
@@ -118,10 +118,8 @@ export function EventForm({
         </div>
       </fieldset>
 
-      <fieldset className="admin-card space-y-4 p-6">
-        <legend className="admin-section-title px-1">
-          Cielenie a kapacita
-        </legend>
+      <fieldset className="admin-fieldset">
+        <legend>Cielenie a kapacita</legend>
         <div>
           <span className="admin-label">Pre typ rakoviny</span>
           <CancerTypeSelect

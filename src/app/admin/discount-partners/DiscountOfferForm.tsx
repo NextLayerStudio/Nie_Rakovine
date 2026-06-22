@@ -36,8 +36,8 @@ export function DiscountOfferForm({
       <input type="hidden" name="partnerId" value={partnerId} />
       {offer && <input type="hidden" name="id" value={offer.id} />}
 
-      <fieldset className="admin-card space-y-4 p-6">
-        <legend className="admin-section-title px-1">Zľavová karta</legend>
+      <fieldset className="admin-fieldset">
+        <legend>Zľavová karta</legend>
         <Field label="Názov / popis zľavy" name="title" defaultValue={offer?.title} required />
         <Field
           label="Detail zľavy"

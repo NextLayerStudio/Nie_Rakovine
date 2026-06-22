@@ -6,17 +6,28 @@ import { PhoneShell } from "@/components/PhoneShell";
 export default function WelcomePage() {
   return (
     <PhoneShell>
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-white">
-        <div className="welcome-content flex flex-col items-center px-8 pb-12">
+      <div className="flex min-h-0 flex-1 flex-col bg-white">
+        <div className="welcome-top flex shrink-0 justify-center px-8">
           <NieRakovineMark priority />
+        </div>
 
-          <OnkoLogo size="lg" priority className="welcome-logo max-h-[300px] w-auto mt-4" />
+        <div className="flex flex-1 items-center justify-center px-8">
+          <OnkoLogo
+            size="xl"
+            priority
+            className="welcome-logo max-h-[360px] w-auto"
+          />
+        </div>
 
-          <p className="text-center text-lg leading-relaxed text-brand-purple/80 -mt-2 relative z-10">
+        <div
+          className="welcome-bottom shrink-0 px-8"
+          style={{ paddingBottom: "max(3rem, env(safe-area-inset-bottom))" }}
+        >
+          <p className="mb-5 text-center text-base leading-relaxed text-brand-purple/80">
             Miesto podpory a porozumenia na ceste s onkologickým ochorením.
           </p>
 
-          <div className="welcome-buttons w-full flex flex-col gap-3 mt-4 relative z-10">
+          <div className="welcome-buttons flex w-full flex-col gap-3">
             <Link
               href="/login"
               className="rounded-pill bg-brand-pink py-5 text-center text-xl font-bold text-white shadow-soft transition hover:brightness-105 active:scale-[0.99]"

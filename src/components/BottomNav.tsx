@@ -8,7 +8,7 @@ const items = [
   { href: "/home", label: "Domov", icon: HomeIcon },
   { href: "/home/forums", label: "Fóra", icon: ForumIcon },
   { href: "/home/search", label: "Hľadať", icon: SearchIcon },
-  { href: "/home/calendar", label: "Kalendár", icon: CalendarIcon },
+  { href: "/home/calendar", label: "Aktivity", icon: CalendarIcon },
 ];
 
 /** Hide nav on forum thread chat so the comment bar has full focus. */
@@ -19,10 +19,15 @@ function isForumThreadChat(pathname: string | null): boolean {
   return match[2] !== "new";
 }
 
+/** Full-screen menu hub — bottom tabs would overlap the menu panel. */
+function isMenuHub(pathname: string | null): boolean {
+  return pathname === "/menu";
+}
+
 export function BottomNav() {
   const pathname = usePathname();
 
-  if (isForumThreadChat(pathname)) return null;
+  if (isForumThreadChat(pathname) || isMenuHub(pathname)) return null;
 
   return (
     <nav

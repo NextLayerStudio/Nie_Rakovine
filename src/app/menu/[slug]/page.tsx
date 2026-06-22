@@ -7,6 +7,7 @@ import { TopBar } from "@/components/TopBar";
 const REDIRECTS: Record<string, string> = {
   "kontent-kniznica": "/home/kniznica",
   "zlavova-karta": "/menu/zlavova-karta",
+  aktivity: "/home/calendar",
 };
 
 const LABELS: Record<string, string> = {

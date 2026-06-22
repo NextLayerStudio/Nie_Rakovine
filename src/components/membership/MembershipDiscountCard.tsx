@@ -33,10 +33,17 @@ export function MembershipDiscountCard({
 
   return (
     <>
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         onClick={() => setZoomed(true)}
-        className={`block w-full text-left${className ? ` ${className}` : ""}`}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setZoomed(true);
+          }
+        }}
+        className={`block w-full cursor-pointer text-left${className ? ` ${className}` : ""}`}
         aria-label="Zobraziť zľavovú kartu"
       >
         <CardFace
@@ -52,7 +59,7 @@ export function MembershipDiscountCard({
             onPhotoClick?.();
           }}
         />
-      </button>
+      </div>
 
       {zoomed &&
         typeof document !== "undefined" &&

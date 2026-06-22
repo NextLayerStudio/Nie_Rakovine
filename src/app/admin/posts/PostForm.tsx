@@ -43,8 +43,8 @@ export function PostForm({
         />
       )}
 
-      <fieldset className="admin-card space-y-4 p-6">
-        <legend className="admin-section-title px-1">Obsah</legend>
+      <fieldset className="admin-fieldset">
+        <legend>Obsah</legend>
         <label className="block">
           <span className="admin-label">Typ</span>
           <select
@@ -74,8 +74,8 @@ export function PostForm({
         />
       </fieldset>
 
-      <fieldset className="admin-card space-y-4 p-6">
-        <legend className="admin-section-title px-1">Médiá a cielenie</legend>
+      <fieldset className="admin-fieldset">
+        <legend>Médiá a cielenie</legend>
         <AdminImageField
           name="coverUrl"
           uploadName="coverFile"

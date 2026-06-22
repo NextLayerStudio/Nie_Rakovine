@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { BottomNav } from "@/components/BottomNav";
 import { MenuInformacie } from "@/components/MenuInformacie";
 import { PhoneShell } from "@/components/PhoneShell";
 import { requireUser } from "@/lib/auth";
@@ -12,7 +11,7 @@ const MAIN_ITEMS = [
   { href: "/profile", label: "Môj profil", icon: "user" as const },
   { href: "/home/kniznica", label: "Kontent knižnica", icon: "library" as const },
   { href: "/home/zlavy", label: "Zľavy", icon: "percent" as const },
-  { href: "/menu/aktivity", label: "Aktivity", icon: "calendar" as const },
+  { href: "/home/calendar", label: "Aktivity", icon: "calendar" as const },
   { href: "/home/forums", label: "Fóra", icon: "forum" as const },
 ] as const;
 
@@ -25,7 +24,10 @@ export default async function MenuPage() {
 
   return (
     <PhoneShell>
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-brand-pink pb-[calc(5.5rem+env(safe-area-inset-bottom))] text-white">
+      <div
+        className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-brand-pink text-white"
+        style={{ paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))" }}
+      >
         <header className="flex items-center justify-between px-5 pt-6 pb-4">
           <Link href="/profile" className="flex items-center gap-3">
             <div
@@ -151,7 +153,6 @@ export default async function MenuPage() {
           </form>
         </div>
       </div>
-      <BottomNav />
     </PhoneShell>
   );
 }

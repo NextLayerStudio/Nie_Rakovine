@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
 import { ForumFollowButton } from "@/components/ForumFollowButton";
+import { ForumSearchBar } from "@/components/forums/ForumSearchBar";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { forumAvatarStyle } from "@/lib/avatar-style";
@@ -74,34 +75,7 @@ export default async function ForumSearchPage({
       </section>
 
       <section className="px-5 pb-2">
-        <form action="/home/forums/search" method="get" className="relative">
-          {filter !== "all" && (
-            <input type="hidden" name="f" value={filter} />
-          )}
-          <input
-            name="q"
-            type="search"
-            defaultValue={query}
-            placeholder="Názov alebo popis fóra…"
-            autoFocus
-            className="forum-search"
-          />
-          <button
-            type="submit"
-            aria-label="Hľadať"
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-purple/60"
-          >
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
-              <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
-              <path
-                d="M21 21l-4-4"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </button>
-        </form>
+        <ForumSearchBar defaultQuery={query} filter={filter} autoFocus />
 
         <div className="no-scrollbar mt-4 flex items-center gap-2 overflow-x-auto pb-1">
           <span className="forum-section-label shrink-0">Filter</span>
