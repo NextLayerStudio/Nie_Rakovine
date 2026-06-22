@@ -15,6 +15,7 @@ export function FeedEventItem({
   location,
   coverUrl,
   isRegistered,
+  registrationCount,
   defaultName,
   defaultSurname,
 }: {
@@ -26,6 +27,7 @@ export function FeedEventItem({
   location: string | null;
   coverUrl: string | null;
   isRegistered: boolean;
+  registrationCount?: number;
   defaultName: string;
   defaultSurname: string;
 }) {
@@ -39,9 +41,12 @@ export function FeedEventItem({
       }
     : { background: "linear-gradient(180deg, #f3c3a2 0%, #d98c80 100%)" };
 
-  const date = new Intl.DateTimeFormat("sk-SK", {
+  const dateFormatted = new Intl.DateTimeFormat("sk-SK", {
     day: "numeric",
     month: "long",
+  }).format(new Date(startsAt));
+
+  const timeFormatted = new Intl.DateTimeFormat("sk-SK", {
     hour: "2-digit",
     minute: "2-digit",
   }).format(new Date(startsAt));
@@ -55,7 +60,7 @@ export function FeedEventItem({
     location,
     coverUrl,
     isRegistered,
-    registrationCount: 0,
+    registrationCount: registrationCount ?? 0,
     capacity: null,
     defaultName,
     defaultSurname,
@@ -64,6 +69,7 @@ export function FeedEventItem({
   return (
     <>
       <article className="border-b border-brand-purple/10">
+        {/* Obrázok s tlačidlom dole-vľavo */}
         <button
           type="button"
           onClick={() => setOpen(true)}
@@ -73,36 +79,56 @@ export function FeedEventItem({
             className="aspect-[4/3] max-h-[220px] w-full bg-cover bg-center"
             style={cover}
           />
-          <span className="absolute right-4 top-4 rounded-pill bg-white/90 px-3 py-1 text-[10px] font-medium text-brand-purple/70">
-            {date}
+          <span className="absolute bottom-3 left-3">
+            <span
+              className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold shadow-md backdrop-blur-sm ${
+                isRegistered
+                  ? "bg-emerald-500 text-white"
+                  : "bg-brand-purple text-white"
+              }`}
+            >
+              {isRegistered && <CheckIcon />}
+              {isRegistered ? "Prihlásený" : "Zaregistrovať sa"}
+            </span>
           </span>
         </button>
 
-        <div className="flex items-center justify-end px-4 py-2">
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            className="rounded-pill bg-brand-purple px-4 py-1.5 text-xs font-semibold text-white"
-          >
-            Zaregistrovať sa
-          </button>
-        </div>
-
-        <div className="px-4 pb-4">
+        {/* Textový obsah */}
+        <div className="px-4 pb-4 pt-3">
           <button
             type="button"
             onClick={() => setOpen(true)}
             className="w-full text-left"
           >
             <h3 className="text-base font-bold text-brand-purple">{title}</h3>
+
+            {/* Meta riadok s ikonkami */}
+            <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+              <span className="flex items-center gap-1 text-xs text-brand-purple/55">
+                <CalendarIcon />
+                {dateFormatted}
+              </span>
+              <span className="flex items-center gap-1 text-xs text-brand-purple/55">
+                <ClockIcon />
+                {timeFormatted}
+              </span>
+              {location && (
+                <span className="flex items-center gap-1 text-xs text-brand-purple/55">
+                  <LocationIcon />
+                  <span className="max-w-[140px] truncate">{location}</span>
+                </span>
+              )}
+              {registrationCount !== undefined && (
+                <span className="flex items-center gap-1 text-xs text-brand-purple/55">
+                  <PeopleIcon />
+                  {registrationCount}
+                </span>
+              )}
+            </div>
+
             {description && (
-              <p className="mt-0.5 line-clamp-2 text-sm leading-relaxed text-brand-purple/70">
+              <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-brand-purple/70">
                 {description}
-              </p>
-            )}
-            {location && (
-              <p className="mt-1 text-xs text-brand-purple/55">
-                {location}
               </p>
             )}
           </button>
@@ -113,5 +139,52 @@ export function FeedEventItem({
         <EventDetailModal event={modalEvent} onClose={() => setOpen(false)} />
       )}
     </>
+  );
+}
+
+function CalendarIcon() {
+  return (
+    <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 shrink-0" fill="none" aria-hidden>
+      <rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M5 1v3M11 1v3M2 7h12" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function ClockIcon() {
+  return (
+    <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 shrink-0" fill="none" aria-hidden>
+      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M8 5v3.5l2.5 1.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function LocationIcon() {
+  return (
+    <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 shrink-0" fill="none" aria-hidden>
+      <path d="M8 1.5C5.79 1.5 4 3.29 4 5.5c0 3.25 4 9 4 9s4-5.75 4-9c0-2.21-1.79-3.5-4-4z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+      <circle cx="8" cy="5.5" r="1.5" stroke="currentColor" strokeWidth="1.2" />
+    </svg>
+  );
+}
+
+function PeopleIcon() {
+  return (
+    <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 shrink-0" fill="none" aria-hidden>
+      <path d="M11 13c0-2.21-1.343-4-3-4S5 10.79 5 13" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <circle cx="8" cy="5.5" r="2" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M13.5 13c0-1.66-1.007-3-2.25-3M2.5 13c0-1.66 1.007-3 2.25-3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <circle cx="11.5" cy="5" r="1.5" stroke="currentColor" strokeWidth="1.2" />
+      <circle cx="4.5" cy="5" r="1.5" stroke="currentColor" strokeWidth="1.2" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg viewBox="0 0 12 12" className="h-3 w-3 shrink-0" fill="none" aria-hidden>
+      <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }

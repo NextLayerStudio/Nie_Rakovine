@@ -50,6 +50,7 @@ export const feedEventSelect = {
   endsAt: true,
   cancerTypes: true,
   profile: { select: feedProfileSelect },
+  _count: { select: { registrations: true } },
 } satisfies Prisma.EventSelect;
 
 export const listPostSelect = {
