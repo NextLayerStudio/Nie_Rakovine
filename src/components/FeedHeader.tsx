@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { profileAvatarStyle } from "@/lib/avatar-style";
+import { cn } from "@/lib/utils";
 
 export function FeedHeader({
-  name: _name,
+  name,
   avatarUrl,
   unreadCount = 0,
 }: {
@@ -12,19 +14,48 @@ export function FeedHeader({
   avatarUrl?: string | null;
   unreadCount?: number;
 }) {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const el = document.querySelector("[data-app-scroll]");
+    if (!el) return;
+    const onScroll = () => setScrolled(el.scrollTop > 40);
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-10 px-4 pb-1 pt-3">
-      <div className="flex items-center justify-between">
-        {/* Profilovka — link na profil s kartou a kalendárom */}
-        <Link href="/profile" aria-label="Môj profil">
+    <header className={cn(
+      "sticky top-0 z-10 px-4 transition-all duration-300",
+      scrolled ? "pb-2 pt-2" : "pb-1.5 pt-3",
+    )}>
+      <div className="flex items-center justify-between gap-3">
+        {/* Profilovka + meno — link na profil */}
+        <Link href="/profile" aria-label="Môj profil" className="flex min-w-0 flex-1 items-center gap-3">
           <div
-            className="h-10 w-10 shrink-0 rounded-full bg-cover bg-center ring-2 ring-brand-purple/15 shadow-sm"
+            className="h-14 w-14 shrink-0 rounded-full bg-cover bg-center ring-2 ring-brand-purple/15 shadow-sm"
             style={profileAvatarStyle(avatarUrl)}
           />
+          <div
+            className={cn(
+              "grid transition-all duration-300 ease-in-out",
+              scrolled ? "grid-cols-[0fr] opacity-0" : "grid-cols-[1fr] opacity-100",
+            )}
+          >
+            <div className={cn(
+              "overflow-hidden transition-transform duration-300 ease-in-out",
+              scrolled ? "-translate-x-3" : "translate-x-0",
+            )}>
+              <p className="text-sm leading-none text-brand-pink">Ahoj!</p>
+              <p className="mt-0.5 truncate text-xl font-bold leading-tight text-brand-purple">
+                {name}
+              </p>
+            </div>
+          </div>
         </Link>
 
         {/* Zvoneček + hamburger menu */}
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
             aria-label="Notifikácie"
