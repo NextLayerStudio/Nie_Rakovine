@@ -33,8 +33,11 @@ export function FeedEventItem({
   defaultName: string;
   defaultSurname: string;
 }) {
-  const isFull = capacity !== undefined && registrationCount !== undefined && registrationCount >= capacity;
   const [open, setOpen] = useState(false);
+  const [liveRegistered, setLiveRegistered] = useState(isRegistered);
+  const [liveCount, setLiveCount] = useState(registrationCount ?? 0);
+
+  const isFull = capacity !== undefined && liveCount >= capacity;
 
   const cover = coverUrl
     ? {
@@ -62,9 +65,9 @@ export function FeedEventItem({
     endsAt,
     location,
     coverUrl,
-    isRegistered,
-    registrationCount: registrationCount ?? 0,
-    capacity: null,
+    isRegistered: liveRegistered,
+    registrationCount: liveCount,
+    capacity: capacity ?? null,
     defaultName,
     defaultSurname,
   };
@@ -85,13 +88,13 @@ export function FeedEventItem({
           <span className="absolute bottom-3 left-3">
             <span
               className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold shadow-md backdrop-blur-sm ${
-                isRegistered
+                liveRegistered
                   ? "bg-emerald-500 text-white"
                   : "bg-brand-purple text-white"
               }`}
             >
-              {isRegistered && <CheckIcon />}
-              {isRegistered ? "Prihlásený" : "Zaregistrovať sa"}
+              {liveRegistered && <CheckIcon />}
+              {liveRegistered ? "Prihlásený" : "Zaregistrovať sa"}
             </span>
           </span>
         </button>
@@ -121,14 +124,12 @@ export function FeedEventItem({
                   <span className="max-w-[140px] truncate">{location}</span>
                 </span>
               )}
-              {registrationCount !== undefined && (
-                <span className={`flex items-center gap-1 text-xs font-medium ${isFull ? "text-red-500/70" : "text-brand-purple/55"}`}>
-                  <PeopleIcon />
-                  {capacity !== undefined
-                    ? `${registrationCount}/${capacity}`
-                    : registrationCount}
-                </span>
-              )}
+              <span className={`flex items-center gap-1 text-xs font-medium ${isFull ? "text-red-500/70" : "text-brand-purple/55"}`}>
+                <PeopleIcon />
+                {capacity !== undefined
+                  ? `${liveCount}/${capacity}`
+                  : liveCount}
+              </span>
             </div>
 
             {description && (
@@ -141,7 +142,14 @@ export function FeedEventItem({
       </article>
 
       {open && (
-        <EventDetailModal event={modalEvent} onClose={() => setOpen(false)} />
+        <EventDetailModal
+          event={modalEvent}
+          onClose={() => setOpen(false)}
+          onRegistered={() => {
+            setLiveRegistered(true);
+            setLiveCount((c) => c + 1);
+          }}
+        />
       )}
     </>
   );
