@@ -73,8 +73,8 @@ export function NieRakovineMark({
     <Image
       src={HORIZONTAL2_SRC}
       alt="ONKO KLUB"
-      width={232}
-      height={110}
+      width={1031}
+      height={488}
       priority={priority}
       className={cn("h-auto object-contain", horizontal2SizeClass[size], className)}
     />
@@ -95,8 +95,8 @@ export function OnkoLogoWide({
     <Image
       src={HORIZONTAL_SRC}
       alt="ONKO KLUB"
-      width={277}
-      height={91}
+      width={1642}
+      height={538}
       priority={priority}
       className={cn("h-auto object-contain", horizontalSizeClass[size], className)}
     />

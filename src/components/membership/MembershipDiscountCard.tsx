@@ -134,8 +134,8 @@ function CardFace({
           <Image
             src="/logo/onkoklub-horizontal.png"
             alt="ONKO KLUB"
-            width={277}
-            height={91}
+            width={1642}
+            height={538}
             className="h-[18px] w-auto brightness-0 invert opacity-85"
           />
           <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-white/40">
