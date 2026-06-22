@@ -120,7 +120,7 @@ export function NieRakovineLogo({
       width={1626}
       height={851}
       priority={priority}
-      className={cn("h-auto w-[140px] object-contain", className)}
+      className={cn("h-auto w-[110px] object-contain", className)}
     />
   );
 }

@@ -1,54 +1,54 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import {
-  createCommentAction,
-  type ActionState,
-} from "@/lib/actions/forums";
+import { useRef, useTransition } from "react";
+import { createCommentAction } from "@/lib/actions/forums";
 import type { ReplyTarget } from "@/components/ForumThreadChat";
-import { FormError, SubmitButton } from "@/components/FormError";
-
-const INITIAL: ActionState = { ok: false };
 
 export function CommentForm({
   forumId,
   threadId,
   replyTo,
   onClearReply,
+  onOptimisticSend,
 }: {
   forumId: string;
   threadId: string;
   replyTo?: ReplyTarget | null;
   onClearReply?: () => void;
+  onOptimisticSend?: (body: string) => void;
 }) {
-  const router = useRouter();
-  const [state, formAction] = useActionState(createCommentAction, INITIAL);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [, startTransition] = useTransition();
 
-  useEffect(() => {
-    if (state.ok) {
-      onClearReply?.();
-      router.refresh();
+  function handleSend() {
+    const body = textareaRef.current?.value?.trim();
+    if (!body) return;
+    onOptimisticSend?.(body);
+    if (textareaRef.current) {
+      textareaRef.current.value = "";
+      textareaRef.current.style.height = "auto";
     }
-  }, [state.ok, onClearReply, router]);
+    const fd = new FormData();
+    fd.set("forumId", forumId);
+    fd.set("threadId", threadId);
+    if (replyTo) fd.set("replyToCommentId", replyTo.commentId);
+    fd.set("body", body);
+    startTransition(async () => {
+      await createCommentAction({ ok: false }, fd);
+    });
+  }
 
   return (
     <div
       className="fixed inset-x-0 bottom-0 z-30 border-t border-brand-purple/10 bg-white/95 px-5 pt-3 backdrop-blur-md shadow-[0_-4px_24px_rgba(111,35,128,0.08)]"
       style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
     >
-      <form action={formAction} className="mx-auto max-w-[460px]">
-        <input type="hidden" name="forumId" value={forumId} />
-        <input type="hidden" name="threadId" value={threadId} />
+      <div className="mx-auto max-w-[460px]">
         {replyTo && (
-          <input type="hidden" name="replyToCommentId" value={replyTo.commentId} />
-        )}
-
-        {replyTo ? (
           <div className="mb-2 flex items-start gap-2 rounded-2xl border border-brand-pink/25 bg-brand-pink/8 px-3 py-2">
             <div className="min-w-0 flex-1">
               <p className="text-[10px] font-bold uppercase tracking-wide text-brand-pink">
-                Reakcia na správu
+                Reakcia na správu od
               </p>
               <p className="text-[11px] font-semibold text-brand-purple/75">
                 {replyTo.authorName}
@@ -66,16 +66,11 @@ export function CommentForm({
               ×
             </button>
           </div>
-        ) : null}
-
-        <label className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wide text-brand-purple/60">
-          {replyTo ? "Vaša reakcia" : "Napíšte komentár"}
-        </label>
+        )}
 
         <div className="flex items-end gap-2 rounded-[28px] bg-brand-pink p-2 pl-4 shadow-soft">
           <textarea
-            name="body"
-            required
+            ref={textareaRef}
             rows={1}
             placeholder={replyTo ? "Napíšte reakciu…" : "Napíšte správu…"}
             className="max-h-28 min-h-[40px] min-w-0 flex-1 resize-none bg-transparent py-2 text-sm leading-snug text-white placeholder-white/75 outline-none"
@@ -84,24 +79,23 @@ export function CommentForm({
               el.style.height = "auto";
               el.style.height = `${Math.min(el.scrollHeight, 112)}px`;
             }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
           />
-          <SubmitButton
+          <button
+            type="button"
             aria-label="Odoslať"
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white text-brand-pink transition hover:brightness-95"
-            pendingLabel="…"
+            onClick={handleSend}
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white text-brand-pink transition hover:brightness-95 active:scale-95"
           >
             <SendIcon />
-          </SubmitButton>
+          </button>
         </div>
-
-        {state.ok && state.message ? (
-          <p className="mt-2 text-center text-[11px] font-medium text-emerald-700">
-            {state.message}
-          </p>
-        ) : (
-          <FormError message={state.message} />
-        )}
-      </form>
+      </div>
     </div>
   );
 }

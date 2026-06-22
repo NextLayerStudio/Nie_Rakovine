@@ -87,11 +87,13 @@ export function ForumChatBubble({
   threadId,
   forumId,
   authorName,
+  avatarUrl,
   body,
   pendingModeration,
   liked,
   likeCount,
   replyTo,
+  isReply,
   canReact,
   onReply,
 }: {
@@ -99,16 +101,21 @@ export function ForumChatBubble({
   threadId: string;
   forumId: string;
   authorName: string;
+  avatarUrl?: string | null;
   body: string;
   pendingModeration: boolean;
   liked: boolean;
   likeCount: number;
   replyTo: { authorName: string; body: string } | null;
+  isReply?: boolean;
   canReact: boolean;
   onReply: () => void;
 }) {
   return (
-    <li className="forum-chat-bubble">
+    <li className={`forum-chat-bubble relative ${isReply ? "ml-6 border-l-2 border-brand-pink/30 pl-3" : ""}`}>
+      {isReply && (
+        <div className="absolute -left-[1px] top-0 h-4 w-3 border-b-2 border-l-0 border-brand-pink/30 rounded-bl-lg" />
+      )}
       {pendingModeration && (
         <span className="mb-2 inline-flex rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
           Čaká na overenie
@@ -122,9 +129,14 @@ export function ForumChatBubble({
       <div className="flex items-center gap-2">
         <div
           aria-hidden
-          className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-brand-purple/10 text-[10px] font-bold text-brand-purple"
+          className="h-7 w-7 shrink-0 rounded-full bg-cover bg-center bg-brand-purple/10 ring-1 ring-white"
+          style={avatarUrl ? { backgroundImage: `url(${avatarUrl})` } : undefined}
         >
-          {initials(authorName)}
+          {!avatarUrl && (
+            <span className="flex h-full w-full items-center justify-center rounded-full text-[10px] font-bold text-brand-purple">
+              {initials(authorName)}
+            </span>
+          )}
         </div>
         <p className="text-xs font-semibold text-brand-purple">{authorName}</p>
       </div>

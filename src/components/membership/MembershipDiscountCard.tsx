@@ -138,9 +138,13 @@ function CardFace({
             height={538}
             className="h-[18px] w-auto brightness-0 invert opacity-85"
           />
-          <span className="text-[9px] font-bold uppercase tracking-[0.22em] text-white/40">
-            ONKO KLUB
-          </span>
+          <Image
+            src="/logo/nie-rakovine.png"
+            alt="NIE RAKOVINE, o.z."
+            width={1626}
+            height={851}
+            className="h-[14px] w-auto brightness-0 invert opacity-40"
+          />
         </div>
 
         {/* Content row */}

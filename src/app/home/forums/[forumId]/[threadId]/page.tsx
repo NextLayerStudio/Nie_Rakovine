@@ -35,7 +35,7 @@ export default async function ForumThreadPage({
           where: visibleCommentsWhere(user.id),
           orderBy: { createdAt: "asc" },
           include: {
-            author: { select: { fullName: true } },
+            author: { select: { fullName: true, profile: { select: { avatarUrl: true } } } },
             likes: {
               where: { userId: user.id },
               select: { id: true },
@@ -78,6 +78,7 @@ export default async function ForumThreadPage({
   const chatMessages = thread.comments.map((c) => ({
     id: c.id,
     authorName: c.author.fullName,
+    avatarUrl: c.author.profile?.avatarUrl ?? null,
     body: c.body,
     pendingModeration: c.status !== APPROVED,
     liked: c.likes.length > 0,
@@ -146,6 +147,8 @@ export default async function ForumThreadPage({
           threadId={threadId}
           canComment={canComment}
           comments={chatMessages}
+          currentUserName={user.fullName}
+          currentAvatarUrl={user.profile?.avatarUrl ?? null}
         />
       </article>
 

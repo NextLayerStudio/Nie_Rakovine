@@ -70,9 +70,9 @@ export function ForumPostCard({
 
   return (
     <article
-      className={`forum-card flex h-full flex-col overflow-hidden ${className}`}
+      className={`flex h-full flex-col border-b border-brand-purple/10 bg-white ${className}`}
     >
-      <div className={`flex flex-1 flex-col ${compact ? "p-3" : "p-4"}`}>
+      <div className={`flex flex-1 flex-col ${compact ? "px-5 py-3" : "px-5 py-4"}`}>
         <div className="flex items-center gap-3">
           <div
             aria-hidden
