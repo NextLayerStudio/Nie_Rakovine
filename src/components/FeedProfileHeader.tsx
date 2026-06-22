@@ -27,7 +27,7 @@ export function FeedProfileHeader({
 
   return (
     <>
-      <div className="flex items-center gap-3 px-4 py-3">
+      <div className="flex items-center gap-3 px-4 py-2">
         <button onClick={openDrawer} className="shrink-0" aria-label={`Zobraziť profil ${displayName}`}>
           <div
             aria-hidden

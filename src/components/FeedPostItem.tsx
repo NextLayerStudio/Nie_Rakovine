@@ -167,7 +167,7 @@ function ArticleCard({
             <div className="mt-1">
               <p
                 ref={excerptRef}
-                className={`text-sm leading-relaxed text-brand-purple/65 ${expanded ? "" : "line-clamp-3"}`}
+                className={`text-sm leading-relaxed text-brand-purple/70 ${expanded ? "" : "line-clamp-3"}`}
               >
                 {excerpt}
               </p>
@@ -194,7 +194,7 @@ function ArticleCard({
       </Link>
 
       {/* Action bar */}
-      <div className="flex items-center gap-5 px-4 pb-4">
+      <div className="flex items-center gap-5 px-4 pb-3">
         <LikeButton postId={postId} liked={liked} count={likeCount} variant="feed" onToggle={onLike} />
         <button type="button" aria-label="Komentáre" onClick={onCommentOpen} className="flex items-center gap-1.5 text-brand-purple/60">
           <CommentIcon />
@@ -279,7 +279,7 @@ function MediaCard({
         }
       />
 
-      <div className="px-4 pb-7">
+      <div className="px-4 pb-4">
         <Link href={href}>
           <h3 className="text-base font-bold text-brand-purple">{title}</h3>
         </Link>

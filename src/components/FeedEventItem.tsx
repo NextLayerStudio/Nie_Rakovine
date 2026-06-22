@@ -78,7 +78,7 @@ export function FeedEventItem({
           </span>
         </button>
 
-        <div className="flex items-center justify-end px-4 py-2.5">
+        <div className="flex items-center justify-end px-4 py-2">
           <button
             type="button"
             onClick={() => setOpen(true)}
@@ -88,20 +88,20 @@ export function FeedEventItem({
           </button>
         </div>
 
-        <div className="px-4 pb-7">
+        <div className="px-4 pb-4">
           <button
             type="button"
             onClick={() => setOpen(true)}
             className="w-full text-left"
           >
-            <h3 className="text-sm font-semibold text-brand-purple">{title}</h3>
+            <h3 className="text-base font-bold text-brand-purple">{title}</h3>
             {description && (
-              <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-brand-purple/70">
+              <p className="mt-0.5 line-clamp-2 text-sm leading-relaxed text-brand-purple/70">
                 {description}
               </p>
             )}
             {location && (
-              <p className="mt-1 text-[11px] text-brand-purple/60">
+              <p className="mt-1 text-xs text-brand-purple/55">
                 {location}
               </p>
             )}
