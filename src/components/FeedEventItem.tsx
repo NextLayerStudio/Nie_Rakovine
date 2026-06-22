@@ -16,6 +16,7 @@ export function FeedEventItem({
   coverUrl,
   isRegistered,
   registrationCount,
+  capacity,
   defaultName,
   defaultSurname,
 }: {
