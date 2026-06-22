@@ -8,8 +8,8 @@ import {
 
 const WEEKDAYS = ["Po", "Ut", "St", "Št", "Pi", "So", "Ne"];
 const MONTHS = [
-  "Jan", "Feb", "Mar", "Apr", "Máj", "Jún",
-  "Júl", "Aug", "Sep", "Okt", "Nov", "Dec",
+  "Január", "Február", "Marec", "Apríl", "Máj", "Jún",
+  "Júl", "August", "September", "Október", "November", "December",
 ];
 
 export type ProfileRegisteredEvent = {
@@ -47,18 +47,20 @@ export function ProfileCalendarTab({
   );
   const [detail, setDetail] = useState<EventModalData | null>(null);
 
-  const eventDays = useMemo(() => {
-    const set = new Set<string>();
+  /* days that have at least one registered event this month */
+  const eventsByDay = useMemo(() => {
+    const map = new Map<string, ProfileRegisteredEvent[]>();
     for (const e of events) {
       const d = new Date(e.startsAt);
       if (
         d.getFullYear() === viewMonth.getFullYear() &&
         d.getMonth() === viewMonth.getMonth()
       ) {
-        set.add(dayKey(d));
+        const k = dayKey(d);
+        map.set(k, [...(map.get(k) ?? []), e]);
       }
     }
-    return set;
+    return map;
   }, [events, viewMonth]);
 
   const monthEvents = useMemo(
@@ -87,14 +89,6 @@ export function ProfileCalendarTab({
     return cells;
   }, [viewMonth]);
 
-  function prevMonth() {
-    setViewMonth((m) => new Date(m.getFullYear(), m.getMonth() - 1, 1));
-  }
-
-  function nextMonth() {
-    setViewMonth((m) => new Date(m.getFullYear(), m.getMonth() + 1, 1));
-  }
-
   function openEvent(event: ProfileRegisteredEvent) {
     setDetail({
       id: event.id,
@@ -112,82 +106,98 @@ export function ProfileCalendarTab({
     });
   }
 
+  function handleDayClick(date: Date) {
+    const k = dayKey(date);
+    const dayEvents = eventsByDay.get(k);
+    if (dayEvents?.length) openEvent(dayEvents[0]);
+  }
+
   const gallery = events.filter((e) => e.coverUrl).slice(0, 12);
 
   return (
-    <div className="px-4 pb-6 pt-3">
-      <div className="rounded-3xl bg-white p-4 shadow-card">
-        <div className="flex items-center justify-between">
+    <div className="pb-6 pt-3">
+      {/* Calendar card — full width, no side padding */}
+      <div className="mx-4 overflow-hidden rounded-3xl bg-white shadow-card">
+
+        {/* Month navigation */}
+        <div className="flex items-center justify-between px-5 pb-2 pt-5">
           <button
             type="button"
             aria-label="Predchádzajúci mesiac"
-            onClick={prevMonth}
-            className="grid h-8 w-8 place-items-center rounded-full text-brand-purple/70"
+            onClick={() => setViewMonth((m) => new Date(m.getFullYear(), m.getMonth() - 1, 1))}
+            className="grid h-10 w-10 place-items-center rounded-full text-2xl text-brand-purple/60 transition hover:bg-brand-purple/8"
           >
             ‹
           </button>
-          <p className="text-sm font-bold text-brand-purple">
+          <p className="text-base font-bold text-brand-purple">
             {MONTHS[viewMonth.getMonth()]} {viewMonth.getFullYear()}
           </p>
           <button
             type="button"
             aria-label="Ďalší mesiac"
-            onClick={nextMonth}
-            className="grid h-8 w-8 place-items-center rounded-full text-brand-purple/70"
+            onClick={() => setViewMonth((m) => new Date(m.getFullYear(), m.getMonth() + 1, 1))}
+            className="grid h-10 w-10 place-items-center rounded-full text-2xl text-brand-purple/60 transition hover:bg-brand-purple/8"
           >
             ›
           </button>
         </div>
 
-        <div className="mt-3 grid grid-cols-7 gap-y-1 text-center">
+        {/* Weekday labels */}
+        <div className="grid grid-cols-7 px-3 pb-1">
           {WEEKDAYS.map((d) => (
             <span
               key={d}
-              className="text-[10px] font-semibold uppercase text-brand-purple/45"
+              className="text-center text-xs font-semibold uppercase tracking-wide text-brand-purple/40"
             >
               {d}
             </span>
           ))}
+        </div>
+
+        {/* Day grid */}
+        <div className="grid grid-cols-7 gap-1 px-3 pb-5">
           {grid.map((date, i) => {
-            if (!date) {
-              return <span key={`empty-${i}`} />;
-            }
-            const hasEvent = eventDays.has(dayKey(date));
+            if (!date) return <span key={`empty-${i}`} />;
+            const k = dayKey(date);
+            const hasEvent = eventsByDay.has(k);
             const isToday = sameDay(date, now);
             return (
-              <div key={dayKey(date)} className="flex justify-center py-0.5">
-                <span
-                  className={`grid h-8 w-8 place-items-center rounded-full text-xs font-semibold ${
-                    hasEvent
-                      ? "bg-brand-pink text-white"
-                      : isToday
-                        ? "text-brand-purple ring-1 ring-brand-pink/40"
-                        : "text-brand-purple/80"
-                  }`}
-                >
-                  {date.getDate()}
-                </span>
-              </div>
+              <button
+                key={k}
+                type="button"
+                onClick={() => handleDayClick(date)}
+                disabled={!hasEvent}
+                className={`aspect-square w-full rounded-xl text-sm font-bold transition active:scale-95 ${
+                  hasEvent
+                    ? "bg-brand-pink text-white shadow-sm"
+                    : isToday
+                      ? "ring-2 ring-brand-pink/50 text-brand-purple"
+                      : "text-brand-purple/70"
+                }`}
+              >
+                {date.getDate()}
+              </button>
             );
           })}
         </div>
 
+        {/* Events list for this month */}
         {monthEvents.length > 0 && (
-          <ul className="mt-4 space-y-2 border-t border-brand-purple/8 pt-3">
+          <ul className="border-t border-brand-purple/8 px-4 pb-4 pt-3 space-y-1">
             {monthEvents.map((e) => (
               <li key={e.id}>
                 <button
                   type="button"
                   onClick={() => openEvent(e)}
-                  className="flex w-full items-center gap-3 rounded-xl px-1 py-1.5 text-left transition hover:bg-brand-purple/5"
+                  className="flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left transition hover:bg-brand-purple/5"
                 >
-                  <span className="text-xs font-bold text-brand-pink">
+                  <span className="shrink-0 rounded-lg bg-brand-pink/10 px-2 py-1 text-xs font-bold text-brand-pink">
                     {new Date(e.startsAt).toLocaleDateString("sk-SK", {
                       day: "numeric",
                       month: "short",
                     })}
                   </span>
-                  <span className="min-w-0 flex-1 truncate text-xs font-semibold text-brand-purple">
+                  <span className="min-w-0 flex-1 truncate text-sm font-semibold text-brand-purple">
                     {e.title}
                   </span>
                 </button>
@@ -197,8 +207,9 @@ export function ProfileCalendarTab({
         )}
       </div>
 
+      {/* Photo gallery */}
       {gallery.length > 0 && (
-        <div className="mt-4 grid grid-cols-3 gap-1.5">
+        <div className="mx-4 mt-4 grid grid-cols-3 gap-1.5">
           {gallery.map((e) => (
             <button
               key={e.id}
@@ -217,7 +228,7 @@ export function ProfileCalendarTab({
       )}
 
       {events.length === 0 && (
-        <p className="mt-4 text-center text-xs text-brand-purple/55">
+        <p className="mt-6 px-4 text-center text-sm text-brand-purple/50">
           Zatiaľ nemáte prihlásené žiadne aktivity.
         </p>
       )}
