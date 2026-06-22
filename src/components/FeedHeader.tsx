@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { profileAvatarStyle } from "@/lib/avatar-style";
 import { cn } from "@/lib/utils";
 
 export function FeedHeader({
@@ -33,9 +32,15 @@ export function FeedHeader({
         {/* Profilovka + meno — link na profil */}
         <Link href="/profile" aria-label="Môj profil" className="flex min-w-0 flex-1 items-center gap-3">
           <div
-            className="h-14 w-14 shrink-0 rounded-full bg-cover bg-center ring-2 ring-brand-purple/15 shadow-sm"
-            style={profileAvatarStyle(avatarUrl)}
-          />
+            className="h-16 w-16 shrink-0 rounded-full bg-cover bg-center ring-2 ring-brand-purple/15 shadow-sm flex items-center justify-center"
+            style={avatarUrl ? { backgroundImage: `url(${avatarUrl})`, backgroundSize: "cover", backgroundPosition: "center" } : { backgroundColor: avatarBg(name) }}
+          >
+            {!avatarUrl && (
+              <span className="text-base font-bold text-white select-none">
+                {initials(name)}
+              </span>
+            )}
+          </div>
           <div
             className={cn(
               "grid transition-all duration-300 ease-in-out",
@@ -94,6 +99,26 @@ export function FeedHeader({
       </div>
     </header>
   );
+}
+
+const AVATAR_COLORS = [
+  "#CA6A8A", "#6F2380", "#E07B9A", "#8B3A9E",
+  "#B05070", "#7A4090", "#D4849A", "#9B50B0",
+];
+
+function avatarBg(name: string): string {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+}
+
+function initials(name: string): string {
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase() ?? "")
+    .join("");
 }
 
 export function FeedTabs({

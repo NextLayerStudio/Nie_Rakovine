@@ -72,6 +72,10 @@ export function ProfileView({
       }
       const qs = params.toString();
       router.replace(qs ? `/profile?${qs}` : "/profile", { scroll: false });
+      // Reset scroll to top on tab switch so new tab content starts at top
+      document
+        .querySelector("[data-profile-scroll]")
+        ?.scrollTo({ top: 0, behavior: "instant" });
     },
     [router, searchParams],
   );

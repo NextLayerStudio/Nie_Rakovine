@@ -259,7 +259,7 @@ export default async function ProfilePage({
 
   return (
     <PhoneShell>
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto pb-[calc(5.5rem+env(safe-area-inset-bottom))]">
+      <div data-profile-scroll className="flex min-h-0 flex-1 flex-col overflow-y-auto pb-[calc(5.5rem+env(safe-area-inset-bottom))]">
         <Suspense fallback={null}>
           <ProfileView
             data={data}
@@ -269,7 +269,7 @@ export default async function ProfilePage({
         </Suspense>
       </div>
       <BottomNav />
-      <MenuDrawer userName={user.fullName} isAdmin={user.role === "ADMIN"} />
+      <MenuDrawer userName={user.fullName} avatarUrl={user.profile?.avatarUrl ?? null} isAdmin={user.role === "ADMIN"} />
       <NotificationsDrawer />
     </PhoneShell>
   );

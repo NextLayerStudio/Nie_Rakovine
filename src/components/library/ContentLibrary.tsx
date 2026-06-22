@@ -124,14 +124,14 @@ export function ContentLibrary() {
       <div className="sticky top-[57px] z-[9] bg-white pb-1 shadow-[0_1px_0_rgba(111,35,128,0.06)]">
         {/* Search */}
         <section className="px-5 pb-2 pt-3">
-          <div className="flex items-center gap-2 rounded-full bg-brand-pink-soft px-4 py-2.5">
+          <div className="flex items-center gap-2 rounded-full bg-white px-4 py-3 shadow-[0_1px_6px_rgba(111,35,128,0.12)] ring-1 ring-brand-purple/10">
             <SearchIcon />
             <input
               type="search"
               placeholder="Hľadať"
               value={query}
               onChange={(e) => handleSearch(e.target.value)}
-              className="flex-1 bg-transparent text-sm text-brand-purple placeholder-brand-purple/40 outline-none"
+              className="flex-1 bg-transparent text-sm font-medium text-brand-purple placeholder-brand-purple/40 outline-none"
             />
           </div>
         </section>
