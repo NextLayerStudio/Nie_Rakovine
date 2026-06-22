@@ -28,9 +28,11 @@ export function FeedEventItem({
   coverUrl: string | null;
   isRegistered: boolean;
   registrationCount?: number;
+  capacity?: number;
   defaultName: string;
   defaultSurname: string;
 }) {
+  const isFull = capacity !== undefined && registrationCount !== undefined && registrationCount >= capacity;
   const [open, setOpen] = useState(false);
 
   const cover = coverUrl
@@ -119,9 +121,11 @@ export function FeedEventItem({
                 </span>
               )}
               {registrationCount !== undefined && (
-                <span className="flex items-center gap-1 text-xs text-brand-purple/55">
+                <span className={`flex items-center gap-1 text-xs font-medium ${isFull ? "text-red-500/70" : "text-brand-purple/55"}`}>
                   <PeopleIcon />
-                  {registrationCount}
+                  {capacity !== undefined
+                    ? `${registrationCount}/${capacity}`
+                    : registrationCount}
                 </span>
               )}
             </div>

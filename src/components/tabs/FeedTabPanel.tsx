@@ -101,6 +101,7 @@ export function FeedTabPanel({ initialData }: { initialData?: FeedData }) {
                 coverUrl={e.coverUrl}
                 isRegistered={registeredIds.has(e.id)}
                 registrationCount={e._count.registrations}
+                capacity={e.capacity ?? undefined}
                 defaultName={firstName ?? ""}
                 defaultSurname={lastName}
               />
