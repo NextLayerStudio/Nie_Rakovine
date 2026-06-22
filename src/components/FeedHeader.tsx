@@ -14,33 +14,52 @@ export function FeedHeader({
 }) {
   return (
     <header className="sticky top-0 z-10 px-4 pb-1 pt-3">
-      <div className="flex items-center justify-end gap-2">
-        <button
-          type="button"
-          aria-label="Notifikácie"
-          onClick={() => document.dispatchEvent(new CustomEvent("open-notifications"))}
-          className="relative grid h-10 w-10 place-items-center rounded-full bg-brand-pink text-white shadow-sm"
-        >
-          {unreadCount > 0 && (
-            <span className="absolute right-1.5 top-1.5 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" />
-          )}
-          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
-            <path
-              d="M6 16V11a6 6 0 1112 0v5l1.5 2H4.5L6 16zM10 20a2 2 0 004 0"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
-        <button
-          type="button"
-          aria-label="Menu"
-          onClick={() => document.dispatchEvent(new CustomEvent("open-menu"))}
-          className="h-10 w-10 shrink-0 rounded-full bg-cover bg-center ring-2 ring-brand-purple/15 shadow-sm"
-          style={profileAvatarStyle(avatarUrl)}
-        />
+      <div className="flex items-center justify-between">
+        {/* Profilovka — link na profil s kartou a kalendárom */}
+        <Link href="/profile" aria-label="Môj profil">
+          <div
+            className="h-10 w-10 shrink-0 rounded-full bg-cover bg-center ring-2 ring-brand-purple/15 shadow-sm"
+            style={profileAvatarStyle(avatarUrl)}
+          />
+        </Link>
+
+        {/* Zvoneček + hamburger menu */}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            aria-label="Notifikácie"
+            onClick={() => document.dispatchEvent(new CustomEvent("open-notifications"))}
+            className="relative grid h-10 w-10 place-items-center rounded-full bg-brand-pink text-white shadow-sm"
+          >
+            {unreadCount > 0 && (
+              <span className="absolute right-1.5 top-1.5 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" />
+            )}
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+              <path
+                d="M6 16V11a6 6 0 1112 0v5l1.5 2H4.5L6 16zM10 20a2 2 0 004 0"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinejoin="round"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+          <button
+            type="button"
+            aria-label="Menu"
+            onClick={() => document.dispatchEvent(new CustomEvent("open-menu"))}
+            className="grid h-10 w-10 place-items-center rounded-full bg-brand-pink text-white shadow-sm"
+          >
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+              <path
+                d="M4 7h16M4 12h16M4 17h16"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </header>
   );
