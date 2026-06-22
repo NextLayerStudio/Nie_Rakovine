@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { profileAvatarStyle } from "@/lib/avatar-style";
 
 export function FeedHeader({
