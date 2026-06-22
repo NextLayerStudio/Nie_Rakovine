@@ -1,4 +1,4 @@
-import { NieRakovineMark, OnkoLogo } from "@/components/OnkoLogo";
+import { NieRakovineLogo, OnkoLogo } from "@/components/OnkoLogo";
 import { cn } from "@/lib/utils";
 
 /** Brand loading screen — pink canvas, ONKO centre, NIE RAKOVINE footer, animation. */
@@ -32,15 +32,14 @@ export function LoadingScreen({
       >
         <div className="flex flex-1 flex-col items-center justify-center px-8">
           <div className="onko-loading-pulse">
-            <OnkoLogo size="lg" priority />
+            <OnkoLogo size="md" priority />
           </div>
           <LoadingDots />
         </div>
 
         <div className="flex justify-center pb-10">
-          <NieRakovineMark
-            size="md"
-            className="brightness-0 invert opacity-95"
+          <NieRakovineLogo
+            className="brightness-0 invert opacity-90"
             priority
           />
         </div>

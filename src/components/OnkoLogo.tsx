@@ -3,10 +3,12 @@ import { cn } from "@/lib/utils";
 
 // vertical.png — 142×161 — hlavné logo (loading, welcome, register done)
 const VERTICAL_SRC = "/logo/onkoklub-vertical.png";
-// horizontal2.png — 232×110 — stredné logo (login footer, loading footer)
+// horizontal2.png — 1031×488 — stredné logo (login footer)
 const HORIZONTAL2_SRC = "/logo/onkoklub-horizontal2.png";
-// horizontal.png — 277×91 — najširšie logo (karta, wide header)
+// horizontal.png — 1642×538 — najširšie logo (karta, wide header)
 const HORIZONTAL_SRC = "/logo/onkoklub-horizontal.png";
+// nie-rakovine.png — 1626×851 — logo NIE RAKOVINE, o.z. (loading footer)
+const NIE_RAKOVINE_SRC = "/logo/nie-rakovine.png";
 
 const verticalSizeClass = {
   sm: "w-[64px]",
@@ -99,6 +101,26 @@ export function OnkoLogoWide({
       height={538}
       priority={priority}
       className={cn("h-auto object-contain", horizontalSizeClass[size], className)}
+    />
+  );
+}
+
+/** Logo NIE RAKOVINE, o.z. — pre loading screen footer a ďalšie miesta kde treba brand NIE RAKOVINE. */
+export function NieRakovineLogo({
+  className,
+  priority = false,
+}: {
+  className?: string;
+  priority?: boolean;
+}) {
+  return (
+    <Image
+      src={NIE_RAKOVINE_SRC}
+      alt="NIE RAKOVINE, o.z."
+      width={1626}
+      height={851}
+      priority={priority}
+      className={cn("h-auto w-[140px] object-contain", className)}
     />
   );
 }
