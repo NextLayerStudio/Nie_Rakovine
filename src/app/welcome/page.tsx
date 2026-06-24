@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { NieRakovineMark, OnkoLogo } from "@/components/OnkoLogo";
+import { NieRakovineLogo, OnkoLogo } from "@/components/OnkoLogo";
 import { PhoneShell } from "@/components/PhoneShell";
 
 /** Welcome / landing — layout per design mockup (white screen, logos, two CTAs). */
@@ -8,14 +8,14 @@ export default function WelcomePage() {
     <PhoneShell>
       <div className="flex min-h-0 flex-1 flex-col bg-white">
         <div className="welcome-top flex shrink-0 justify-center px-8">
-          <NieRakovineMark priority />
+          <NieRakovineLogo priority className="w-[150px]" />
         </div>
 
         <div className="flex flex-1 items-center justify-center px-8">
           <OnkoLogo
             size="xl"
             priority
-            className="welcome-logo max-h-[360px] w-auto"
+            className="welcome-logo max-h-[480px] w-auto"
           />
         </div>
 
