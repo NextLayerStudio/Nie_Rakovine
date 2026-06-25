@@ -13,9 +13,9 @@ export default function WelcomePage() {
 
         <div className="flex flex-1 items-center justify-center px-8">
           <OnkoLogo
-            size="xl"
+            size="2xl"
             priority
-            className="welcome-logo max-h-[480px] w-auto"
+            className="welcome-logo max-h-[560px] w-auto"
           />
         </div>
 
