@@ -10,22 +10,24 @@ export default async function SourceStep() {
   const user = await requireUser();
   return (
     <PhoneShell>
-      <TopBar
-        backHref="/register/profile/expectations"
-        title="Registračný formulár"
-        step={{ current: 5, total: 5 }}
-      />
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+        <TopBar
+          backHref="/register/profile/expectations"
+          title="Registračný formulár"
+          step={{ current: 5, total: 5 }}
+        />
 
-      <SourceForm
-        gainOptions={GAIN_OPTIONS}
-        hearOptions={HEAR_ABOUT_US_OPTIONS}
-        defaultGain={
-          user.profile?.expectations
-            .filter((e) => e.startsWith("získať: "))
-            .map((e) => e.replace(/^získať:\s*/, "")) ?? []
-        }
-        defaultHear={user.profile?.hearAboutUs ?? []}
-      />
+        <SourceForm
+          gainOptions={GAIN_OPTIONS}
+          hearOptions={HEAR_ABOUT_US_OPTIONS}
+          defaultGain={
+            user.profile?.expectations
+              .filter((e) => e.startsWith("získať: "))
+              .map((e) => e.replace(/^získať:\s*/, "")) ?? []
+          }
+          defaultHear={user.profile?.hearAboutUs ?? []}
+        />
+      </div>
     </PhoneShell>
   );
 }

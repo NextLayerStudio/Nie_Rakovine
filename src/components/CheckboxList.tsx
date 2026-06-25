@@ -30,7 +30,7 @@ export function CheckboxList({
           <li key={option}>
             <label
               className={cn(
-                "flex cursor-pointer items-start gap-3 rounded-2xl px-4 py-3 text-xs leading-snug transition",
+                "relative flex cursor-pointer items-start gap-3 rounded-2xl px-4 py-3 text-xs leading-snug transition",
                 checked
                   ? "bg-brand-pink text-white"
                   : "bg-brand-pink-soft/60 text-brand-purple",
@@ -42,6 +42,7 @@ export function CheckboxList({
                 value={option}
                 checked={checked}
                 onChange={() => toggle(option)}
+                onFocus={(e) => e.currentTarget.blur()}
                 className="sr-only"
               />
               <span

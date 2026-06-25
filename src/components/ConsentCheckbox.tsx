@@ -18,13 +18,14 @@ export function ConsentCheckbox({
   const [checked, setChecked] = useState(defaultChecked);
 
   return (
-    <label className="flex cursor-pointer items-start gap-3 py-1.5">
+    <label className="relative flex cursor-pointer items-start gap-3 py-1.5">
       <input
         type="checkbox"
         name={name}
         value="on"
         checked={checked}
         onChange={(e) => setChecked(e.target.checked)}
+        onFocus={(e) => e.currentTarget.blur()}
         required={required}
         className="sr-only"
       />

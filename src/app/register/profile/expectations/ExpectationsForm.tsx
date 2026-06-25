@@ -30,10 +30,7 @@ export function ExpectationsForm({
   const [state, formAction] = useActionState(saveExpectationsAction, INITIAL);
 
   return (
-    <form
-      action={formAction}
-      className="mt-4 flex flex-1 flex-col gap-5 overflow-y-auto px-5 pb-2"
-    >
+    <form action={formAction} className="mt-4 flex flex-col gap-5 px-5 pb-6">
       <h2 className="text-center text-base font-semibold text-brand-purple">
         Čo očakávate od členstva v ONKO KLUBE?
       </h2>

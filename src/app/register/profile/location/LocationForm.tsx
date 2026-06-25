@@ -41,7 +41,7 @@ export function LocationForm({
   const [city, setCity] = useState(defaultCity);
 
   return (
-    <form action={formAction} className="mt-5 flex flex-1 flex-col px-5">
+    <form action={formAction} className="mt-5 flex flex-col px-5 pb-6">
       <select
         name="region"
         value={region}
@@ -82,9 +82,9 @@ export function LocationForm({
 
       <FormError message={state.message} />
 
-      <div className="mt-auto py-4">
+      <div className="flex justify-center py-4">
         <SubmitButton
-          className="btn-secondary mx-auto flex w-40 justify-between"
+          className="btn-secondary flex w-40 justify-between"
           pendingLabel="Ukladám…"
         >
           <>
