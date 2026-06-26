@@ -1,7 +1,11 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { maxImageUploadBytes } from "@/lib/image-upload-limits";
+import {
+  IMAGE_FILE_INPUT_ACCEPT,
+  isLikelyImageFile,
+  maxImageUploadBytes,
+} from "@/lib/image-upload-limits";
 
 export function PostImagePicker() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -13,7 +17,7 @@ export function PostImagePicker() {
     if (!file) return;
     setError(null);
 
-    if (!file.type.startsWith("image/")) {
+    if (!isLikelyImageFile(file)) {
       setError("Vyberte obrázok (JPG, PNG…).");
       return;
     }
@@ -80,7 +84,7 @@ export function PostImagePicker() {
         ref={inputRef}
         name="image"
         type="file"
-        accept="image/*"
+        accept={IMAGE_FILE_INPUT_ACCEPT}
         className="hidden"
         onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
       />

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { IMAGE_FILE_INPUT_ACCEPT } from "@/lib/image-upload-limits";
 
 type ExistingImage = { id: string; url: string };
 
@@ -79,7 +80,7 @@ export function AdminMultiImageField({
         ref={fileRef}
         type="file"
         name="galleryFiles"
-        accept="image/jpeg,image/png,image/webp,image/gif"
+        accept={IMAGE_FILE_INPUT_ACCEPT}
         multiple
         className="sr-only"
         onChange={(e) => onFilesChange(e.target.files)}

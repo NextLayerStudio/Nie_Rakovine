@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { IMAGE_FILE_INPUT_ACCEPT } from "@/lib/image-upload-limits";
 
 /** Admin image field — upload a file or paste a URL, with live preview. */
 export function AdminImageField({
@@ -77,7 +78,7 @@ export function AdminImageField({
                 ref={fileRef}
                 type="file"
                 name={uploadName}
-                accept="image/jpeg,image/png,image/webp,image/gif"
+                accept={IMAGE_FILE_INPUT_ACCEPT}
                 className="sr-only"
                 onChange={(e) => onFileChange(e.target.files?.[0])}
               />

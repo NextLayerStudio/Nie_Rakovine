@@ -15,6 +15,11 @@ export function postHrefWithReturn(postId: string, returnPath: string) {
   return `/home/posts/${postId}?from=${encodeURIComponent(returnPath)}`;
 }
 
+/** Club profile URL that remembers where to go back (e.g. search tab). */
+export function profileHrefWithReturn(handle: string, returnPath: string) {
+  return `/home/profiles/${handle}?from=${encodeURIComponent(returnPath)}`;
+}
+
 /** Only allow in-app relative return paths. */
 export function safeReturnHref(from: string | undefined, fallback: string): string {
   if (!from) return fallback;

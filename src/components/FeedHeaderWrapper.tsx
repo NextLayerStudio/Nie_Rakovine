@@ -5,5 +5,11 @@ import { FeedHeader } from "@/components/FeedHeader";
 export async function FeedHeaderWrapper() {
   const user = await requireUser();
   const unreadCount = await getUnreadNotificationCount(user.id);
-  return <FeedHeader name={user.fullName} unreadCount={unreadCount} />;
+  return (
+    <FeedHeader
+      name={user.fullName}
+      avatarUrl={user.profile?.avatarUrl ?? null}
+      unreadCount={unreadCount}
+    />
+  );
 }

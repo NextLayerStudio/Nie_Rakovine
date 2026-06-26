@@ -3,18 +3,22 @@ import { notFound } from "next/navigation";
 import { FollowProfileButton } from "@/components/FollowProfileButton";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
-import { postPublicHref, postCoverFallback } from "@/lib/post-display";
+import { postPublicHref, postCoverFallback, safeReturnHref } from "@/lib/post-display";
 import type { PostType } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 
 export default async function ClubProfilePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ handle: string }>;
+  searchParams: Promise<{ from?: string }>;
 }) {
   const user = await requireUser();
   const { handle } = await params;
+  const { from } = await searchParams;
+  const backHref = safeReturnHref(from, "/home/profiles");
 
   const profile = await prisma.clubProfile.findFirst({
     where: { handle, published: true },
@@ -65,7 +69,7 @@ export default async function ClubProfilePage({
     <div className="flex min-h-full flex-col bg-white">
       {/* Top nav */}
       <div className="flex h-12 items-center gap-3 border-b border-brand-purple/10 px-4">
-        <Link href="/home/profiles" className="grid h-8 w-8 shrink-0 place-items-center">
+        <Link href={backHref} className="grid h-8 w-8 shrink-0 place-items-center">
           <svg viewBox="0 0 24 24" className="h-5 w-5 text-brand-purple" fill="none">
             <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>

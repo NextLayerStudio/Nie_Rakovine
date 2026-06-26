@@ -4,6 +4,7 @@ import { readSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { prismaActionError } from "@/lib/safe-action";
 import { saveUploadedImage } from "@/lib/uploads";
+import { isLikelyImageFile } from "@/lib/image-upload-limits";
 
 export async function POST(request: Request) {
   try {
@@ -25,7 +26,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!file.type.startsWith("image/")) {
+    if (!isLikelyImageFile(file)) {
       return NextResponse.json(
         { ok: false, message: "Vyberte obrázok (JPG, PNG, WebP…)." },
         { status: 400 },

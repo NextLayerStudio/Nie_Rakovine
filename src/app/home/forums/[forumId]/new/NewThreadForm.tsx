@@ -11,7 +11,7 @@ export function NewThreadForm({ forumId }: { forumId: string }) {
   const [state, formAction] = useActionState(createThreadAction, INITIAL);
 
   return (
-    <form action={formAction} className="mx-5 space-y-4 pb-24 pt-2">
+    <form action={formAction} className="mx-5 space-y-4 pb-8 pt-2">
       <input type="hidden" name="forumId" value={forumId} />
 
       <label className="block">

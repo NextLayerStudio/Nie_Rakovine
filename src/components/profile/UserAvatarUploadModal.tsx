@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { maxImageUploadBytes } from "@/lib/image-upload-limits";
+import {
+  IMAGE_FILE_INPUT_ACCEPT,
+  isLikelyImageFile,
+  maxImageUploadBytes,
+} from "@/lib/image-upload-limits";
 import { profileAvatarStyle } from "@/lib/avatar-style";
 import { nameInitials } from "@/lib/membership-card";
 
@@ -43,7 +47,7 @@ export function UserAvatarUploadModal({
     if (!file) return;
     setLocalError(null);
 
-    if (!file.type.startsWith("image/")) {
+    if (!isLikelyImageFile(file)) {
       setLocalError("Vyberte obrázok (JPG, PNG…).");
       return;
     }
@@ -151,7 +155,7 @@ export function UserAvatarUploadModal({
             ref={inputRef}
             type="file"
             name="avatar"
-            accept="image/jpeg,image/png,image/webp,image/gif"
+            accept={IMAGE_FILE_INPUT_ACCEPT}
             className="sr-only"
             onChange={(event) => {
               const file = event.target.files?.[0] ?? null;

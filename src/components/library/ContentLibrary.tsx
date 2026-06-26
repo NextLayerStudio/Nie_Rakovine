@@ -120,8 +120,7 @@ export function ContentLibrary() {
 
   return (
     <>
-      {/* Sticky search + filters — stay visible while scrolling long lists (e.g. Články) */}
-      <div className="sticky top-[57px] z-[9] bg-white pb-1 shadow-[0_1px_0_rgba(111,35,128,0.06)]">
+      <div className="bg-white pb-1">
         {/* Search */}
         <section className="px-5 pb-2 pt-3">
           <div className="flex items-center gap-2 rounded-full bg-white px-4 py-3 shadow-[0_1px_6px_rgba(111,35,128,0.12)] ring-1 ring-brand-purple/10">

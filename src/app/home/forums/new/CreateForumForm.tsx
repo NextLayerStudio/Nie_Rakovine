@@ -14,7 +14,7 @@ export function CreateForumForm() {
   const [state, formAction] = useActionState(createForumByUserAction, INITIAL);
 
   return (
-    <form action={formAction} className="mx-5 space-y-4 pb-24 pt-2">
+    <form action={formAction} className="mx-5 space-y-4 pb-8 pt-2">
       <p className="forum-banner text-center text-[11px] leading-relaxed">
         Vytvorte vlastné fórum. Po odoslaní ho skontroluje administrátor —
         fórum sa zobrazí ostatným až po schválení.

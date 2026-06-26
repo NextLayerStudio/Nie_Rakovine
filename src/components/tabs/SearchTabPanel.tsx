@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { FollowProfileButton } from "@/components/FollowProfileButton";
 import { searchTabAction } from "@/lib/actions/tabs";
+import { profileHrefWithReturn } from "@/lib/post-display";
 
 type CategoryFilter =
   | "ZDRAVA_VYZIVA"
@@ -45,7 +46,7 @@ function ProfileList({
           key={p.id}
           className="flex items-center gap-4 border-b border-brand-purple/6 px-5 py-3.5 last:border-0"
         >
-          <Link href={`/home/profiles/${p.handle}`} className="shrink-0">
+          <Link href={profileHrefWithReturn(p.handle, "/home/search")} className="shrink-0">
             <div
               className="h-14 w-14 rounded-full bg-cover bg-center ring-2 ring-brand-purple/10"
               style={
@@ -56,7 +57,7 @@ function ProfileList({
             />
           </Link>
           <div className="min-w-0 flex-1">
-            <Link href={`/home/profiles/${p.handle}`}>
+            <Link href={profileHrefWithReturn(p.handle, "/home/search")}>
               <p className="truncate text-sm font-bold uppercase tracking-wide text-brand-purple">
                 {p.displayName}
               </p>

@@ -11,12 +11,11 @@ const items = [
   { href: "/home/calendar", label: "Aktivity", icon: CalendarIcon },
 ];
 
-/** Hide nav on forum thread chat so the comment bar has full focus. */
-function isForumThreadChat(pathname: string | null): boolean {
+/** Hide nav on forum compose + thread chat (comment bar needs full focus). */
+function isForumComposeOrThread(pathname: string | null): boolean {
   if (!pathname) return false;
-  const match = pathname.match(/^\/home\/forums\/([^/]+)\/([^/]+)$/);
-  if (!match) return false;
-  return match[2] !== "new";
+  if (pathname === "/home/forums/new") return true;
+  return /^\/home\/forums\/[^/]+\/[^/]+$/.test(pathname);
 }
 
 /** Full-screen menu hub — bottom tabs would overlap the menu panel. */
@@ -27,7 +26,7 @@ function isMenuHub(pathname: string | null): boolean {
 export function BottomNav() {
   const pathname = usePathname();
 
-  if (isForumThreadChat(pathname) || isMenuHub(pathname)) return null;
+  if (isForumComposeOrThread(pathname) || isMenuHub(pathname)) return null;
 
   return (
     <nav

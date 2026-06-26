@@ -1,7 +1,7 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
-import { maxImageUploadBytes } from "@/lib/image-upload-limits";
+import { maxImageUploadBytes, inferImageMimeType } from "@/lib/image-upload-limits";
 import { optimizeImage } from "@/lib/image-processing";
 
 const IMAGE_TYPES = new Map([
@@ -44,7 +44,10 @@ async function saveUploadedFile(
     throw new Error("Nebol vybraný žiadny súbor.");
   }
 
-  if (!allowedTypes.has(file.type)) {
+  const mimeType =
+    allowedTypes === IMAGE_TYPES ? inferImageMimeType(file) : file.type;
+
+  if (!allowedTypes.has(mimeType)) {
     throw new Error("Nepodporovaný formát súboru.");
   }
 
@@ -57,8 +60,8 @@ async function saveUploadedFile(
   const raw = Buffer.from(await file.arrayBuffer());
   const optimized =
     allowedTypes === IMAGE_TYPES
-      ? await optimizeImage(raw, file.type)
-      : { buffer: raw, mimeType: file.type, size: raw.length };
+      ? await optimizeImage(raw, mimeType)
+      : { buffer: raw, mimeType, size: raw.length };
 
   const asset = await prisma.mediaAsset.create({
     data: {
