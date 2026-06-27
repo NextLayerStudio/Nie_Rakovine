@@ -82,7 +82,7 @@ export function RegisterForm() {
           id="birthDate"
           name="birthDate"
           type="date"
-          className="input-light"
+          className="input-light min-w-0"
         />
       </div>
 
@@ -90,7 +90,7 @@ export function RegisterForm() {
 
       <div className="mt-4 flex flex-col items-center gap-3">
         <SubmitButton
-          className="btn-secondary w-56"
+          className="rounded-pill bg-brand-pink w-full py-5 text-xl font-bold text-white shadow-soft transition hover:brightness-105 active:scale-[0.99]"
           pendingLabel="Vytváram účet…"
         >
           Registrovať sa
