@@ -116,7 +116,9 @@ export function ForumSearchBar({
           placeholder="Názov alebo popis fóra…"
           autoFocus={autoFocus}
           autoComplete="off"
+          role="combobox"
           aria-autocomplete="list"
+          aria-haspopup="listbox"
           aria-controls={showPanel ? listId : undefined}
           aria-expanded={showPanel}
           className="forum-search"
@@ -146,7 +148,7 @@ export function ForumSearchBar({
               </li>
             )}
             {hints.map((hint) => (
-              <li key={hint.id} role="option">
+              <li key={hint.id} role="option" aria-selected={false}>
                 <button
                   type="button"
                   onClick={() => goToForum(hint.id)}

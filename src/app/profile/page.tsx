@@ -10,6 +10,7 @@ import { getUnreadNotificationCount } from "@/lib/notifications";
 import { parseProfileTab } from "@/lib/profile-page";
 import { buildPostGallery, postPublicHref } from "@/lib/post-display";
 import { feedPostSelect } from "@/lib/feed-queries";
+import { isEventRegistrationComplete } from "@/lib/event-payment";
 import { membershipSubscriptionInfo } from "@/lib/membership-card";
 import { prisma } from "@/lib/prisma";
 
@@ -44,6 +45,7 @@ export default async function ProfilePage({
       where: { userId: user.id, event: { published: true } },
       orderBy: { event: { startsAt: "asc" } },
       select: {
+        paymentStatus: true,
         event: {
           select: {
             id: true,
@@ -54,6 +56,9 @@ export default async function ProfilePage({
             endsAt: true,
             location: true,
             capacity: true,
+            isPaid: true,
+            priceCents: true,
+            currency: true,
             _count: { select: { registrations: true } },
           },
         },
@@ -198,17 +203,22 @@ export default async function ProfilePage({
     unreadCount,
     subscription: membershipSubscriptionInfo(user),
     avatarUrl: user.profile?.avatarUrl ?? null,
-    registeredEvents: registrations.map((r) => ({
-      id: r.event.id,
-      title: r.event.title,
-      description: r.event.description,
-      coverUrl: r.event.coverUrl,
-      startsAt: r.event.startsAt.toISOString(),
-      endsAt: r.event.endsAt?.toISOString() ?? null,
-      location: r.event.location,
-      registrationCount: r.event._count.registrations,
-      capacity: r.event.capacity,
-    })),
+    registeredEvents: registrations
+      .filter((r) => isEventRegistrationComplete(r, r.event.isPaid))
+      .map((r) => ({
+        id: r.event.id,
+        title: r.event.title,
+        description: r.event.description,
+        coverUrl: r.event.coverUrl,
+        startsAt: r.event.startsAt.toISOString(),
+        endsAt: r.event.endsAt?.toISOString() ?? null,
+        location: r.event.location,
+        registrationCount: r.event._count.registrations,
+        capacity: r.event.capacity,
+        isPaid: r.event.isPaid,
+        priceCents: r.event.priceCents,
+        currency: r.event.currency,
+      })),
     forums: memberships.map((m) => ({
       id: m.forum.id,
       title: m.forum.title,

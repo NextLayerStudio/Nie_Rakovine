@@ -70,10 +70,10 @@ export function TermsModal({
           1. Všeobecné ustanovenia
         </h3>
         <p className="mb-4">
-          Tieto obchodné podmienky a podmienky používania (ďalej len „Podmienky")
+          Tieto obchodné podmienky a podmienky používania (ďalej len „Podmienky“)
           upravujú práva a povinnosti registrovaných členov platformy OnkoKlub,
           ktorú prevádzkuje NIE RAKOVINE, o. z. so sídlom Cukrová 2272/14,
-          811 01 Bratislava-Staré Mesto, IČO: 50654896 (ďalej len „Prevádzkovateľ").
+          811 01 Bratislava-Staré Mesto, IČO: 50654896 (ďalej len „Prevádzkovateľ“).
         </p>
         <p className="mb-4">
           Registráciou na platforme OnkoKlub potvrdzujete, že ste si tieto

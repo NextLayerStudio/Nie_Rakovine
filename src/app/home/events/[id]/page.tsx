@@ -3,6 +3,11 @@ import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { EventRegistrationForm } from "./EventRegistrationForm";
+import { EventPaidLabel } from "@/components/events/EventPriceBadge";
+import {
+  isEventRegistrationComplete,
+  isEventRegistrationPendingPayment,
+} from "@/lib/event-payment";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +27,13 @@ export default async function EventPage({
   const myRegistration = await prisma.eventRegistration.findUnique({
     where: { eventId_userId: { eventId: id, userId: user.id } },
   });
+
+  const isRegistered = isEventRegistrationComplete(myRegistration, event.isPaid);
+  const pendingPayment = isEventRegistrationPendingPayment(
+    myRegistration,
+    event.isPaid,
+  );
+  const nameParts = user.fullName.trim().split(/\s+/).filter(Boolean);
 
   const cover = event.coverUrl
     ? {
@@ -75,17 +87,32 @@ export default async function EventPage({
                 {event.capacity}
               </li>
             ) : null}
+            {event.isPaid && event.priceCents ? (
+              <li className="flex items-center gap-2">
+                <Dot />
+                <EventPaidLabel
+                  priceCents={event.priceCents}
+                  currency={event.currency}
+                />
+              </li>
+            ) : null}
           </ul>
 
-          {myRegistration ? (
+          {isRegistered ? (
             <p className="mt-5 rounded-pill bg-white/15 py-2 text-center text-xs font-semibold text-white">
               Ste prihlásení na toto podujatie
+              {event.isPaid ? " · zaplatené" : ""}
             </p>
           ) : (
             <EventRegistrationForm
               eventId={event.id}
-              defaultName={user.fullName.split(" ")[0] ?? ""}
-              defaultSurname={user.fullName.split(" ").slice(1).join(" ")}
+              eventTitle={event.title}
+              defaultName={nameParts[0] ?? ""}
+              defaultSurname={nameParts.slice(1).join(" ")}
+              isPaid={event.isPaid}
+              priceCents={event.priceCents}
+              currency={event.currency}
+              pendingPayment={pendingPayment}
             />
           )}
         </div>

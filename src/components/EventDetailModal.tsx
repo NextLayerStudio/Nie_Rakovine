@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { EventRegistrationForm } from "@/app/home/events/[id]/EventRegistrationForm";
+import { EventPaidLabel } from "@/components/events/EventPriceBadge";
 
 export type EventModalData = {
   id: string;
@@ -17,6 +18,10 @@ export type EventModalData = {
   capacity: number | null;
   defaultName: string;
   defaultSurname: string;
+  isPaid: boolean;
+  priceCents: number | null;
+  currency: string;
+  pendingPayment: boolean;
 };
 
 export function EventDetailModal({
@@ -120,9 +125,19 @@ export function EventDetailModal({
             style={cover}
           />
 
+          {event.isPaid && event.priceCents ? (
+            <div className="mx-auto mt-4 flex max-w-[280px] justify-center">
+              <EventPaidLabel
+                priceCents={event.priceCents}
+                currency={event.currency}
+              />
+            </div>
+          ) : null}
+
           {registered ? (
             <p className="mx-auto mt-5 max-w-[280px] rounded-pill bg-white/15 py-2.5 text-center text-sm font-semibold text-white">
               Ste prihlásení na toto podujatie
+              {event.isPaid ? " · zaplatené" : ""}
             </p>
           ) : isFull ? (
             <p className="mx-auto mt-5 max-w-[280px] rounded-pill bg-white/15 py-2.5 text-center text-sm font-semibold text-white">
@@ -131,10 +146,15 @@ export function EventDetailModal({
           ) : (
             <EventRegistrationForm
               eventId={event.id}
+              eventTitle={event.title}
               defaultName={event.defaultName}
               defaultSurname={event.defaultSurname}
               variant="modal"
               stayOnPage
+              isPaid={event.isPaid}
+              priceCents={event.priceCents}
+              currency={event.currency}
+              pendingPayment={event.pendingPayment}
               onSuccess={() => {
                 setRegistered(true);
                 setRegistrationCount((c) => c + 1);

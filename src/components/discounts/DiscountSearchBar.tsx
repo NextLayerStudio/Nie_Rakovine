@@ -106,7 +106,9 @@ export function DiscountSearchBar({
           }}
           placeholder="Hľadať"
           autoComplete="off"
+          role="combobox"
           aria-autocomplete="list"
+          aria-haspopup="listbox"
           aria-controls={showPanel ? listId : undefined}
           aria-expanded={showPanel}
           className="w-full rounded-pill bg-brand-pink-soft py-3 pl-5 pr-12 text-sm text-brand-purple placeholder-brand-purple/45 outline-none focus:ring-2 focus:ring-brand-purple/15"
@@ -136,7 +138,7 @@ export function DiscountSearchBar({
               </li>
             )}
             {hints.map((hint) => (
-              <li key={hint.handle} role="option">
+              <li key={hint.handle} role="option" aria-selected={false}>
                 <button
                   type="button"
                   onClick={() => goToBrand(hint.handle)}

@@ -104,6 +104,9 @@ export function FeedTabPanel({ initialData }: { initialData?: FeedData }) {
                 capacity={e.capacity ?? undefined}
                 defaultName={firstName ?? ""}
                 defaultSurname={lastName}
+                isPaid={e.isPaid}
+                priceCents={e.priceCents}
+                currency={e.currency}
               />
             </div>
           );

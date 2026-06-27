@@ -5,6 +5,8 @@ import {
   EventDetailModal,
   type EventModalData,
 } from "@/components/EventDetailModal";
+import { EventPriceBadge } from "@/components/events/EventPriceBadge";
+import { formatEventPrice } from "@/lib/event-payment";
 
 export function FeedEventItem({
   id,
@@ -19,6 +21,10 @@ export function FeedEventItem({
   capacity,
   defaultName,
   defaultSurname,
+  isPaid = false,
+  priceCents = null,
+  currency = "EUR",
+  pendingPayment = false,
 }: {
   id: string;
   title: string;
@@ -32,6 +38,10 @@ export function FeedEventItem({
   capacity?: number;
   defaultName: string;
   defaultSurname: string;
+  isPaid?: boolean;
+  priceCents?: number | null;
+  currency?: string;
+  pendingPayment?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [liveRegistered, setLiveRegistered] = useState(isRegistered);
@@ -70,6 +80,10 @@ export function FeedEventItem({
     capacity: capacity ?? null,
     defaultName,
     defaultSurname,
+    isPaid,
+    priceCents,
+    currency,
+    pendingPayment,
   };
 
   return (
@@ -94,9 +108,18 @@ export function FeedEventItem({
               }`}
             >
               {liveRegistered && <CheckIcon />}
-              {liveRegistered ? "Prihlásený" : "Zaregistrovať sa"}
+              {liveRegistered
+                ? "Prihlásený"
+                : isPaid && priceCents
+                  ? `Zaplatiť · ${formatEventPrice(priceCents, currency)}`
+                  : "Zaregistrovať sa"}
             </span>
           </span>
+          {isPaid && priceCents ? (
+            <span className="absolute right-3 top-3">
+              <EventPriceBadge priceCents={priceCents} currency={currency} />
+            </span>
+          ) : null}
         </button>
 
         {/* Textový obsah */}

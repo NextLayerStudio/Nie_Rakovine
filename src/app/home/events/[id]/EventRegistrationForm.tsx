@@ -6,22 +6,33 @@ import {
   type ActionState,
 } from "@/lib/actions/events";
 import { FormError, SubmitButton } from "@/components/FormError";
+import { EventPaymentStep } from "@/components/events/EventPaymentStep";
 
 const INITIAL: ActionState = { ok: false };
 
 export function EventRegistrationForm({
   eventId,
+  eventTitle,
   defaultName,
   defaultSurname,
   variant = "page",
   stayOnPage = false,
+  isPaid = false,
+  priceCents = null,
+  currency = "EUR",
+  pendingPayment = false,
   onSuccess,
 }: {
   eventId: string;
+  eventTitle?: string;
   defaultName: string;
   defaultSurname: string;
   variant?: "page" | "modal";
   stayOnPage?: boolean;
+  isPaid?: boolean;
+  priceCents?: number | null;
+  currency?: string;
+  pendingPayment?: boolean;
   onSuccess?: () => void;
 }) {
   const [state, formAction] = useActionState(
@@ -34,6 +45,35 @@ export function EventRegistrationForm({
   }, [state.ok, onSuccess]);
 
   const compact = variant === "modal";
+
+  if (pendingPayment) {
+    return (
+      <p
+        className={
+          compact
+            ? "mx-auto mt-5 max-w-[280px] rounded-pill bg-amber-400/20 py-2.5 text-center text-sm font-semibold text-amber-50"
+            : "mt-5 rounded-pill bg-amber-400/20 py-2.5 text-center text-xs font-semibold text-white"
+        }
+      >
+        Platba čaká na dokončenie
+      </p>
+    );
+  }
+
+  if (isPaid && priceCents) {
+    return (
+      <EventPaymentStep
+        eventId={eventId}
+        eventTitle={eventTitle ?? "Podujatie"}
+        priceCents={priceCents}
+        currency={currency}
+        defaultName={defaultName}
+        defaultSurname={defaultSurname}
+        variant={variant}
+        onSuccess={onSuccess}
+      />
+    );
+  }
 
   return (
     <form

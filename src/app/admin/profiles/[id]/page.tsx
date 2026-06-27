@@ -130,6 +130,9 @@ export default async function AdminProfileDetailPage({
                 startsAt={event.startsAt}
                 location={event.location}
                 coverUrl={event.coverUrl}
+                isPaid={event.isPaid}
+                priceCents={event.priceCents}
+                currency={event.currency}
                 compact
                 className="mx-0 mb-0 h-full"
                 statusBadge={<PublishBadge published={event.published} />}

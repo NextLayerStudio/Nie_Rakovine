@@ -293,6 +293,12 @@ enum EventCategory {
   INTERNE
 }
 
+enum EventPaymentStatus {
+  NOT_REQUIRED
+  PENDING
+  PAID
+}
+
 model Post {
   id          String   @id @default(cuid())
   profileId   String?
@@ -396,6 +402,9 @@ model Event {
   capacity    Int?
   published   Boolean  @default(true)
   cancerTypes CancerType[] @default([])
+  isPaid      Boolean  @default(false)
+  priceCents  Int?
+  currency    String   @default("EUR")
 
   registrations EventRegistration[]
 
@@ -406,14 +415,16 @@ model Event {
 }
 
 model EventRegistration {
-  id        String   @id @default(cuid())
-  eventId   String
-  userId    String
-  name      String?
-  surname   String?
-  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
+  id            String             @id @default(cuid())
+  eventId       String
+  userId        String
+  name          String?
+  surname       String?
+  paymentStatus EventPaymentStatus @default(NOT_REQUIRED)
+  paidAt        DateTime?
+  event         Event              @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime           @default(now())
 
   @@unique([eventId, userId])
 }

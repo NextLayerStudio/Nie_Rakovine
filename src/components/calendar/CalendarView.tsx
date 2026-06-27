@@ -6,6 +6,7 @@ import {
   EventDetailModal,
   type EventModalData,
 } from "@/components/EventDetailModal";
+import { formatEventPrice } from "@/lib/event-payment";
 import {
   EVENT_CATEGORIES,
   EVENT_CATEGORY_META,
@@ -27,6 +28,10 @@ export type CalendarEvent = {
   registrationCount: number;
   capacity: number | null;
   distanceKm: number | null;
+  isPaid: boolean;
+  priceCents: number | null;
+  currency: string;
+  pendingPayment: boolean;
 };
 
 const WEEKDAYS = ["Po", "Ut", "St", "Št", "Pi", "So", "Ne"];
@@ -95,6 +100,10 @@ export function CalendarView({
       capacity: event.capacity,
       defaultName,
       defaultSurname,
+      isPaid: event.isPaid,
+      priceCents: event.priceCents,
+      currency: event.currency,
+      pendingPayment: event.pendingPayment,
     });
   }
 
@@ -422,6 +431,11 @@ export function CalendarView({
                     Prihlásený/á
                   </span>
                 )}
+                {e.isPaid && e.priceCents ? (
+                  <span className="rounded-pill bg-amber-100 px-2 py-0.5 font-semibold text-amber-900">
+                    {formatEventPrice(e.priceCents, e.currency)}
+                  </span>
+                ) : null}
               </div>
             </button>
           ))
