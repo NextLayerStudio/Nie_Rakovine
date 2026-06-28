@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FollowProfileButton } from "@/components/FollowProfileButton";
+import { ProfilePostGrid } from "@/components/profile/ProfilePostGrid";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
-import { postPublicHref, postCoverFallback, safeReturnHref } from "@/lib/post-display";
+import { postCoverFallback, safeReturnHref } from "@/lib/post-display";
 import type { PostType } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
@@ -47,9 +48,9 @@ export default async function ClubProfilePage({
           videoUrl: true,
           images: {
             orderBy: { sortOrder: "asc" as const },
-            take: 1,
             select: { url: true },
           },
+          _count: { select: { images: true } },
         },
       },
     },
@@ -64,6 +65,15 @@ export default async function ClubProfilePage({
   const avatarStyle = profile.avatarUrl
     ? { backgroundImage: `url(${profile.avatarUrl})`, backgroundSize: "cover" as const, backgroundPosition: "center" as const }
     : { background: "linear-gradient(135deg, #f5c4d0 0%, #6F2380 100%)" };
+
+  const gridPosts = profile.posts.map((post) => ({
+    id: post.id,
+    type: post.type as PostType,
+    title: post.title,
+    coverUrl: post.coverUrl ?? post.images[0]?.url ?? null,
+    fallback: postCoverFallback(post.type as PostType),
+    imageCount: post._count.images,
+  }));
 
   return (
     <div className="flex min-h-full flex-col bg-white">
@@ -138,75 +148,7 @@ export default async function ClubProfilePage({
       </div>
 
       {/* Posts grid */}
-      {profile.posts.length === 0 ? (
-        <div className="flex flex-1 items-center justify-center py-16 text-sm text-brand-purple/50">
-          Zatiaľ žiadne príspevky.
-        </div>
-      ) : (
-        <div className="grid grid-cols-3 gap-px bg-brand-purple/10">
-          {profile.posts.map((post) => {
-            const cover = post.coverUrl ?? post.images[0]?.url ?? null;
-            const fallback = postCoverFallback(post.type as PostType);
-            return (
-              <Link
-                key={post.id}
-                href={postPublicHref(post)}
-                className="relative aspect-square overflow-hidden"
-              >
-                {cover ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={cover}
-                    alt={post.title}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="h-full w-full" style={{ background: fallback }} />
-                )}
-
-                {/* Type overlay icon */}
-                {post.type === "VIDEO" && (
-                  <div className="absolute right-1.5 top-1.5">
-                    <div className="grid h-6 w-6 place-items-center rounded-full bg-black/50">
-                      <svg viewBox="0 0 24 24" className="h-3 w-3 translate-x-px text-white" fill="currentColor" aria-hidden>
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
-                  </div>
-                )}
-                {post.type === "ARTICLE" && (
-                  <div className="absolute right-1.5 top-1.5">
-                    <div className="grid h-6 w-6 place-items-center rounded-full bg-black/50">
-                      <svg viewBox="0 0 24 24" className="h-3 w-3 text-white" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-                        <path d="M4 6h16M4 10h16M4 14h10" strokeLinecap="round" />
-                      </svg>
-                    </div>
-                  </div>
-                )}
-                {post.type === "RECIPE" && (
-                  <div className="absolute right-1.5 top-1.5">
-                    <div className="grid h-6 w-6 place-items-center rounded-full bg-black/50">
-                      <svg viewBox="0 0 24 24" className="h-3 w-3 text-white" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-                        <path d="M12 2v7m0 0c0-3.5-4-5-4-5m4 5c0-3.5 4-5 4-5M5 9h14l-1.5 11H6.5L5 9z" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </div>
-                  </div>
-                )}
-                {post.type === "PHOTO" && post.images.length > 1 && (
-                  <div className="absolute right-1.5 top-1.5">
-                    <div className="grid h-6 w-6 place-items-center rounded-full bg-black/50">
-                      <svg viewBox="0 0 24 24" className="h-3 w-3 text-white" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-                        <rect x="5" y="5" width="14" height="14" rx="2" />
-                        <rect x="2" y="2" width="14" height="14" rx="2" />
-                      </svg>
-                    </div>
-                  </div>
-                )}
-              </Link>
-            );
-          })}
-        </div>
-      )}
+      <ProfilePostGrid posts={gridPosts} />
     </div>
   );
 }

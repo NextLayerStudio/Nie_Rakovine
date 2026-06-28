@@ -11,6 +11,10 @@ import { notifyNearbyUsersNewEvent } from "@/lib/notifications";
 import { EVENT_CATEGORIES } from "@/lib/event-category";
 import { parseCancerTypes } from "@/lib/cancer-type";
 import { parsePriceToCents } from "@/lib/event-payment";
+import {
+  queueEventPaymentEmail,
+  queueEventRegistrationEmail,
+} from "@/lib/email/send";
 
 export type ActionState = { ok: boolean; message?: string };
 
@@ -185,16 +189,26 @@ export async function registerForEventAction(
 ): Promise<ActionState> {
   const auth = await requireActionUser();
   if (!auth.ok) return { ok: false, message: auth.message };
-  const user = auth.user;
+  const sessionUser = auth.user;
 
   const eventId = String(formData.get("eventId") ?? "");
   const name = String(formData.get("name") ?? "").trim() || null;
   const surname = String(formData.get("surname") ?? "").trim() || null;
   if (!eventId) return { ok: false, message: "Chýba podujatie." };
 
+  const user = await prisma.user.findUnique({
+    where: { id: sessionUser.id },
+    select: { id: true, email: true, fullName: true },
+  });
+  if (!user) return { ok: false, message: "Prihláste sa prosím znova." };
+
   const event = await prisma.event.findFirst({
     where: { id: eventId, published: true },
     select: {
+      title: true,
+      startsAt: true,
+      endsAt: true,
+      location: true,
       isPaid: true,
       priceCents: true,
       capacity: true,
@@ -223,6 +237,8 @@ export async function registerForEventAction(
     return { ok: false, message: "Podujatie je plne obsadené." };
   }
 
+  const wasAlreadyRegistered = Boolean(alreadyRegistered);
+
   try {
     await prisma.eventRegistration.upsert({
       where: { eventId_userId: { eventId, userId: user.id } },
@@ -240,6 +256,18 @@ export async function registerForEventAction(
       ok: false,
       message: prismaActionError(err, "Registrácia zlyhala. Skúste to znova."),
     };
+  }
+
+  if (!wasAlreadyRegistered) {
+    queueEventRegistrationEmail({
+      email: user.email,
+      fullName: user.fullName,
+      eventTitle: event.title,
+      startsAt: event.startsAt,
+      endsAt: event.endsAt,
+      location: event.location,
+      eventId,
+    });
   }
 
   revalidatePath(`/home/events/${eventId}`);
@@ -315,4 +343,74 @@ export async function initiateEventPaymentAction(
   // });
   // const checkoutUrl = await createPaymentSession({ eventId, userId: user.id, amount: event.priceCents });
   // redirect(checkoutUrl);
+}
+
+/** Call from payment webhook after successful charge. */
+export async function finalizePaidEventRegistration(input: {
+  eventId: string;
+  userId: string;
+  name?: string | null;
+  surname?: string | null;
+}): Promise<{ ok: true } | { ok: false; message: string }> {
+  const [user, event] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: input.userId },
+      select: { id: true, email: true, fullName: true },
+    }),
+    prisma.event.findFirst({
+      where: { id: input.eventId, published: true, isPaid: true },
+      select: {
+        title: true,
+        startsAt: true,
+        endsAt: true,
+        location: true,
+        priceCents: true,
+        currency: true,
+      },
+    }),
+  ]);
+
+  if (!user || !event?.priceCents) {
+    return { ok: false, message: "Platba sa nepodarila overiť." };
+  }
+
+  const now = new Date();
+
+  await prisma.eventRegistration.upsert({
+    where: {
+      eventId_userId: { eventId: input.eventId, userId: input.userId },
+    },
+    create: {
+      eventId: input.eventId,
+      userId: input.userId,
+      name: input.name ?? null,
+      surname: input.surname ?? null,
+      paymentStatus: "PAID",
+      paidAt: now,
+    },
+    update: {
+      name: input.name ?? undefined,
+      surname: input.surname ?? undefined,
+      paymentStatus: "PAID",
+      paidAt: now,
+    },
+  });
+
+  queueEventPaymentEmail({
+    email: user.email,
+    fullName: user.fullName,
+    eventTitle: event.title,
+    amountCents: event.priceCents,
+    currency: event.currency,
+    startsAt: event.startsAt,
+    location: event.location,
+    eventId: input.eventId,
+  });
+
+  revalidatePath(`/home/events/${input.eventId}`);
+  revalidatePath("/home");
+  revalidatePath("/home/calendar");
+  revalidatePath("/profile");
+
+  return { ok: true };
 }

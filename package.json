@@ -16,7 +16,10 @@
     "db:demo": "tsx scripts/seed-demo-data.ts",
     "db:cancer-demo": "tsx scripts/seed-cancer-demo.ts",
     "db:discount-demo": "tsx scripts/seed-discount-demo.ts",
-    "admin:promote": "tsx scripts/promote-admin.ts"
+    "admin:promote": "tsx scripts/promote-admin.ts",
+    "email:test": "tsx scripts/test-email.ts",
+    "email:welcome": "tsx scripts/test-welcome-email.ts",
+    "email:event": "tsx scripts/test-event-email.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -31,6 +34,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-leaflet": "^5.0.0",
+    "resend": "^6.16.0",
     "sharp": "^0.35.1",
     "tsx": "^4.22.3"
   },

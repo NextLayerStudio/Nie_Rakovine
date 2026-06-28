@@ -89,6 +89,7 @@ model User {
   profileFollows     ProfileFollow[]
   notifications      Notification[]
   savedDiscountOffers SavedDiscountOffer[]
+  knownDevices       UserKnownDevice[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -229,6 +230,20 @@ model SavedDiscountOffer {
 
   @@unique([userId, offerId])
   @@index([userId, createdAt(sort: Desc)])
+}
+
+model UserKnownDevice {
+  id         String   @id @default(cuid())
+  userId     String
+  deviceId   String
+  label      String?
+  userAgent  String?
+  lastSeenAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, deviceId])
+  @@index([userId, lastSeenAt(sort: Desc)])
 }
 
 model ProfileFollow {

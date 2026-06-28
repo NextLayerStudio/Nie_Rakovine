@@ -9,6 +9,11 @@ import {
   hashPassword,
   verifyPassword,
 } from "@/lib/auth";
+import {
+  queueWelcomeEmail,
+  trackLoginDevice,
+} from "@/lib/email/send";
+import { headers } from "next/headers";
 
 export type ActionState = {
   ok: boolean;
@@ -56,6 +61,17 @@ export async function registerAction(
   });
 
   await createSession({ userId: user.id, role: user.role });
+
+  queueWelcomeEmail({ email: user.email, fullName: user.fullName });
+
+  const headerStore = await headers();
+  await trackLoginDevice({
+    userId: user.id,
+    email: user.email,
+    fullName: user.fullName,
+    userAgent: headerStore.get("user-agent") ?? "Neznáme zariadenie",
+  });
+
   redirect("/register/subscription");
 }
 
@@ -80,6 +96,14 @@ export async function loginAction(
   }
 
   await createSession({ userId: user.id, role: user.role });
+
+  const headerStore = await headers();
+  await trackLoginDevice({
+    userId: user.id,
+    email: user.email,
+    fullName: user.fullName,
+    userAgent: headerStore.get("user-agent") ?? "Neznáme zariadenie",
+  });
 
   const redirectTo =
     next && next.startsWith("/")
