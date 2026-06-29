@@ -15,10 +15,11 @@ export default async function ExpectationsStep() {
           backHref="/register/profile/interests"
           title="Registračný formulár"
           step={{ current: 4, total: 5 }}
+          className="[&_h1]:text-lg [&_h1]:font-bold"
         />
 
         <div className="shrink-0 px-6 text-center">
-          <p className="text-sm leading-relaxed text-brand-purple/75">
+          <p className="text-base leading-relaxed text-brand-purple/75">
             Naším cieľom je čo najviac vás podporiť. Vaše odpovede nám pomôžu lepšie
             pochopiť, čo od členstva očakávate a akú pomoc práve potrebujete.
           </p>

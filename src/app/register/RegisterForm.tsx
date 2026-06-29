@@ -83,13 +83,13 @@ export function RegisterForm() {
           <label className="label" htmlFor="birthDate">
             Dátum narodenia
           </label>
-          {/* overflow-hidden wrapper forces date input to stay within container on iOS */}
-          <div className="overflow-hidden">
+          {/* Clip iOS date input — native control ignores border-radius/min-width otherwise */}
+          <div className="w-full overflow-hidden rounded-pill">
             <input
               id="birthDate"
               name="birthDate"
               type="date"
-              className="input-light"
+              className="input-light block w-full min-w-0 max-w-full"
             />
           </div>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { cn } from "@/lib/utils";
 import { saveLocationAction, type ActionState } from "@/lib/actions/profile";
 import { FormError, SubmitButton } from "@/components/FormError";
 import { LocationPicker } from "@/components/map/LocationPicker";
@@ -46,7 +47,7 @@ export function LocationForm({
         name="region"
         value={region}
         onChange={(e) => setRegion(e.target.value)}
-        className="input-light text-brand-purple"
+        className="input-light py-3.5 text-lg text-brand-purple"
       >
         <option value="">Vyberte kraj</option>
         {REGIONS.map((r) => (
@@ -62,10 +63,10 @@ export function LocationForm({
         value={city}
         onChange={(e) => setCity(e.target.value)}
         placeholder="Mesto (voliteľné)"
-        className="input-light mt-3"
+        className="input-light mt-3 text-base"
       />
 
-      <p className="my-3 text-center text-xs text-brand-purple/60">
+      <p className="my-3 text-center text-sm text-brand-purple/60">
         Alebo vyberte miesto na mape:
       </p>
 
@@ -84,12 +85,13 @@ export function LocationForm({
 
       <div className="flex justify-center py-4">
         <SubmitButton
-          className="btn-secondary flex w-40 justify-between"
+          className="btn-secondary !grid w-[94%] grid-cols-[1fr_auto_1fr] items-center !px-4 !py-3.5 text-base font-medium"
           pendingLabel="Ukladám…"
         >
           <>
-            Ďalej
-            <Chevron />
+            <span aria-hidden />
+            <span>Ďalej</span>
+            <Chevron className="justify-self-end" />
           </>
         </SubmitButton>
       </div>
@@ -97,9 +99,14 @@ export function LocationForm({
   );
 }
 
-function Chevron() {
+function Chevron({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden>
+    <svg
+      viewBox="0 0 24 24"
+      className={cn("h-4 w-4 shrink-0", className)}
+      fill="none"
+      aria-hidden
+    >
       <path
         d="M9 6l6 6-6 6"
         stroke="currentColor"

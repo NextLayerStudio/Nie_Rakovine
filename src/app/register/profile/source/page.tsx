@@ -15,6 +15,7 @@ export default async function SourceStep() {
           backHref="/register/profile/expectations"
           title="Registračný formulár"
           step={{ current: 5, total: 5 }}
+          className="[&_h1]:text-lg [&_h1]:font-bold"
         />
 
         <SourceForm

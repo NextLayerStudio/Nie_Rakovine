@@ -1,4 +1,5 @@
-import { NieRakovineLogo, OnkoLogo } from "@/components/OnkoLogo";
+import Image from "next/image";
+import { NieRakovineLogo } from "@/components/OnkoLogo";
 import { cn } from "@/lib/utils";
 
 /** Brand loading screen — pink canvas, ONKO centre, NIE RAKOVINE footer, animation. */
@@ -32,7 +33,14 @@ export function LoadingScreen({
       >
         <div className="flex flex-1 flex-col items-center justify-center px-8">
           <div className="onko-loading-pulse">
-            <OnkoLogo size="md" priority />
+            <Image
+              src="/logo/logo_biele_onkoklub.png.webp"
+              alt="ONKO KLUB"
+              width={800}
+              height={400}
+              priority
+              className="h-auto w-[min(55vw,210px)] object-contain"
+            />
           </div>
           <LoadingDots />
         </div>

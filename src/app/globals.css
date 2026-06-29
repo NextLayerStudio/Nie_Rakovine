@@ -93,6 +93,19 @@ body {
   .input-light {
     @apply w-full rounded-pill bg-[#F2D9E2] px-5 py-3 text-sm text-brand-purple placeholder-brand-purple/60 outline-none focus:bg-[#EAC4D2];
   }
+  .input-light[type="date"] {
+    @apply block min-w-0 max-w-full appearance-none;
+    box-sizing: border-box;
+  }
+  .input-light[type="date"]::-webkit-date-and-time-value {
+    min-width: 0;
+    text-align: left;
+  }
+  .input-light[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    margin-left: 0.25rem;
+    opacity: 0.55;
+  }
   .label {
     @apply mb-1 block text-xs font-medium text-brand-purple/80;
   }

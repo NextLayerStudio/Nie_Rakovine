@@ -9,13 +9,24 @@ export function ConsentCheckbox({
   children,
   required,
   defaultChecked = false,
+  checked: checkedProp,
+  onCheckedChange,
 }: {
   name: string;
   children: React.ReactNode;
   required?: boolean;
   defaultChecked?: boolean;
+  checked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
 }) {
-  const [checked, setChecked] = useState(defaultChecked);
+  const [internalChecked, setInternalChecked] = useState(defaultChecked);
+  const isControlled = checkedProp !== undefined;
+  const checked = isControlled ? checkedProp : internalChecked;
+
+  function handleChange(next: boolean) {
+    if (isControlled) onCheckedChange?.(next);
+    else setInternalChecked(next);
+  }
 
   return (
     <label className="relative flex cursor-pointer items-start gap-3 py-1.5">
@@ -24,7 +35,7 @@ export function ConsentCheckbox({
         name={name}
         value="on"
         checked={checked}
-        onChange={(e) => setChecked(e.target.checked)}
+        onChange={(e) => handleChange(e.target.checked)}
         onFocus={(e) => e.currentTarget.blur()}
         required={required}
         className="sr-only"

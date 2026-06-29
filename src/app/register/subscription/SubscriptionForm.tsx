@@ -42,20 +42,20 @@ export function SubscriptionForm({
                 "w-full rounded-[28px] border-2 p-5 text-white shadow-soft transition",
                 isPrimary
                   ? "border-brand-purple/30 bg-brand-purple"
-                  : "border-sky-400 bg-brand-pink",
+                  : "border-brand-pink/30 bg-brand-pink",
                 active &&
                   (isPrimary
                     ? "ring-4 ring-brand-purple/25"
-                    : "ring-4 ring-sky-300/40"),
+                    : "ring-4 ring-brand-pink/30"),
               )}
             >
-              <h2 className="text-left font-serif text-xl font-extrabold leading-tight">
+              <h2 className="text-left text-2xl font-extrabold leading-tight tracking-tight">
                 {plan.name}
               </h2>
               <p className="mt-2 text-left text-sm leading-relaxed text-white/95">
                 {plan.description}
               </p>
-              <p className="mt-4 text-left font-serif text-lg font-extrabold leading-none">
+              <p className="mt-4 text-left text-lg font-extrabold leading-none">
                 {plan.price}
               </p>
               <p className="mt-2 text-left text-sm text-white/90">

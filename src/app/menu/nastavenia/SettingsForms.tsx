@@ -336,7 +336,7 @@ export function SettingsForms({
         subtitle="Dokumenty a zásady"
       >
         <Link
-          href="/cookies"
+          href="/cookies?from=/menu/nastavenia"
           className="flex items-center gap-3 rounded-2xl px-1 py-2 transition hover:bg-brand-purple/5"
         >
           <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand-purple/10 text-brand-purple">

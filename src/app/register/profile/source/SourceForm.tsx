@@ -21,30 +21,39 @@ export function SourceForm({
   const [state, formAction] = useActionState(saveSourceAction, INITIAL);
 
   return (
-    <form action={formAction} className="mt-4 flex flex-col gap-5 px-5 pb-6">
-      <h2 className="text-center text-base font-semibold text-brand-purple">
+    <form action={formAction} className="mt-8 flex flex-col items-center gap-5 px-5 pb-6">
+      <h2 className="text-center text-xl font-bold leading-snug text-brand-purple">
         Čo od ONKO KLUBU očakávate?
       </h2>
       <CheckboxList
         name="gain"
         options={gainOptions}
         defaultSelected={defaultGain}
+        variant="plain"
       />
 
-      <h3 className="text-center text-sm font-semibold text-brand-purple">
+      <h3 className="text-center text-xl font-bold leading-snug text-brand-purple">
         Odkiaľ ste sa o nás dozvedeli?
       </h3>
       <CheckboxList
         name="hearAboutUs"
         options={hearOptions}
         defaultSelected={defaultHear}
+        variant="plain"
       />
 
       <FormError message={state.message} />
 
-      <div className="flex justify-center pt-2">
-        <SubmitButton className="btn-secondary w-40" pendingLabel="Ukladám…">
-          Hotovo
+      <div className="flex w-full justify-center pt-6">
+        <SubmitButton
+          className="btn-secondary !grid w-[94%] grid-cols-[1fr_auto_1fr] items-center !px-4 !py-3.5 text-base font-medium"
+          pendingLabel="Ukladám…"
+        >
+          <>
+            <span aria-hidden />
+            <span>Hotovo</span>
+            <span aria-hidden />
+          </>
         </SubmitButton>
       </div>
     </form>

@@ -122,7 +122,7 @@ export function LocationPicker({
       <button
         type="button"
         onClick={useMyLocation}
-        className="mb-2 flex w-full items-center justify-center gap-2 rounded-pill bg-brand-purple px-4 py-2.5 text-sm font-semibold text-white"
+        className="mb-2 flex w-full items-center justify-center gap-2 rounded-pill bg-brand-purple px-4 py-3.5 text-base font-bold text-white shadow-soft"
       >
         <LocateIcon />
         Použiť moju polohu
@@ -138,7 +138,7 @@ export function LocationPicker({
         />
       </div>
 
-      <p className="mt-2 text-center text-[11px] text-brand-purple/60">
+      <p className="mt-2 text-center text-sm text-brand-purple/60">
         {status ||
           (position
             ? "Potiahnutím špendlíka alebo klepnutím upravte miesto."
@@ -146,7 +146,7 @@ export function LocationPicker({
       </p>
 
       {showAddress && address && (
-        <p className="mt-1 text-center text-xs font-semibold text-brand-purple">
+        <p className="mt-1 text-center text-sm font-semibold text-brand-purple">
           {address}
         </p>
       )}

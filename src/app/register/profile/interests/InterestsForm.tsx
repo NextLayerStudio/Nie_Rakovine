@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { cn } from "@/lib/utils";
 import { saveInterestsAction, type ActionState } from "@/lib/actions/profile";
 import { FormError, SubmitButton } from "@/components/FormError";
 import { CheckboxList } from "@/components/CheckboxList";
@@ -17,26 +18,25 @@ export function InterestsForm({
   const [state, formAction] = useActionState(saveInterestsAction, INITIAL);
 
   return (
-    <form
-      action={formAction}
-      className="mt-5 flex flex-1 flex-col gap-4 px-5 pb-2"
-    >
+    <form action={formAction} className="mt-4 flex flex-col items-center gap-4 px-5 pb-6">
       <CheckboxList
         name="interests"
         options={options}
         defaultSelected={defaultSelected}
+        variant="plain"
       />
 
       <FormError message={state.message} />
 
-      <div className="mt-auto pb-2">
+      <div className="flex w-full justify-center pt-6">
         <SubmitButton
-          className="btn-secondary mx-auto flex w-40 justify-between"
+          className="btn-secondary !grid w-[94%] grid-cols-[1fr_auto_1fr] items-center !px-4 !py-3.5 text-base font-medium"
           pendingLabel="Ukladám…"
         >
           <>
-            Ďalej
-            <Chevron />
+            <span aria-hidden />
+            <span>Ďalej</span>
+            <Chevron className="justify-self-end" />
           </>
         </SubmitButton>
       </div>
@@ -44,9 +44,14 @@ export function InterestsForm({
   );
 }
 
-function Chevron() {
+function Chevron({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden>
+    <svg
+      viewBox="0 0 24 24"
+      className={cn("h-4 w-4 shrink-0", className)}
+      fill="none"
+      aria-hidden
+    >
       <path
         d="M9 6l6 6-6 6"
         stroke="currentColor"
