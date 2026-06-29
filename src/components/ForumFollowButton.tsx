@@ -19,7 +19,7 @@ export function ForumFollowButton({
   const [isFollowing, setIsFollowing] = useState(initialFollowing);
   const [, startTransition] = useTransition();
   const sizing =
-    size === "md" ? "px-4 py-2 text-xs" : "px-3 py-1.5 text-[10px]";
+    size === "md" ? "px-3.5 py-1.5 text-sm" : "px-3.5 py-1 text-sm";
 
   const handleClick = () => {
     const next = !isFollowing;
@@ -36,10 +36,10 @@ export function ForumFollowButton({
     <button
       type="button"
       onClick={handleClick}
-      className={`shrink-0 rounded-full font-semibold shadow-sm transition active:scale-95 ${sizing} ${
+      className={`shrink-0 rounded-xl border font-semibold transition active:scale-95 ${sizing} ${
         isFollowing
-          ? "bg-brand-purple/10 text-brand-purple ring-1 ring-brand-purple/20"
-          : "border border-brand-pink text-brand-pink hover:bg-brand-pink/5"
+          ? "border-brand-purple/20 text-brand-purple/40"
+          : "border-brand-pink text-brand-pink hover:bg-brand-pink/5"
       }`}
     >
       {isFollowing ? joinedLabel : joinLabel}
