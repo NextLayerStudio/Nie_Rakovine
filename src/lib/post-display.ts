@@ -20,14 +20,34 @@ export function profileHrefWithReturn(handle: string, returnPath: string) {
   return `/home/profiles/${handle}?from=${encodeURIComponent(returnPath)}`;
 }
 
-/** Only allow in-app relative return paths under /home. */
+/** Forum page URL that remembers where to go back (e.g. Moj profil). */
+export function forumHrefWithReturn(forumId: string, returnPath: string) {
+  return `/home/forums/${forumId}?from=${encodeURIComponent(returnPath)}`;
+}
+
+/** Forum thread URL that remembers where to go back (e.g. Moj profil). */
+export function forumThreadHrefWithReturn(
+  forumId: string,
+  threadId: string,
+  returnPath: string,
+) {
+  return `/home/forums/${forumId}/${threadId}?from=${encodeURIComponent(returnPath)}`;
+}
+
+/** Only allow in-app relative return paths under /home or /profile. */
 export function safeReturnHref(from: string | undefined, fallback: string): string {
   if (!from) return fallback;
   try {
     const path = decodeURIComponent(from);
     if (path.includes("://")) return fallback;
     const pathname = path.split("?")[0];
-    if (pathname === "/home" || pathname.startsWith("/home/")) return path;
+    if (
+      pathname === "/home" ||
+      pathname.startsWith("/home/") ||
+      pathname === "/profile"
+    ) {
+      return path;
+    }
   } catch {
     // invalid encoding
   }

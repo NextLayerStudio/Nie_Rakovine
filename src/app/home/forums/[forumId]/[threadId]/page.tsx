@@ -9,15 +9,20 @@ import {
   visibleCommentsWhere,
   visibleThreadsWhere,
 } from "@/lib/forum-moderation";
+import { safeReturnHref } from "@/lib/post-display";
 
 export const dynamic = "force-dynamic";
 
 export default async function ForumThreadPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ forumId: string; threadId: string }>;
+  searchParams: Promise<{ from?: string }>;
 }) {
   const { forumId, threadId } = await params;
+  const { from } = await searchParams;
+  const backHref = safeReturnHref(from, `/home/forums/${forumId}`);
   const user = await requireUser();
 
   const [thread, membership, userLike] = await Promise.all([
@@ -91,7 +96,7 @@ export default async function ForumThreadPage({
   return (
     <div className="forum-page min-h-full">
       <ForumSubHeader
-        backHref={`/home/forums/${forumId}`}
+        backHref={backHref}
         title={thread.forum.title}
       />
 

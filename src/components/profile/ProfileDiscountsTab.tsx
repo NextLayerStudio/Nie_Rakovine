@@ -72,36 +72,20 @@ export function ProfileDiscountsTab({
             </Link>
           </div>
         ) : (
-          <div className="-mx-1 overflow-x-auto px-1 pb-1">
-            <div className="flex w-max gap-3">
-              {savedDiscounts.map((offer) => (
-                <div key={offer.offerId} className="w-[280px] shrink-0">
-                  <DiscountOfferCard
-                    offerId={offer.offerId}
-                    title={offer.title}
-                    description={offer.description}
-                    discountText={offer.discountText}
-                    promoCode={offer.promoCode}
-                    accentColor={offer.accentColor}
-                    imageUrl={offer.imageUrl}
-                    validUntil={
-                      offer.validUntil ? new Date(offer.validUntil) : null
-                    }
-                    saved
-                  />
-                </div>
-              ))}
-            </div>
-            {savedDiscounts.length > 1 && (
-              <div className="mt-2 flex justify-center gap-1">
-                {savedDiscounts.map((o) => (
-                  <span
-                    key={o.offerId}
-                    className="h-1.5 w-1.5 rounded-full bg-brand-purple/25"
-                  />
-                ))}
-              </div>
-            )}
+          <div className="space-y-3">
+            {savedDiscounts.map((offer) => (
+              <DiscountOfferCard
+                key={offer.offerId}
+                offerId={offer.offerId}
+                title={offer.title}
+                description={offer.description}
+                discountText={offer.discountText}
+                accentColor={offer.accentColor}
+                imageUrl={offer.imageUrl}
+                validUntil={offer.validUntil}
+                saved
+              />
+            ))}
           </div>
         )}
       </section>

@@ -5,6 +5,7 @@ import { ForumPostCard } from "@/components/ForumPostCard";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { forumAvatarStyle } from "@/lib/avatar-style";
+import { safeReturnHref } from "@/lib/post-display";
 import {
   APPROVED,
   approvedCommentsCountWhere,
@@ -18,10 +19,11 @@ export default async function ForumDetailPage({
   searchParams,
 }: {
   params: Promise<{ forumId: string }>;
-  searchParams: Promise<{ pending?: string }>;
+  searchParams: Promise<{ pending?: string; from?: string }>;
 }) {
   const { forumId } = await params;
-  const { pending } = await searchParams;
+  const { pending, from } = await searchParams;
+  const backHref = safeReturnHref(from, "/home/forums");
   const user = await requireUser();
 
   const forum = await prisma.forum.findUnique({
@@ -54,7 +56,7 @@ export default async function ForumDetailPage({
   return (
     <div className="forum-page min-h-full">
       <ForumDetailHeader
-        backHref="/home/forums"
+        backHref={backHref}
         imageUrl={forum.imageUrl}
         accentColor={forum.accentColor}
         title={forum.title}

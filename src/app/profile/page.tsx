@@ -5,7 +5,7 @@ import { NotificationsDrawer } from "@/components/NotificationsDrawer";
 import { PhoneShell } from "@/components/PhoneShell";
 import { ProfileView } from "@/components/profile/ProfileView";
 import { requireUser } from "@/lib/auth";
-import { visibleCommentsWhere, visibleThreadsWhere } from "@/lib/forum-moderation";
+import { visibleThreadsWhere, approvedCommentsCountWhere } from "@/lib/forum-moderation";
 import { getUnreadNotificationCount } from "@/lib/notifications";
 import { parseProfileTab } from "@/lib/profile-page";
 import { buildPostGallery, postPublicHref } from "@/lib/post-display";
@@ -124,7 +124,7 @@ export default async function ProfilePage({
 
   const followedForumIds = memberships.map((m) => m.forum.id);
 
-  const [recentActivity, forumThreads] = await Promise.all([
+  const [recentActivity, userForumThreads] = await Promise.all([
     followedForumIds.length > 0
       ? prisma.forumThread.findMany({
           where: {
@@ -136,37 +136,47 @@ export default async function ProfilePage({
           distinct: ["forumId"],
         })
       : Promise.resolve([]),
-    followedForumIds.length > 0
-      ? prisma.forumThread.findMany({
-          where: {
-            forumId: { in: followedForumIds },
-            createdAt: { gte: conversationCutoff },
-            ...visibleThreadsWhere(user.id),
-          },
-          orderBy: { createdAt: "desc" },
-          take: 15,
+    prisma.forumThread.findMany({
+      where: {
+        authorId: user.id,
+        createdAt: { gte: conversationCutoff },
+        forum: { published: true },
+        ...visibleThreadsWhere(user.id),
+      },
+      orderBy: { createdAt: "desc" },
+      take: 15,
+      select: {
+        id: true,
+        body: true,
+        title: true,
+        status: true,
+        coverUrl: true,
+        likeCount: true,
+        forum: {
           select: {
             id: true,
-            body: true,
             title: true,
-            forum: {
-              select: {
-                id: true,
-                title: true,
-                imageUrl: true,
-                accentColor: true,
-              },
-            },
-            comments: {
-              where: visibleCommentsWhere(user.id),
-              orderBy: { createdAt: "asc" },
-              take: 1,
-              select: { body: true },
-            },
+            imageUrl: true,
+            accentColor: true,
           },
-        })
-      : Promise.resolve([]),
+        },
+        _count: { select: { comments: approvedCommentsCountWhere() } },
+      },
+    }),
   ]);
+
+  const threadIds = userForumThreads.map((t) => t.id);
+  const likedThreadIds =
+    threadIds.length > 0
+      ? new Set(
+          (
+            await prisma.forumThreadLike.findMany({
+              where: { userId: user.id, threadId: { in: threadIds } },
+              select: { threadId: true },
+            })
+          ).map((l) => l.threadId),
+        )
+      : new Set<string>();
 
   const activeForumIds = new Set(recentActivity.map((t) => t.forumId));
 
@@ -226,14 +236,17 @@ export default async function ProfilePage({
       accentColor: m.forum.accentColor,
       hasRecentActivity: activeForumIds.has(m.forum.id),
     })),
-    forumConversations: forumThreads.map((t) => ({
+    forumPosts: userForumThreads.map((t) => ({
       forumId: t.forum.id,
-      forumTitle: t.forum.title,
-      forumImageUrl: t.forum.imageUrl,
-      forumAccentColor: t.forum.accentColor,
       threadId: t.id,
-      question: (t.title?.trim() || t.body).trim(),
-      answer: t.comments[0]?.body?.trim() ?? null,
+      authorName: user.fullName,
+      title: t.title,
+      body: t.body,
+      coverUrl: t.coverUrl,
+      liked: likedThreadIds.has(t.id),
+      likeCount: t.likeCount,
+      commentCount: t._count.comments,
+      isPending: t.status !== "APPROVED",
     })),
     featuredBrands: featuredBrands.map((b) => ({
       id: b.id,

@@ -16,7 +16,7 @@ import {
 import {
   ProfileForumsTab,
   type ProfileForumChip,
-  type ProfileForumConversation,
+  type ProfileForumPost,
 } from "@/components/profile/ProfileForumsTab";
 import {
   ProfileDiscountsTab,
@@ -43,7 +43,7 @@ export type ProfileViewData = {
   avatarUrl: string | null;
   registeredEvents: ProfileRegisteredEvent[];
   forums: ProfileForumChip[];
-  forumConversations: ProfileForumConversation[];
+  forumPosts: ProfileForumPost[];
   featuredBrands: ProfileFeaturedBrand[];
   savedDiscounts: ProfileSavedDiscount[];
   savedPosts: ProfileSavedPost[];
@@ -101,10 +101,7 @@ export function ProfileView({
         />
       )}
       {activeTab === "forums" && (
-        <ProfileForumsTab
-          forums={data.forums}
-          conversations={data.forumConversations}
-        />
+        <ProfileForumsTab forums={data.forums} posts={data.forumPosts} />
       )}
       {activeTab === "discounts" && (
         <ProfileDiscountsTab

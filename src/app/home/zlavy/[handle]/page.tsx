@@ -82,10 +82,9 @@ export default async function DiscountPartnerPage({
               title={offer.title}
               description={offer.description}
               discountText={offer.discountText}
-              promoCode={offer.promoCode}
               accentColor={offerCardColor(index, offer.accentColor)}
               imageUrl={offer.imageUrl}
-              validUntil={offer.validUntil}
+              validUntil={offer.validUntil?.toISOString() ?? null}
               saved={savedIds.has(offer.id)}
             />
           ))

@@ -111,7 +111,7 @@ export function DiscountSearchBar({
           aria-haspopup="listbox"
           aria-controls={showPanel ? listId : undefined}
           aria-expanded={showPanel}
-          className="w-full rounded-pill bg-brand-pink-soft py-3 pl-5 pr-12 text-sm text-brand-purple placeholder-brand-purple/45 outline-none focus:ring-2 focus:ring-brand-purple/15"
+          className="forum-search"
         />
         <button
           type="submit"

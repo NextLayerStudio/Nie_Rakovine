@@ -2,11 +2,21 @@
 
 import { SaveDiscountButton } from "@/components/discounts/SaveDiscountButton";
 
+function formatValidUntil(validUntil: string | null): string | null {
+  if (!validUntil) return null;
+  const date = new Date(validUntil);
+  if (Number.isNaN(date.getTime())) return null;
+  return date.toLocaleDateString("sk-SK", {
+    day: "numeric",
+    month: "numeric",
+    year: "numeric",
+  });
+}
+
 export function DiscountOfferCard({
   title,
   description,
   discountText,
-  promoCode,
   accentColor,
   imageUrl,
   validUntil,
@@ -16,13 +26,13 @@ export function DiscountOfferCard({
   title: string;
   description: string | null;
   discountText: string | null;
-  promoCode: string | null;
   accentColor: string;
   imageUrl: string | null;
-  validUntil: Date | null;
+  validUntil: string | null;
   saved: boolean;
   offerId: string;
 }) {
+  const validUntilLabel = formatValidUntil(validUntil);
   return (
     <article
       className="relative overflow-hidden rounded-3xl shadow-card"
@@ -54,19 +64,9 @@ export function DiscountOfferCard({
             {description}
           </p>
         )}
-        {promoCode && (
-          <p className="mt-3 inline-flex rounded-pill bg-white/70 px-3 py-1 text-xs font-bold tracking-wide text-brand-purple">
-            Kód: {promoCode}
-          </p>
-        )}
-        {validUntil && (
+        {validUntilLabel && (
           <p className="mt-2 text-[11px] font-medium text-brand-purple/60">
-            Platí do{" "}
-            {validUntil.toLocaleDateString("sk-SK", {
-              day: "numeric",
-              month: "numeric",
-              year: "numeric",
-            })}
+            Platí do {validUntilLabel}
           </p>
         )}
       </div>

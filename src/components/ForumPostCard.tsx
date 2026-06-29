@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ForumThreadLikeButton } from "@/components/ForumThreadLikeButton";
+import { forumThreadHrefWithReturn } from "@/lib/post-display";
 
 export function ForumPostCard({
   forumId,
@@ -14,6 +15,7 @@ export function ForumPostCard({
   likeCount,
   commentCount,
   isPending = false,
+  returnPath,
   footerSlot,
   statusBadge,
   compact = false,
@@ -29,12 +31,15 @@ export function ForumPostCard({
   likeCount: number;
   commentCount: number;
   isPending?: boolean;
+  returnPath?: string;
   footerSlot?: React.ReactNode;
   statusBadge?: React.ReactNode;
   compact?: boolean;
   className?: string;
 }) {
-  const threadHref = `/home/forums/${forumId}/${threadId}`;
+  const threadHref = returnPath
+    ? forumThreadHrefWithReturn(forumId, threadId, returnPath)
+    : `/home/forums/${forumId}/${threadId}`;
   const adminPreview = !!footerSlot;
 
   const content = (

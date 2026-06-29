@@ -4,6 +4,10 @@ import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
 import {
   DiscountBrandCircle,
 } from "@/components/discounts/DiscountUi";
+import {
+  DiscountCategoryIcon,
+} from "@/components/discounts/DiscountCategoryIcon";
+import type { DiscountCategoryIconKind } from "@/lib/discount-category";
 import { DiscountSearchBar } from "@/components/discounts/DiscountSearchBar";
 import {
   ALL_CATEGORIES_SLUG,
@@ -77,6 +81,7 @@ export default async function DiscountsPage({
           <CategoryPill
             href={`/home/zlavy/kategoria/${ALL_CATEGORIES_SLUG}`}
             label="Všetky kategórie"
+            iconKind="ALL"
           />
           {DISCOUNT_CATEGORIES.map((category) => (
             <CategoryPill
@@ -84,6 +89,7 @@ export default async function DiscountsPage({
               href={`/home/zlavy/kategoria/${categorySlug(category)}`}
               label={categoryLabel(category)}
               count={counts.get(category)}
+              iconKind={category}
             />
           ))}
         </div>
@@ -102,17 +108,22 @@ function CategoryPill({
   href,
   label,
   count,
+  iconKind,
 }: {
   href: string;
   label: string;
   count?: number;
+  iconKind: DiscountCategoryIconKind;
 }) {
   return (
     <Link
       href={href}
-      className="flex min-h-[52px] items-center justify-center rounded-2xl border border-brand-purple/12 bg-white px-4 py-3 text-center text-sm font-semibold text-brand-purple shadow-card transition hover:border-brand-purple/25"
+      className="relative flex min-h-[52px] items-center justify-center rounded-2xl border border-brand-purple/12 bg-white px-4 py-3 text-sm font-semibold text-brand-purple shadow-card transition hover:border-brand-purple/25"
     >
-      <span>
+      <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2">
+        <DiscountCategoryIcon kind={iconKind} />
+      </span>
+      <span className="text-center">
         {label}
         {typeof count === "number" && count > 0 && (
           <span className="ml-1 text-brand-purple/45">({count})</span>

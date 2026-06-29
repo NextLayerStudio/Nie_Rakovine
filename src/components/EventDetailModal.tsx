@@ -106,7 +106,7 @@ export function EventDetailModal({
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 z-10 grid h-8 w-8 place-items-center text-white/90 transition hover:text-white"
+          className="absolute right-2 top-2 z-10 grid h-8 w-8 place-items-center text-white/90 transition hover:text-white"
           aria-label="Zavrieť"
         >
           <CloseIcon />

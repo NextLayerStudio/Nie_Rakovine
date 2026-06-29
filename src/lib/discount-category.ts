@@ -1,5 +1,7 @@
 import type { DiscountCategory } from "@prisma/client";
 
+export type DiscountCategoryIconKind = DiscountCategory | "ALL";
+
 export const DISCOUNT_CATEGORIES: DiscountCategory[] = [
   "MODA",
   "KOZMETIKA",
