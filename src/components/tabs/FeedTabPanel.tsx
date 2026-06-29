@@ -64,6 +64,7 @@ export function FeedTabPanel({ initialData }: { initialData?: FeedData }) {
   const savedIds = new Set(data.savedPostIds);
   const followingIds = new Set(data.followingProfileIds);
   const registeredIds = new Set(data.registeredEventIds);
+  const likedEventIds = new Set(data.likedEventIds ?? []);
   const [firstName, ...rest] = data.userName.split(" ");
   const lastName = rest.join(" ");
 
@@ -111,6 +112,9 @@ export function FeedTabPanel({ initialData }: { initialData?: FeedData }) {
                 isPaid={e.isPaid}
                 priceCents={e.priceCents}
                 currency={e.currency}
+                liked={likedEventIds.has(e.id)}
+                likeCount={e._count.likes}
+                commentCount={e._count.comments}
               />
             </div>
           );

@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import {
   EventDetailModal,
   type EventModalData,
 } from "@/components/EventDetailModal";
+import { EventCommentDrawer } from "@/components/EventCommentDrawer";
+import { toggleEventLikeAction } from "@/lib/actions/event-likes";
 import { formatEventPrice } from "@/lib/event-payment";
 
 export function FeedEventItem({
@@ -24,6 +26,9 @@ export function FeedEventItem({
   priceCents = null,
   currency = "EUR",
   pendingPayment = false,
+  liked: initialLiked = false,
+  likeCount: initialLikeCount = 0,
+  commentCount: initialCommentCount = 0,
 }: {
   id: string;
   title: string;
@@ -41,10 +46,27 @@ export function FeedEventItem({
   priceCents?: number | null;
   currency?: string;
   pendingPayment?: boolean;
+  liked?: boolean;
+  likeCount?: number;
+  commentCount?: number;
 }) {
   const [open, setOpen] = useState(false);
+  const [commentOpen, setCommentOpen] = useState(false);
   const [liveRegistered, setLiveRegistered] = useState(isRegistered);
   const [liveCount, setLiveCount] = useState(registrationCount ?? 0);
+  const [liked, setLiked] = useState(initialLiked);
+  const [likeCount, setLikeCount] = useState(initialLikeCount);
+  const [commentCount, setCommentCount] = useState(initialCommentCount);
+  const [, startTransition] = useTransition();
+
+  const toggleLike = () => {
+    const newLiked = !liked;
+    setLiked(newLiked);
+    setLikeCount((c) => c + (newLiked ? 1 : -1));
+    const fd = new FormData();
+    fd.set("eventId", id);
+    startTransition(() => { void toggleEventLikeAction(fd); });
+  };
 
   const isFull = capacity !== undefined && liveCount >= capacity;
 
@@ -127,7 +149,7 @@ export function FeedEventItem({
         </button>
 
         {/* Textový obsah */}
-        <div className="px-4 pb-4 pt-3">
+        <div className="px-4 pb-2 pt-3">
           <button
             type="button"
             onClick={() => setOpen(true)}
@@ -165,6 +187,33 @@ export function FeedEventItem({
               </p>
             )}
           </button>
+
+          {/* Like / comment lišta */}
+          <div className="mt-3 flex items-center gap-5 pb-3">
+            <button
+              type="button"
+              onClick={toggleLike}
+              className={`flex items-center gap-1.5 transition-colors ${
+                liked ? "text-brand-pink" : "text-brand-purple/60"
+              }`}
+            >
+              <HeartIcon filled={liked} />
+              <span className="text-sm font-semibold">
+                {likeCount > 0 ? likeCount : "Páči sa mi"}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setCommentOpen(true)}
+              className="flex items-center gap-1.5 text-brand-purple/60"
+            >
+              <CommentIcon />
+              <span className="text-sm font-semibold">
+                {commentCount > 0 ? commentCount : "Komentovať"}
+              </span>
+            </button>
+          </div>
         </div>
       </article>
 
@@ -178,6 +227,13 @@ export function FeedEventItem({
           }}
         />
       )}
+
+      <EventCommentDrawer
+        eventId={id}
+        open={commentOpen}
+        onClose={() => setCommentOpen(false)}
+        onCommentAdded={() => setCommentCount((c) => c + 1)}
+      />
     </>
   );
 }
@@ -236,6 +292,36 @@ function ChevronRight() {
         d="M9 6l6 6-6 6"
         stroke="currentColor"
         strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function HeartIcon({ filled }: { filled: boolean }) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden>
+      <path
+        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+        fill={filled ? "currentColor" : "none"}
+        stroke="currentColor"
+        strokeWidth={filled ? "0" : "2"}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="transition-all duration-150"
+      />
+    </svg>
+  );
+}
+
+function CommentIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+      <path
+        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+        stroke="currentColor"
+        strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

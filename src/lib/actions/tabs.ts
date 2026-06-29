@@ -69,7 +69,7 @@ export async function fetchFeedTabAction() {
   ];
   const eventIds = events.map((e) => e.id);
 
-  const { likedIds, savedIds, followingIds, registeredEventIds } =
+  const { likedIds, savedIds, followingIds, registeredEventIds, likedEventIds } =
     await loadFeedEngagement(user.id, postIds, profileIds, eventIds);
 
   return {
@@ -80,6 +80,7 @@ export async function fetchFeedTabAction() {
     savedPostIds: [...savedIds],
     followingProfileIds: [...followingIds],
     registeredEventIds: [...registeredEventIds],
+    likedEventIds: [...likedEventIds],
     userTypes,
     userName: user.fullName,
   };

@@ -53,7 +53,7 @@ export async function loadFeedTabData(
   ];
   const eventIds = events.map((e) => e.id);
 
-  const { likedIds, savedIds, followingIds, registeredEventIds } =
+  const { likedIds, savedIds, followingIds, registeredEventIds, likedEventIds } =
     await loadFeedEngagement(userId, postIds, profileIds, eventIds);
 
   return {
@@ -64,6 +64,7 @@ export async function loadFeedTabData(
     savedPostIds: [...savedIds],
     followingProfileIds: [...followingIds],
     registeredEventIds: [...registeredEventIds],
+    likedEventIds: [...likedEventIds],
     userTypes,
     userName: fullName,
   };

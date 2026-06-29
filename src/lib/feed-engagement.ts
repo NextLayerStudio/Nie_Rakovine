@@ -9,7 +9,7 @@ export async function loadFeedEngagement(
   profileIds: string[],
   eventIds: string[],
 ) {
-  const [userLikes, userSaves, follows, eventRegistrations] = await Promise.all([
+  const [userLikes, userSaves, follows, eventRegistrations, userEventLikes] = await Promise.all([
     postIds.length
       ? prisma.articleLike.findMany({
           where: { userId, postId: { in: postIds } },
@@ -38,6 +38,12 @@ export async function loadFeedEngagement(
           },
         })
       : [],
+    eventIds.length
+      ? prisma.eventLike.findMany({
+          where: { userId, eventId: { in: eventIds } },
+          select: { eventId: true },
+        })
+      : [],
   ]);
 
   return {
@@ -51,5 +57,6 @@ export async function loadFeedEngagement(
         )
         .map((r) => r.eventId),
     ),
+    likedEventIds: new Set(userEventLikes.map((l) => l.eventId)),
   };
 }

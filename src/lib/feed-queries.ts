@@ -63,7 +63,7 @@ export const feedEventSelect = {
   isPaid: true,
   priceCents: true,
   currency: true,
-  _count: { select: { registrations: true } },
+  _count: { select: { registrations: true, likes: true, comments: true } },
 } satisfies Prisma.EventSelect;
 
 export const listPostSelect = {
