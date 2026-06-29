@@ -9,6 +9,7 @@ const items = [
   { href: "/home/forums", label: "Fóra", icon: ForumIcon },
   { href: "/home/search", label: "Hľadať", icon: SearchIcon },
   { href: "/home/calendar", label: "Aktivity", icon: CalendarIcon },
+  { href: "/home/profile", label: "Môj profil", icon: ProfileIcon },
 ];
 
 /** Hide nav on forum compose + thread chat (comment bar needs full focus). */
@@ -33,7 +34,7 @@ export function BottomNav() {
       className="bottom-nav pointer-events-none absolute inset-x-0 bottom-0 z-20 px-4 pt-2"
       style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
     >
-      <ul className="pointer-events-auto mx-auto grid h-[54px] w-full max-w-[390px] grid-cols-4 items-center rounded-full bg-brand-pink px-2 shadow-soft">
+      <ul className="pointer-events-auto mx-auto grid h-[54px] w-full max-w-[390px] grid-cols-5 items-center rounded-full bg-brand-pink px-2 shadow-soft">
         {items.map(({ href, label, icon: Icon }) => {
           const active =
             href === "/home"
@@ -123,6 +124,20 @@ function CalendarIcon() {
         d="M8.5 12.5h2v2h-2zM13.5 12.5h2v2h-2z"
         fill="currentColor"
         opacity="0.9"
+      />
+    </svg>
+  );
+}
+
+function ProfileIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className={iconClass} fill="none" aria-hidden>
+      <circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.8" />
+      <path
+        d="M5 19.5C5 16.46 8.13 14 12 14s7 2.46 7 5.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
       />
     </svg>
   );

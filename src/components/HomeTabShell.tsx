@@ -7,9 +7,10 @@ import { FeedTabPanel } from "@/components/tabs/FeedTabPanel";
 import { ForumsTabPanel } from "@/components/tabs/ForumsTabPanel";
 import { SearchTabPanel } from "@/components/tabs/SearchTabPanel";
 import { CalendarTabPanel } from "@/components/tabs/CalendarTabPanel";
+import { ProfileTabPanel, type ProfileInitialData } from "@/components/tabs/ProfileTabPanel";
 import type { loadFeedTabData, loadForumsTabData, loadCalendarTabData } from "@/lib/tab-data";
 
-type Tab = "home" | "forums" | "search" | "calendar";
+type Tab = "home" | "forums" | "search" | "calendar" | "profile";
 
 type FeedInitialData = Awaited<ReturnType<typeof loadFeedTabData>>;
 type ForumsInitialData = Awaited<ReturnType<typeof loadForumsTabData>>;
@@ -20,6 +21,7 @@ const MAIN_TAB_PATHS: Record<string, Tab> = {
   "/home/forums": "forums",
   "/home/search": "search",
   "/home/calendar": "calendar",
+  "/home/profile": "profile",
 };
 
 function pathnameToTab(p: string): Tab | null {
@@ -34,6 +36,7 @@ export function HomeTabShell({
   initialFeedData,
   initialForumsData,
   initialCalendarData,
+  initialProfileData,
 }: {
   children: React.ReactNode;
   userName: string;
@@ -42,6 +45,7 @@ export function HomeTabShell({
   initialFeedData?: FeedInitialData;
   initialForumsData?: ForumsInitialData;
   initialCalendarData?: CalendarInitialData;
+  initialProfileData?: ProfileInitialData;
 }) {
   const pathname = usePathname();
   const tab = pathnameToTab(pathname);
@@ -106,6 +110,11 @@ export function HomeTabShell({
       {mountedTabs.has("calendar") && (
         <div className={visible("calendar") ? "" : "hidden"} aria-hidden={!visible("calendar")}>
           <CalendarTabPanel initialData={initialCalendarData} />
+        </div>
+      )}
+      {mountedTabs.has("profile") && initialProfileData && (
+        <div className={visible("profile") ? "" : "hidden"} aria-hidden={!visible("profile")}>
+          <ProfileTabPanel data={initialProfileData} />
         </div>
       )}
 

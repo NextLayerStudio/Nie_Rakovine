@@ -30,9 +30,11 @@ function TabSpinner() {
 export function ProfileView({
   initialTab,
   initialCalendarData,
+  basePath: _basePath = "/profile",
 }: {
   initialTab: ProfileTab;
   initialCalendarData?: CalendarData;
+  basePath?: string;
 }) {
   const searchParams = useSearchParams();
   const activeTab = parseProfileTab(searchParams.get("tab") ?? initialTab);

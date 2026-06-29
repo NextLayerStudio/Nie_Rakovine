@@ -30,7 +30,7 @@ export function FeedHeader({
     )}>
       <div className="flex items-center justify-between gap-3">
         {/* Profilovka + meno — link na profil */}
-        <Link href="/profile" aria-label="Môj profil" className="flex min-w-0 flex-1 items-center gap-3">
+        <Link href="/home/profile" aria-label="Môj profil" className="flex min-w-0 flex-1 items-center gap-3">
           <div
             className="h-16 w-16 shrink-0 rounded-full bg-cover bg-center ring-2 ring-brand-purple/15 shadow-sm flex items-center justify-center"
             style={avatarUrl ? { backgroundImage: `url(${avatarUrl})`, backgroundSize: "cover", backgroundPosition: "center" } : { backgroundColor: avatarBg(name) }}

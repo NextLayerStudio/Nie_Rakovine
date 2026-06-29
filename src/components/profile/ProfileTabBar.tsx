@@ -12,17 +12,23 @@ const TABS: { id: ProfileTab; label: string; icon: React.FC<{ active: boolean }>
   { id: "saved", label: "Uložené", icon: SavedTabIcon },
 ];
 
-export function ProfileTabBar({ initialTab }: { initialTab: ProfileTab }) {
+export function ProfileTabBar({
+  initialTab,
+  basePath = "/profile",
+}: {
+  initialTab: ProfileTab;
+  basePath?: string;
+}) {
   const [active, setActive] = useState<ProfileTab>(initialTab);
   const router = useRouter();
 
   const navigate = (tab: ProfileTab) => {
     setActive(tab);
-    document
-      .querySelector("[data-profile-scroll]")
-      ?.scrollTo({ top: 0, behavior: "instant" });
+    // Works in both standalone /profile and home-tab /home/profile context
+    document.querySelector("[data-profile-scroll]")?.scrollTo({ top: 0, behavior: "instant" });
+    document.querySelector("[data-app-scroll]")?.scrollTo({ top: 0, behavior: "instant" });
     const qs = tab === "calendar" ? "" : `?tab=${tab}`;
-    router.replace(`/profile${qs}`, { scroll: false });
+    router.replace(`${basePath}${qs}`, { scroll: false });
   };
 
   return (

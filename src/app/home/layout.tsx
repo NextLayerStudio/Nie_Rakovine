@@ -9,6 +9,8 @@ import { PhoneShell } from "@/components/PhoneShell";
 import { requireUser } from "@/lib/auth";
 import { getUnreadNotificationCount } from "@/lib/notifications";
 import { loadFeedTabData, loadForumsTabData, loadCalendarTabData } from "@/lib/tab-data";
+import { loadProfileCalendarData } from "@/lib/profile-data";
+import { membershipSubscriptionInfo } from "@/lib/membership-card";
 
 export default async function HomeLayout({
   children,
@@ -26,12 +28,29 @@ export default async function HomeLayout({
       }
     : null;
 
-  const [unreadCount, feedData, forumsData, calendarData] = await Promise.all([
+  const [unreadCount, feedData, forumsData, calendarData, profileCalendarData] = await Promise.all([
     getUnreadNotificationCount(user.id),
     loadFeedTabData(user.id, user.fullName, tabProfile),
     loadForumsTabData(user.id, tabProfile),
     loadCalendarTabData(user.id, user.fullName, tabProfile),
+    loadProfileCalendarData(user.id, user.fullName),
   ]);
+
+  const profileInitialData = {
+    fullName: user.fullName,
+    userId: user.id,
+    profile: user.profile
+      ? {
+          diagnosis: user.profile.diagnosis,
+          diagnosisPhase: user.profile.diagnosisPhase,
+          cancerTypes: user.profile.cancerTypes,
+        }
+      : null,
+    subscription: membershipSubscriptionInfo(user),
+    avatarUrl: user.profile?.avatarUrl ?? null,
+    unreadCount,
+    initialCalendarData: profileCalendarData,
+  };
 
   return (
     <PhoneShell>
@@ -46,6 +65,7 @@ export default async function HomeLayout({
           initialFeedData={feedData}
           initialForumsData={forumsData}
           initialCalendarData={calendarData}
+          initialProfileData={profileInitialData}
         >
           {children}
         </HomeTabShell>
