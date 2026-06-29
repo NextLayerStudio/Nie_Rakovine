@@ -75,7 +75,7 @@ export default async function DiscountsPage({
         </section>
       )}
 
-      <section className="px-5 pb-8">
+      <section className="px-5 pb-28">
         <h2 className="mb-3 text-base font-bold text-brand-purple">Kategórie</h2>
         <div className="grid grid-cols-2 gap-3">
           <CategoryPill

@@ -235,7 +235,7 @@ export function CalendarView({
                   setLocationMode("all");
                 }}
                 placeholder="Hľadať mesto alebo región"
-                className="w-full rounded-full border-0 bg-brand-pink-soft/40 py-2.5 pl-4 pr-10 text-sm text-brand-purple placeholder-brand-purple/50 outline-none"
+                className="w-full rounded-full border border-brand-purple/10 bg-white py-2.5 pl-4 pr-10 text-sm text-brand-purple placeholder-brand-purple/50 shadow-sm outline-none transition focus:border-brand-pink/40 focus:ring-4 focus:ring-brand-pink/10"
               />
               <SearchIcon />
             </div>

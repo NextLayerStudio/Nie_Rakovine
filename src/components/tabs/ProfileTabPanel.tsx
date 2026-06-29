@@ -6,9 +6,15 @@ import { ProfileIdentityCard } from "@/components/profile/ProfileIdentityCard";
 import { ProfileTabBar } from "@/components/profile/ProfileTabBar";
 import { ProfileView } from "@/components/profile/ProfileView";
 import type { MembershipSubscriptionInfo } from "@/lib/membership-card";
-import type { fetchProfileCalendarAction } from "@/lib/actions/profile-tabs";
+import type {
+  fetchProfileCalendarAction,
+  fetchProfileForumsAction,
+  fetchProfileDiscountsAction,
+} from "@/lib/actions/profile-tabs";
 
 type CalendarData = Extract<Awaited<ReturnType<typeof fetchProfileCalendarAction>>, { ok: true }>;
+type ForumsData = Extract<Awaited<ReturnType<typeof fetchProfileForumsAction>>, { ok: true }>;
+type DiscountsData = Extract<Awaited<ReturnType<typeof fetchProfileDiscountsAction>>, { ok: true }>;
 
 export type ProfileInitialData = {
   fullName: string;
@@ -22,6 +28,8 @@ export type ProfileInitialData = {
   avatarUrl: string | null;
   unreadCount: number;
   initialCalendarData: CalendarData;
+  initialForumsData?: ForumsData;
+  initialDiscountsData?: DiscountsData;
 };
 
 function TabSpinner() {
@@ -48,6 +56,8 @@ export function ProfileTabPanel({ data }: { data: ProfileInitialData }) {
         <ProfileView
           initialTab="calendar"
           initialCalendarData={data.initialCalendarData}
+          initialForumsData={data.initialForumsData}
+          initialDiscountsData={data.initialDiscountsData}
           basePath="/home/profile"
         />
       </Suspense>

@@ -12,6 +12,7 @@ import { readSession } from "@/lib/auth";
 import { membershipSubscriptionInfo } from "@/lib/membership-card";
 import { parseProfileTab } from "@/lib/profile-page";
 import { isEventRegistrationComplete } from "@/lib/event-payment";
+import { loadProfileForumsData, loadProfileDiscountsData } from "@/lib/profile-data";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -37,7 +38,7 @@ export default async function ProfilePage({
   const initialTab = parseProfileTab(params.tab);
   const forceAvatarPrompt = params.setupAvatar === "1";
 
-  // All three DB queries in parallel — one round-trip to Neon
+  // Batch 1: user identity + unread + calendar registrations in parallel
   const [user, unreadCount, registrations] = await Promise.all([
     prisma.user.findUnique({
       where: { id: session.userId },
@@ -72,6 +73,12 @@ export default async function ProfilePage({
   ]);
 
   if (!user) redirect("/login");
+
+  // Batch 2: forums + discounts in parallel (need user.fullName and user.id)
+  const [forumsPreload, discountsPreload] = await Promise.all([
+    loadProfileForumsData(user.id, user.fullName),
+    loadProfileDiscountsData(user.id),
+  ]);
 
   const nameParts = user.fullName.trim().split(/\s+/).filter(Boolean);
 
@@ -129,6 +136,8 @@ export default async function ProfilePage({
           <ProfileView
             initialTab={initialTab}
             initialCalendarData={initialCalendarData}
+            initialForumsData={forumsPreload}
+            initialDiscountsData={discountsPreload}
           />
         </Suspense>
       </div>

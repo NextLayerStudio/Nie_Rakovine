@@ -91,7 +91,7 @@ export function MenuDrawer({
               type="search"
               name="q"
               placeholder="Hľadať"
-              className="w-full rounded-pill bg-white py-3 pl-5 pr-12 text-sm text-brand-purple placeholder-brand-purple/50 outline-none"
+              className="w-full rounded-full border border-brand-purple/10 bg-white py-3 pl-5 pr-12 text-sm text-brand-purple placeholder-brand-purple/50 shadow-sm outline-none transition focus:border-brand-pink/40 focus:ring-4 focus:ring-brand-pink/10"
             />
             <button
               type="submit"
