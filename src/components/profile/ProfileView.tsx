@@ -1,32 +1,27 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { parseProfileTab, type ProfileTab } from "@/lib/profile-page";
 import { ProfileHeader } from "@/components/profile/ProfileHeader";
-import {
-  ProfileIdentityCard,
-} from "@/components/profile/ProfileIdentityCard";
+import { ProfileIdentityCard } from "@/components/profile/ProfileIdentityCard";
 import type { MembershipSubscriptionInfo } from "@/lib/membership-card";
 import { ProfileTabBar } from "@/components/profile/ProfileTabBar";
+import { ProfileCalendarTab } from "@/components/profile/ProfileCalendarTab";
+import { ProfileForumsTab } from "@/components/profile/ProfileForumsTab";
+import { ProfileDiscountsTab } from "@/components/profile/ProfileDiscountsTab";
+import { ProfileSavedTab } from "@/components/profile/ProfileSavedTab";
 import {
-  ProfileCalendarTab,
-  type ProfileRegisteredEvent,
-} from "@/components/profile/ProfileCalendarTab";
-import {
-  ProfileForumsTab,
-  type ProfileForumChip,
-  type ProfileForumPost,
-} from "@/components/profile/ProfileForumsTab";
-import {
-  ProfileDiscountsTab,
-  type ProfileFeaturedBrand,
-  type ProfileSavedDiscount,
-} from "@/components/profile/ProfileDiscountsTab";
-import {
-  ProfileSavedTab,
-  type ProfileSavedPost,
-} from "@/components/profile/ProfileSavedTab";
+  fetchProfileCalendarAction,
+  fetchProfileForumsAction,
+  fetchProfileDiscountsAction,
+  fetchProfileSavedAction,
+} from "@/lib/actions/profile-tabs";
+
+type CalendarData = Extract<Awaited<ReturnType<typeof fetchProfileCalendarAction>>, { ok: true }>;
+type ForumsData = Extract<Awaited<ReturnType<typeof fetchProfileForumsAction>>, { ok: true }>;
+type DiscountsData = Extract<Awaited<ReturnType<typeof fetchProfileDiscountsAction>>, { ok: true }>;
+type SavedData = Extract<Awaited<ReturnType<typeof fetchProfileSavedAction>>, { ok: true }>;
 
 export type ProfileViewData = {
   fullName: string;
@@ -41,13 +36,15 @@ export type ProfileViewData = {
   unreadCount: number;
   subscription: MembershipSubscriptionInfo;
   avatarUrl: string | null;
-  registeredEvents: ProfileRegisteredEvent[];
-  forums: ProfileForumChip[];
-  forumPosts: ProfileForumPost[];
-  featuredBrands: ProfileFeaturedBrand[];
-  savedDiscounts: ProfileSavedDiscount[];
-  savedPosts: ProfileSavedPost[];
 };
+
+function TabSpinner() {
+  return (
+    <div className="flex items-center justify-center py-16">
+      <div className="h-7 w-7 animate-spin rounded-full border-2 border-brand-purple/15 border-t-brand-pink" />
+    </div>
+  );
+}
 
 export function ProfileView({
   data,
@@ -62,6 +59,52 @@ export function ProfileView({
   const searchParams = useSearchParams();
   const activeTab = parseProfileTab(searchParams.get("tab") ?? initialTab);
 
+  const [calendarData, setCalendarData] = useState<CalendarData | null>(null);
+  const [forumsData, setForumsData] = useState<ForumsData | null>(null);
+  const [discountsData, setDiscountsData] = useState<DiscountsData | null>(null);
+  const [savedData, setSavedData] = useState<SavedData | null>(null);
+  const [loadingTab, setLoadingTab] = useState<ProfileTab | null>(null);
+
+  const fetched = useRef(new Set<ProfileTab>());
+
+  const loadTab = useCallback(async (tab: ProfileTab) => {
+    if (fetched.current.has(tab)) return;
+    fetched.current.add(tab);
+    setLoadingTab(tab);
+    try {
+      switch (tab) {
+        case "calendar": {
+          const res = await fetchProfileCalendarAction();
+          if (res.ok) setCalendarData(res);
+          break;
+        }
+        case "forums": {
+          const res = await fetchProfileForumsAction();
+          if (res.ok) setForumsData(res);
+          break;
+        }
+        case "discounts": {
+          const res = await fetchProfileDiscountsAction();
+          if (res.ok) setDiscountsData(res);
+          break;
+        }
+        case "saved": {
+          const res = await fetchProfileSavedAction();
+          if (res.ok) setSavedData(res);
+          break;
+        }
+      }
+    } finally {
+      setLoadingTab((cur) => (cur === tab ? null : cur));
+    }
+  }, []);
+
+  // Load the initial tab on mount
+  useEffect(() => {
+    loadTab(initialTab);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const setTab = useCallback(
     (tab: ProfileTab) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -72,13 +115,15 @@ export function ProfileView({
       }
       const qs = params.toString();
       router.replace(qs ? `/profile?${qs}` : "/profile", { scroll: false });
-      // Reset scroll to top on tab switch so new tab content starts at top
       document
         .querySelector("[data-profile-scroll]")
         ?.scrollTo({ top: 0, behavior: "instant" });
+      loadTab(tab);
     },
-    [router, searchParams],
+    [router, searchParams, loadTab],
   );
+
+  const isLoading = loadingTab === activeTab;
 
   return (
     <>
@@ -93,23 +138,27 @@ export function ProfileView({
       />
       <ProfileTabBar active={activeTab} onChange={setTab} />
 
-      {activeTab === "calendar" && (
+      {isLoading && <TabSpinner />}
+
+      {!isLoading && activeTab === "calendar" && calendarData && (
         <ProfileCalendarTab
-          events={data.registeredEvents}
-          defaultName={data.defaultName}
-          defaultSurname={data.defaultSurname}
+          events={calendarData.registeredEvents}
+          defaultName={calendarData.defaultName}
+          defaultSurname={calendarData.defaultSurname}
         />
       )}
-      {activeTab === "forums" && (
-        <ProfileForumsTab forums={data.forums} posts={data.forumPosts} />
+      {!isLoading && activeTab === "forums" && forumsData && (
+        <ProfileForumsTab forums={forumsData.forums} posts={forumsData.forumPosts} />
       )}
-      {activeTab === "discounts" && (
+      {!isLoading && activeTab === "discounts" && discountsData && (
         <ProfileDiscountsTab
-          savedDiscounts={data.savedDiscounts}
-          featuredBrands={data.featuredBrands}
+          savedDiscounts={discountsData.savedDiscounts}
+          featuredBrands={discountsData.featuredBrands}
         />
       )}
-      {activeTab === "saved" && <ProfileSavedTab posts={data.savedPosts} />}
+      {!isLoading && activeTab === "saved" && savedData && (
+        <ProfileSavedTab posts={savedData.savedPosts} />
+      )}
     </>
   );
 }
