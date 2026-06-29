@@ -1,7 +1,6 @@
 "use client";
 
 import { Suspense } from "react";
-import { ProfileHeader } from "@/components/profile/ProfileHeader";
 import { ProfileIdentityCard } from "@/components/profile/ProfileIdentityCard";
 import { ProfileTabBar } from "@/components/profile/ProfileTabBar";
 import { ProfileView } from "@/components/profile/ProfileView";
@@ -43,7 +42,6 @@ function TabSpinner() {
 export function ProfileTabPanel({ data }: { data: ProfileInitialData }) {
   return (
     <>
-      <ProfileHeader unreadCount={data.unreadCount} />
       <ProfileIdentityCard
         fullName={data.fullName}
         userId={data.userId}

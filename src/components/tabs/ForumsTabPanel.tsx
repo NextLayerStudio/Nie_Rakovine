@@ -1,10 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ForumFollowButton } from "@/components/ForumFollowButton";
 import { fetchForumsTabAction } from "@/lib/actions/tabs";
 import { forumAvatarStyle } from "@/lib/avatar-style";
+
+type ForumFilter = "all" | "popular" | "following";
+
+const FILTERS: { id: ForumFilter; label: string }[] = [
+  { id: "all", label: "Všetky" },
+  { id: "popular", label: "Populárne" },
+  { id: "following", label: "Sledované" },
+];
 
 type ForumsData = Awaited<ReturnType<typeof fetchForumsTabAction>> & { ok: true };
 
@@ -28,6 +36,7 @@ function TabSkeleton() {
 export function ForumsTabPanel({ initialData }: { initialData?: ForumsData }) {
   const [data, setData] = useState<ForumsData | null>(initialData ?? null);
   const [failed, setFailed] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<ForumFilter>("all");
 
   useEffect(() => {
     if (initialData) return;
@@ -49,6 +58,17 @@ export function ForumsTabPanel({ initialData }: { initialData?: ForumsData }) {
 
   const followingIds = new Set(data.followingForumIds);
 
+  const filteredForums = useMemo(() => {
+    let list = [...data.forums];
+    if (activeFilter === "following") {
+      list = list.filter((f) => followingIds.has(f.id));
+    } else if (activeFilter === "popular") {
+      list = [...list].sort((a, b) => b._count.members - a._count.members);
+    }
+    return list;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.forums, activeFilter, data.followingForumIds]);
+
   return (
     <div className="forum-page min-h-full">
       <section className="px-5 pb-1 pt-1">
@@ -66,6 +86,26 @@ export function ForumsTabPanel({ initialData }: { initialData?: ForumsData }) {
             <path d="M21 21l-4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
           </svg>
         </Link>
+      </section>
+
+      {/* Filter chips */}
+      <section className="pb-3 pl-5">
+        <div className="no-scrollbar flex items-center gap-2 overflow-x-auto pr-5">
+          {FILTERS.map((f) => (
+            <button
+              key={f.id}
+              type="button"
+              onClick={() => setActiveFilter(f.id)}
+              className={`shrink-0 rounded-full px-5 py-2.5 text-sm font-bold transition ${
+                activeFilter === f.id
+                  ? "bg-brand-pink text-white shadow-sm"
+                  : "border-2 border-brand-purple/15 text-brand-purple/70 hover:bg-brand-purple/5"
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
       </section>
 
       {data.pendingForums.length > 0 && (
@@ -94,65 +134,58 @@ export function ForumsTabPanel({ initialData }: { initialData?: ForumsData }) {
         </section>
       )}
 
-      {data.forums.length === 0 ? (
+      {filteredForums.length === 0 ? (
         <div className="forum-empty mx-5 mt-2">
-          {data.userTypes.length > 0
-            ? "Zatiaľ žiadne fóra pre váš typ rakoviny."
-            : "Zatiaľ žiadne schválené fóra. Vytvorte prvé!"}
+          {activeFilter === "following"
+            ? "Zatiaľ nesledujete žiadne fóra."
+            : data.userTypes.length > 0
+              ? "Zatiaľ žiadne fóra pre váš typ rakoviny."
+              : "Zatiaľ žiadne schválené fóra."}
         </div>
       ) : (
-        <>
-          <h3 className="forum-section-label mb-3 px-5">
-            {data.userTypes.length > 0
-              ? "Fóra pre vás"
-              : followingIds.size > 0
-                ? "Všetky fóra"
-                : "Objavte fóra"}
-          </h3>
-          <ul className="flex flex-col gap-3 px-5 pb-4">
-            {data.forums.map((forum) => (
-              <li key={forum.id} className="forum-card p-4">
-                <div className="flex items-start gap-4">
-                  <Link href={`/home/forums/${forum.id}`} className="shrink-0" aria-label={forum.title}>
-                    <div
-                      aria-hidden
-                      className="h-[68px] w-[68px] rounded-2xl bg-cover bg-center ring-2 ring-white shadow-sm"
-                      style={{
-                        ...forumAvatarStyle(forum),
-                        boxShadow: `0 4px 16px ${forum.accentColor ?? "#6F2380"}28`,
-                      }}
+        <ul className="flex flex-col gap-3 px-5 pb-4">
+          {filteredForums.map((forum) => (
+            <li key={forum.id} className="forum-card p-4">
+              <div className="flex items-start gap-4">
+                <Link href={`/home/forums/${forum.id}`} className="shrink-0" aria-label={forum.title}>
+                  <div
+                    aria-hidden
+                    className="h-[68px] w-[68px] rounded-2xl bg-cover bg-center ring-2 ring-white shadow-sm"
+                    style={{
+                      ...forumAvatarStyle(forum),
+                      boxShadow: `0 4px 16px ${forum.accentColor ?? "#6F2380"}28`,
+                    }}
+                  />
+                </Link>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-start justify-between gap-2">
+                    <Link href={`/home/forums/${forum.id}`} className="min-w-0">
+                      <h2 className="truncate text-[15px] font-bold leading-snug text-brand-purple">
+                        {forum.title}
+                      </h2>
+                    </Link>
+                    <ForumFollowButton
+                      forumId={forum.id}
+                      isFollowing={followingIds.has(forum.id)}
+                      size="md"
+                      joinLabel="Zapojiť sa"
+                      joinedLabel="Zapojené"
                     />
-                  </Link>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-2">
-                      <Link href={`/home/forums/${forum.id}`} className="min-w-0">
-                        <h2 className="truncate text-[15px] font-bold leading-snug text-brand-purple">
-                          {forum.title}
-                        </h2>
-                      </Link>
-                      <ForumFollowButton
-                        forumId={forum.id}
-                        isFollowing={followingIds.has(forum.id)}
-                        size="md"
-                        joinLabel="Zapojiť sa"
-                        joinedLabel="Zapojené"
-                      />
-                    </div>
-                    <span className="forum-chip mt-2">
-                      <MembersIcon />
-                      {forum._count.members} členov
-                    </span>
                   </div>
+                  <span className="forum-chip mt-2">
+                    <MembersIcon />
+                    {forum._count.members} členov
+                  </span>
                 </div>
-                {forum.description && (
-                  <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-brand-purple/70">
-                    {forum.description}
-                  </p>
-                )}
-              </li>
-            ))}
-          </ul>
-        </>
+              </div>
+              {forum.description && (
+                <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-brand-purple/70">
+                  {forum.description}
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
       )}
 
     </div>

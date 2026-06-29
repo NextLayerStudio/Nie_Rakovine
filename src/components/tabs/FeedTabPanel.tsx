@@ -10,6 +10,7 @@ import {
   buildPostGallery,
   discountPartnerHref,
   feedPostHref,
+  postHrefWithReturn,
 } from "@/lib/post-display";
 import { defaultProfileLabel } from "@/lib/feed";
 import { FEED_DISPLAY_LIMIT } from "@/lib/feed-queries";
@@ -141,7 +142,7 @@ export function FeedTabPanel({ initialData }: { initialData?: FeedData }) {
             {header}
             <FeedPostItem
               postId={p.id}
-              href={feedPostHref(p)}
+              href={dp ? feedPostHref(p) : postHrefWithReturn(p.id, "/home")}
               type={p.type}
               title={p.title}
               excerpt={p.excerpt}
