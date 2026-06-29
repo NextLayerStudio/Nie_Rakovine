@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { PostType } from "@prisma/client";
 import { PostDetailModal } from "@/components/PostDetailModal";
 
@@ -13,14 +14,34 @@ export type ProfileGridPost = {
   imageCount: number;
 };
 
+// ARTICLE, VIDEO, AUDIO open the full detail page (content library style).
+// Everything else (PHOTO, RECIPE, NEWS…) opens the fullscreen modal.
+function isContentLibraryType(type: PostType): boolean {
+  return type === "ARTICLE" || type === "VIDEO" || type === "AUDIO";
+}
+
 export function ProfilePostGrid({
   posts,
   emptyMessage = "Zatiaľ žiadne príspevky.",
+  profileHandle,
 }: {
   posts: ProfileGridPost[];
   emptyMessage?: string;
+  profileHandle?: string;
 }) {
+  const router = useRouter();
   const [activePostId, setActivePostId] = useState<string | null>(null);
+
+  function handlePostClick(post: ProfileGridPost) {
+    if (isContentLibraryType(post.type)) {
+      const from = profileHandle
+        ? `/home/profiles/${profileHandle}`
+        : "/home/profiles";
+      router.push(`/home/posts/${post.id}?from=${encodeURIComponent(from)}`);
+    } else {
+      setActivePostId(post.id);
+    }
+  }
 
   if (posts.length === 0) {
     return (
@@ -37,7 +58,7 @@ export function ProfilePostGrid({
           <button
             key={post.id}
             type="button"
-            onClick={() => setActivePostId(post.id)}
+            onClick={() => handlePostClick(post)}
             className="relative aspect-square overflow-hidden"
             aria-label={`Otvoriť príspevok ${post.title}`}
           >

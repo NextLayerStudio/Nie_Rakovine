@@ -136,7 +136,7 @@ export default async function ClubProfilePage({
       </div>
 
       {/* Post categories + grid */}
-      <ClubProfilePostsSection posts={gridPosts} />
+      <ClubProfilePostsSection posts={gridPosts} profileHandle={profile.handle} />
     </div>
   );
 }

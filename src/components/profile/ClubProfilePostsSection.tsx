@@ -16,7 +16,13 @@ const TABS: { id: FilterTab; label: string; Icon: React.FC<{ active: boolean }> 
   { id: "ARTICLE", label: "Text / Článok", Icon: ArticleIcon },
 ];
 
-export function ClubProfilePostsSection({ posts }: { posts: ProfileGridPost[] }) {
+export function ClubProfilePostsSection({
+  posts,
+  profileHandle,
+}: {
+  posts: ProfileGridPost[];
+  profileHandle?: string;
+}) {
   const [active, setActive] = useState<FilterTab>("all");
 
   const filtered = useMemo(
@@ -74,6 +80,7 @@ export function ClubProfilePostsSection({ posts }: { posts: ProfileGridPost[] })
       <ProfilePostGrid
         posts={filtered}
         emptyMessage={emptyMessages[active]}
+        profileHandle={profileHandle}
       />
     </>
   );
