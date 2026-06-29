@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 :root {
+  color-scheme: light;
   --brand-purple: #6f2380;
   --brand-purple-soft: #6f238066;
   --brand-pink: #ca6a8a;
