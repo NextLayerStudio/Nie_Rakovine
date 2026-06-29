@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { saveInterestsAction, type ActionState } from "@/lib/actions/profile";
 import { FormError, SubmitButton } from "@/components/FormError";
 import { CheckboxList } from "@/components/CheckboxList";
+import { useFormRedirect } from "@/hooks/useFormRedirect";
 
 const INITIAL: ActionState = { ok: false };
 
@@ -16,6 +17,7 @@ export function InterestsForm({
   defaultSelected: string[];
 }) {
   const [state, formAction] = useActionState(saveInterestsAction, INITIAL);
+  useFormRedirect(state);
 
   return (
     <form action={formAction} className="mt-4 flex flex-col items-center gap-4 px-5 pb-6">

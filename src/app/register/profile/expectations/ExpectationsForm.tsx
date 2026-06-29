@@ -10,6 +10,7 @@ import { FormError, SubmitButton } from "@/components/FormError";
 import { CheckboxList } from "@/components/CheckboxList";
 import { ConsentCheckbox } from "@/components/ConsentCheckbox";
 import { CookiesModal } from "@/components/CookiesModal";
+import { useFormRedirect } from "@/hooks/useFormRedirect";
 
 const INITIAL: ActionState = { ok: false };
 const DRAFT_KEY = "register-expectations-draft";
@@ -66,6 +67,7 @@ export function ExpectationsForm({
   );
   const [showCookies, setShowCookies] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  useFormRedirect(state);
 
   useEffect(() => {
     const draft = readDraft();

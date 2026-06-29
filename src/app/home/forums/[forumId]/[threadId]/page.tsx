@@ -64,16 +64,13 @@ export default async function ForumThreadPage({
   const isPending = thread.status !== APPROVED;
   const canComment = !!membership && !isPending;
 
-  const cover = thread.coverUrl
+  const coverStyle = thread.coverUrl
     ? {
         backgroundImage: `url(${thread.coverUrl})`,
         backgroundSize: "cover" as const,
         backgroundPosition: "center" as const,
       }
-    : {
-        background:
-          "linear-gradient(135deg, #f5e0c8 0%, #d8a079 50%, #6f2380 100%)",
-      };
+    : undefined;
 
   const chatMessages = thread.comments.map((c) => ({
     id: c.id,
@@ -105,51 +102,68 @@ export default async function ForumThreadPage({
         </div>
       )}
 
-      <article className="px-5 pb-[calc(7.5rem+env(safe-area-inset-bottom))] pt-3">
-        <div className="forum-card overflow-hidden">
-          <div className="aspect-[4/3] w-full" style={cover} />
-          <div className="p-5">
-            <div className="flex items-center gap-3">
-              <div
-                aria-hidden
-                className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-brand-pink to-brand-purple text-xs font-bold text-white"
-              >
-                {initials(thread.author.fullName)}
-              </div>
-              <p className="text-sm font-semibold text-brand-purple">
+      <article className="pb-[calc(7.5rem+env(safe-area-inset-bottom))]">
+        <section className="border-b border-brand-purple/8 px-5 pb-5 pt-3">
+          {thread.coverUrl && coverStyle && (
+            <div
+              className="mb-4 aspect-[4/3] w-full overflow-hidden rounded-2xl bg-cover bg-center"
+              style={coverStyle}
+              role="img"
+              aria-label={thread.title ?? "Obrázok príspevku"}
+            />
+          )}
+
+          <div className="flex gap-3">
+            <div
+              aria-hidden
+              className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-brand-pink to-brand-purple text-[10px] font-bold text-white"
+            >
+              {initials(thread.author.fullName)}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-brand-purple/60">
                 {thread.author.fullName}
               </p>
-            </div>
-            {thread.title && (
-              <h1 className="mt-3 text-lg font-bold leading-snug text-brand-purple">
-                {thread.title}
-              </h1>
-            )}
-            <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-brand-purple/85">
-              {thread.body}
-            </p>
-            <div className="mt-5 flex items-center gap-4 border-t border-brand-purple/[0.06] pt-4">
-              <ForumThreadLikeButton
-                threadId={thread.id}
-                forumId={forumId}
-                liked={!!userLike}
-                count={thread.likeCount}
-              />
-              <span className="forum-chip">
-                <CommentIcon /> {thread.comments.length} v chate
-              </span>
+              {thread.title && (
+                <h1 className="mt-1 text-lg font-bold leading-snug text-brand-purple">
+                  {thread.title}
+                </h1>
+              )}
+              <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-brand-purple/85">
+                {thread.body}
+              </p>
             </div>
           </div>
-        </div>
 
-        <ForumThreadChat
-          forumId={forumId}
-          threadId={threadId}
-          canComment={canComment}
-          comments={chatMessages}
-          currentUserName={user.fullName}
-          currentAvatarUrl={user.profile?.avatarUrl ?? null}
-        />
+          <div className="mt-4 flex items-center gap-5">
+            <ForumThreadLikeButton
+              threadId={thread.id}
+              forumId={forumId}
+              liked={!!userLike}
+              count={thread.likeCount}
+              iconSize="md"
+            />
+            <span className="flex items-center gap-1.5 text-brand-purple/60">
+              <CommentIcon />
+              {thread.comments.length > 0 && (
+                <span className="text-sm font-semibold">
+                  {thread.comments.length}
+                </span>
+              )}
+            </span>
+          </div>
+        </section>
+
+        <div className="px-5">
+          <ForumThreadChat
+            forumId={forumId}
+            threadId={threadId}
+            canComment={canComment}
+            comments={chatMessages}
+            currentUserName={user.fullName}
+            currentAvatarUrl={user.profile?.avatarUrl ?? null}
+          />
+        </div>
       </article>
 
       {!canComment && (
@@ -176,11 +190,13 @@ function initials(name: string) {
 
 function CommentIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" aria-hidden>
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden>
       <path
-        d="M4 12a7 7 0 0112-4.95A7 7 0 0118 20H9l-4 3 1-4A7 7 0 014 12z"
+        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

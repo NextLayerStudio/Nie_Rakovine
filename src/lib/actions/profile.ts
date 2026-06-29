@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
@@ -10,7 +9,11 @@ import type {
   SubscriptionStatus,
 } from "@prisma/client";
 
-export type ActionState = { ok: boolean; message?: string };
+export type ActionState = {
+  ok: boolean;
+  message?: string;
+  redirectTo?: string;
+};
 
 function getStringArray(formData: FormData, name: string): string[] {
   return formData
@@ -46,7 +49,7 @@ export async function chooseSubscriptionAction(
     },
   });
 
-  redirect("/register/profile/location");
+  return { ok: true, redirectTo: "/register/profile/location" };
 }
 
 // --------------------------------------------------------------------
@@ -79,7 +82,7 @@ export async function saveLocationAction(
     },
   });
 
-  redirect("/register/profile/diagnosis");
+  return { ok: true, redirectTo: "/register/profile/diagnosis" };
 }
 
 // --------------------------------------------------------------------
@@ -114,7 +117,7 @@ export async function saveDiagnosisAction(
     },
   });
 
-  redirect("/register/profile/interests");
+  return { ok: true, redirectTo: "/register/profile/interests" };
 }
 
 // --------------------------------------------------------------------
@@ -133,7 +136,7 @@ export async function saveInterestsAction(
     update: { interests },
   });
 
-  redirect("/register/profile/expectations");
+  return { ok: true, redirectTo: "/register/profile/expectations" };
 }
 
 // --------------------------------------------------------------------
@@ -173,7 +176,7 @@ export async function saveExpectationsAction(
     },
   });
 
-  redirect("/register/profile/source");
+  return { ok: true, redirectTo: "/register/profile/source" };
 }
 
 // --------------------------------------------------------------------
@@ -202,5 +205,5 @@ export async function saveSourceAction(
   });
 
   revalidatePath("/profile");
-  redirect("/register/profile/done");
+  return { ok: true, redirectTo: "/register/profile/done" };
 }

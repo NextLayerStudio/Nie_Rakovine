@@ -39,6 +39,14 @@ export function ForumPostCard({
 
   const content = (
     <>
+      {coverUrl && (
+        <div
+          className={`mb-3 w-full overflow-hidden rounded-2xl bg-cover bg-center ring-1 ring-brand-purple/10 ${
+            compact ? "aspect-[4/3]" : "aspect-[16/10]"
+          }`}
+          style={{ backgroundImage: `url(${coverUrl})` }}
+        />
+      )}
       {title && (
         <h3
           className={`font-bold leading-snug text-brand-purple ${
@@ -49,7 +57,9 @@ export function ForumPostCard({
         </h3>
       )}
       <p
-        className={`mt-1.5 whitespace-pre-wrap text-brand-purple/80 ${
+        className={`whitespace-pre-wrap text-brand-purple/80 ${
+          title ? "mt-1.5" : ""
+        } ${
           compact
             ? "line-clamp-3 text-[11px] leading-snug"
             : "line-clamp-4 text-sm leading-relaxed"
@@ -57,14 +67,6 @@ export function ForumPostCard({
       >
         {body}
       </p>
-      {coverUrl && (
-        <div
-          className={`mt-3 w-full overflow-hidden rounded-2xl bg-cover bg-center ring-1 ring-brand-purple/10 ${
-            compact ? "aspect-[4/3]" : "aspect-[16/10]"
-          }`}
-          style={{ backgroundImage: `url(${coverUrl})` }}
-        />
-      )}
     </>
   );
 
@@ -106,19 +108,23 @@ export function ForumPostCard({
         </div>
 
         {!footerSlot && (
-          <div className="mt-4 flex items-center gap-4 border-t border-brand-purple/[0.06] pt-3 text-brand-purple/70">
+          <div className="mt-4 flex items-center gap-5 border-t border-brand-purple/[0.06] pt-3">
             <ForumThreadLikeButton
               threadId={threadId}
               forumId={forumId}
               liked={liked}
               count={likeCount}
+              iconSize="md"
             />
             <Link
               href={threadHref}
-              className="flex items-center gap-1.5 rounded-full bg-brand-purple/[0.06] px-3 py-1.5 text-xs font-semibold text-brand-purple/80 transition hover:bg-brand-purple/10"
+              aria-label="Komentáre"
+              className="flex items-center gap-1.5 text-brand-purple/60"
             >
               <CommentIcon />
-              {commentCount}
+              {commentCount > 0 && (
+                <span className="text-sm font-semibold">{commentCount}</span>
+              )}
             </Link>
           </div>
         )}
@@ -139,11 +145,13 @@ function initials(name: string) {
 
 function CommentIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden>
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden>
       <path
-        d="M4 12a7 7 0 0112-4.95A7 7 0 0118 20H9l-4 3 1-4A7 7 0 014 12z"
+        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

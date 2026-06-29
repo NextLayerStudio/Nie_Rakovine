@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { saveDiagnosisAction, type ActionState } from "@/lib/actions/profile";
 import { FormError, SubmitButton } from "@/components/FormError";
 import { CancerTypeSelect } from "@/components/CancerTypeSelect";
+import { useFormRedirect } from "@/hooks/useFormRedirect";
 
 const PHASES = ["1. fáza", "2. fáza", "3. fáza", "4. fáza", "Remisia"];
 
@@ -23,6 +24,7 @@ export function DiagnosisForm({
   defaultCancerTypes: CancerType[];
 }) {
   const [state, formAction] = useActionState(saveDiagnosisAction, INITIAL);
+  useFormRedirect(state);
 
   return (
     <form action={formAction} className="mt-5 flex flex-col gap-3 px-5 pb-6">

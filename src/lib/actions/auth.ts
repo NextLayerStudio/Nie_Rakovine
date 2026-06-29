@@ -65,14 +65,18 @@ export async function registerAction(
   queueWelcomeEmail({ email: user.email, fullName: user.fullName });
 
   const headerStore = await headers();
-  await trackLoginDevice({
-    userId: user.id,
-    email: user.email,
-    fullName: user.fullName,
-    userAgent: headerStore.get("user-agent") ?? "Neznáme zariadenie",
-  });
+  try {
+    await trackLoginDevice({
+      userId: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      userAgent: headerStore.get("user-agent") ?? "Neznáme zariadenie",
+    });
+  } catch (error) {
+    console.error("trackLoginDevice failed during register:", error);
+  }
 
-  redirect("/register/subscription");
+  return { ok: true, redirectTo: "/register/subscription" };
 }
 
 // ---------- Login -------------------------------------------------------

@@ -62,10 +62,9 @@ export function ForumThreadChat({
     <>
       {comments.length > 0 && (
         <>
-          <h2 className="forum-section-label mb-3 mt-6">Chat</h2>
-          <ul className="space-y-0">
-            {comments.map((c, idx) => {
-              const prevHasReply = idx > 0 && comments[idx - 1].replyTo !== null;
+          <h2 className="forum-section-label mb-1 mt-5">Chat</h2>
+          <ul>
+            {comments.map((c) => {
               const isReply = c.replyTo !== null;
               return (
                 <ForumChatBubble

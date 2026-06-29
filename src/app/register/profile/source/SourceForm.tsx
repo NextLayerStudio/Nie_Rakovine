@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { saveSourceAction, type ActionState } from "@/lib/actions/profile";
 import { FormError, SubmitButton } from "@/components/FormError";
 import { CheckboxList } from "@/components/CheckboxList";
+import { useFormRedirect } from "@/hooks/useFormRedirect";
 
 const INITIAL: ActionState = { ok: false };
 
@@ -19,6 +20,7 @@ export function SourceForm({
   defaultHear: string[];
 }) {
   const [state, formAction] = useActionState(saveSourceAction, INITIAL);
+  useFormRedirect(state);
 
   return (
     <form action={formAction} className="mt-8 flex flex-col items-center gap-5 px-5 pb-6">

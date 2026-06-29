@@ -38,7 +38,7 @@ export function NewThreadForm({ forumId }: { forumId: string }) {
         />
       </label>
 
-      <PostImagePicker />
+      <PostImagePicker variant="compact" />
 
       <p className="forum-banner-info text-center text-[11px]">
         Po odoslaní príspevok čaká na overenie administrátorom.

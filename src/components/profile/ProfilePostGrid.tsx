@@ -13,13 +13,19 @@ export type ProfileGridPost = {
   imageCount: number;
 };
 
-export function ProfilePostGrid({ posts }: { posts: ProfileGridPost[] }) {
+export function ProfilePostGrid({
+  posts,
+  emptyMessage = "Zatiaľ žiadne príspevky.",
+}: {
+  posts: ProfileGridPost[];
+  emptyMessage?: string;
+}) {
   const [activePostId, setActivePostId] = useState<string | null>(null);
 
   if (posts.length === 0) {
     return (
       <div className="flex flex-1 items-center justify-center py-16 text-sm text-brand-purple/50">
-        Zatiaľ žiadne príspevky.
+        {emptyMessage}
       </div>
     );
   }

@@ -5,7 +5,6 @@ import {
   EventDetailModal,
   type EventModalData,
 } from "@/components/EventDetailModal";
-import { EventPriceBadge } from "@/components/events/EventPriceBadge";
 import { formatEventPrice } from "@/lib/event-payment";
 
 export function FeedEventItem({
@@ -99,27 +98,32 @@ export function FeedEventItem({
             className="aspect-[4/3] max-h-[220px] w-full bg-cover bg-center"
             style={cover}
           />
-          <span className="absolute bottom-3 left-3">
+          <span className="absolute bottom-3 left-4">
             <span
-              className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold shadow-md backdrop-blur-sm ${
+              className={`inline-flex min-w-[11.5rem] items-center justify-between gap-4 rounded-[10px] px-5 py-3 text-sm font-semibold shadow-md backdrop-blur-sm ${
                 liveRegistered
                   ? "bg-emerald-500 text-white"
                   : "bg-brand-purple text-white"
               }`}
             >
-              {liveRegistered && <CheckIcon />}
-              {liveRegistered
-                ? "Prihlásený"
-                : isPaid && priceCents
-                  ? `Zaplatiť · ${formatEventPrice(priceCents, currency)}`
-                  : "Zaregistrovať sa"}
+              {liveRegistered ? (
+                <span className="flex items-center gap-2">
+                  <CheckIcon />
+                  Prihlásený
+                </span>
+              ) : isPaid && priceCents ? (
+                <>
+                  <span>Zaplatiť · {formatEventPrice(priceCents, currency)}</span>
+                  <ChevronRight />
+                </>
+              ) : (
+                <>
+                  <span>Zaregistrovať sa</span>
+                  <ChevronRight />
+                </>
+              )}
             </span>
           </span>
-          {isPaid && priceCents ? (
-            <span className="absolute right-3 top-3">
-              <EventPriceBadge priceCents={priceCents} currency={currency} />
-            </span>
-          ) : null}
         </button>
 
         {/* Textový obsah */}
@@ -221,6 +225,20 @@ function CheckIcon() {
   return (
     <svg viewBox="0 0 12 12" className="h-3 w-3 shrink-0" fill="none" aria-hidden>
       <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ChevronRight() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="none" aria-hidden>
+      <path
+        d="M9 6l6 6-6 6"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

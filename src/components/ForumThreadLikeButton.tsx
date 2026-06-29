@@ -10,12 +10,14 @@ export function ForumThreadLikeButton({
   liked: likedProp,
   count: countProp,
   variant = "feed",
+  iconSize,
 }: {
   threadId: string;
   forumId: string;
   liked: boolean;
   count: number;
   variant?: "feed" | "pill";
+  iconSize?: "sm" | "md" | "lg";
 }) {
   const [liked, setLiked] = useState(likedProp);
   const [count, setCount] = useState(countProp);
@@ -53,7 +55,10 @@ export function ForumThreadLikeButton({
       onClick={handleClick}
       className={variant === "feed" ? feedClass : pillClass}
     >
-      <HeartIcon filled={liked} large={variant === "feed"} />
+      <HeartIcon
+        filled={liked}
+        size={iconSize ?? (variant === "feed" ? "lg" : "sm")}
+      />
       {variant === "feed" ? (
         <span className="text-sm font-semibold">
           {count > 0 ? count : "Páči sa mi"}

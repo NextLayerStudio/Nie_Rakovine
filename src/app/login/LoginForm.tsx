@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useActionState, useEffect } from "react";
+import { useActionState } from "react";
 import { loginAction, type ActionState } from "@/lib/actions/auth";
 import { FormError, SubmitButton } from "@/components/FormError";
 import { LoginLoadingOverlay } from "./LoginLoadingOverlay";
+import { useFormRedirect } from "@/hooks/useFormRedirect";
 
 const INITIAL: ActionState = { ok: false };
 
@@ -16,16 +16,8 @@ export function LoginForm({
   next: string;
   isAdminLogin?: boolean;
 }) {
-  const router = useRouter();
   const [state, formAction] = useActionState(loginAction, INITIAL);
-
-  useEffect(() => {
-    if (state.ok && state.redirectTo) {
-      router.replace(state.redirectTo);
-    }
-  }, [state, router]);
-
-  const redirecting = state.ok && !!state.redirectTo;
+  const redirecting = useFormRedirect(state);
 
   return (
     <form action={formAction} className="mt-6 flex flex-1 flex-col gap-4 px-6">

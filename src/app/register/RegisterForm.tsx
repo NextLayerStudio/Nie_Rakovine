@@ -6,6 +6,7 @@ import { registerAction, type ActionState } from "@/lib/actions/auth";
 import { FormError, SubmitButton } from "@/components/FormError";
 import { TermsModal } from "@/components/TermsModal";
 import { cn } from "@/lib/utils";
+import { useFormRedirect } from "@/hooks/useFormRedirect";
 
 const INITIAL: ActionState = { ok: false };
 
@@ -13,6 +14,7 @@ export function RegisterForm() {
   const [state, formAction] = useActionState(registerAction, INITIAL);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  useFormRedirect(state);
 
   return (
     <>

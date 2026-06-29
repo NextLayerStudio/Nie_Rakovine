@@ -162,7 +162,7 @@ export function ProfileCalendarTab({
         </div>
 
         {/* Day grid */}
-        <div className="grid grid-cols-7 gap-1 px-3 pb-5">
+        <div className="grid grid-cols-7 gap-y-1 px-3 pb-5">
           {grid.map((date, i) => {
             if (!date) return <span key={`empty-${i}`} />;
             const k = dayKey(date);
@@ -174,15 +174,27 @@ export function ProfileCalendarTab({
                 type="button"
                 onClick={() => handleDayClick(date)}
                 disabled={!hasEvent}
-                className={`aspect-square w-full rounded-xl text-sm font-bold transition active:scale-95 ${
-                  hasEvent
-                    ? "bg-brand-pink text-white shadow-sm"
-                    : isToday
-                      ? "ring-2 ring-brand-pink/50 text-brand-purple"
-                      : "text-brand-purple/70"
+                className={`relative mx-auto flex h-10 w-full max-w-[2.75rem] flex-col items-center justify-center transition active:scale-95 ${
+                  hasEvent ? "cursor-pointer" : "cursor-default"
                 }`}
               >
-                {date.getDate()}
+                <span
+                  className={`leading-none ${
+                    isToday
+                      ? "text-base font-bold text-brand-purple"
+                      : hasEvent
+                        ? "text-sm font-semibold text-brand-purple"
+                        : "text-sm text-brand-purple/70"
+                  }`}
+                >
+                  {date.getDate()}
+                </span>
+                {hasEvent && (
+                  <span
+                    className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500"
+                    aria-hidden
+                  />
+                )}
               </button>
             );
           })}

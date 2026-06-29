@@ -9,6 +9,7 @@ import {
 import { FormError, SubmitButton } from "@/components/FormError";
 import { SUBSCRIPTION_PLANS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { useFormRedirect } from "@/hooks/useFormRedirect";
 
 const INITIAL: ActionState = { ok: false };
 
@@ -24,6 +25,7 @@ export function SubscriptionForm({
     chooseSubscriptionAction,
     INITIAL,
   );
+  useFormRedirect(state);
 
   return (
     <form action={formAction} className="flex min-h-0 flex-1 flex-col">

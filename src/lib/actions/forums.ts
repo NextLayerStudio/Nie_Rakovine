@@ -371,17 +371,17 @@ export async function createThreadAction(
   }
 
   let coverUrl: string | null = null;
-  if (imageFile instanceof File && imageFile.size > 0) {
-    try {
-      const { saveForumImage } = await import("@/lib/forum-image");
-      coverUrl = await saveForumImage(imageFile);
-    } catch (err) {
-      return {
-        ok: false,
-        message:
-          err instanceof Error ? err.message : "Obrázok sa nepodarilo uložiť.",
-      };
-    }
+  try {
+    const { saveForumImage } = await import("@/lib/forum-image");
+    coverUrl = await saveForumImage(
+      imageFile instanceof File ? imageFile : null,
+    );
+  } catch (err) {
+    return {
+      ok: false,
+      message:
+        err instanceof Error ? err.message : "Obrázok sa nepodarilo uložiť.",
+    };
   }
 
   let threadId: string;

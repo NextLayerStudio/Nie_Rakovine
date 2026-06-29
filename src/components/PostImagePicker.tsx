@@ -7,7 +7,11 @@ import {
   maxImageUploadBytes,
 } from "@/lib/image-upload-limits";
 
-export function PostImagePicker() {
+export function PostImagePicker({
+  variant = "default",
+}: {
+  variant?: "default" | "compact";
+}) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -57,25 +61,21 @@ export function PostImagePicker() {
             Odstrániť
           </button>
         </div>
+      ) : variant === "compact" ? (
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          className="rounded-full border border-brand-purple/20 bg-white px-4 py-2 text-sm font-semibold text-brand-purple/70 transition hover:border-brand-pink/40 hover:text-brand-purple"
+        >
+          Pridať fotku
+        </button>
       ) : (
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
           className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-brand-purple/25 bg-white py-8 text-sm font-semibold text-brand-purple/70"
         >
-          <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden>
-            <path
-              d="M12 16a4 4 0 100-8 4 4 0 000 8z"
-              stroke="currentColor"
-              strokeWidth="1.8"
-            />
-            <path
-              d="M4 7h2l1.5-2h9L18 7h2a2 2 0 012 2v9a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2z"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <CameraIcon />
           Pridať fotku
         </button>
       )}
@@ -90,11 +90,30 @@ export function PostImagePicker() {
       />
 
       <p className="mt-2 text-[11px] text-brand-purple/55">
-        Môžete nahrať väčšiu fotku (do {maxMb} MB) — systém ju automaticky
-        zmenší.
+        {variant === "compact"
+          ? "Fotka nie je povinná — príspevok môže byť len text."
+          : `Môžete nahrať väčšiu fotku (do ${maxMb} MB) — systém ju automaticky zmenší.`}
       </p>
 
       {error && <p className="mt-2 text-[11px] text-red-600">{error}</p>}
     </div>
+  );
+}
+
+function CameraIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden>
+      <path
+        d="M12 16a4 4 0 100-8 4 4 0 000 8z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M4 7h2l1.5-2h9L18 7h2a2 2 0 012 2v9a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }

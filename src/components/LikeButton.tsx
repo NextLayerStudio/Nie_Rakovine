@@ -63,10 +63,25 @@ export function LikeButton({
   );
 }
 
-export function HeartIcon({ filled, large = false }: { filled: boolean; large?: boolean }) {
-  const size = large ? "h-7 w-7" : "h-4 w-4";
+export function HeartIcon({
+  filled,
+  large = false,
+  size,
+}: {
+  filled: boolean;
+  large?: boolean;
+  size?: "sm" | "md" | "lg";
+}) {
+  const className =
+    size === "lg" || (size === undefined && large)
+      ? "h-7 w-7"
+      : size === "md"
+        ? "h-6 w-6"
+        : size === "sm" || !large
+          ? "h-4 w-4"
+          : "h-7 w-7";
   return (
-    <svg viewBox="0 0 24 24" className={size} aria-hidden>
+    <svg viewBox="0 0 24 24" className={className} aria-hidden>
       <path
         d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
         fill={filled ? "currentColor" : "none"}

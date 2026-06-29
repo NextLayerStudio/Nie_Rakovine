@@ -11,12 +11,14 @@ export function ForumCommentReactionButton({
   forumId,
   liked: likedProp,
   count: countProp,
+  variant = "pill",
 }: {
   commentId: string;
   threadId: string;
   forumId: string;
   liked: boolean;
   count: number;
+  variant?: "pill" | "plain";
 }) {
   const [liked, setLiked] = useState(likedProp);
   const [count, setCount] = useState(countProp);
@@ -48,13 +50,20 @@ export function ForumCommentReactionButton({
       onClick={handleClick}
       aria-label={liked ? "Odstrániť srdiečko" : "Páči sa mi"}
       className={cn(
-        "inline-flex items-center gap-1 rounded-pill px-2 py-0.5 text-[11px] font-semibold transition disabled:opacity-60",
-        liked
-          ? "bg-brand-pink/15 text-brand-pink"
-          : "bg-brand-purple/5 text-brand-purple/55 hover:bg-brand-purple/10 hover:text-brand-purple/75",
+        "inline-flex items-center gap-1 transition disabled:opacity-60",
+        variant === "plain"
+          ? liked
+            ? "text-brand-pink"
+            : "text-brand-purple/45 hover:text-brand-purple/70"
+          : cn(
+              "rounded-pill px-2 py-0.5 text-[11px] font-semibold",
+              liked
+                ? "bg-brand-pink/15 text-brand-pink"
+                : "bg-brand-purple/5 text-brand-purple/55 hover:bg-brand-purple/10 hover:text-brand-purple/75",
+            ),
       )}
     >
-      <HeartIcon filled={liked} />
+      <HeartIcon filled={liked} size={variant === "plain" ? "sm" : undefined} />
       {count > 0 ? <span>{count}</span> : null}
     </button>
   );
@@ -71,11 +80,11 @@ function QuotedMessage({
     body.length > 120 ? `${body.slice(0, 117).trimEnd()}…` : body;
 
   return (
-    <div className="mb-2 rounded-xl border-l-[3px] border-brand-pink bg-brand-pink/8 px-3 py-2">
-      <p className="text-[11px] font-semibold text-brand-purple/70">
+    <div className="mb-2 border-l-2 border-brand-purple/15 pl-2.5">
+      <p className="text-[11px] font-semibold text-brand-purple/55">
         {authorName}
       </p>
-      <p className="mt-0.5 line-clamp-3 whitespace-pre-wrap text-xs leading-snug text-brand-purple/65">
+      <p className="mt-0.5 line-clamp-2 whitespace-pre-wrap text-xs leading-snug text-brand-purple/45">
         {preview}
       </p>
     </div>
@@ -112,55 +121,64 @@ export function ForumChatBubble({
   onReply: () => void;
 }) {
   return (
-    <li className={`forum-chat-bubble relative ${isReply ? "ml-6 border-l-2 border-brand-pink/30 pl-3" : ""}`}>
-      {isReply && (
-        <div className="absolute -left-[1px] top-0 h-4 w-3 border-b-2 border-l-0 border-brand-pink/30 rounded-bl-lg" />
+    <li
+      className={cn(
+        "relative",
+        isReply ? "ml-7 border-l border-brand-purple/15 pl-4 pt-4" : "border-t border-brand-purple/8 py-5 first:border-t-0 first:pt-2",
       )}
+    >
       {pendingModeration && (
         <span className="mb-2 inline-flex rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
           Čaká na overenie
         </span>
       )}
 
-      {replyTo && (
-        <QuotedMessage authorName={replyTo.authorName} body={replyTo.body} />
-      )}
-
-      <div className="flex items-center gap-2">
+      <div className="flex gap-3">
         <div
           aria-hidden
-          className="h-7 w-7 shrink-0 rounded-full bg-cover bg-center bg-brand-purple/10 ring-1 ring-white"
-          style={avatarUrl ? { backgroundImage: `url(${avatarUrl})` } : undefined}
+          className="h-9 w-9 shrink-0 overflow-hidden rounded-full bg-brand-purple/10"
+          style={avatarUrl ? { backgroundImage: `url(${avatarUrl})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
         >
           {!avatarUrl && (
-            <span className="flex h-full w-full items-center justify-center rounded-full text-[10px] font-bold text-brand-purple">
+            <span className="flex h-full w-full items-center justify-center text-[10px] font-bold text-brand-purple">
               {initials(authorName)}
             </span>
           )}
         </div>
-        <p className="text-xs font-semibold text-brand-purple">{authorName}</p>
-      </div>
-      <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-brand-purple/85">
-        {body}
-      </p>
 
-      <div className="mt-2 flex items-center justify-end gap-2">
-        <ForumCommentReactionButton
-          commentId={commentId}
-          threadId={threadId}
-          forumId={forumId}
-          liked={liked}
-          count={likeCount}
-        />
-        {canReact && (
-          <button
-            type="button"
-            onClick={onReply}
-            className="rounded-pill bg-brand-purple/5 px-2.5 py-0.5 text-[11px] font-semibold text-brand-purple/55 transition hover:bg-brand-purple/10 hover:text-brand-purple/75"
-          >
-            Reagovať
-          </button>
-        )}
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold text-brand-purple/60">{authorName}</p>
+
+          {replyTo && (
+            <div className="mt-2">
+              <QuotedMessage authorName={replyTo.authorName} body={replyTo.body} />
+            </div>
+          )}
+
+          <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-brand-purple/85">
+            {body}
+          </p>
+
+          <div className="mt-2 flex items-center gap-4">
+            <ForumCommentReactionButton
+              commentId={commentId}
+              threadId={threadId}
+              forumId={forumId}
+              liked={liked}
+              count={likeCount}
+              variant="plain"
+            />
+            {canReact && (
+              <button
+                type="button"
+                onClick={onReply}
+                className="text-xs font-semibold text-brand-purple/45 transition hover:text-brand-purple/70"
+              >
+                Reagovať
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </li>
   );

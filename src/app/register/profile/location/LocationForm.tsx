@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { saveLocationAction, type ActionState } from "@/lib/actions/profile";
 import { FormError, SubmitButton } from "@/components/FormError";
 import { LocationPicker } from "@/components/map/LocationPicker";
+import { useFormRedirect } from "@/hooks/useFormRedirect";
 
 const REGIONS = [
   "Bratislavský",
@@ -40,6 +41,7 @@ export function LocationForm({
   const [state, formAction] = useActionState(saveLocationAction, INITIAL);
   const [region, setRegion] = useState(defaultRegion);
   const [city, setCity] = useState(defaultCity);
+  useFormRedirect(state);
 
   return (
     <form action={formAction} className="mt-5 flex flex-col px-5 pb-6">

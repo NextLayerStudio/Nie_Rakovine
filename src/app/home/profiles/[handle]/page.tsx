@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FollowProfileButton } from "@/components/FollowProfileButton";
-import { ProfilePostGrid } from "@/components/profile/ProfilePostGrid";
+import { ClubProfilePostsSection } from "@/components/profile/ClubProfilePostsSection";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { postCoverFallback, safeReturnHref } from "@/lib/post-display";
@@ -135,20 +135,8 @@ export default async function ClubProfilePage({
         </div>
       </div>
 
-      {/* Tab bar — grid only for now */}
-      <div className="flex border-y border-brand-purple/10">
-        <div className="flex flex-1 items-center justify-center py-2.5 border-b-2 border-brand-purple">
-          <svg viewBox="0 0 24 24" className="h-5 w-5 text-brand-purple" fill="currentColor" aria-hidden>
-            <rect x="3" y="3" width="7" height="7" rx="1" />
-            <rect x="14" y="3" width="7" height="7" rx="1" />
-            <rect x="3" y="14" width="7" height="7" rx="1" />
-            <rect x="14" y="14" width="7" height="7" rx="1" />
-          </svg>
-        </div>
-      </div>
-
-      {/* Posts grid */}
-      <ProfilePostGrid posts={gridPosts} />
+      {/* Post categories + grid */}
+      <ClubProfilePostsSection posts={gridPosts} />
     </div>
   );
 }

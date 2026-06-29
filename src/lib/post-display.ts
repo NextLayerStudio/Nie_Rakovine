@@ -20,12 +20,14 @@ export function profileHrefWithReturn(handle: string, returnPath: string) {
   return `/home/profiles/${handle}?from=${encodeURIComponent(returnPath)}`;
 }
 
-/** Only allow in-app relative return paths. */
+/** Only allow in-app relative return paths under /home. */
 export function safeReturnHref(from: string | undefined, fallback: string): string {
   if (!from) return fallback;
   try {
     const path = decodeURIComponent(from);
-    if (path.startsWith("/home/") && !path.includes("://")) return path;
+    if (path.includes("://")) return fallback;
+    const pathname = path.split("?")[0];
+    if (pathname === "/home" || pathname.startsWith("/home/")) return path;
   } catch {
     // invalid encoding
   }
