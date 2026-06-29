@@ -14,19 +14,18 @@ export default function DonePage() {
             width={400}
             height={200}
             priority
-            className="h-auto w-[150px] object-contain"
+            className="h-auto w-[150px] object-contain brightness-0 invert"
           />
         </div>
 
         <div className="flex flex-1 flex-col items-center justify-center px-8 text-center text-white">
-          <h1 className="text-5xl font-extrabold tracking-tight">Vitajte</h1>
           <Image
             src="/logo/logo_biele_onkoklub.png.webp"
             alt="ONKO KLUB"
             width={800}
             height={400}
             priority
-            className="mt-10 h-auto w-[min(62vw,240px)] object-contain"
+            className="h-auto w-[min(54vw,210px)] object-contain"
           />
           <p className="mt-8 max-w-[28ch] text-lg leading-relaxed text-white/90">
             Vaša registrácia bola úspešná. Tešíme sa, že ste sa stali súčasťou
