@@ -48,17 +48,10 @@ export function ForumsTabPanel({ initialData }: { initialData?: ForumsData }) {
       .catch(() => setFailed(true));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (failed)
-    return (
-      <div className="px-5 py-8 text-center text-sm text-brand-purple/50">
-        Obsah sa nepodarilo načítať. Skúste obnoviť stránku.
-      </div>
-    );
-  if (!data) return <TabSkeleton />;
-
-  const followingIds = new Set(data.followingForumIds);
+  const followingIds = new Set(data?.followingForumIds ?? []);
 
   const filteredForums = useMemo(() => {
+    if (!data) return [];
     let list = [...data.forums];
     if (activeFilter === "following") {
       list = list.filter((f) => followingIds.has(f.id));
@@ -67,7 +60,15 @@ export function ForumsTabPanel({ initialData }: { initialData?: ForumsData }) {
     }
     return list;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data.forums, activeFilter, data.followingForumIds]);
+  }, [data, activeFilter]);
+
+  if (failed)
+    return (
+      <div className="px-5 py-8 text-center text-sm text-brand-purple/50">
+        Obsah sa nepodarilo načítať. Skúste obnoviť stránku.
+      </div>
+    );
+  if (!data) return <TabSkeleton />
 
   return (
     <div className="forum-page min-h-full">
