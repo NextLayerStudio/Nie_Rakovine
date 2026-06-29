@@ -27,17 +27,24 @@ function TabSpinner() {
   );
 }
 
-export function ProfileView({ initialTab }: { initialTab: ProfileTab }) {
+export function ProfileView({
+  initialTab,
+  initialCalendarData,
+}: {
+  initialTab: ProfileTab;
+  initialCalendarData?: CalendarData;
+}) {
   const searchParams = useSearchParams();
   const activeTab = parseProfileTab(searchParams.get("tab") ?? initialTab);
 
-  const [calendarData, setCalendarData] = useState<CalendarData | null>(null);
+  const [calendarData, setCalendarData] = useState<CalendarData | null>(initialCalendarData ?? null);
   const [forumsData, setForumsData] = useState<ForumsData | null>(null);
   const [discountsData, setDiscountsData] = useState<DiscountsData | null>(null);
   const [savedData, setSavedData] = useState<SavedData | null>(null);
   const [loadingTab, setLoadingTab] = useState<ProfileTab | null>(null);
 
-  const fetched = useRef(new Set<ProfileTab>());
+  // Calendar is pre-fetched server-side — mark it so we never re-fetch
+  const fetched = useRef(new Set<ProfileTab>(initialCalendarData ? ["calendar"] : []));
 
   const loadTab = useCallback(async (tab: ProfileTab) => {
     if (fetched.current.has(tab)) return;
