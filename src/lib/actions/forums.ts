@@ -283,15 +283,6 @@ export async function createCommentAction(
     return { ok: false, message: "Príspevok nie je dostupný." };
   }
 
-  const membership = await prisma.forumMembership.findUnique({
-    where: {
-      forumId_userId: { forumId: thread.forumId, userId: user.id },
-    },
-  });
-  if (!membership) {
-    return { ok: false, message: "Najprv sa zapojte do fóra." };
-  }
-
   let replyTarget: {
     authorId: string;
     forumTitle: string;
@@ -386,21 +377,13 @@ export async function createThreadAction(
 
   let threadId: string;
   try {
-    const [forum, membership] = await Promise.all([
-      prisma.forum.findFirst({
-        where: { id: forumId, published: true },
-        select: { id: true },
-      }),
-      prisma.forumMembership.findUnique({
-        where: { forumId_userId: { forumId, userId: user.id } },
-      }),
-    ]);
+    const forum = await prisma.forum.findFirst({
+      where: { id: forumId, published: true },
+      select: { id: true },
+    });
 
     if (!forum) {
       return { ok: false, message: "Fórum nie je dostupné." };
-    }
-    if (!membership) {
-      return { ok: false, message: "Najprv sa zapojte do fóra." };
     }
 
     const thread = await prisma.forumThread.create({

@@ -60,7 +60,7 @@ export default async function ForumDetailPage({
         imageUrl={forum.imageUrl}
         accentColor={forum.accentColor}
         title={forum.title}
-        newPostHref={joined ? `/home/forums/${forum.id}/new` : undefined}
+        newPostHref={`/home/forums/${forum.id}/new`}
       />
 
       <section className="px-5 pt-4">
@@ -99,11 +99,6 @@ export default async function ForumDetailPage({
         </div>
       )}
 
-      {!joined && (
-        <div className="forum-banner-info mx-5 mt-4 text-center">
-          Zapojte sa do fóra, aby ste mohli prispievať do diskusie.
-        </div>
-      )}
 
       <section className="px-5 pb-24 pt-5">
         <h2 className="forum-section-label mb-4">

@@ -155,14 +155,6 @@ export function ForumsTabPanel({ initialData }: { initialData?: ForumsData }) {
         </>
       )}
 
-      <div className="px-5 pb-8 pt-1">
-        <Link href="/home/forums/new" className="forum-btn-outline">
-          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
-            <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-          </svg>
-          Vytvoriť fórum
-        </Link>
-      </div>
     </div>
   );
 }

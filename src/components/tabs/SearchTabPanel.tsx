@@ -141,45 +141,37 @@ export function SearchTabPanel() {
     <>
       {/* Searchbar */}
       <section className="px-5 pb-4 pt-4">
-        <div className="flex items-center gap-3 rounded-full border border-brand-purple/12 bg-white px-6 py-4 shadow-md">
+        <div className="relative">
           <input
             ref={inputRef}
             type="search"
             placeholder="Hľadať profily..."
             value={query}
             onChange={(e) => handleInput(e.target.value)}
-            className="flex-1 bg-transparent text-base font-medium text-brand-purple placeholder-brand-purple/35 outline-none"
+            className="w-full rounded-pill bg-white py-3 pl-5 pr-12 text-sm text-brand-purple placeholder-brand-purple/50 outline-none"
           />
-          {query ? (
-            <button
-              type="button"
-              onClick={() => {
-                setQuery("");
-                handleInput("");
-                inputRef.current?.focus();
-              }}
-              className="shrink-0 text-brand-purple/40"
-            >
-              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
-                <path
-                  d="M6 6l12 12M6 18L18 6"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-purple/60">
+            {query ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setQuery("");
+                  handleInput("");
+                  inputRef.current?.focus();
+                }}
+                aria-label="Zmazať hľadanie"
+              >
+                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none">
+                  <path d="M6 6l12 12M6 18L18 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </button>
+            ) : (
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+                <circle cx="10.5" cy="10.5" r="6.2" stroke="currentColor" strokeWidth="1.8" />
+                <path d="M15.8 15.8 20 20" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
               </svg>
-            </button>
-          ) : (
-            <svg
-              viewBox="0 0 24 24"
-              className="h-5 w-5 shrink-0 text-brand-purple/40"
-              fill="none"
-              aria-hidden
-            >
-              <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
-              <path d="M21 21l-4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          )}
+            )}
+          </span>
         </div>
       </section>
 

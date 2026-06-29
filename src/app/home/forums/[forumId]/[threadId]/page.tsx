@@ -67,7 +67,7 @@ export default async function ForumThreadPage({
   if (!thread) notFound();
 
   const isPending = thread.status !== APPROVED;
-  const canComment = !!membership && !isPending;
+  const canComment = !isPending;
 
   const coverStyle = thread.coverUrl
     ? {
@@ -171,14 +171,12 @@ export default async function ForumThreadPage({
         </div>
       </article>
 
-      {!canComment && (
+      {!canComment && isPending && (
         <div
           className="fixed inset-x-0 bottom-0 z-30 border-t border-brand-purple/10 bg-white/95 px-5 py-4 text-center text-xs text-brand-purple/70 backdrop-blur-md"
           style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
         >
-          {isPending
-            ? "Chat bude dostupný po schválení príspevku administrátorom."
-            : "Zapojte sa do fóra, aby ste mohli písať komentáre."}
+          Chat bude dostupný po schválení príspevku administrátorom.
         </div>
       )}
     </div>
