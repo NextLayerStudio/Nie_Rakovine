@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import Link from "next/link";
 import type { CancerType } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { saveDiagnosisAction, type ActionState } from "@/lib/actions/profile";
@@ -85,7 +86,7 @@ export function DiagnosisForm({
 
       <FormError message={state.message} />
 
-      <div className="flex justify-center pt-2">
+      <div className="flex flex-col items-center gap-3 pt-2">
         <SubmitButton
           className="btn-secondary !grid w-[94%] grid-cols-[1fr_auto_1fr] items-center !px-4 !py-3.5 text-base font-medium"
           pendingLabel="Ukladám…"
@@ -96,6 +97,12 @@ export function DiagnosisForm({
             <Chevron className="justify-self-end" />
           </>
         </SubmitButton>
+        <Link
+          href="/register/profile/interests"
+          className="text-sm text-brand-purple/50 underline underline-offset-2 hover:text-brand-purple/70"
+        >
+          Preskočiť tento krok
+        </Link>
       </div>
     </form>
   );
