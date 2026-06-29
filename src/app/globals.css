@@ -96,6 +96,7 @@ body {
   .input-light[type="date"] {
     @apply block min-w-0 max-w-full appearance-none;
     box-sizing: border-box;
+    min-height: 2.75rem;
   }
   .input-light[type="date"]::-webkit-date-and-time-value {
     min-width: 0;
