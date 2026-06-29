@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import type { ProfileTab } from "@/lib/profile-page";
 
@@ -10,13 +12,19 @@ const TABS: { id: ProfileTab; label: string; icon: React.FC<{ active: boolean }>
   { id: "saved", label: "Uložené", icon: SavedTabIcon },
 ];
 
-export function ProfileTabBar({
-  active,
-  onChange,
-}: {
-  active: ProfileTab;
-  onChange: (tab: ProfileTab) => void;
-}) {
+export function ProfileTabBar({ initialTab }: { initialTab: ProfileTab }) {
+  const [active, setActive] = useState<ProfileTab>(initialTab);
+  const router = useRouter();
+
+  const navigate = (tab: ProfileTab) => {
+    setActive(tab);
+    document
+      .querySelector("[data-profile-scroll]")
+      ?.scrollTo({ top: 0, behavior: "instant" });
+    const qs = tab === "calendar" ? "" : `?tab=${tab}`;
+    router.replace(`/profile${qs}`, { scroll: false });
+  };
+
   return (
     <nav
       aria-label="Sekcie profilu"
@@ -31,7 +39,7 @@ export function ProfileTabBar({
             type="button"
             aria-label={tab.label}
             aria-current={isActive ? "page" : undefined}
-            onClick={() => onChange(tab.id)}
+            onClick={() => navigate(tab.id)}
             className={cn(
               "grid h-11 w-11 place-items-center rounded-xl transition",
               isActive ? "bg-brand-purple/10 text-brand-purple" : "text-brand-purple/45",

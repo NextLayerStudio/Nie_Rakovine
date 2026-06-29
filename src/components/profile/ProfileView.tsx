@@ -1,12 +1,8 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { parseProfileTab, type ProfileTab } from "@/lib/profile-page";
-import { ProfileHeader } from "@/components/profile/ProfileHeader";
-import { ProfileIdentityCard } from "@/components/profile/ProfileIdentityCard";
-import type { MembershipSubscriptionInfo } from "@/lib/membership-card";
-import { ProfileTabBar } from "@/components/profile/ProfileTabBar";
 import { ProfileCalendarTab } from "@/components/profile/ProfileCalendarTab";
 import { ProfileForumsTab } from "@/components/profile/ProfileForumsTab";
 import { ProfileDiscountsTab } from "@/components/profile/ProfileDiscountsTab";
@@ -23,21 +19,6 @@ type ForumsData = Extract<Awaited<ReturnType<typeof fetchProfileForumsAction>>, 
 type DiscountsData = Extract<Awaited<ReturnType<typeof fetchProfileDiscountsAction>>, { ok: true }>;
 type SavedData = Extract<Awaited<ReturnType<typeof fetchProfileSavedAction>>, { ok: true }>;
 
-export type ProfileViewData = {
-  fullName: string;
-  userId: string;
-  defaultName: string;
-  defaultSurname: string;
-  profile: {
-    diagnosis: string | null;
-    diagnosisPhase: string | null;
-    cancerTypes: string[];
-  } | null;
-  unreadCount: number;
-  subscription: MembershipSubscriptionInfo;
-  avatarUrl: string | null;
-};
-
 function TabSpinner() {
   return (
     <div className="flex items-center justify-center py-16">
@@ -46,16 +27,7 @@ function TabSpinner() {
   );
 }
 
-export function ProfileView({
-  data,
-  initialTab,
-  forceAvatarPrompt = false,
-}: {
-  data: ProfileViewData;
-  initialTab: ProfileTab;
-  forceAvatarPrompt?: boolean;
-}) {
-  const router = useRouter();
+export function ProfileView({ initialTab }: { initialTab: ProfileTab }) {
   const searchParams = useSearchParams();
   const activeTab = parseProfileTab(searchParams.get("tab") ?? initialTab);
 
@@ -99,45 +71,21 @@ export function ProfileView({
     }
   }, []);
 
-  // Load the initial tab on mount
+  // Load initial tab on mount
   useEffect(() => {
     loadTab(initialTab);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const setTab = useCallback(
-    (tab: ProfileTab) => {
-      const params = new URLSearchParams(searchParams.toString());
-      if (tab === "calendar") {
-        params.delete("tab");
-      } else {
-        params.set("tab", tab);
-      }
-      const qs = params.toString();
-      router.replace(qs ? `/profile?${qs}` : "/profile", { scroll: false });
-      document
-        .querySelector("[data-profile-scroll]")
-        ?.scrollTo({ top: 0, behavior: "instant" });
-      loadTab(tab);
-    },
-    [router, searchParams, loadTab],
-  );
+  // When the tab bar navigates (URL changes), load that tab's data
+  useEffect(() => {
+    loadTab(activeTab);
+  }, [activeTab, loadTab]);
 
   const isLoading = loadingTab === activeTab;
 
   return (
     <>
-      <ProfileHeader unreadCount={data.unreadCount} />
-      <ProfileIdentityCard
-        fullName={data.fullName}
-        userId={data.userId}
-        profile={data.profile}
-        subscription={data.subscription}
-        avatarUrl={data.avatarUrl}
-        forceAvatarPrompt={forceAvatarPrompt}
-      />
-      <ProfileTabBar active={activeTab} onChange={setTab} />
-
       {isLoading && <TabSpinner />}
 
       {!isLoading && activeTab === "calendar" && calendarData && (
