@@ -39,7 +39,7 @@ export function ForumFollowButton({
       className={`shrink-0 rounded-full font-semibold shadow-sm transition active:scale-95 ${sizing} ${
         isFollowing
           ? "bg-brand-purple/10 text-brand-purple ring-1 ring-brand-purple/20"
-          : "bg-brand-pink text-white hover:brightness-105"
+          : "border border-brand-pink text-brand-pink hover:bg-brand-pink/5"
       }`}
     >
       {isFollowing ? joinedLabel : joinLabel}
