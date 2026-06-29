@@ -1,11 +1,19 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
-import { deleteDiscountOfferAction, deleteDiscountPartnerAction } from "@/lib/actions/admin-discount-partners";
+import {
+  deleteDiscountOfferAction,
+  deleteDiscountPartnerAction,
+  deleteReklamaPostAction,
+} from "@/lib/actions/admin-discount-partners";
 import { categoryLabel } from "@/lib/discount-category";
 import { profileAvatarStyle } from "@/lib/avatar-style";
 import { prisma } from "@/lib/prisma";
 import { DiscountOfferForm } from "@/app/admin/discount-partners/DiscountOfferForm";
+import {
+  ReklamaPostForm,
+  type OfferOption,
+} from "@/app/admin/discount-partners/ReklamaPostForm";
 
 export const dynamic = "force-dynamic";
 
@@ -14,15 +22,21 @@ export default async function AdminDiscountPartnerDetailPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ editOffer?: string; newOffer?: string }>;
+  searchParams: Promise<{
+    editOffer?: string;
+    newOffer?: string;
+    editPost?: string;
+    newPost?: string;
+  }>;
 }) {
   const { id } = await params;
-  const { editOffer, newOffer } = await searchParams;
+  const { editOffer, newOffer, editPost, newPost } = await searchParams;
 
   const partner = await prisma.discountPartner.findUnique({
     where: { id },
     include: {
       offers: { orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }] },
+      posts: { orderBy: [{ createdAt: "desc" }] },
     },
   });
   if (!partner) notFound();
@@ -30,6 +44,15 @@ export default async function AdminDiscountPartnerDetailPage({
   const editingOffer = editOffer
     ? partner.offers.find((o) => o.id === editOffer)
     : null;
+  const editingPost = editPost
+    ? partner.posts.find((p) => p.id === editPost)
+    : null;
+
+  const offerOptions: OfferOption[] = partner.offers.map((o, index) => ({
+    id: o.id,
+    label: `Karta ${index + 1}`,
+  }));
+  const offerLabelById = new Map(offerOptions.map((o) => [o.id, o.label]));
 
   return (
     <div>
@@ -93,6 +116,7 @@ export default async function AdminDiscountPartnerDetailPage({
         </div>
       </article>
 
+      {/* ---------------- Discount cards (image only) ---------------- */}
       <section className="mb-10">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="admin-section-title text-sm">Zľavové karty</h2>
@@ -118,35 +142,39 @@ export default async function AdminDiscountPartnerDetailPage({
 
         {partner.offers.length === 0 ? (
           <div className="rounded-xl border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/55">
-            Zatiaľ žiadne zľavové karty. Pridajte prvú.
+            Zatiaľ žiadne zľavové karty. Pridajte prvú (iba obrázok).
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">
-            {partner.offers.map((offer) => (
+            {partner.offers.map((offer, index) => (
               <article
                 key={offer.id}
                 className="overflow-hidden rounded-2xl ring-1 ring-brand-purple/10"
               >
-                <div
-                  className="relative flex min-h-[140px] flex-col justify-end p-4"
-                  style={{ backgroundColor: offer.accentColor ?? "#F5D5E0" }}
-                >
-                  {offer.discountText && (
-                    <p className="text-2xl font-black text-brand-purple/90">
-                      {offer.discountText}
-                    </p>
+                <div className="aspect-video w-full bg-brand-purple/5">
+                  {offer.imageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={offer.imageUrl}
+                      alt={`Karta ${index + 1}`}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="grid h-full place-items-center text-xs text-brand-purple/40">
+                      Bez obrázka
+                    </div>
                   )}
-                  <p className="mt-1 text-sm font-bold text-brand-purple/85">
-                    {offer.title}
-                  </p>
                 </div>
                 <div className="flex items-center justify-between bg-white px-4 py-3">
-                  <span
-                    className={`text-[10px] font-semibold ${
-                      offer.published ? "text-emerald-700" : "text-amber-700"
-                    }`}
-                  >
-                    {offer.published ? "Publikované" : "Koncept"}
+                  <span className="text-xs font-semibold text-brand-purple/70">
+                    Karta {index + 1}
+                    <span
+                      className={`ml-2 text-[10px] font-semibold ${
+                        offer.published ? "text-emerald-700" : "text-amber-700"
+                      }`}
+                    >
+                      {offer.published ? "Publikované" : "Koncept"}
+                    </span>
                   </span>
                   <div className="flex gap-3">
                     <Link
@@ -157,6 +185,107 @@ export default async function AdminDiscountPartnerDetailPage({
                     </Link>
                     <form action={deleteDiscountOfferAction}>
                       <input type="hidden" name="id" value={offer.id} />
+                      <input type="hidden" name="partnerId" value={partner.id} />
+                      <button type="submit" className="admin-link-danger text-xs">
+                        Zmazať
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* ---------------- Reklama posts (home feed) ---------------- */}
+      <section className="mb-10">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="admin-section-title text-sm">Reklama (kanál)</h2>
+          {!newPost && !editPost && (
+            <Link
+              href={`/admin/discount-partners/${partner.id}?newPost=1`}
+              className="inline-flex items-center gap-1 rounded-pill bg-brand-purple px-3.5 py-1.5 text-xs font-semibold text-white shadow-soft"
+            >
+              + Nová reklama
+            </Link>
+          )}
+        </div>
+
+        {(newPost || editPost) && (
+          <div className="mb-8">
+            <ReklamaPostForm
+              mode={editingPost ? "edit" : "create"}
+              partnerId={partner.id}
+              offers={offerOptions}
+              post={
+                editingPost
+                  ? {
+                      id: editingPost.id,
+                      title: editingPost.title,
+                      excerpt: editingPost.excerpt,
+                      coverUrl: editingPost.coverUrl,
+                      linkedOfferId: editingPost.linkedOfferId,
+                      published: editingPost.published,
+                    }
+                  : undefined
+              }
+            />
+          </div>
+        )}
+
+        {partner.posts.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/55">
+            Zatiaľ žiadna reklama. Reklama sa zobrazí v domovskom kanáli a po
+            kliknutí presmeruje na zľavovú kartu.
+          </div>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2">
+            {partner.posts.map((post) => (
+              <article
+                key={post.id}
+                className="overflow-hidden rounded-2xl ring-1 ring-brand-purple/10"
+              >
+                <div className="aspect-video w-full bg-brand-purple/5">
+                  {post.coverUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={post.coverUrl}
+                      alt={post.title}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="grid h-full place-items-center text-xs text-brand-purple/40">
+                      Bez obrázka
+                    </div>
+                  )}
+                </div>
+                <div className="bg-white px-4 py-3">
+                  <p className="truncate text-sm font-semibold text-brand-purple">
+                    {post.title}
+                  </p>
+                  <p className="mt-0.5 text-[11px] text-brand-purple/55">
+                    {post.linkedOfferId
+                      ? `Odkaz: ${offerLabelById.get(post.linkedOfferId) ?? "karta"}`
+                      : "Bez prepojenia"}
+                    {" · "}
+                    <span
+                      className={
+                        post.published ? "text-emerald-700" : "text-amber-700"
+                      }
+                    >
+                      {post.published ? "Publikované" : "Koncept"}
+                    </span>
+                  </p>
+                  <div className="mt-2 flex gap-3">
+                    <Link
+                      href={`/admin/discount-partners/${partner.id}?editPost=${post.id}`}
+                      className="text-xs font-semibold text-brand-purple hover:underline"
+                    >
+                      Upraviť
+                    </Link>
+                    <form action={deleteReklamaPostAction}>
+                      <input type="hidden" name="id" value={post.id} />
                       <input type="hidden" name="partnerId" value={partner.id} />
                       <button type="submit" className="admin-link-danger text-xs">
                         Zmazať

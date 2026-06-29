@@ -11,18 +11,27 @@ export function FeedProfileHeader({
   handle,
   avatarUrl,
   isFollowing = false,
+  hrefOverride,
 }: {
   profileId?: string | null;
   displayName: string;
   handle: string;
   avatarUrl: string | null;
   isFollowing?: boolean;
+  /** When set, avatar/name link here and the follow button is hidden
+   * (used for discount-partner "reklama" posts). */
+  hrefOverride?: string | null;
 }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const query = searchParams.toString();
   const returnPath = query ? `${pathname}?${query}` : pathname;
-  const profileHref = profileId ? profileHrefWithReturn(handle, returnPath) : null;
+  const profileHref = hrefOverride
+    ? hrefOverride
+    : profileId
+      ? profileHrefWithReturn(handle, returnPath)
+      : null;
+  const showFollow = !hrefOverride && !!profileId;
 
   const avatarStyle = avatarUrl
     ? { backgroundImage: `url(${avatarUrl})`, backgroundSize: "cover" as const, backgroundPosition: "center" as const }
@@ -63,7 +72,7 @@ export function FeedProfileHeader({
         <span className="block text-xs text-brand-purple/50">@{handle}</span>
       </div>
 
-      {profileId && (
+      {showFollow && profileId && (
         <div className="shrink-0">
           <FollowProfileButton
             profileId={profileId}

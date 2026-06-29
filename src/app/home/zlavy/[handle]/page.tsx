@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
-import { DiscountOfferCard } from "@/components/discounts/DiscountOfferCard";
+import { DiscountProfileTabs } from "@/components/discounts/DiscountProfileTabs";
 import { categoryLabel, categorySlug, offerCardColor } from "@/lib/discount-category";
 import { profileAvatarStyle } from "@/lib/avatar-style";
 import { prisma } from "@/lib/prisma";
@@ -24,6 +24,10 @@ export default async function DiscountPartnerPage({
         where: { published: true },
         orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
       },
+      posts: {
+        where: { published: true },
+        orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
+      },
     },
   });
 
@@ -39,6 +43,25 @@ export default async function DiscountPartnerPage({
       })
     : [];
   const savedIds = new Set(savedRows.map((r) => r.offerId));
+
+  const offerData = partner.offers.map((offer, index) => ({
+    id: offer.id,
+    title: offer.title,
+    description: offer.description,
+    discountText: offer.discountText,
+    accentColor: offerCardColor(index, offer.accentColor),
+    imageUrl: offer.imageUrl,
+    validUntil: offer.validUntil?.toISOString() ?? null,
+    saved: savedIds.has(offer.id),
+  }));
+
+  const postData = partner.posts.map((post) => ({
+    id: post.id,
+    title: post.title,
+    excerpt: post.excerpt,
+    coverUrl: post.coverUrl,
+    linkedOfferId: post.linkedOfferId,
+  }));
 
   return (
     <>
@@ -69,27 +92,11 @@ export default async function DiscountPartnerPage({
         </div>
       </section>
 
-      <section className="space-y-4 px-5 pb-10">
-        {partner.offers.length === 0 ? (
-          <p className="py-8 text-center text-sm text-brand-purple/60">
-            Táto značka zatiaľ nemá žiadne zľavové karty.
-          </p>
-        ) : (
-          partner.offers.map((offer, index) => (
-            <DiscountOfferCard
-              key={offer.id}
-              offerId={offer.id}
-              title={offer.title}
-              description={offer.description}
-              discountText={offer.discountText}
-              accentColor={offerCardColor(index, offer.accentColor)}
-              imageUrl={offer.imageUrl}
-              validUntil={offer.validUntil?.toISOString() ?? null}
-              saved={savedIds.has(offer.id)}
-            />
-          ))
-        )}
-      </section>
+      <DiscountProfileTabs
+        handle={partner.handle}
+        posts={postData}
+        offers={offerData}
+      />
     </>
   );
 }

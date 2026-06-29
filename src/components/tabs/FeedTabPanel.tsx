@@ -6,7 +6,11 @@ import { FeedPostItem } from "@/components/FeedPostItem";
 import { FeedEventItem } from "@/components/FeedEventItem";
 import { fetchFeedTabAction } from "@/lib/actions/tabs";
 import { buildHomeFeed } from "@/lib/feed";
-import { buildPostGallery, postPublicHref } from "@/lib/post-display";
+import {
+  buildPostGallery,
+  discountPartnerHref,
+  feedPostHref,
+} from "@/lib/post-display";
 import { defaultProfileLabel } from "@/lib/feed";
 import { FEED_DISPLAY_LIMIT } from "@/lib/feed-queries";
 import type { CancerType } from "@prisma/client";
@@ -113,17 +117,27 @@ export function FeedTabPanel({ initialData }: { initialData?: FeedData }) {
         }
 
         const p = item.post;
-        const label = defaultProfileLabel(p.profile);
+        const dp = p.discountPartner;
+        const header = dp ? (
+          <FeedProfileHeader
+            displayName={dp.displayName}
+            handle={dp.handle}
+            avatarUrl={dp.avatarUrl}
+            hrefOverride={discountPartnerHref(dp.handle)}
+          />
+        ) : (
+          <FeedProfileHeader
+            profileId={p.profile?.id}
+            isFollowing={p.profile ? followingIds.has(p.profile.id) : false}
+            {...defaultProfileLabel(p.profile)}
+          />
+        );
         return (
           <div key={`post-${p.id}`}>
-            <FeedProfileHeader
-              profileId={p.profile?.id}
-              isFollowing={p.profile ? followingIds.has(p.profile.id) : false}
-              {...label}
-            />
+            {header}
             <FeedPostItem
               postId={p.id}
-              href={postPublicHref(p)}
+              href={feedPostHref(p)}
               type={p.type}
               title={p.title}
               excerpt={p.excerpt}

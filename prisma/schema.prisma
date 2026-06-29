@@ -193,6 +193,7 @@ model DiscountPartner {
   published   Boolean          @default(true)
   sortOrder   Int              @default(0)
   offers      DiscountOffer[]
+  posts       Post[]
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 
@@ -214,6 +215,7 @@ model DiscountOffer {
   published    Boolean  @default(true)
   sortOrder    Int      @default(0)
   savedBy      SavedDiscountOffer[]
+  linkedPosts  Post[]   @relation("PostLinkedOffer")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -318,6 +320,12 @@ model Post {
   id          String   @id @default(cuid())
   profileId   String?
   profile     ClubProfile? @relation(fields: [profileId], references: [id], onDelete: SetNull)
+  // When set, this post is a discount-partner advertisement ("reklama").
+  discountPartnerId String?
+  discountPartner   DiscountPartner? @relation(fields: [discountPartnerId], references: [id], onDelete: Cascade)
+  // The specific discount card a reklama post links to when clicked.
+  linkedOfferId String?
+  linkedOffer   DiscountOffer? @relation("PostLinkedOffer", fields: [linkedOfferId], references: [id], onDelete: SetNull)
   type        PostType
   title       String
   excerpt     String?
@@ -341,6 +349,7 @@ model Post {
   @@index([type, published, publishedAt(sort: Desc)])
   @@index([isNovinka, published, publishedAt(sort: Desc)])
   @@index([profileId, published, publishedAt(sort: Desc)])
+  @@index([discountPartnerId, published, publishedAt(sort: Desc)])
 }
 
 model PostImage {

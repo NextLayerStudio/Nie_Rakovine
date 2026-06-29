@@ -5,6 +5,34 @@ export function postPublicHref(post: { id: string }) {
   return `/home/posts/${post.id}`;
 }
 
+/** Discount partner profile page. */
+export function discountPartnerHref(handle: string) {
+  return `/home/zlavy/${handle}`;
+}
+
+/** A single discount card view (image-only) under a partner. */
+export function discountCardHref(handle: string, offerId: string) {
+  return `/home/zlavy/${handle}/karta/${offerId}`;
+}
+
+/**
+ * Where a feed post should navigate when clicked. Discount-partner posts
+ * ("reklama") link to their attached card (or the partner page as a fallback).
+ */
+export function feedPostHref(post: {
+  id: string;
+  linkedOfferId?: string | null;
+  discountPartner?: { handle: string } | null;
+}): string {
+  if (post.discountPartner) {
+    if (post.linkedOfferId) {
+      return discountCardHref(post.discountPartner.handle, post.linkedOfferId);
+    }
+    return discountPartnerHref(post.discountPartner.handle);
+  }
+  return postPublicHref(post);
+}
+
 /** Return path for Kontent knižnica (preserves active category tab). */
 export function libraryReturnPath(kind: string) {
   return `/home/kniznica?kind=${kind}`;

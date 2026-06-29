@@ -23,6 +23,7 @@ function slugify(input: string): string {
 function revalidateDiscountPaths(handle?: string) {
   revalidatePath("/admin/profiles");
   revalidatePath("/admin/discount-partners");
+  revalidatePath("/home");
   revalidatePath("/home/zlavy");
   if (handle) revalidatePath(`/home/zlavy/${handle}`);
 }
@@ -177,19 +178,8 @@ export async function createDiscountOfferAction(
 ): Promise<ActionState> {
   await requireAdmin();
   const partnerId = String(formData.get("partnerId") ?? "");
-  const title = String(formData.get("title") ?? "").trim();
-  const description = String(formData.get("description") ?? "").trim() || null;
-  const discountText = String(formData.get("discountText") ?? "").trim() || null;
-  const promoCode = String(formData.get("promoCode") ?? "").trim() || null;
-  const accentColor = String(formData.get("accentColor") ?? "").trim() || null;
   const published = formData.get("published") === "on";
   const sortOrder = Number(formData.get("sortOrder") ?? 0) || 0;
-  const validUntilRaw = String(formData.get("validUntil") ?? "").trim();
-  const validUntil = validUntilRaw ? new Date(validUntilRaw) : null;
-
-  if (!partnerId || !title) {
-    return { ok: false, message: "Vyplňte názov zľavy." };
-  }
 
   let imageUrl: string | null;
   try {
@@ -206,6 +196,10 @@ export async function createDiscountOfferAction(
     };
   }
 
+  if (!partnerId || !imageUrl) {
+    return { ok: false, message: "Nahrajte obrázok zľavovej karty." };
+  }
+
   const partner = await prisma.discountPartner.findUniqueOrThrow({
     where: { id: partnerId },
   });
@@ -213,13 +207,8 @@ export async function createDiscountOfferAction(
   await prisma.discountOffer.create({
     data: {
       partnerId,
-      title,
-      description,
-      discountText,
-      promoCode,
-      accentColor,
+      title: "",
       imageUrl,
-      validUntil,
       published,
       sortOrder,
     },
@@ -236,18 +225,11 @@ export async function updateDiscountOfferAction(
   await requireAdmin();
   const id = String(formData.get("id") ?? "");
   const partnerId = String(formData.get("partnerId") ?? "");
-  const title = String(formData.get("title") ?? "").trim();
-  const description = String(formData.get("description") ?? "").trim() || null;
-  const discountText = String(formData.get("discountText") ?? "").trim() || null;
-  const promoCode = String(formData.get("promoCode") ?? "").trim() || null;
-  const accentColor = String(formData.get("accentColor") ?? "").trim() || null;
   const published = formData.get("published") === "on";
   const sortOrder = Number(formData.get("sortOrder") ?? 0) || 0;
-  const validUntilRaw = String(formData.get("validUntil") ?? "").trim();
-  const validUntil = validUntilRaw ? new Date(validUntilRaw) : null;
 
-  if (!id || !partnerId || !title) {
-    return { ok: false, message: "Vyplňte povinné polia." };
+  if (!id || !partnerId) {
+    return { ok: false, message: "Chýba identifikátor karty." };
   }
 
   const existing = await prisma.discountOffer.findUnique({ where: { id } });
@@ -269,6 +251,10 @@ export async function updateDiscountOfferAction(
 
   if (imageUrl === null && existing?.imageUrl) imageUrl = existing.imageUrl;
 
+  if (!imageUrl) {
+    return { ok: false, message: "Nahrajte obrázok zľavovej karty." };
+  }
+
   const partner = await prisma.discountPartner.findUniqueOrThrow({
     where: { id: partnerId },
   });
@@ -276,13 +262,7 @@ export async function updateDiscountOfferAction(
   await prisma.discountOffer.update({
     where: { id },
     data: {
-      title,
-      description,
-      discountText,
-      promoCode,
-      accentColor,
       imageUrl,
-      validUntil,
       published,
       sortOrder,
     },
@@ -298,6 +278,124 @@ export async function deleteDiscountOfferAction(formData: FormData): Promise<voi
   const partnerId = String(formData.get("partnerId") ?? "");
   if (!id) return;
   await prisma.discountOffer.delete({ where: { id } });
+  const partner = partnerId
+    ? await prisma.discountPartner.findUnique({ where: { id: partnerId } })
+    : null;
+  revalidateDiscountPaths(partner?.handle);
+  redirect(partnerId ? `/admin/discount-partners/${partnerId}` : "/admin/profiles");
+}
+
+// ------ Reklama posts (discount-partner posts shown in the home feed) -------
+
+export async function createReklamaPostAction(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  await requireAdmin();
+  const partnerId = String(formData.get("partnerId") ?? "");
+  const title = String(formData.get("title") ?? "").trim();
+  const excerpt = String(formData.get("excerpt") ?? "").trim() || null;
+  const linkedOfferId = String(formData.get("linkedOfferId") ?? "").trim() || null;
+  const published = formData.get("published") === "on";
+
+  if (!partnerId) {
+    return { ok: false, message: "Chýba značka." };
+  }
+
+  let coverUrl: string | null;
+  try {
+    coverUrl = await resolveImageField(formData, "coverFile", "coverUrl", "posts");
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Nepodarilo sa nahrať obrázok.",
+    };
+  }
+
+  if (!coverUrl) {
+    return { ok: false, message: "Nahrajte obrázok reklamy." };
+  }
+
+  const partner = await prisma.discountPartner.findUniqueOrThrow({
+    where: { id: partnerId },
+  });
+
+  await prisma.post.create({
+    data: {
+      type: "PHOTO",
+      title: title || partner.displayName,
+      excerpt,
+      coverUrl,
+      published,
+      publishedAt: published ? new Date() : null,
+      discountPartnerId: partnerId,
+      linkedOfferId,
+    },
+  });
+
+  revalidateDiscountPaths(partner.handle);
+  redirect(`/admin/discount-partners/${partnerId}`);
+}
+
+export async function updateReklamaPostAction(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const partnerId = String(formData.get("partnerId") ?? "");
+  const title = String(formData.get("title") ?? "").trim();
+  const excerpt = String(formData.get("excerpt") ?? "").trim() || null;
+  const linkedOfferId = String(formData.get("linkedOfferId") ?? "").trim() || null;
+  const published = formData.get("published") === "on";
+
+  if (!id || !partnerId) {
+    return { ok: false, message: "Chýba identifikátor." };
+  }
+
+  const existing = await prisma.post.findUnique({ where: { id } });
+
+  let coverUrl: string | null;
+  try {
+    coverUrl = await resolveImageField(formData, "coverFile", "coverUrl", "posts");
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Nepodarilo sa nahrať obrázok.",
+    };
+  }
+
+  if (coverUrl === null && existing?.coverUrl) coverUrl = existing.coverUrl;
+  if (!coverUrl) {
+    return { ok: false, message: "Nahrajte obrázok reklamy." };
+  }
+
+  const partner = await prisma.discountPartner.findUniqueOrThrow({
+    where: { id: partnerId },
+  });
+
+  await prisma.post.update({
+    where: { id },
+    data: {
+      title: title || partner.displayName,
+      excerpt,
+      coverUrl,
+      published,
+      publishedAt: published ? new Date() : null,
+      linkedOfferId,
+    },
+  });
+
+  revalidateDiscountPaths(partner.handle);
+  redirect(`/admin/discount-partners/${partnerId}`);
+}
+
+export async function deleteReklamaPostAction(formData: FormData): Promise<void> {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const partnerId = String(formData.get("partnerId") ?? "");
+  if (!id) return;
+  await prisma.post.delete({ where: { id } });
   const partner = partnerId
     ? await prisma.discountPartner.findUnique({ where: { id: partnerId } })
     : null;

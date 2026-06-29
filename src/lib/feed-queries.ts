@@ -18,6 +18,13 @@ export const feedProfileSelect = {
   avatarUrl: true,
 } satisfies Prisma.ClubProfileSelect;
 
+export const feedDiscountPartnerSelect = {
+  id: true,
+  handle: true,
+  displayName: true,
+  avatarUrl: true,
+} satisfies Prisma.DiscountPartnerSelect;
+
 export const feedPostSelect = {
   id: true,
   profileId: true,
@@ -32,6 +39,8 @@ export const feedPostSelect = {
   createdAt: true,
   cancerTypes: true,
   profile: { select: feedProfileSelect },
+  discountPartner: { select: feedDiscountPartnerSelect },
+  linkedOfferId: true,
   images: {
     orderBy: { sortOrder: "asc" as const },
     select: { id: true, url: true, sortOrder: true },

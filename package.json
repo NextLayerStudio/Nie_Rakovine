@@ -16,6 +16,7 @@
     "db:demo": "tsx scripts/seed-demo-data.ts",
     "db:cancer-demo": "tsx scripts/seed-cancer-demo.ts",
     "db:discount-demo": "tsx scripts/seed-discount-demo.ts",
+    "db:reklama-demo": "tsx scripts/seed-reklama-demo.ts",
     "admin:promote": "tsx scripts/promote-admin.ts",
     "email:test": "tsx scripts/test-email.ts",
     "email:welcome": "tsx scripts/test-welcome-email.ts",

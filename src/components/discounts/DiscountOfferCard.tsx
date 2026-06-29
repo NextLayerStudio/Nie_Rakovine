@@ -33,6 +33,28 @@ export function DiscountOfferCard({
   offerId: string;
 }) {
   const validUntilLabel = formatValidUntil(validUntil);
+  const hasText = Boolean(
+    discountText || (title && title.trim()) || description,
+  );
+
+  // Image-only card: show just the uploaded graphic with a save button.
+  if (imageUrl && !hasText) {
+    return (
+      <article className="relative overflow-hidden rounded-3xl shadow-card">
+        <div className="absolute right-3 top-3 z-10">
+          <SaveDiscountButton offerId={offerId} saved={saved} />
+        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={imageUrl}
+          alt={title || "Zľavová karta"}
+          className="block w-full"
+          draggable={false}
+        />
+      </article>
+    );
+  }
+
   return (
     <article
       className="relative overflow-hidden rounded-3xl shadow-card"
@@ -56,9 +78,11 @@ export function DiscountOfferCard({
             {discountText}
           </p>
         )}
-        <h3 className="mt-1 text-lg font-bold leading-snug text-brand-purple">
-          {title}
-        </h3>
+        {title && title.trim() && (
+          <h3 className="mt-1 text-lg font-bold leading-snug text-brand-purple">
+            {title}
+          </h3>
+        )}
         {description && (
           <p className="mt-2 text-sm leading-relaxed text-brand-purple/75">
             {description}
