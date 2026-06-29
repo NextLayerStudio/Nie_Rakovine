@@ -81,7 +81,7 @@ export function SubscriptionForm({
 
       <div className="sticky bottom-0 shrink-0 border-t border-brand-purple/5 bg-white px-6 py-5">
         <SubmitButton
-          className="mx-auto flex w-full max-w-[280px] items-center justify-center gap-2 rounded-pill border border-brand-pink bg-brand-pink-soft px-6 py-3 text-sm font-semibold text-white shadow-soft transition hover:bg-brand-pink disabled:opacity-60"
+          className="mx-auto flex w-full max-w-[280px] items-center justify-center gap-2 rounded-pill bg-brand-pink px-6 py-3 text-sm font-semibold text-white shadow-soft transition hover:brightness-105 disabled:opacity-60"
           pendingLabel="Ukladám…"
         >
           <>

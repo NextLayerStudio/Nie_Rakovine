@@ -81,7 +81,7 @@ body {
     @apply btn bg-brand-pink text-white shadow-soft hover:brightness-110;
   }
   .btn-soft {
-    @apply btn bg-brand-pink-soft text-white hover:bg-brand-pink;
+    @apply btn bg-brand-pink text-white hover:brightness-105;
   }
   .btn-ghost {
     @apply btn bg-white text-brand-purple border border-brand-purple/20;
