@@ -9,18 +9,8 @@ const COOKIE_NAME = "onko_session";
 
 const PROTECTED_PREFIXES = ["/home", "/menu", "/profile", "/admin"];
 
-// Paths where an authenticated user should be sent to /home instead
-const LANDING_PATHS = [
-  "/", "/co-ziskas", "/cennik", "/akcie", "/sponzori",
-  "/prednasky-podcasty", "/onkorumky", "/kontent-kniznica",
-];
-
 function isProtected(pathname: string): boolean {
   return PROTECTED_PREFIXES.some((prefix) => pathname.startsWith(prefix));
-}
-
-function isLanding(pathname: string): boolean {
-  return LANDING_PATHS.includes(pathname);
 }
 
 export async function middleware(req: NextRequest) {
@@ -28,8 +18,8 @@ export async function middleware(req: NextRequest) {
 
   const token = req.cookies.get(COOKIE_NAME)?.value;
 
-  // Authenticated users visiting the landing pages go straight to the app
-  if (isLanding(pathname) && token) {
+  // Authenticated users hitting the root go straight to the app
+  if (pathname === "/" && token) {
     try {
       const secret =
         process.env.AUTH_SECRET?.trim().replace(/^["']|["']$/g, "") ?? "";
