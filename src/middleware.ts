@@ -18,8 +18,8 @@ export async function middleware(req: NextRequest) {
 
   const token = req.cookies.get(COOKIE_NAME)?.value;
 
-  // Authenticated users hitting the root go straight to the app
-  if (pathname === "/" && token) {
+  // Authenticated users hitting the root go straight to the app (unless ?preview=1)
+  if (pathname === "/" && token && req.nextUrl.searchParams.get("preview") !== "1") {
     try {
       const secret =
         process.env.AUTH_SECRET?.trim().replace(/^["']|["']$/g, "") ?? "";
