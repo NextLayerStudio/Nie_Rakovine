@@ -180,9 +180,12 @@ export function AdminImageField({
               image={cropSrc}
               crop={crop}
               zoom={zoom}
+              minZoom={0.3}
+              maxZoom={4}
               aspect={cropAspect}
               cropShape={cropShape}
               showGrid={false}
+              restrictPosition={false}
               onCropChange={setCrop}
               onZoomChange={setZoom}
               onCropComplete={onCropComplete}
@@ -195,8 +198,8 @@ export function AdminImageField({
               <span className="text-xs text-white/50 w-10 text-right">−</span>
               <input
                 type="range"
-                min={1}
-                max={3}
+                min={0.3}
+                max={4}
                 step={0.05}
                 value={zoom}
                 onChange={(e) => setZoom(Number(e.target.value))}
