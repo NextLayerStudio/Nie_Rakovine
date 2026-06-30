@@ -20,7 +20,7 @@ const INITIAL: ActionState = { ok: false };
 
 type PostWithImages = Post & { images?: PostImage[] };
 
-const RICH_TEXT_TYPES: PostType[] = ["ARTICLE", "RECIPE"];
+const RICH_TEXT_TYPES: PostType[] = ["ARTICLE"];
 
 export function PostForm({
   mode,
@@ -64,7 +64,6 @@ export function PostForm({
             <option value="VIDEO">Video</option>
             <option value="AUDIO">Audio</option>
             <option value="ARTICLE">Článok</option>
-            <option value="RECIPE">Recept</option>
           </select>
         </label>
 
@@ -83,11 +82,7 @@ export function PostForm({
             <TiptapEditor
               name="body"
               defaultValue={post?.body ?? ""}
-              placeholder={
-                postType === "RECIPE"
-                  ? "Napíšte recept — ingrediencie, postup…"
-                  : "Napíšte obsah článku. Môžete prilepiť text z Wordu alebo Google Docs vrátane obrázkov."
-              }
+              placeholder="Napíšte obsah článku. Môžete prilepiť text z Wordu alebo Google Docs vrátane obrázkov."
             />
           ) : (
             <textarea
