@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -39,6 +40,23 @@ export function NieSiVTomSamSection() {
               na Slovensku. Všetko, čo v OnkoKlube nájdeš, je overené, bezpečné a vytvorené
               s ohľadom na teba.
             </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.35, ease }}
+              className="mt-8"
+            >
+              <p className="text-[#6F2380]/40 text-[10px] font-bold uppercase tracking-widest mb-2">Zakladateľ a prevádzkovateľ</p>
+              <Image
+                src="/images/logo-nie-rakovine.png"
+                alt="NIE RAKOVINE, o. z."
+                width={160}
+                height={84}
+                className="h-10 w-auto opacity-70"
+              />
+            </motion.div>
           </motion.div>
 
           {/* Karty — na mobile nad textom, na desktop vpravo */}

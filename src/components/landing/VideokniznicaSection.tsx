@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 import { Play, Clock, ChevronRight } from "lucide-react";
 
 const VIDEOS = [
-  { img: "[IMG-02]", title: "Jemná joga pri únave — 20 minút",                        lektor: "Petra Joga",               dur: "20 min", accent: "#FDA4C7" },
-  { img: "[IMG-03]", title: "Mindfulness: ako zvládnuť úzkosť pri diagnóze",           lektor: "Mirka Malejčíková",         dur: "35 min", accent: "#6F2380" },
-  { img: "[IMG-04]", title: "Dýchacie cvičenia pre lepší spánok",                      lektor: "Mindfulness kanál",         dur: "15 min", accent: "#FDA4C7" },
-  { img: "[IMG-05]", title: "Čo jesť počas chemoterapie — rady nutričnej poradkyne",   lektor: "Výživa & nutričná poradňa", dur: "45 min", accent: "#6F2380" },
+  { src: "/videos/preview-1.mp4", title: "Jemná joga pri únave — 20 minút",                        lektor: "Petra Joga",               dur: "20 min", accent: "#FDA4C7" },
+  { src: "/videos/preview-2.mp4", title: "Mindfulness: ako zvládnuť úzkosť pri diagnóze",           lektor: "Mirka Malejčíková",         dur: "35 min", accent: "#6F2380" },
+  { src: "/videos/preview-3.mp4", title: "Dýchacie cvičenia pre lepší spánok",                      lektor: "Mindfulness kanál",         dur: "15 min", accent: "#FDA4C7" },
+  { src: "/videos/preview-4.mp4", title: "Čo jesť počas chemoterapie — rady nutričnej poradkyne",   lektor: "Výživa & nutričná poradňa", dur: "45 min", accent: "#6F2380" },
 ];
 
 export function VideokniznicaSection() {
@@ -49,14 +49,25 @@ export function VideokniznicaSection() {
               transition={{ duration: 0.45, delay: i * 0.08 }}
               className="shrink-0 w-[72vw] max-w-[280px] md:w-auto md:max-w-none"
             >
-              {/* Thumbnail */}
-              <div className="relative w-full aspect-video rounded-2xl bg-[#6F2380]/20 mb-3 overflow-hidden">
+              {/* Video thumbnail */}
+              <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-3">
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="absolute inset-0 h-full w-full object-cover"
+                >
+                  <source src={v.src} type="video/mp4" />
+                </video>
+                {/* Overlay s play tlačidlom */}
+                <div className="absolute inset-0 bg-black/20" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center"
+                    className="w-11 h-11 rounded-full flex items-center justify-center shadow-lg"
                     style={{ backgroundColor: v.accent }}
                   >
-                    <Play size={20} className="text-white ml-0.5" fill="white" />
+                    <Play size={18} className="text-white ml-0.5" fill="white" />
                   </div>
                 </div>
                 <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 rounded-full px-2 py-1">
@@ -76,7 +87,6 @@ export function VideokniznicaSection() {
         <p className="text-[#6F2380]/50 text-sm text-center mb-5 md:text-left">
           A stovky ďalších videí čaká na teba v členskej knižnici.
         </p>
-        {/* Mobile: wide card, Desktop: inline compact button */}
         <div className="md:flex md:justify-start">
           <Link
             href="/kontent-kniznica"

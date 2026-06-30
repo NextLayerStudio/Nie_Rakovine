@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const NAV = [
@@ -18,15 +19,24 @@ export function Footer() {
         <div className="md:grid md:grid-cols-3 md:gap-12 mb-8">
           {/* Logo */}
           <div className="mb-7 md:mb-0">
-            <p className="font-black text-2xl mb-2">
-              <span className="text-white">ONKO</span>
-              <span className="text-[#FDA4C7]">KLUB</span>
-            </p>
-            <p className="text-white/50 text-xs leading-relaxed">
+            <Image
+              src="/images/logo-horizontal.png"
+              alt="OnkoKlub"
+              width={160}
+              height={55}
+              className="h-9 w-auto mb-3 brightness-0 invert"
+            />
+            <p className="text-white/50 text-xs leading-relaxed mb-4">
               Platforma pre onkologických pacientov a ich blízkych.
-              <br />
-              Prevádzkuje: NIE RAKOVINE, o. z.
             </p>
+            <p className="text-white/30 text-[10px] font-bold uppercase tracking-widest mb-2">Prevádzkuje</p>
+            <Image
+              src="/images/logo-nie-rakovine.png"
+              alt="NIE RAKOVINE, o. z."
+              width={120}
+              height={63}
+              className="h-7 w-auto brightness-0 invert opacity-60"
+            />
           </div>
 
           {/* Navigácia */}
