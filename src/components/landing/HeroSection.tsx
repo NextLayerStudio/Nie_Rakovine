@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -70,15 +71,13 @@ export function HeroSection() {
                   className="absolute rounded-[2rem] overflow-hidden"
                   style={{ inset: "5%", rotate: "-4deg" }}
                 >
-                  <video
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="h-full w-full object-cover"
-                  >
-                    <source src="/videos/hero-portrait.mp4" type="video/mp4" />
-                  </video>
+                  <Image
+                    src="/images/hero-komunita.jpg"
+                    alt="OnkoKlub komunita"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
                 </motion.div>
               </div>
             </motion.div>

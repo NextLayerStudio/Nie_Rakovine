@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Lock, MessageSquare, ChevronRight, Circle } from "lucide-react";
+import { Lock, ChevronRight, Circle } from "lucide-react";
 
 const CATEGORIES = [
   {
@@ -82,10 +82,16 @@ export function OnkorumkySection() {
         transition={{ duration: 0.55 }}
         className="mb-10"
       >
-        {/* [IMG] Screenshot Onkorumky fóra — mobilné zobrazenie */}
-        <div className="w-full aspect-[9/16] max-h-[480px] rounded-[2rem] bg-[#6F2380]/20 flex flex-col items-center justify-center gap-3 rotate-1">
-          <MessageSquare size={40} className="text-[#6F2380]/30" />
-          <p className="text-[#6F2380]/30 text-xs font-semibold">Screenshot fóra</p>
+        <div className="w-full aspect-[9/16] max-h-[480px] rounded-[2rem] overflow-hidden rotate-1">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="h-full w-full object-cover"
+          >
+            <source src="/videos/c0408.mp4" type="video/mp4" />
+          </video>
         </div>
       </motion.div>
 
@@ -187,10 +193,16 @@ export function OnkorumkySection() {
         transition={{ duration: 0.55 }}
         className="mb-10"
       >
-        {/* [IMG] Screenshot detail vlákna / odpovede */}
-        <div className="w-full aspect-video rounded-[2rem] bg-[#FDA4C7]/20 flex flex-col items-center justify-center gap-3 -rotate-1">
-          <MessageSquare size={36} className="text-[#FDA4C7]/50" />
-          <p className="text-[#FDA4C7]/50 text-xs font-semibold">Screenshot vlákna</p>
+        <div className="w-full aspect-[9/16] max-h-[480px] rounded-[2rem] overflow-hidden -rotate-1">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="h-full w-full object-cover"
+          >
+            <source src="/videos/c0397.mp4" type="video/mp4" />
+          </video>
         </div>
       </motion.div>
 
