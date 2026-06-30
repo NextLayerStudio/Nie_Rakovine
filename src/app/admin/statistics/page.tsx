@@ -309,7 +309,7 @@ function ChartCard({
               </div>
               <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-brand-purple/8">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-brand-pink to-brand-purple"
+                  className="h-full rounded-full bg-brand-pink"
                   style={{ width: `${Math.round((r.count / max) * 100)}%` }}
                 />
               </div>
