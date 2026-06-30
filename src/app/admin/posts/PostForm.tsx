@@ -125,7 +125,7 @@ export function PostForm({
             className="admin-input"
           />
           <p className="mt-1 text-[11px] text-brand-purple/55">
-            Voliteľné. Zobrazí sa pri audio a video obsahu (napr. „15 min").
+            Voliteľné. Zobrazí sa pri audio a video obsahu (napr. „15 min&rdquo;).
           </p>
         </label>
         <div>
