@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 
 export function AdminItemActions({
@@ -37,6 +39,11 @@ export function AdminItemActions({
           ))}
         <button
           type="submit"
+          onClick={(e) => {
+            if (!window.confirm("Naozaj chceš zmazať túto položku? Táto akcia je nezvratná.")) {
+              e.preventDefault();
+            }
+          }}
           className={`rounded border border-red-200 bg-red-50 text-xs font-semibold text-red-700 transition hover:bg-red-100 ${
             compact ? "w-full py-2" : "px-4 py-1.5"
           }`}

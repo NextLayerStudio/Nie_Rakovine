@@ -7,6 +7,7 @@ import {
   deleteReklamaPostAction,
 } from "@/lib/actions/admin-discount-partners";
 import { categoryLabel } from "@/lib/discount-category";
+import { DeleteConfirmButton } from "@/components/admin/DeleteConfirmButton";
 import { profileAvatarStyle } from "@/lib/avatar-style";
 import { prisma } from "@/lib/prisma";
 import { DiscountOfferForm } from "@/app/admin/discount-partners/DiscountOfferForm";
@@ -107,12 +108,13 @@ export default async function AdminDiscountPartnerDetailPage({
           {partner.bio && (
             <p className="mt-2 text-sm text-brand-purple/70">{partner.bio}</p>
           )}
-          <form action={deleteDiscountPartnerAction} className="mt-3">
-            <input type="hidden" name="id" value={partner.id} />
-            <button type="submit" className="admin-link-danger">
-              Zmazať značku
-            </button>
-          </form>
+          <DeleteConfirmButton
+            action={deleteDiscountPartnerAction}
+            id={partner.id}
+            label="Zmazať značku"
+            confirmText="Naozaj chceš zmazať túto značku? Zmažú sa aj všetky jej karty a reklamy. Táto akcia je nezvratná."
+            className="admin-link-danger"
+          />
         </div>
       </article>
 
@@ -183,13 +185,13 @@ export default async function AdminDiscountPartnerDetailPage({
                     >
                       Upraviť
                     </Link>
-                    <form action={deleteDiscountOfferAction}>
-                      <input type="hidden" name="id" value={offer.id} />
-                      <input type="hidden" name="partnerId" value={partner.id} />
-                      <button type="submit" className="admin-link-danger text-xs">
-                        Zmazať
-                      </button>
-                    </form>
+                    <DeleteConfirmButton
+                      action={deleteDiscountOfferAction}
+                      id={offer.id}
+                      extraFields={{ partnerId: partner.id }}
+                      confirmText="Naozaj chceš zmazať túto zľavovú kartu? Táto akcia je nezvratná."
+                      className="admin-link-danger text-xs"
+                    />
                   </div>
                 </div>
               </article>
@@ -284,13 +286,13 @@ export default async function AdminDiscountPartnerDetailPage({
                     >
                       Upraviť
                     </Link>
-                    <form action={deleteReklamaPostAction}>
-                      <input type="hidden" name="id" value={post.id} />
-                      <input type="hidden" name="partnerId" value={partner.id} />
-                      <button type="submit" className="admin-link-danger text-xs">
-                        Zmazať
-                      </button>
-                    </form>
+                    <DeleteConfirmButton
+                      action={deleteReklamaPostAction}
+                      id={post.id}
+                      extraFields={{ partnerId: partner.id }}
+                      confirmText="Naozaj chceš zmazať tento reklamný príspevok? Táto akcia je nezvratná."
+                      className="admin-link-danger text-xs"
+                    />
                   </div>
                 </div>
               </article>

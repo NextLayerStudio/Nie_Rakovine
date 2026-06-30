@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { deleteForumAction, toggleForumPublishedAction } from "@/lib/actions/admin-forums";
 import { forumAvatarStyle } from "@/lib/avatar-style";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { DeleteConfirmButton } from "@/components/admin/DeleteConfirmButton";
 
 export const dynamic = "force-dynamic";
 
@@ -85,15 +86,11 @@ export default async function AdminForumsPage() {
                       {f.published ? "Publikované" : "Čaká"}
                     </button>
                   </form>
-                  <form action={deleteForumAction}>
-                    <input type="hidden" name="id" value={f.id} />
-                    <button
-                      type="submit"
-                      className="rounded border border-red-200 px-3.5 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50"
-                    >
-                      Zmazať
-                    </button>
-                  </form>
+                  <DeleteConfirmButton
+                    action={deleteForumAction}
+                    id={f.id}
+                    confirmText="Naozaj chceš zmazať toto fórum? Zmažú sa aj všetky vlákna v ňom. Táto akcia je nezvratná."
+                  />
                 </div>
               </li>
             ))}

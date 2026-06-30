@@ -5,6 +5,7 @@ import { deleteDiscountPartnerAction, toggleDiscountPartnerPublishedAction } fro
 import { profileAvatarStyle } from "@/lib/avatar-style";
 import { categoryLabel } from "@/lib/discount-category";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { DeleteConfirmButton } from "@/components/admin/DeleteConfirmButton";
 import { profileCategoryLabel } from "@/lib/profile-category";
 
 export const dynamic = "force-dynamic";
@@ -139,15 +140,11 @@ export default async function AdminProfilesPage({
                         {p.published ? "Publikovaný" : "Skrytý"}
                       </button>
                     </form>
-                    <form action={deleteClubProfileAction}>
-                      <input type="hidden" name="id" value={p.id} />
-                      <button
-                        type="submit"
-                        className="rounded border border-red-200 px-3.5 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50"
-                      >
-                        Zmazať
-                      </button>
-                    </form>
+                    <DeleteConfirmButton
+                      action={deleteClubProfileAction}
+                      id={p.id}
+                      confirmText="Naozaj chceš zmazať tento profil? Zmažú sa aj všetky jeho príspevky a udalosti. Táto akcia je nezvratná."
+                    />
                   </div>
                 </li>
               ))}
@@ -211,15 +208,11 @@ export default async function AdminProfilesPage({
                         {p.published ? "Publikovaný" : "Skrytý"}
                       </button>
                     </form>
-                    <form action={deleteDiscountPartnerAction}>
-                      <input type="hidden" name="id" value={p.id} />
-                      <button
-                        type="submit"
-                        className="rounded border border-red-200 px-3.5 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50"
-                      >
-                        Zmazať
-                      </button>
-                    </form>
+                    <DeleteConfirmButton
+                      action={deleteDiscountPartnerAction}
+                      id={p.id}
+                      confirmText="Naozaj chceš zmazať tohto discount partnera? Zmažú sa aj všetky jeho karty. Táto akcia je nezvratná."
+                    />
                   </div>
                 </li>
               ))}
