@@ -163,6 +163,15 @@ export async function updateDiscountPartnerAction(
   redirect(`/admin/discount-partners/${partner.id}`);
 }
 
+export async function toggleDiscountPartnerPublishedAction(formData: FormData): Promise<void> {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const current = formData.get("current") === "true";
+  if (!id) return;
+  await prisma.discountPartner.update({ where: { id }, data: { published: !current } });
+  revalidateDiscountPaths();
+}
+
 export async function deleteDiscountPartnerAction(formData: FormData): Promise<void> {
   await requireAdmin();
   const id = String(formData.get("id") ?? "");

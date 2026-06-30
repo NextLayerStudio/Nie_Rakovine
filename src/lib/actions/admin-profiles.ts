@@ -154,6 +154,16 @@ export async function updateClubProfileAction(
   redirect(`/admin/profiles/${id}`);
 }
 
+export async function toggleClubProfilePublishedAction(formData: FormData): Promise<void> {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const current = formData.get("current") === "true";
+  if (!id) return;
+  await prisma.clubProfile.update({ where: { id }, data: { published: !current } });
+  revalidatePath("/admin/profiles");
+  revalidatePath("/home/profiles");
+}
+
 export async function deleteClubProfileAction(formData: FormData): Promise<void> {
   await requireAdmin();
   const id = String(formData.get("id") ?? "");
