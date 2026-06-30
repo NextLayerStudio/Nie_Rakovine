@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { requireAdmin } from "@/lib/auth";
 import { logoutAction } from "@/lib/actions/auth";
 import { getPendingModerationCounts } from "@/lib/admin-metrics";
@@ -25,15 +26,16 @@ export default async function AdminLayout({
   return (
     <div className="min-h-[100dvh] bg-[#f5f6f8] text-brand-purple">
       <header className="sticky top-0 z-30 border-b border-brand-purple/20 bg-brand-purple text-white">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-2.5">
-          <Link
-            href="/admin"
-            className="flex items-center gap-2.5 text-sm font-bold tracking-wide"
-          >
-            <span className="grid h-7 w-7 place-items-center rounded bg-white/15 text-xs font-extrabold">
-              OK
-            </span>
-            <span className="hidden opacity-90 sm:inline">ONKO KLUB · Admin</span>
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">
+          <Link href="/admin" className="shrink-0">
+            <Image
+              src="/images/logo-horizontal.png"
+              alt="OnkoKlub"
+              width={140}
+              height={48}
+              className="h-8 w-auto brightness-0 invert"
+              priority
+            />
           </Link>
 
           <AdminNav items={NAV} pendingCount={pendingCount} />
