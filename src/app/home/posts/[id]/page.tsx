@@ -214,7 +214,7 @@ function EditorialArticle({
       {/* Body */}
       {post.body && (
         <div className="px-5">
-          <MarkdownBody text={post.body} />
+          <ArticleBody text={post.body} />
         </div>
       )}
 
@@ -226,7 +226,20 @@ function EditorialArticle({
   );
 }
 
-/* ─── Simple markdown renderer ─── */
+/* ─── Article body renderer ─── */
+
+function ArticleBody({ text }: { text: string }) {
+  // Tiptap outputs HTML starting with <; legacy content is plain text/markdown
+  if (text.trimStart().startsWith("<")) {
+    return (
+      <div
+        className="article-body"
+        dangerouslySetInnerHTML={{ __html: text }}
+      />
+    );
+  }
+  return <MarkdownBody text={text} />;
+}
 
 function renderInline(text: string): React.ReactNode {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);

@@ -289,7 +289,36 @@ body.membership-no-screenshot {
   -webkit-user-drag: none;
 }
 
-/* Membership discount card — ID number groups */
+/* ─── Tiptap editor (admin) ─── */
+.tiptap-content .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #6f238055;
+  pointer-events: none;
+  height: 0;
+}
+
+/* ─── Article body HTML (shared between editor and frontend render) ─── */
+.article-body { @apply text-[17px] leading-[1.85] text-zinc-800; }
+.article-body h1 { @apply mt-8 mb-3 text-[26px] font-black leading-tight text-zinc-900; }
+.article-body h2 { @apply mt-7 mb-2 text-xl font-bold leading-snug text-zinc-900 pt-1; }
+.article-body h3 { @apply mt-5 mb-1.5 text-[17px] font-bold leading-snug text-zinc-900; }
+.article-body p { @apply mb-4; }
+.article-body ul { @apply mb-4 ml-5 list-disc space-y-1.5; }
+.article-body ol { @apply mb-4 ml-5 list-decimal space-y-1.5; }
+.article-body li { @apply leading-relaxed; }
+.article-body blockquote { @apply my-5 border-l-4 border-brand-pink/60 pl-4 italic text-zinc-600; }
+.article-body hr { @apply my-6 border-zinc-200; }
+.article-body strong { @apply font-bold text-zinc-900; }
+.article-body em { @apply italic; }
+.article-body a { @apply text-brand-purple underline underline-offset-2 hover:text-brand-pink; }
+.article-body img { @apply my-5 w-full rounded-lg object-cover; }
+
+/* Tiptap editor content mirrors article-body styles */
+.tiptap-content .ProseMirror { @apply article-body; }
+.tiptap-content .ProseMirror:focus { outline: none; }
+
+/* ─── Membership discount card — ID number groups ─── */
 .membership-card-id {
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
