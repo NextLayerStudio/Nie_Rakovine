@@ -1,5 +1,7 @@
-import { LoadingScreen } from "@/components/LoadingScreen";
-
 export default function AdminLoading() {
-  return <LoadingScreen fixed />;
+  return (
+    <div className="flex min-h-[40vh] items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-[3px] border-brand-purple/20 border-t-brand-purple" />
+    </div>
+  );
 }

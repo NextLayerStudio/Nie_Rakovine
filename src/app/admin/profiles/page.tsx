@@ -19,15 +19,22 @@ export default async function AdminProfilesPage({
   const sp = await searchParams;
   const tab: Tab = sp.tab === "discount" ? "discount" : "content";
 
-  const [profiles, discountPartners] = await Promise.all([
-    prisma.clubProfile.findMany({
-      orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
-      include: { _count: { select: { posts: true, events: true } } },
-    }),
-    prisma.discountPartner.findMany({
-      orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
-      include: { _count: { select: { offers: true } } },
-    }),
+  // Fetch counts for tab badges + full list only for the active tab
+  const [profileCount, discountCount, profiles, discountPartners] = await Promise.all([
+    prisma.clubProfile.count(),
+    prisma.discountPartner.count(),
+    tab === "content"
+      ? prisma.clubProfile.findMany({
+          orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+          include: { _count: { select: { posts: true, events: true } } },
+        })
+      : Promise.resolve([]),
+    tab === "discount"
+      ? prisma.discountPartner.findMany({
+          orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+          include: { _count: { select: { offers: true } } },
+        })
+      : Promise.resolve([]),
   ]);
 
   return (
@@ -60,7 +67,7 @@ export default async function AdminProfilesPage({
         >
           Obsahové profily
           <span className="ml-2 rounded bg-brand-purple/8 px-1.5 py-0.5 text-[11px] font-bold text-brand-purple/60">
-            {profiles.length}
+            {profileCount}
           </span>
         </Link>
         <Link
@@ -73,7 +80,7 @@ export default async function AdminProfilesPage({
         >
           Zľavové profily
           <span className="ml-2 rounded bg-brand-purple/8 px-1.5 py-0.5 text-[11px] font-bold text-brand-purple/60">
-            {discountPartners.length}
+            {discountCount}
           </span>
         </Link>
       </div>

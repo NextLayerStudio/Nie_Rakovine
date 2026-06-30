@@ -38,17 +38,40 @@ export default async function AdminProfileDetailPage({
   const sp = await searchParams;
   const section: Section = sp.section === "events" ? "events" : "posts";
 
-  const profile = await prisma.clubProfile.findUnique({
-    where: { id },
-    include: {
-      posts: {
-        orderBy: { createdAt: "desc" },
-        include: { images: { orderBy: { sortOrder: "asc" } } },
+  // Fetch profile metadata + only the active section's items in parallel
+  const [profile, posts, events] = await Promise.all([
+    prisma.clubProfile.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        displayName: true,
+        handle: true,
+        bio: true,
+        avatarUrl: true,
+        published: true,
+        cancerTypes: true,
+        _count: { select: { posts: true, events: true } },
       },
-      events: { orderBy: { startsAt: "desc" } },
-    },
-  });
+    }),
+    section === "posts"
+      ? prisma.post.findMany({
+          where: { profileId: id },
+          orderBy: { createdAt: "desc" },
+          include: { images: { orderBy: { sortOrder: "asc" } } },
+        })
+      : Promise.resolve(null),
+    section === "events"
+      ? prisma.event.findMany({
+          where: { profileId: id },
+          orderBy: { startsAt: "desc" },
+        })
+      : Promise.resolve(null),
+  ]);
+
   if (!profile) notFound();
+
+  const postCount = profile._count.posts;
+  const eventCount = profile._count.events;
 
   return (
     <div>
@@ -81,7 +104,7 @@ export default async function AdminProfileDetailPage({
         >
           Príspevky
           <span className="ml-2 rounded bg-brand-purple/8 px-1.5 py-0.5 text-[11px] font-bold text-brand-purple/60">
-            {profile.posts.length}
+            {postCount}
           </span>
         </Link>
         <Link
@@ -94,11 +117,10 @@ export default async function AdminProfileDetailPage({
         >
           Podujatia
           <span className="ml-2 rounded bg-brand-purple/8 px-1.5 py-0.5 text-[11px] font-bold text-brand-purple/60">
-            {profile.events.length}
+            {eventCount}
           </span>
         </Link>
 
-        {/* Add button aligned to the right */}
         <div className="ml-auto flex items-center pb-1">
           {section === "posts" ? (
             <Link
@@ -121,13 +143,13 @@ export default async function AdminProfileDetailPage({
       {/* Posts */}
       {section === "posts" && (
         <div className="mt-5">
-          {profile.posts.length === 0 ? (
+          {!posts || posts.length === 0 ? (
             <div className="rounded-md border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/55">
               Žiadne príspevky.
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {profile.posts.map((post) => (
+              {posts.map((post) => (
                 <PostCard
                   key={post.id}
                   href={postPublicHref(post)}
@@ -156,13 +178,13 @@ export default async function AdminProfileDetailPage({
       {/* Events */}
       {section === "events" && (
         <div className="mt-5">
-          {profile.events.length === 0 ? (
+          {!events || events.length === 0 ? (
             <div className="rounded-md border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/55">
               Žiadne podujatia.
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {profile.events.map((event) => (
+              {events.map((event) => (
                 <EventCard
                   key={event.id}
                   id={event.id}

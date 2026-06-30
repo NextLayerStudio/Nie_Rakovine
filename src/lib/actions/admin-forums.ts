@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
 import { parseCancerTypes } from "@/lib/cancer-type";
@@ -126,6 +126,7 @@ async function revalidateForumPaths(forumId: string, threadId?: string) {
   revalidatePath(`/home/forums/${forumId}`);
   revalidatePath("/home/notifications");
   if (threadId) revalidatePath(`/home/forums/${forumId}/${threadId}`);
+  revalidateTag("pending-moderation");
 }
 
 export async function approveThreadAction(formData: FormData): Promise<void> {

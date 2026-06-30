@@ -20,8 +20,10 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await requireAdmin();
-  const { total: pendingCount } = await getPendingModerationCounts();
+  const [user, { total: pendingCount }] = await Promise.all([
+    requireAdmin(),
+    getPendingModerationCounts(),
+  ]);
 
   return (
     <div className="min-h-[100dvh] bg-[#f5f6f8] text-brand-purple">
