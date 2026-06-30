@@ -168,6 +168,9 @@ export async function deleteClubProfileAction(formData: FormData): Promise<void>
   await requireAdmin();
   const id = String(formData.get("id") ?? "");
   if (!id) return;
+  // Post and Event use onDelete: SetNull, so delete them explicitly first
+  await prisma.post.deleteMany({ where: { profileId: id } });
+  await prisma.event.deleteMany({ where: { profileId: id } });
   await prisma.clubProfile.delete({ where: { id } });
   revalidatePath("/admin/profiles");
   revalidatePath("/home/profiles");
