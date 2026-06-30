@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -57,12 +56,15 @@ export function NieSiVTomSamSection() {
                 className="absolute top-0 left-0 w-[84%] rounded-[1.6rem] overflow-hidden"
                 style={{ aspectRatio: "4/3", transformOrigin: "top left" }}
               >
-                <Image
-                  src="/images/niesivtomsam-2.jpg"
-                  alt="Skupinová diskusia OnkoKlub"
-                  fill
-                  className="object-cover"
-                />
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="h-full w-full object-cover"
+                >
+                  <source src="/videos/community-1.mp4" type="video/mp4" />
+                </video>
               </motion.div>
               <motion.div
                 animate={{ y: [0,8,0], rotate: [6,7,6] }}
@@ -70,12 +72,15 @@ export function NieSiVTomSamSection() {
                 className="absolute bottom-0 right-[8%] md:right-[-12%] w-[84%] rounded-[1.6rem] overflow-hidden"
                 style={{ aspectRatio: "4/3", transformOrigin: "bottom right" }}
               >
-                <Image
-                  src="/images/niesivtomsam-1.jpg"
-                  alt="Joga OnkoKlub"
-                  fill
-                  className="object-cover"
-                />
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="h-full w-full object-cover"
+                >
+                  <source src="/videos/community-2.mp4" type="video/mp4" />
+                </video>
               </motion.div>
             </div>
           </motion.div>

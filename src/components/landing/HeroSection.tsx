@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -64,20 +63,22 @@ export function HeroSection() {
                   className="absolute inset-0 rounded-[2rem] bg-[#6F2380]/25"
                   style={{ rotate: "-4deg" }}
                 />
-                {/* Fotka — o niečo menšia, na vrchu */}
+                {/* Video — o niečo menšie, na vrchu */}
                 <motion.div
                   animate={{ y: [0,-8,0] }}
                   transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                   className="absolute rounded-[2rem] overflow-hidden"
                   style={{ inset: "5%", rotate: "-4deg" }}
                 >
-                  <Image
-                    src="/images/hero-komunita.jpg"
-                    alt="Komunita OnkoKlub — ženy sa objímajú"
-                    fill
-                    className="object-cover"
-                    priority
-                  />
+                  <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="h-full w-full object-cover"
+                  >
+                    <source src="/videos/hero-portrait.mp4" type="video/mp4" />
+                  </video>
                 </motion.div>
               </div>
             </motion.div>
