@@ -32,14 +32,14 @@ export default async function ForumModerationPage() {
         </h2>
         <ul className="mt-3 space-y-4">
           {pendingThreads.length === 0 && (
-            <li className="rounded-2xl border border-dashed border-brand-purple/20 p-6 text-center text-sm text-brand-purple/60">
+            <li className="rounded-lg border border-dashed border-brand-purple/20 p-6 text-center text-sm text-brand-purple/60">
               Žiadne príspevky na schválenie.
             </li>
           )}
           {pendingThreads.map((t) => (
             <li
               key={t.id}
-              className="rounded-2xl border border-brand-purple/10 bg-white p-4 shadow-card"
+              className="rounded-lg border border-brand-purple/10 bg-white p-4 shadow-card"
             >
               <div className="min-w-0 flex-1">
                 <p className="text-xs text-brand-purple/60">
@@ -59,7 +59,7 @@ export default async function ForumModerationPage() {
                     <input type="hidden" name="id" value={t.id} />
                     <button
                       type="submit"
-                      className="rounded-pill bg-brand-purple px-4 py-1.5 text-xs font-semibold text-white"
+                      className="rounded-md bg-brand-purple px-4 py-1.5 text-xs font-semibold text-white"
                     >
                       Schváliť
                     </button>
@@ -68,7 +68,7 @@ export default async function ForumModerationPage() {
                     <input type="hidden" name="id" value={t.id} />
                     <button
                       type="submit"
-                      className="rounded-pill border border-red-300 px-4 py-1.5 text-xs font-semibold text-red-600"
+                      className="rounded-md border border-red-300 px-4 py-1.5 text-xs font-semibold text-red-600"
                     >
                       Zamietnuť
                     </button>

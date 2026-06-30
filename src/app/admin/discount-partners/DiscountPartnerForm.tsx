@@ -101,7 +101,7 @@ export function DiscountPartnerForm({
         />
       </fieldset>
 
-      <label className="flex items-center gap-3 rounded-2xl bg-brand-purple/5 px-4 py-3 text-sm font-medium text-brand-purple">
+      <label className="flex items-center gap-3 rounded-lg bg-brand-purple/5 px-4 py-3 text-sm font-medium text-brand-purple">
         <input
           type="checkbox"
           name="featured"
@@ -111,7 +111,7 @@ export function DiscountPartnerForm({
         Odporúčaná značka (zobrazí sa hore na úvodnej stránke Zľavy)
       </label>
 
-      <label className="flex items-center gap-3 rounded-2xl bg-brand-purple/5 px-4 py-3 text-sm font-medium text-brand-purple">
+      <label className="flex items-center gap-3 rounded-lg bg-brand-purple/5 px-4 py-3 text-sm font-medium text-brand-purple">
         <input
           type="checkbox"
           name="published"

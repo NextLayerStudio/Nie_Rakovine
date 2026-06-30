@@ -21,7 +21,7 @@ export function ForumThreadForm({ forumId }: { forumId: string }) {
   return (
     <form
       action={formAction}
-      className="mt-6 space-y-3 rounded-2xl border border-brand-purple/15 bg-brand-purple/[0.04] p-5"
+      className="mt-6 space-y-3 rounded-lg border border-brand-purple/15 bg-brand-purple/[0.04] p-5"
     >
       <input type="hidden" name="forumId" value={forumId} />
       <h3 className="text-sm font-bold text-brand-purple">

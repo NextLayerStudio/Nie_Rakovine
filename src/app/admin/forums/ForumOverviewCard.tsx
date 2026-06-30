@@ -32,7 +32,7 @@ export function ForumOverviewCard({
     >
       <div className="flex flex-col items-center px-6 pb-6 pt-8 text-center sm:flex-row sm:items-start sm:text-left">
         <div
-          className="h-28 w-28 shrink-0 rounded-2xl bg-cover bg-center ring-4 ring-white shadow-md"
+          className="h-28 w-28 shrink-0 rounded-lg bg-cover bg-center ring-4 ring-white shadow-md"
           style={forumAvatarStyle(forum)}
           role="img"
           aria-label={`Profilová fotka fóra — ${forum.title}`}

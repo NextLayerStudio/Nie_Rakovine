@@ -108,7 +108,7 @@ export function EventForm({
           <span className="admin-label">
             Poloha na mape (pre „aktivity v okolí“)
           </span>
-          <div className="overflow-hidden rounded-xl ring-1 ring-brand-purple/10">
+          <div className="overflow-hidden rounded-md ring-1 ring-brand-purple/10">
             <LocationPicker
               defaultLat={event?.latitude ?? null}
               defaultLng={event?.longitude ?? null}
@@ -150,7 +150,7 @@ export function EventForm({
 
       <fieldset className="admin-fieldset">
         <legend>Platba</legend>
-        <label className="flex items-center gap-3 rounded-2xl bg-brand-purple/5 px-4 py-3 text-sm font-medium text-brand-purple">
+        <label className="flex items-center gap-3 rounded-lg bg-brand-purple/5 px-4 py-3 text-sm font-medium text-brand-purple">
           <input
             type="checkbox"
             name="isPaid"
@@ -181,7 +181,7 @@ export function EventForm({
       </fieldset>
 
       {mode === "edit" && (
-        <label className="flex items-center gap-3 rounded-2xl bg-brand-purple/5 px-4 py-3 text-sm font-medium text-brand-purple">
+        <label className="flex items-center gap-3 rounded-lg bg-brand-purple/5 px-4 py-3 text-sm font-medium text-brand-purple">
           <input
             type="checkbox"
             name="published"

@@ -209,7 +209,7 @@ export default async function AdminUserDetailPage({
       </div>
 
       {!p && (
-        <p className="mt-6 rounded-2xl border border-dashed border-brand-purple/20 p-4 text-sm text-brand-purple/60">
+        <p className="mt-6 rounded-lg border border-dashed border-brand-purple/20 p-4 text-sm text-brand-purple/60">
           Používateľ zatiaľ nedokončil profil po registrácii (žiadne údaje z
           krokov profilu).
         </p>
@@ -229,7 +229,7 @@ function Section({
 }) {
   return (
     <section
-      className={`rounded-2xl border border-brand-purple/10 bg-white p-5 shadow-card ${className}`}
+      className={`rounded-lg border border-brand-purple/10 bg-white p-5 shadow-card ${className}`}
     >
       <h2 className="text-sm font-bold uppercase tracking-wide text-brand-purple/70">
         {title}
@@ -265,7 +265,7 @@ function TagList({
       {items.map((item) => (
         <li
           key={item}
-          className="rounded-pill bg-brand-purple/10 px-3 py-1 text-xs font-medium text-brand-purple"
+          className="rounded-md bg-brand-purple/10 px-3 py-1 text-xs font-medium text-brand-purple"
         >
           {item}
         </li>

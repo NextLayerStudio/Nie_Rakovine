@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 function PublishBadge({ published }: { published: boolean }) {
   return (
     <span
-      className={`rounded-pill px-2.5 py-0.5 text-[10px] font-semibold ${
+      className={`rounded-md px-2.5 py-0.5 text-[10px] font-semibold ${
         published
           ? "bg-emerald-50 text-emerald-700"
           : "bg-amber-50 text-amber-700"
@@ -67,14 +67,14 @@ export default async function AdminProfileDetailPage({
           <h2 className="admin-section-title text-sm">Príspevky</h2>
           <Link
             href={`/admin/posts/new?profileId=${profile.id}`}
-            className="inline-flex items-center gap-1 rounded-pill bg-brand-purple px-3.5 py-1.5 text-xs font-semibold text-white shadow-soft transition hover:brightness-110"
+            className="inline-flex items-center gap-1 rounded-md bg-brand-purple px-3.5 py-1.5 text-xs font-semibold text-white shadow-soft transition hover:brightness-110"
           >
             + Príspevok
           </Link>
         </div>
 
         {profile.posts.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/55">
+          <div className="rounded-md border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/55">
             Žiadne príspevky.
           </div>
         ) : (
@@ -109,14 +109,14 @@ export default async function AdminProfileDetailPage({
           <h2 className="admin-section-title text-sm">Podujatia</h2>
           <Link
             href={`/admin/events/new?profileId=${profile.id}`}
-            className="inline-flex items-center gap-1 rounded-pill bg-brand-purple px-3.5 py-1.5 text-xs font-semibold text-white shadow-soft transition hover:brightness-110"
+            className="inline-flex items-center gap-1 rounded-md bg-brand-purple px-3.5 py-1.5 text-xs font-semibold text-white shadow-soft transition hover:brightness-110"
           >
             + Podujatie
           </Link>
         </div>
 
         {profile.events.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/55">
+          <div className="rounded-md border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/55">
             Žiadne podujatia.
           </div>
         ) : (

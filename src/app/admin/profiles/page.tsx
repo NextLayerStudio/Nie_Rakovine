@@ -44,7 +44,7 @@ export default async function AdminProfilesPage() {
         <h2 className="admin-section-title mb-4 text-sm">Obsahové profily</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           {profiles.length === 0 && (
-            <p className="col-span-full rounded-2xl border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/60">
+            <p className="col-span-full rounded-lg border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/60">
               Zatiaľ žiadne profily. Vytvorte prvý profil.
             </p>
           )}
@@ -54,7 +54,7 @@ export default async function AdminProfilesPage() {
               className="admin-card group flex gap-4 overflow-hidden p-4 transition hover:-translate-y-0.5 hover:shadow-lg"
             >
               <div
-                className="h-16 w-16 shrink-0 rounded-2xl bg-cover bg-center ring-1 ring-brand-purple/10"
+                className="h-16 w-16 shrink-0 rounded-lg bg-cover bg-center ring-1 ring-brand-purple/10"
                 style={profileAvatarStyle(p.avatarUrl)}
               />
               <div className="min-w-0 flex-1">
@@ -120,7 +120,7 @@ export default async function AdminProfilesPage() {
         <h2 className="admin-section-title mb-4 text-sm">Zľavové profily</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           {discountPartners.length === 0 && (
-            <p className="col-span-full rounded-2xl border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/60">
+            <p className="col-span-full rounded-lg border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/60">
               Zatiaľ žiadne zľavové profily. Pridajte partnera v sekcii Zľavy.
             </p>
           )}

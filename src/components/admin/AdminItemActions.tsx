@@ -23,8 +23,8 @@ export function AdminItemActions({
     >
       <Link
         href={editHref}
-        className={`rounded-pill bg-brand-purple text-xs font-semibold text-white shadow-soft transition hover:brightness-110 ${
-          compact ? "py-2 text-center" : "px-4 py-1.5"
+        className={`rounded bg-brand-purple text-xs font-semibold text-white transition hover:brightness-110 ${
+          compact ? "block py-2 text-center" : "px-4 py-1.5"
         }`}
       >
         {editLabel}
@@ -37,7 +37,7 @@ export function AdminItemActions({
           ))}
         <button
           type="submit"
-          className={`rounded-pill border border-red-200 bg-red-50 text-xs font-semibold text-red-700 transition hover:bg-red-100 ${
+          className={`rounded border border-red-200 bg-red-50 text-xs font-semibold text-red-700 transition hover:bg-red-100 ${
             compact ? "w-full py-2" : "px-4 py-1.5"
           }`}
         >

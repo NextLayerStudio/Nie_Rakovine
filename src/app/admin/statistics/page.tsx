@@ -62,7 +62,7 @@ export default async function AdminStatisticsPage({
         </div>
         <Link
           href="/admin/users"
-          className="rounded-pill border border-brand-purple/30 px-4 py-2 text-sm font-semibold text-brand-purple hover:bg-brand-purple/5"
+          className="rounded-md border border-brand-purple/30 px-4 py-2 text-sm font-semibold text-brand-purple hover:bg-brand-purple/5"
         >
           Zoznam používateľov →
         </Link>
@@ -71,7 +71,7 @@ export default async function AdminStatisticsPage({
       {/* Filters */}
       <form
         method="get"
-        className="mt-6 grid gap-3 rounded-2xl border border-brand-purple/10 bg-white p-4 shadow-card sm:grid-cols-2 lg:grid-cols-4"
+        className="mt-6 grid gap-3 rounded-lg border border-brand-purple/10 bg-white p-4 shadow-card sm:grid-cols-2 lg:grid-cols-4"
       >
         <Filter label="Obdobie (registrácia)">
           <select name="period" defaultValue={period} className="stats-select">
@@ -125,14 +125,14 @@ export default async function AdminStatisticsPage({
         <div className="flex items-center gap-2 sm:col-span-2 lg:col-span-4">
           <button
             type="submit"
-            className="rounded-pill bg-brand-purple px-6 py-2 text-sm font-semibold text-white hover:brightness-110"
+            className="rounded-md bg-brand-purple px-6 py-2 text-sm font-semibold text-white hover:brightness-110"
           >
             Použiť filtre
           </button>
           {hasFilter && (
             <Link
               href="/admin/statistics"
-              className="rounded-pill border border-brand-purple/30 px-4 py-2 text-sm font-semibold text-brand-purple hover:bg-brand-purple/5"
+              className="rounded-md border border-brand-purple/30 px-4 py-2 text-sm font-semibold text-brand-purple hover:bg-brand-purple/5"
             >
               Zrušiť filtre
             </Link>
@@ -173,7 +173,7 @@ export default async function AdminStatisticsPage({
       </div>
 
       {stats.filteredUsers === 0 ? (
-        <p className="mt-8 rounded-2xl border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/60">
+        <p className="mt-8 rounded-lg border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/60">
           Pre zvolené filtre nie sú žiadni používatelia.
         </p>
       ) : (
@@ -254,7 +254,7 @@ function Kpi({
   accent: "purple" | "pink";
 }) {
   return (
-    <div className="rounded-2xl border border-brand-purple/10 bg-white p-5 shadow-card">
+    <div className="rounded-lg border border-brand-purple/10 bg-white p-5 shadow-card">
       <p className="text-xs font-semibold uppercase tracking-wide text-brand-purple/60">
         {label}
       </p>
@@ -288,7 +288,7 @@ function ChartCard({
 
   return (
     <section
-      className={`rounded-2xl border border-brand-purple/10 bg-white p-5 shadow-card ${className}`}
+      className={`rounded-lg border border-brand-purple/10 bg-white p-5 shadow-card ${className}`}
     >
       <h2 className="text-sm font-bold text-brand-purple">{title}</h2>
       {hint && <p className="mt-0.5 text-xs text-brand-purple/55">{hint}</p>}

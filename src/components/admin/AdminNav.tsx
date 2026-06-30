@@ -21,7 +21,7 @@ export function AdminNav({
       : pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <nav className="flex flex-wrap items-center gap-1 text-sm font-medium">
+    <nav className="flex items-center gap-0.5 text-sm font-medium">
       {items.map(({ href, label }) => {
         const active = isActive(href);
         return (
@@ -29,22 +29,15 @@ export function AdminNav({
             key={href}
             href={href}
             className={cn(
-              "rounded-pill px-3.5 py-1.5 transition",
+              "rounded px-3 py-1.5 text-xs transition",
               active
-                ? "bg-white text-brand-purple shadow-soft"
-                : "text-white/85 hover:bg-white/10 hover:text-white",
+                ? "bg-white/20 text-white font-semibold"
+                : "text-white/70 hover:bg-white/10 hover:text-white",
             )}
           >
             {label}
             {href === "/admin/forums" && pendingCount > 0 && (
-              <span
-                className={cn(
-                  "ml-1.5 rounded-full px-1.5 py-0.5 text-[10px] font-bold",
-                  active
-                    ? "bg-brand-pink text-white"
-                    : "bg-white text-brand-purple",
-                )}
-              >
+              <span className="ml-1.5 rounded bg-brand-pink px-1.5 py-0.5 text-[10px] font-bold text-white">
                 {pendingCount}
               </span>
             )}

@@ -23,35 +23,33 @@ export default async function AdminLayout({
   const { total: pendingCount } = await getPendingModerationCounts();
 
   return (
-    <div className="min-h-[100dvh] bg-[#f7f4f6] text-brand-purple">
-      <header className="sticky top-0 z-30 border-b border-white/10 bg-gradient-to-r from-brand-purple to-[#7d2a90] text-white shadow-soft">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-6 py-3">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/admin"
-              className="flex items-center gap-2 text-base font-extrabold tracking-wide"
-            >
-              <span className="grid h-8 w-8 place-items-center rounded-xl bg-white/15 text-sm">
-                OK
-              </span>
-              <span className="hidden sm:inline">ONKO KLUB · Admin</span>
-            </Link>
-          </div>
+    <div className="min-h-[100dvh] bg-[#f5f6f8] text-brand-purple">
+      <header className="sticky top-0 z-30 border-b border-brand-purple/20 bg-brand-purple text-white">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-2.5">
+          <Link
+            href="/admin"
+            className="flex items-center gap-2.5 text-sm font-bold tracking-wide"
+          >
+            <span className="grid h-7 w-7 place-items-center rounded bg-white/15 text-xs font-extrabold">
+              OK
+            </span>
+            <span className="hidden opacity-90 sm:inline">ONKO KLUB · Admin</span>
+          </Link>
 
           <AdminNav items={NAV} pendingCount={pendingCount} />
 
           <div className="flex items-center gap-2 text-xs">
-            <span className="hidden text-white/70 lg:inline">{user.email}</span>
+            <span className="hidden text-white/55 lg:inline">{user.email}</span>
             <Link
               href="/home"
-              className="rounded-pill bg-white px-3 py-1.5 font-bold text-brand-purple transition hover:brightness-95"
+              className="rounded-md bg-white/15 px-3 py-1.5 font-semibold transition hover:bg-white/25"
             >
               Aplikácia
             </Link>
             <form action={logoutAction}>
               <button
                 type="submit"
-                className="rounded-pill border border-white/40 px-3 py-1.5 font-bold transition hover:bg-white/10"
+                className="rounded-md border border-white/25 px-3 py-1.5 font-semibold transition hover:bg-white/10"
               >
                 Odhlásiť
               </button>

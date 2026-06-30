@@ -27,7 +27,7 @@ export default function SeedContentPage() {
         <button
           disabled={loading}
           onClick={() => run(seedContentAction)}
-          className="rounded-xl bg-brand-purple px-6 py-3 font-semibold text-white hover:brightness-110 disabled:opacity-60"
+          className="rounded-md bg-brand-purple px-6 py-3 font-semibold text-white hover:brightness-110 disabled:opacity-60"
         >
           {loading ? "Prebieha..." : "▶ Naplniť testovacie príspevky"}
         </button>
@@ -38,14 +38,14 @@ export default function SeedContentPage() {
             if (!confirm("Naozaj vymazať všetky testovacie príspevky?")) return;
             run(deleteSeedContentAction);
           }}
-          className="rounded-xl border border-red-300 px-6 py-3 font-semibold text-red-600 hover:bg-red-50 disabled:opacity-60"
+          className="rounded-md border border-red-300 px-6 py-3 font-semibold text-red-600 hover:bg-red-50 disabled:opacity-60"
         >
           🗑️ Vymazať testovacie príspevky
         </button>
       </div>
 
       {message && (
-        <div className="rounded-xl bg-brand-purple/8 p-4 text-sm font-medium text-brand-purple">
+        <div className="rounded-md bg-brand-purple/8 p-4 text-sm font-medium text-brand-purple">
           {message}
         </div>
       )}

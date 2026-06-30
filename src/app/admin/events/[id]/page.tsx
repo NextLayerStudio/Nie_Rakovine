@@ -57,7 +57,7 @@ export default async function EditEventPage({
               </li>
             ))}
             {event.registrations.length === 0 && (
-              <li className="rounded-xl border border-dashed border-brand-purple/30 p-3 text-center text-xs text-brand-purple/60">
+              <li className="rounded-md border border-dashed border-brand-purple/30 p-3 text-center text-xs text-brand-purple/60">
                 Žiadne registrácie zatiaľ.
               </li>
             )}

@@ -18,19 +18,19 @@ function ThreadStatusBadge({
   switch (status) {
     case "APPROVED":
       return (
-        <span className="rounded-pill bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+        <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
           Schválené
         </span>
       );
     case "PENDING":
       return (
-        <span className="rounded-pill bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
+        <span className="rounded-md bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
           Čaká
         </span>
       );
     case "REJECTED":
       return (
-        <span className="rounded-pill bg-red-50 px-2 py-0.5 text-[10px] font-semibold text-red-700">
+        <span className="rounded-md bg-red-50 px-2 py-0.5 text-[10px] font-semibold text-red-700">
           Zamietnuté
         </span>
       );
@@ -94,7 +94,7 @@ export default async function AdminForumDetailPage({
         <ForumThreadForm forumId={forum.id} />
 
         {forum.threads.length === 0 ? (
-          <div className="mt-4 rounded-xl border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/55">
+          <div className="mt-4 rounded-md border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/55">
             Zatiaľ žiadne príspevky.
           </div>
         ) : (

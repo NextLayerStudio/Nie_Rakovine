@@ -56,7 +56,7 @@ export default async function AdminDashboard() {
         </div>
         <Link
           href="/admin/statistics"
-          className="rounded-pill bg-brand-purple px-5 py-2 text-sm font-semibold text-white hover:brightness-110"
+          className="rounded-md bg-brand-purple px-5 py-2 text-sm font-semibold text-white hover:brightness-110"
         >
           Štatistiky registrácie →
         </Link>
@@ -113,7 +113,7 @@ export default async function AdminDashboard() {
           Všetci →
         </Link>
       </div>
-      <div className="mt-3 overflow-hidden rounded-2xl border border-brand-purple/10 bg-white shadow-card">
+      <div className="mt-3 overflow-hidden rounded-lg border border-brand-purple/10 bg-white shadow-card">
         {recentUsers.length === 0 ? (
           <p className="p-6 text-center text-sm text-brand-purple/60">
             Zatiaľ žiadni používatelia.
@@ -180,7 +180,7 @@ function Kpi({
   );
 
   const className =
-    "block rounded-2xl border border-brand-purple/10 bg-white p-5 shadow-card transition";
+    "block rounded-lg border border-brand-purple/10 bg-white p-5 shadow-card transition";
 
   if (href) {
     return (
@@ -206,7 +206,7 @@ function SectionCard({
   return (
     <Link
       href={href}
-      className="block rounded-2xl border border-brand-purple/10 bg-white p-5 shadow-card transition hover:border-brand-purple/30"
+      className="block rounded-lg border border-brand-purple/10 bg-white p-5 shadow-card transition hover:border-brand-purple/30"
     >
       <h3 className="text-lg font-bold">{title}</h3>
       <p className="mt-2 text-xs text-brand-purple/70">{description}</p>

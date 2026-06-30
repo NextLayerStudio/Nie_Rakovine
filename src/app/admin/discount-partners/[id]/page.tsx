@@ -123,7 +123,7 @@ export default async function AdminDiscountPartnerDetailPage({
           {!newOffer && !editOffer && (
             <Link
               href={`/admin/discount-partners/${partner.id}?newOffer=1`}
-              className="inline-flex items-center gap-1 rounded-pill bg-brand-purple px-3.5 py-1.5 text-xs font-semibold text-white shadow-soft"
+              className="inline-flex items-center gap-1 rounded-md bg-brand-purple px-3.5 py-1.5 text-xs font-semibold text-white shadow-soft"
             >
               + Nová karta
             </Link>
@@ -141,7 +141,7 @@ export default async function AdminDiscountPartnerDetailPage({
         )}
 
         {partner.offers.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/55">
+          <div className="rounded-md border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/55">
             Zatiaľ žiadne zľavové karty. Pridajte prvú (iba obrázok).
           </div>
         ) : (
@@ -149,7 +149,7 @@ export default async function AdminDiscountPartnerDetailPage({
             {partner.offers.map((offer, index) => (
               <article
                 key={offer.id}
-                className="overflow-hidden rounded-2xl ring-1 ring-brand-purple/10"
+                className="overflow-hidden rounded-lg ring-1 ring-brand-purple/10"
               >
                 <div className="aspect-video w-full bg-brand-purple/5">
                   {offer.imageUrl ? (
@@ -205,7 +205,7 @@ export default async function AdminDiscountPartnerDetailPage({
           {!newPost && !editPost && (
             <Link
               href={`/admin/discount-partners/${partner.id}?newPost=1`}
-              className="inline-flex items-center gap-1 rounded-pill bg-brand-purple px-3.5 py-1.5 text-xs font-semibold text-white shadow-soft"
+              className="inline-flex items-center gap-1 rounded-md bg-brand-purple px-3.5 py-1.5 text-xs font-semibold text-white shadow-soft"
             >
               + Nová reklama
             </Link>
@@ -235,7 +235,7 @@ export default async function AdminDiscountPartnerDetailPage({
         )}
 
         {partner.posts.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/55">
+          <div className="rounded-md border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/55">
             Zatiaľ žiadna reklama. Reklama sa zobrazí v domovskom kanáli a po
             kliknutí presmeruje na zľavovú kartu.
           </div>
@@ -244,7 +244,7 @@ export default async function AdminDiscountPartnerDetailPage({
             {partner.posts.map((post) => (
               <article
                 key={post.id}
-                className="overflow-hidden rounded-2xl ring-1 ring-brand-purple/10"
+                className="overflow-hidden rounded-lg ring-1 ring-brand-purple/10"
               >
                 <div className="aspect-video w-full bg-brand-purple/5">
                   {post.coverUrl ? (

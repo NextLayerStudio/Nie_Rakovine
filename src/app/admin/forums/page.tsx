@@ -33,7 +33,7 @@ export default async function AdminForumsPage() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {forums.length === 0 && (
-          <p className="col-span-full rounded-2xl border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/60">
+          <p className="col-span-full rounded-lg border border-dashed border-brand-purple/20 p-8 text-center text-sm text-brand-purple/60">
             Zatiaľ žiadne fóra. Vytvorte prvé fórum.
           </p>
         )}
@@ -45,7 +45,7 @@ export default async function AdminForumsPage() {
             <div className="flex items-start gap-4 p-4">
               <div
                 aria-hidden
-                className="h-16 w-16 shrink-0 rounded-2xl bg-cover bg-center ring-1 ring-brand-purple/10"
+                className="h-16 w-16 shrink-0 rounded-lg bg-cover bg-center ring-1 ring-brand-purple/10"
                 style={forumAvatarStyle(f)}
               />
               <div className="min-w-0 flex-1">
