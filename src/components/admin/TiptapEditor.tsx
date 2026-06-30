@@ -6,7 +6,7 @@ import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import Typography from "@tiptap/extension-typography";
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 import type { Editor } from "@tiptap/react";
 
 async function uploadImageFile(file: File): Promise<string | null> {
@@ -186,6 +186,9 @@ export function TiptapEditor({
   placeholder?: string;
   minHeight?: number;
 }) {
+  // Hidden input — imperatively updated on every editor change so formData gets the current HTML
+  const hiddenRef = useRef<HTMLInputElement>(null);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -195,6 +198,11 @@ export function TiptapEditor({
       Typography,
     ],
     content: defaultValue || "",
+    onUpdate({ editor }) {
+      if (hiddenRef.current) {
+        hiddenRef.current.value = editor.getHTML();
+      }
+    },
     editorProps: {
       attributes: {
         class: "focus:outline-none",
@@ -240,21 +248,18 @@ export function TiptapEditor({
     },
   });
 
-  const getHtml = useCallback(() => editor?.getHTML() ?? "", [editor]);
-
   if (!editor) return null;
 
   return (
     <div className="rounded-md border border-brand-purple/20 bg-white focus-within:border-brand-purple/40 focus-within:ring-1 focus-within:ring-brand-purple/20">
       <Toolbar editor={editor} />
 
-      {/* Hidden textarea synced on form submit */}
-      <textarea
+      {/* Hidden input — DOM value kept in sync via onUpdate ref, not React state */}
+      <input
+        type="hidden"
         name={name}
-        className="sr-only"
-        readOnly
-        value={getHtml()}
-        onChange={() => {}}
+        ref={hiddenRef}
+        defaultValue={defaultValue}
       />
 
       <EditorContent
