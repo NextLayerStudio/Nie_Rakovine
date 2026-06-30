@@ -173,9 +173,9 @@ export function AdminImageField({
 
       {/* Crop modal */}
       {cropSrc && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-black/90" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex flex-col bg-white" onClick={(e) => e.stopPropagation()}>
           {/* Crop area */}
-          <div className="relative flex-1">
+          <div className="relative flex-1" style={{ background: "#f5f5f5" }}>
             <Cropper
               image={cropSrc}
               crop={crop}
@@ -189,13 +189,14 @@ export function AdminImageField({
               onCropChange={setCrop}
               onZoomChange={setZoom}
               onCropComplete={onCropComplete}
+              style={{ containerStyle: { background: "#f5f5f5" } }}
             />
           </div>
 
           {/* Controls */}
-          <div className="flex flex-col items-center gap-4 bg-black/80 px-6 py-5">
+          <div className="flex flex-col items-center gap-4 border-t border-brand-purple/10 bg-white px-6 py-5">
             <div className="flex w-full max-w-xs items-center gap-3">
-              <span className="text-xs text-white/50 w-10 text-right">−</span>
+              <span className="text-xs text-brand-purple/40 w-10 text-right">−</span>
               <input
                 type="range"
                 min={0.3}
@@ -205,14 +206,14 @@ export function AdminImageField({
                 onChange={(e) => setZoom(Number(e.target.value))}
                 className="flex-1 accent-[#FDA4C7]"
               />
-              <span className="text-xs text-white/50 w-10">+</span>
+              <span className="text-xs text-brand-purple/40 w-10">+</span>
             </div>
-            <p className="text-xs text-white/40">Ťahaj obrázok, zoomuj posuvníkom</p>
+            <p className="text-xs text-brand-purple/40">Ťahaj obrázok, zoomuj posuvníkom</p>
             <div className="flex gap-3">
               <button
                 type="button"
                 onClick={() => setCropSrc(null)}
-                className="rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold text-white/70 hover:bg-white/10"
+                className="rounded-full border border-brand-purple/20 px-6 py-2.5 text-sm font-semibold text-brand-purple/60 hover:bg-brand-purple/5"
               >
                 Zrušiť
               </button>
