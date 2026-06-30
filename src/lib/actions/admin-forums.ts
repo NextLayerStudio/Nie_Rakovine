@@ -74,6 +74,16 @@ export async function updateForumAction(
   redirect(`/admin/forums/${id}`);
 }
 
+export async function toggleForumPublishedAction(formData: FormData): Promise<void> {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const current = formData.get("current") === "true";
+  if (!id) return;
+  await prisma.forum.update({ where: { id }, data: { published: !current } });
+  revalidatePath("/admin/forums");
+  revalidatePath("/home/forums");
+}
+
 export async function deleteForumAction(formData: FormData): Promise<void> {
   await requireAdmin();
   const id = String(formData.get("id") ?? "");
