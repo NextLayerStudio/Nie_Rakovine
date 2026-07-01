@@ -27,7 +27,7 @@ export function VideokniznicaSection() {
           className="px-5 md:max-w-6xl md:mx-auto md:px-8 mb-8"
         >
           <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
-            Kontent knižnica
+            Onko knižnica
           </p>
           <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
             Pozri sa, čo na teba

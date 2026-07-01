@@ -33,7 +33,7 @@ export function feedPostHref(post: {
   return postPublicHref(post);
 }
 
-/** Return path for Kontent knižnica (preserves active category tab). */
+/** Return path for Onko knižnica (preserves active category tab). */
 export function libraryReturnPath(kind: string) {
   return `/home/kniznica?kind=${kind}`;
 }

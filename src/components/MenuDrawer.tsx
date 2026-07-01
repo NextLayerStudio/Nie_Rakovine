@@ -10,7 +10,7 @@ const MAIN_ITEMS = [
   { href: "/home/notifications", label: "Oznámenia", icon: "bell" as const },
   { href: "/profile", label: "Môj profil", icon: "user" as const },
   { href: "/home/saved", label: "Uložené", icon: "bookmark" as const },
-  { href: "/home/kniznica", label: "Kontent knižnica", icon: "library" as const },
+  { href: "/home/kniznica", label: "Onko knižnica", icon: "library" as const },
   { href: "/home/calendar", label: "Aktivity", icon: "calendar" as const },
   { href: "/home/forums", label: "Fóra", icon: "forum" as const },
   { href: "/menu/zlavova-karta", label: "Moja zľavová karta", icon: "card" as const },

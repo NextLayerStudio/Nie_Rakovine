@@ -12,7 +12,7 @@ const REDIRECTS: Record<string, string> = {
 
 const LABELS: Record<string, string> = {
   "zlavova-karta": "Moja zľavová karta",
-  "kontent-kniznica": "Kontent knižnica",
+  "kontent-kniznica": "Onko knižnica",
   zlavy: "Zľavy",
   aktivity: "Aktivity",
   informacie: "Informácie",

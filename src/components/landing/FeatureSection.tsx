@@ -8,7 +8,7 @@ import Link from "next/link";
 const FEATURES = [
   {
     id: "library" as const,
-    title: "Kontent knižnica",
+    title: "Onko knižnica",
     desc: "Stovky videí od overených odborníkov — joga, mindfulness, výživa, psychika. Pozri si ich kedykoľvek, odkiaľkoľvek, vo vlastnom tempe.",
     href: "/kontent-kniznica",
   },

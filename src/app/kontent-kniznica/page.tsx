@@ -18,7 +18,7 @@ export default function KontentKniznicaPage() {
 
       <section className="pt-24 pb-10 px-5">
         <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
-          Kontent knižnica
+          Onko knižnica
         </p>
         <h1 className="text-[2.4rem] font-black text-[#6F2380] leading-[1.1] mb-5 max-w-xs">
           Stovky videí. Vždy po ruke.
