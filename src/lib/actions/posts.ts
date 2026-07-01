@@ -241,25 +241,34 @@ export async function updatePostAction(
 
   const durationSec = parseDurationSec(formData);
 
-  const post = await prisma.post.update({
-    where: { id },
-    data: {
-      type,
-      title,
-      excerpt,
-      body,
-      coverUrl,
-      videoUrl: videoUrl ?? null,
-      audioUrl: audioUrl ?? null,
-      durationSec,
-      isNovinka,
-      published,
-      publishedAt: published ? new Date() : null,
-      profileId,
-      cancerTypes,
-    },
-    include: { profile: { select: { id: true, displayName: true } } },
-  });
+  let post;
+  try {
+    post = await prisma.post.update({
+      where: { id },
+      data: {
+        type,
+        title,
+        excerpt,
+        body,
+        coverUrl,
+        videoUrl: videoUrl ?? null,
+        audioUrl: audioUrl ?? null,
+        durationSec,
+        isNovinka,
+        published,
+        publishedAt: published ? new Date() : null,
+        profileId,
+        cancerTypes,
+      },
+      include: { profile: { select: { id: true, displayName: true } } },
+    });
+  } catch (err) {
+    console.error("[updatePostAction] update failed", err);
+    return {
+      ok: false,
+      message: "Nepodarilo sa uložiť zmeny. Skúste to znova (vaše texty ostávajú vyplnené).",
+    };
+  }
 
   try {
     await syncPostGallery(post.id, formData);

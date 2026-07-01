@@ -104,40 +104,46 @@ export async function notifyProfileFollowersNewPost(
 ) {
   if (!post.published || !post.profileId || !post.profile) return;
 
-  const followers = await prisma.profileFollow.findMany({
-    where: { profileId: post.profileId },
-    select: { userId: true },
-  });
-  if (followers.length === 0) return;
+  // Notifications are a best-effort side effect: never let a failure here abort
+  // the save (which already committed) or blank the admin screen.
+  try {
+    const followers = await prisma.profileFollow.findMany({
+      where: { profileId: post.profileId },
+      select: { userId: true },
+    });
+    if (followers.length === 0) return;
 
-  const profiles = await prisma.userProfile.findMany({
-    where: { userId: { in: followers.map((f) => f.userId) } },
-  });
+    const profiles = await prisma.userProfile.findMany({
+      where: { userId: { in: followers.map((f) => f.userId) } },
+    });
 
-  const prefsByUser = new Map(
-    profiles.map((p) => [
-      p.userId,
-      prefsFromProfile(p as unknown as Record<string, unknown>).notifyNewPosts,
-    ]),
-  );
+    const prefsByUser = new Map(
+      profiles.map((p) => [
+        p.userId,
+        prefsFromProfile(p as unknown as Record<string, unknown>).notifyNewPosts,
+      ]),
+    );
 
-  const eligible = followers.filter((f) => prefsByUser.get(f.userId) !== false);
-  if (eligible.length === 0) return;
+    const eligible = followers.filter((f) => prefsByUser.get(f.userId) !== false);
+    if (eligible.length === 0) return;
 
-  const href = postPublicHref(post);
-  const typeLabel = postKindLabel(post.type).toLowerCase();
+    const href = postPublicHref(post);
+    const typeLabel = postKindLabel(post.type).toLowerCase();
 
-  await prisma.notification.createMany({
-    data: eligible.map((f) => ({
-      userId: f.userId,
-      type: "NEW_POST" as const,
-      title: `Nový ${typeLabel} od ${post.profile!.displayName}`,
-      body: post.title,
-      href,
-      postId: post.id,
-      profileId: post.profileId,
-    })),
-  });
+    await prisma.notification.createMany({
+      data: eligible.map((f) => ({
+        userId: f.userId,
+        type: "NEW_POST" as const,
+        title: `Nový ${typeLabel} od ${post.profile!.displayName}`,
+        body: post.title,
+        href,
+        postId: post.id,
+        profileId: post.profileId,
+      })),
+    });
+  } catch (err) {
+    console.error("[notifyProfileFollowersNewPost]", err);
+  }
 }
 
 export async function notifyForumThreadApproved(
@@ -210,38 +216,43 @@ export async function notifyForumReaction(options: {
 export async function notifyNearbyUsersNewEvent(event: Event) {
   if (!event.published || !hasCoords(event)) return;
 
-  const profiles = await prisma.userProfile.findMany({
-    where: {
-      latitude: { not: null },
-      longitude: { not: null },
-    },
-    select: {
-      userId: true,
-      latitude: true,
-      longitude: true,
-      notifyRadiusKm: true,
-    },
-  });
+  // Best-effort side effect: never let a failure abort the save or blank the screen.
+  try {
+    const profiles = await prisma.userProfile.findMany({
+      where: {
+        latitude: { not: null },
+        longitude: { not: null },
+      },
+      select: {
+        userId: true,
+        latitude: true,
+        longitude: true,
+        notifyRadiusKm: true,
+      },
+    });
 
-  const recipients = profiles.filter((p) => {
-    const prefs = prefsFromProfile(p as unknown as Record<string, unknown>);
-    if (!prefs.notifyEventsNearby) return false;
-    const d = distanceKm(p, event);
-    return d !== null && d <= (p.notifyRadiusKm ?? 50);
-  });
+    const recipients = profiles.filter((p) => {
+      const prefs = prefsFromProfile(p as unknown as Record<string, unknown>);
+      if (!prefs.notifyEventsNearby) return false;
+      const d = distanceKm(p, event);
+      return d !== null && d <= (p.notifyRadiusKm ?? 50);
+    });
 
-  if (recipients.length === 0) return;
+    if (recipients.length === 0) return;
 
-  await prisma.notification.createMany({
-    data: recipients.map((p) => ({
-      userId: p.userId,
-      type: "NEW_EVENT_NEARBY" as const,
-      title: "Nová aktivita vo vašom okolí",
-      body: event.location ? `${event.title} — ${event.location}` : event.title,
-      href: `/home/events/${event.id}`,
-      eventId: event.id,
-    })),
-  });
+    await prisma.notification.createMany({
+      data: recipients.map((p) => ({
+        userId: p.userId,
+        type: "NEW_EVENT_NEARBY" as const,
+        title: "Nová aktivita vo vašom okolí",
+        body: event.location ? `${event.title} — ${event.location}` : event.title,
+        href: `/home/events/${event.id}`,
+        eventId: event.id,
+      })),
+    });
+  } catch (err) {
+    console.error("[notifyNearbyUsersNewEvent]", err);
+  }
 }
 
 export function notificationTypeLabel(type: NotificationType | string): string {

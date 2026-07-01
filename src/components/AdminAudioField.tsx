@@ -77,7 +77,8 @@ export function AdminAudioField({
           </p>
           <input
             name="audioUrl"
-            type="url"
+            type="text"
+            inputMode="url"
             value={url}
             onChange={(e) => {
               setUrl(e.target.value);

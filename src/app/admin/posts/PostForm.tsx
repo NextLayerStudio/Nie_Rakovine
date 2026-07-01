@@ -69,7 +69,7 @@ export function PostForm({
 
         <Field label="Názov" name="title" defaultValue={post?.title} />
         <Field
-          label="Krátky výňatok"
+          label="Perex"
           name="excerpt"
           defaultValue={post?.excerpt ?? ""}
         />

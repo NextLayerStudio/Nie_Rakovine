@@ -160,7 +160,8 @@ export function AdminImageField({
               )}
               <input
                 name={name}
-                type="url"
+                type="text"
+                inputMode="url"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://…"

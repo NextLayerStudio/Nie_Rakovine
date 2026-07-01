@@ -161,7 +161,7 @@ export function ForumsTabPanel({ initialData }: { initialData?: ForumsData }) {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-2">
                     <Link href={`/home/forums/${forum.id}`} className="min-w-0">
-                      <h2 className="truncate text-[15px] font-bold leading-snug text-brand-purple">
+                      <h2 className="text-[15px] font-bold leading-snug text-brand-purple">
                         {forum.title}
                       </h2>
                     </Link>

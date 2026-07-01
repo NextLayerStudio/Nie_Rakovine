@@ -2,11 +2,12 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { deleteClubProfileAction, toggleClubProfilePublishedAction } from "@/lib/actions/admin-profiles";
 import { deleteDiscountPartnerAction, toggleDiscountPartnerPublishedAction } from "@/lib/actions/admin-discount-partners";
-import { profileAvatarStyle } from "@/lib/avatar-style";
 import { categoryLabel } from "@/lib/discount-category";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
-import { DeleteConfirmButton } from "@/components/admin/DeleteConfirmButton";
+import { AdminProfilesList, type AdminProfileListItem } from "@/components/admin/AdminProfilesList";
 import { profileCategoryLabel } from "@/lib/profile-category";
+
+const collator = new Intl.Collator("sk", { sensitivity: "base" });
 
 export const dynamic = "force-dynamic";
 
@@ -26,17 +27,44 @@ export default async function AdminProfilesPage({
     prisma.discountPartner.count(),
     tab === "content"
       ? prisma.clubProfile.findMany({
-          orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
           include: { _count: { select: { posts: true, events: true } } },
         })
       : Promise.resolve([]),
     tab === "discount"
       ? prisma.discountPartner.findMany({
-          orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
           include: { _count: { select: { offers: true } } },
         })
       : Promise.resolve([]),
   ]);
+
+  const profileItems: AdminProfileListItem[] = profiles
+    .map((p) => ({
+      id: p.id,
+      displayName: p.displayName,
+      handle: p.handle,
+      avatarUrl: p.avatarUrl,
+      published: p.published,
+      categoryLabel: p.category ? profileCategoryLabel(p.category) : null,
+      countsText: `${p._count.posts} prísp. · ${p._count.events} podujatí`,
+      manageHref: `/admin/profiles/${p.id}`,
+      previewHref: `/home/profiles/${p.handle}`,
+    }))
+    .sort((a, b) => collator.compare(a.displayName, b.displayName));
+
+  const discountItems: AdminProfileListItem[] = discountPartners
+    .map((p) => ({
+      id: p.id,
+      displayName: p.displayName,
+      handle: p.handle,
+      avatarUrl: p.avatarUrl,
+      published: p.published,
+      categoryLabel: categoryLabel(p.category),
+      featured: p.featured,
+      countsText: `${p._count.offers} kariet`,
+      manageHref: `/admin/discount-partners/${p.id}`,
+      previewHref: `/home/zlavy/${p.handle}`,
+    }))
+    .sort((a, b) => collator.compare(a.displayName, b.displayName));
 
   return (
     <div>
@@ -88,137 +116,26 @@ export default async function AdminProfilesPage({
 
       {/* Content profiles list */}
       {tab === "content" && (
-        <div className="admin-card overflow-hidden">
-          {profiles.length === 0 ? (
-            <p className="p-8 text-center text-sm text-brand-purple/50">
-              Zatiaľ žiadne profily. Vytvorte prvý profil.
-            </p>
-          ) : (
-            <ul className="divide-y divide-brand-purple/8">
-              {profiles.map((p) => (
-                <li key={p.id} className="flex items-center gap-4 px-5 py-3.5 hover:bg-brand-purple/[0.02]">
-                  <div
-                    className="h-10 w-10 shrink-0 rounded-full bg-cover bg-center ring-1 ring-brand-purple/10"
-                    style={profileAvatarStyle(p.avatarUrl)}
-                  />
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold text-brand-purple">
-                      {p.displayName}
-                    </p>
-                    <p className="text-xs text-brand-purple/50">
-                      @{p.handle}
-                      {p.category && (
-                        <span className="ml-2 text-brand-pink/80">{profileCategoryLabel(p.category)}</span>
-                      )}
-                      <span className="ml-2">{p._count.posts} prísp. · {p._count.events} podujatí</span>
-                    </p>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-2">
-                    <Link
-                      href={`/admin/profiles/${p.id}`}
-                      className="rounded bg-brand-purple px-3.5 py-1.5 text-xs font-semibold text-white hover:brightness-110"
-                    >
-                      Spravovať
-                    </Link>
-                    <Link
-                      href={`/home/profiles/${p.handle}`}
-                      className="rounded border border-brand-purple/20 px-3.5 py-1.5 text-xs font-semibold text-brand-purple hover:bg-brand-purple/5"
-                    >
-                      Náhľad
-                    </Link>
-                    <form action={toggleClubProfilePublishedAction}>
-                      <input type="hidden" name="id" value={p.id} />
-                      <input type="hidden" name="current" value={String(p.published)} />
-                      <button
-                        type="submit"
-                        className={`rounded px-3.5 py-1.5 text-xs font-semibold transition ${
-                          p.published
-                            ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                            : "bg-amber-50 text-amber-700 hover:bg-amber-100"
-                        }`}
-                      >
-                        {p.published ? "Publikovaný" : "Skrytý"}
-                      </button>
-                    </form>
-                    <DeleteConfirmButton
-                      action={deleteClubProfileAction}
-                      id={p.id}
-                      confirmText="Naozaj chceš zmazať tento profil? Zmažú sa aj všetky jeho príspevky a udalosti. Táto akcia je nezvratná."
-                    />
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <AdminProfilesList
+          items={profileItems}
+          toggleAction={toggleClubProfilePublishedAction}
+          deleteAction={deleteClubProfileAction}
+          deleteConfirmText="Naozaj chceš zmazať tento profil? Zmažú sa aj všetky jeho príspevky a udalosti. Táto akcia je nezvratná."
+          emptyText="Zatiaľ žiadne profily. Vytvorte prvý profil."
+          listId="admin-content-profiles"
+        />
       )}
 
       {/* Discount partners list */}
       {tab === "discount" && (
-        <div className="admin-card overflow-hidden">
-          {discountPartners.length === 0 ? (
-            <p className="p-8 text-center text-sm text-brand-purple/50">
-              Zatiaľ žiadni partneri. Pridajte prvého partnera.
-            </p>
-          ) : (
-            <ul className="divide-y divide-brand-purple/8">
-              {discountPartners.map((p) => (
-                <li key={p.id} className="flex items-center gap-4 px-5 py-3.5 hover:bg-brand-purple/[0.02]">
-                  <div
-                    className="h-10 w-10 shrink-0 rounded-full bg-cover bg-center ring-1 ring-brand-purple/10"
-                    style={profileAvatarStyle(p.avatarUrl)}
-                  />
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold text-brand-purple">
-                      {p.displayName}
-                    </p>
-                    <p className="text-xs text-brand-purple/50">
-                      @{p.handle}
-                      <span className="ml-2 text-brand-pink/80">{categoryLabel(p.category)}</span>
-                      {p.featured && (
-                        <span className="ml-2 font-medium text-brand-pink">★ Odporúčaná</span>
-                      )}
-                      <span className="ml-2">{p._count.offers} kariet</span>
-                    </p>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-2">
-                    <Link
-                      href={`/admin/discount-partners/${p.id}`}
-                      className="rounded bg-brand-purple px-3.5 py-1.5 text-xs font-semibold text-white hover:brightness-110"
-                    >
-                      Spravovať
-                    </Link>
-                    <Link
-                      href={`/home/zlavy/${p.handle}`}
-                      className="rounded border border-brand-purple/20 px-3.5 py-1.5 text-xs font-semibold text-brand-purple hover:bg-brand-purple/5"
-                    >
-                      Náhľad
-                    </Link>
-                    <form action={toggleDiscountPartnerPublishedAction}>
-                      <input type="hidden" name="id" value={p.id} />
-                      <input type="hidden" name="current" value={String(p.published)} />
-                      <button
-                        type="submit"
-                        className={`rounded px-3.5 py-1.5 text-xs font-semibold transition ${
-                          p.published
-                            ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                            : "bg-amber-50 text-amber-700 hover:bg-amber-100"
-                        }`}
-                      >
-                        {p.published ? "Publikovaný" : "Skrytý"}
-                      </button>
-                    </form>
-                    <DeleteConfirmButton
-                      action={deleteDiscountPartnerAction}
-                      id={p.id}
-                      confirmText="Naozaj chceš zmazať tohto discount partnera? Zmažú sa aj všetky jeho karty. Táto akcia je nezvratná."
-                    />
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <AdminProfilesList
+          items={discountItems}
+          toggleAction={toggleDiscountPartnerPublishedAction}
+          deleteAction={deleteDiscountPartnerAction}
+          deleteConfirmText="Naozaj chceš zmazať tohto discount partnera? Zmažú sa aj všetky jeho karty. Táto akcia je nezvratná."
+          emptyText="Zatiaľ žiadni partneri. Pridajte prvého partnera."
+          listId="admin-discount-profiles"
+        />
       )}
     </div>
   );

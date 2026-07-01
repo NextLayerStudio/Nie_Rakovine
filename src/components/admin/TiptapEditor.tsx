@@ -61,7 +61,7 @@ function Toolbar({ editor }: { editor: Editor }) {
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-0.5 border-b border-brand-purple/10 px-2 py-1.5">
+    <div className="sticky top-[64px] z-20 flex flex-wrap items-center gap-0.5 rounded-t-md border-b border-brand-purple/10 bg-white/95 px-2 py-1.5 backdrop-blur-sm">
       {/* Text styles */}
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleBold().run()}

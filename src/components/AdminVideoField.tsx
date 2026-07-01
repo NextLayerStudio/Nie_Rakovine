@@ -93,7 +93,8 @@ export function AdminVideoField({
           </p>
           <input
             name="videoUrl"
-            type="url"
+            type="text"
+            inputMode="url"
             value={url}
             onChange={(e) => {
               setUrl(e.target.value);
