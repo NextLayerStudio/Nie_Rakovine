@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { League_Spartan } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const leagueSpartan = League_Spartan({
@@ -38,7 +40,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="sk" className={leagueSpartan.className}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <SpeedInsights />
+        <Analytics />
+      </body>
     </html>
   );
 }
