@@ -68,14 +68,26 @@ export async function registerAction(
   // the emailed code is confirmed.
   await createSession({ userId: user.id, role: user.role });
 
-  try {
-    await createAndSendVerificationCode({
-      userId: user.id,
-      email: user.email,
-      fullName: user.fullName,
-    });
-  } catch (error) {
-    console.error("Failed to send verification code during register:", error);
+  const emailResult = await createAndSendVerificationCode({
+    userId: user.id,
+    email: user.email,
+    fullName: user.fullName,
+  });
+  if (!emailResult.ok) {
+    console.error(
+      "Failed to send verification code during register:",
+      emailResult.error,
+    );
+    await destroySession();
+    await prisma.user.delete({ where: { id: user.id } });
+    return {
+      ok: false,
+      message:
+        emailResult.error === "Email not configured" ||
+        emailResult.error === "EMAIL_FROM not configured"
+          ? "E-mailová služba nie je nakonfigurovaná. Kontaktujte podporu."
+          : "Nepodarilo sa odoslať overovací kód. Skúste registráciu znova.",
+    };
   }
 
   return { ok: true, redirectTo: "/register/verify-email" };
@@ -106,14 +118,16 @@ export async function loginAction(
   // Unverified accounts (registration abandoned before the code step) must
   // finish e-mail verification before they can use the app.
   if (!user.emailVerified) {
-    try {
-      await createAndSendVerificationCode({
-        userId: user.id,
-        email: user.email,
-        fullName: user.fullName,
-      });
-    } catch (error) {
-      console.error("Failed to resend verification code during login:", error);
+    const emailResult = await createAndSendVerificationCode({
+      userId: user.id,
+      email: user.email,
+      fullName: user.fullName,
+    });
+    if (!emailResult.ok) {
+      console.error(
+        "Failed to resend verification code during login:",
+        emailResult.error,
+      );
     }
     return { ok: true, redirectTo: "/register/verify-email" };
   }
@@ -159,14 +173,13 @@ export async function requestPasswordResetAction(
 
   const user = await prisma.user.findUnique({ where: { email } });
   if (user) {
-    try {
-      await sendPasswordResetLink({
-        userId: user.id,
-        email: user.email,
-        fullName: user.fullName,
-      });
-    } catch (error) {
-      console.error("Failed to send password reset link:", error);
+    const result = await sendPasswordResetLink({
+      userId: user.id,
+      email: user.email,
+      fullName: user.fullName,
+    });
+    if (!result.ok) {
+      console.error("Failed to send password reset link:", result.error);
     }
   }
 

@@ -2,7 +2,7 @@ import "server-only";
 
 import { prisma } from "@/lib/prisma";
 import { generateNumericCode, hashToken } from "@/lib/tokens";
-import { sendTransactionalEmailAsync } from "@/lib/email/client";
+import { sendTransactionalEmail } from "@/lib/email/client";
 import { renderVerificationCodeEmail } from "@/lib/email/templates/verification-code";
 
 export const VERIFICATION_CODE_TTL_MIN = 15;
@@ -14,7 +14,7 @@ export async function createAndSendVerificationCode(input: {
   userId: string;
   email: string;
   fullName: string;
-}): Promise<void> {
+}): Promise<{ ok: true } | { ok: false; error: string }> {
   const code = generateNumericCode(6);
   const codeHash = hashToken(code);
   const expiresAt = new Date(Date.now() + VERIFICATION_CODE_TTL_MIN * 60_000);
@@ -32,7 +32,7 @@ export async function createAndSendVerificationCode(input: {
     console.log(`[verification] Code for ${input.email}: ${code}`);
   }
 
-  sendTransactionalEmailAsync({
+  return sendTransactionalEmail({
     to: input.email,
     subject: "Overovací kód do Onko Klubu",
     html: renderVerificationCodeEmail({

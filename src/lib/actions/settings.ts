@@ -7,6 +7,16 @@ import { sendPasswordResetLink } from "@/lib/password-reset";
 
 export type SettingsActionState = { ok: boolean; message?: string };
 
+function emailFailureMessage(error: string): string {
+  if (
+    error === "Email not configured" ||
+    error === "EMAIL_FROM not configured"
+  ) {
+    return "E-mailová služba nie je nakonfigurovaná na serveri. Skontrolujte RESEND_API_KEY a EMAIL_FROM vo Vercel.";
+  }
+  return "E-mail sa nepodarilo odoslať. Skúste to znova o chvíľu.";
+}
+
 // Secure change: e-mail a one-time, time-limited link (30 min) instead of
 // letting the password be changed directly in the form.
 export async function requestPasswordChangeLinkAction(
@@ -16,11 +26,15 @@ export async function requestPasswordChangeLinkAction(
   const user = await requireUser();
 
   try {
-    await sendPasswordResetLink({
+    const result = await sendPasswordResetLink({
       userId: user.id,
       email: user.email,
       fullName: user.fullName,
     });
+    if (!result.ok) {
+      console.error("Password change email failed:", result.error);
+      return { ok: false, message: emailFailureMessage(result.error) };
+    }
   } catch (error) {
     console.error("Failed to send password change link:", error);
     return {

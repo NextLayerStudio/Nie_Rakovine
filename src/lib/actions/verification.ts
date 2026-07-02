@@ -70,11 +70,22 @@ export async function resendVerificationCodeAction(
     }
   }
 
-  await createAndSendVerificationCode({
+  const emailResult = await createAndSendVerificationCode({
     userId: user.id,
     email: user.email,
     fullName: user.fullName,
   });
+  if (!emailResult.ok) {
+    console.error("Failed to resend verification code:", emailResult.error);
+    return {
+      ok: false,
+      message:
+        emailResult.error === "Email not configured" ||
+        emailResult.error === "EMAIL_FROM not configured"
+          ? "E-mailová služba nie je nakonfigurovaná na serveri."
+          : "Nepodarilo sa odoslať kód. Skúste to znova.",
+    };
+  }
 
   return { ok: true, message: "Nový kód sme odoslali na váš e-mail." };
 }

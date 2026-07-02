@@ -3,7 +3,7 @@ import "server-only";
 import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/auth";
 import { generateToken, hashToken } from "@/lib/tokens";
-import { sendTransactionalEmailAsync } from "@/lib/email/client";
+import { sendTransactionalEmail } from "@/lib/email/client";
 import { getAppUrl } from "@/lib/email/config";
 import { renderPasswordResetEmail } from "@/lib/email/templates/password-reset";
 
@@ -14,7 +14,7 @@ export async function sendPasswordResetLink(input: {
   userId: string;
   email: string;
   fullName: string;
-}): Promise<void> {
+}): Promise<{ ok: true } | { ok: false; error: string }> {
   const token = generateToken(32);
   const tokenHash = hashToken(token);
   const expiresAt = new Date(Date.now() + PASSWORD_RESET_TTL_MIN * 60_000);
@@ -34,7 +34,7 @@ export async function sendPasswordResetLink(input: {
     console.log(`[password-reset] Link for ${input.email}: ${url}`);
   }
 
-  sendTransactionalEmailAsync({
+  return sendTransactionalEmail({
     to: input.email,
     subject: "Zmena hesla do Onko Klubu",
     html: renderPasswordResetEmail({

@@ -61,7 +61,7 @@ export function sendTransactionalEmailAsync(input: {
   html: string;
 }): void {
   void sendTransactionalEmail(input).then((result) => {
-    if (!result.ok && result.error !== "Email not configured") {
+    if (!result.ok) {
       console.error("[email] Async send failed:", result.error);
     }
   });
