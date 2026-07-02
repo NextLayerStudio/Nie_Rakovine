@@ -29,15 +29,9 @@ export function VideokniznicaSection() {
           <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
             ONKO knižnica
           </p>
-          <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
-            Pozri sa, čo na teba
-            <br />
-            čaká v knižnici.
-          </h2>
           <p className="text-[#6F2380]/65 text-base leading-relaxed md:max-w-xl">
-            Stovky videí od overených odborníkov — kedykoľvek, z kdekoľvek.
-            Krátke cvičenia na 10 minút alebo dlhé prednášky na celé dopoludnie.
-            Ty si vyberáš.
+            Desiatky videí od overených odborníkov na tému pohyb, výživa, psychika
+            a iné. Sledujte kedykoľvek, kdekoľvek a vo vlastnom tempe.
           </p>
         </motion.div>
 
