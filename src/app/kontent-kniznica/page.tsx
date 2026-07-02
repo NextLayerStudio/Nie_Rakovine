@@ -18,15 +18,16 @@ export default function KontentKniznicaPage() {
 
       <section className="pt-24 pb-10 px-5">
         <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
-          Onko knižnica
+          ONKO knižnica
         </p>
         <h1 className="text-[2.4rem] font-black text-[#6F2380] leading-[1.1] mb-5 max-w-xs">
-          Stovky videí. Vždy po ruke.
+          Desiatky videí vždy poruke
         </h1>
         <p className="text-[#6F2380]/70 text-base leading-relaxed mb-8 max-w-sm">
-          V knižnici OnkoKlubu nájdeš videá od overených odborníkov — joga, mindfulness,
-          výživa, psychika, prednášky o liečbe. Pozri si ich kedykoľvek, odkiaľkoľvek,
-          podľa seba. Žiadny tlak — obsah na teba čaká vtedy, keď ty chceš.
+          Joga, mindfulness, jemné pohybové a dychové cvičenia, odborné diskusie
+          o liečbe, výžive aj psychike. ONKO KLUB prináša exkluzívnu ONKO
+          knižnicu vytvorenú špeciálne pre onkologických pacientov a ich
+          blízkych. Sledujte kedykoľvek, kdekoľvek a vo vlastnom tempe.
         </p>
         <Link
           href="/register"

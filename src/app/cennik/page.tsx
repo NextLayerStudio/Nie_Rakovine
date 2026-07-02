@@ -1,35 +1,37 @@
 import Link from "next/link";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { Check, Star, Shield, CreditCard, RefreshCw } from "lucide-react";
+import { Check, Star, ShieldCheck, CreditCard, RefreshCw } from "lucide-react";
 
 const BENEFITY = [
-  "Prístup ku všetkým videám a materiálom",
-  "Odborné prednášky a podcasty zadarmo",
-  "Rezervácia na eventy a workshopy",
-  "Onkorumky — prístup do všetkých 29 fór",
-  "Exkluzívne zľavy od partnerských značiek",
+  "Prístup ku všetkým videám a materiálom prispôsobeným potrebám onkologických pacientov",
+  "Bezplatné odborné prednášky a podcasty",
+  "Pohodlné rezervácie na podujatia a workshopy",
+  "Prístup do všetkých diskusných fór",
+  "Exkluzívne zľavy u partnerských značiek",
   "Digitálna OKkarta s QR kódom",
-  "Mood Meter — sledovanie pohody",
   "Sociálny kompas",
 ];
 
+const REINVESTICIA_TEXT =
+  "Všetky finančné prostriedky získané prostredníctvom ONKO KLUBU vraciame späť do systému pomoci. Vďaka nim dokážeme zabezpečovať fungovanie pacientskych poradní NIE RAKOVINE, poskytovať bezplatné poradenstvo a rozvíjať pomoc, ktorú pacienti s rakovinou na Slovensku potrebujú.";
+
 const FAQ = [
   {
-    q: "Môžem členstvo kedykoľvek zrušiť?",
-    a: "Áno. Členstvo môžeš zrušiť kedykoľvek z nastavení svojho účtu — bez pokuty, bez záväzkov. Prístup ti zostane aktívny do konca zaplateného obdobia.",
+    q: "Ako prebieha platba za členstvo?",
+    a: "Platba prebieha online cez platobnú bránu GoPay. V rámci mesačného členstva sa suma automaticky obnovuje každý mesiac, v prípade ročného členstva ide o jednorazovú platbu raz ročne. Platbu je možné kedykoľvek zrušiť v nastaveniach vášho účtu. Ak uprednostňujete úhradu formou trvalého príkazu, kontaktujte nás, prosím, na office@nierakovine.sk.",
   },
   {
-    q: "Ako funguje platba?",
-    a: "Platíš kartou online cez GoPay. Pre mesačné členstvo sa platba opakuje automaticky. Pre ročné platíš jednorazovo raz za rok. Záujem o trvalý príkaz? Napíš na office@nierakovine.sk.",
+    q: "Je možné členstvo kedykoľvek zrušiť?",
+    a: "Áno. Členstvo môžete kedykoľvek zrušiť v nastaveniach svojho účtu bez sankcií a bez ďalších záväzkov. Prístup k platforme vám zostane aktívny do konca už zaplateného obdobia.",
   },
   {
-    q: "Je tu skúšobné obdobie?",
-    a: "Členstvo môžeš vyskúšať a kedykoľvek odísť — bez pokuty. Ak nie si spokojný v prvom mesiaci, stačí zrušiť.",
+    q: "Má členstvo skúšobné obdobie?",
+    a: "Členstvo si môžete vyskúšať bez záväzkov. Ak sa rozhodnete v prvom mesiaci nepokračovať, stačí ho jednoducho zrušiť. Bez pokuty a akýchkoľvek sankcií.",
   },
   {
-    q: "Sú moje platobné údaje v bezpečí?",
-    a: "Platba prebieha cez GoPay — certifikovanú platobnú bránu. My kartu nevidíme, neukladáme žiadne platobné údaje.",
+    q: "Sú moje osobné a zdravotné údaje v bezpečí?",
+    a: "Áno. Citlivé údaje sú šifrované na úrovni aplikácie. Dáta sú ukladané na serveroch v rámci EÚ (región Frankfurt) a neopúšťajú územie Európskej únie. Spracúvanie osobných údajov prebieha v súlade s nariadením GDPR.",
   },
 ];
 
@@ -44,10 +46,10 @@ export default function CennikPage() {
           <div className="md:max-w-xl">
             <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">Cenník</p>
             <h1 className="text-[2.4rem] md:text-[3rem] font-black text-[#6F2380] leading-[1.1] mb-5">
-              Vyber si, ako chceš byť členom.
+              Vyberte si spôsob členstva, ktorý vám vyhovuje
             </h1>
             <p className="text-[#6F2380]/70 text-base leading-relaxed">
-              Bez záväzkov. Bez skrytých poplatkov. Zrušiť môžeš kedykoľvek.
+              Transparentné podmienky bez skrytých poplatkov.
             </p>
           </div>
         </div>
@@ -56,20 +58,22 @@ export default function CennikPage() {
       {/* Platobné záruky */}
       <section className="pb-10">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
-          <div className="grid grid-cols-3 gap-3 md:max-w-lg">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:max-w-2xl">
             {[
-              { icon: Shield,     label: "Bezpečná platba",          sub: "GoPay" },
-              { icon: RefreshCw,  label: "Zrušíš kedykoľvek",        sub: "Bez záväzkov" },
-              { icon: CreditCard, label: "Bez skrytých poplatkov",    sub: "Transparentne" },
+              { icon: CreditCard, label: "Bezpečná online platba", sub: "Platba prebieha cez platobnú bránu GoPay." },
+              { icon: RefreshCw,  label: "Flexibilné členstvo",    sub: "Členstvo môžete kedykoľvek zrušiť bez záväzkov a ďalších podmienok." },
+              { icon: ShieldCheck, label: "Bez skrytých poplatkov", sub: "Cena členstva je jasná a bez dodatočných nákladov." },
             ].map((item) => {
               const Icon = item.icon;
               return (
-                <div key={item.label} className="bg-white rounded-2xl p-3 border border-[#FDA4C7]/15 flex flex-col items-center text-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-[#FDA4C7]/20 flex items-center justify-center">
-                    <Icon size={15} className="text-[#FDA4C7]" strokeWidth={2} />
+                <div key={item.label} className="flex items-start gap-3 bg-white rounded-2xl p-4 border border-[#FDA4C7]/15">
+                  <div className="w-9 h-9 rounded-xl bg-[#FDA4C7]/15 flex items-center justify-center shrink-0">
+                    <Icon size={16} className="text-[#FDA4C7]" strokeWidth={2} />
                   </div>
-                  <p className="text-[#6F2380] text-[11px] font-black leading-tight">{item.label}</p>
-                  <p className="text-[#6F2380]/40 text-[10px]">{item.sub}</p>
+                  <div>
+                    <p className="font-black text-[#6F2380] text-[13px] leading-tight mb-0.5">{item.label}</p>
+                    <p className="text-[#6F2380]/55 text-[12px] leading-snug">{item.sub}</p>
+                  </div>
                 </div>
               );
             })}
@@ -98,7 +102,7 @@ export default function CennikPage() {
               </div>
               <p className="text-[#FDA4C7] text-sm font-bold mb-6">= 5 € mesačne · platíš raz ročne</p>
               <div className="flex flex-col gap-2.5 mb-7">
-                {[...BENEFITY, "Platíš raz — nemusíš na to myslieť celý rok"].map((b) => (
+                {[...BENEFITY, "Jednorazová platba bez nutnosti aktualizácie počas roka"].map((b) => (
                   <div key={b} className="flex items-center gap-3">
                     <div className="w-5 h-5 rounded-full bg-[#FDA4C7] flex items-center justify-center shrink-0">
                       <Check size={11} className="text-white" strokeWidth={3} />
@@ -110,6 +114,9 @@ export default function CennikPage() {
               <Link href="/register?plan=annual" className="block w-full rounded-full bg-[#FDA4C7] text-white font-black text-base py-4 text-center">
                 Začať ročne — 60 €
               </Link>
+              <p className="text-white/45 text-[11px] leading-relaxed mt-5">
+                {REINVESTICIA_TEXT}
+              </p>
             </div>
 
             {/* Mesačné */}
@@ -133,12 +140,11 @@ export default function CennikPage() {
               <Link href="/register?plan=monthly" className="block w-full rounded-full border-2 border-[#FDA4C7] text-[#FDA4C7] font-black text-base py-4 text-center">
                 Začať mesačne — 5 €
               </Link>
+              <p className="text-[#6F2380]/40 text-[11px] leading-relaxed mt-5">
+                {REINVESTICIA_TEXT}
+              </p>
             </div>
           </div>
-
-          <p className="text-[#6F2380]/35 text-[11px] mt-5 leading-relaxed">
-            Platba kartou online cez GoPay. Bezpečná platba, šifrované spojenie.
-          </p>
         </div>
       </section>
 
@@ -166,7 +172,7 @@ export default function CennikPage() {
       {/* Mini FAQ */}
       <section className="pb-14">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
-          <h2 className="text-xl font-black text-[#6F2380] mb-6">Časté otázky o platbe</h2>
+          <h2 className="text-xl font-black text-[#6F2380] mb-6">Časté otázky k platbe</h2>
           <div className="flex flex-col gap-4 md:grid md:grid-cols-2">
             {FAQ.map((item) => (
               <div key={item.q} className="bg-white rounded-2xl p-5 border border-[#FDA4C7]/15">

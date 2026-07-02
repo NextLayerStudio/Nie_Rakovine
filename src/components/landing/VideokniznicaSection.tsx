@@ -90,6 +90,11 @@ export function VideokniznicaSection() {
 
         {/* CTA */}
         <div className="px-5 mt-8 md:max-w-6xl md:mx-auto md:px-8">
+          <p className="text-[#6F2380]/50 text-sm mb-5 md:max-w-xl">
+            Ako člen/ka ONKO KLUBU získavate prístup k bohatej videotéke
+            vytvorenej špeciálne pre potreby onkologických pacientov a ich
+            blízkych.
+          </p>
           <div className="md:flex md:justify-start">
             <Link
               href="/kontent-kniznica"

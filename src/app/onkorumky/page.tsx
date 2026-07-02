@@ -5,7 +5,19 @@ import { Lock, Circle } from "lucide-react";
 const CATEGORIES = [
   {
     label: "Podľa diagnózy",
-    items: ["Rakovina prsníka", "Rakovina hrubého čreva", "Rakovina pľúc", "Rakovina prostaty", "Melanóm", "Neuroendokrinné tumory", "a ďalšie"],
+    items: [
+      "Rakovina prsníka",
+      "Rakovina hrubého čreva a konečníka",
+      "Rakovina pľúc",
+      "Rakovina prostaty",
+      "Rakovina pankreasu",
+      "Rakovina semenníkov",
+      "Rakovina kože",
+      "Rakovina krčka maternice",
+      "Rakovina vaječníkov",
+      "Rakovina močového mechúra",
+      "Iné",
+    ],
   },
   {
     label: "Podľa témy",
@@ -30,15 +42,15 @@ export default function OnkorumkyPage() {
 
       <section className="pt-24 pb-10 px-5">
         <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
-          Komunita
+          Diskusné fóra
         </p>
         <h1 className="text-[2.4rem] font-black text-[#6F2380] leading-[1.1] mb-5 max-w-xs">
-          Komunita, ktorá rozumie bez slov.
+          Podeľte sa o to, čím prechádzate
         </h1>
         <p className="text-[#6F2380]/70 text-base leading-relaxed mb-8 max-w-sm">
-          V Onkorumky fórach sa každý deň stretávajú ľudia, ktorí prešli alebo prechádzajú
-          tým, čím si prechádzaš ty. Môžeš písať pod vlastným menom alebo anonymne —
-          vždy v bezpečnom, moderovanom prostredí. 29 tematických fór.
+          Zdieľajte svoje skúsenosti, otázky, obavy či každodenné výzvy s
+          ľuďmi, ktorí vedia, čo prežívate. Môžete prispievať pod vlastným
+          menom alebo anonymne.
         </p>
         <Link href="/register" className="block w-full rounded-full bg-[#FDA4C7] text-white text-xl font-black py-5 text-center">
           Vstúpiť do komunity
@@ -52,10 +64,10 @@ export default function OnkorumkyPage() {
             <Lock size={18} className="text-white" strokeWidth={2} />
           </div>
           <div>
-            <h3 className="font-black text-[#6F2380] text-[15px] leading-tight mb-0.5">Anonymita je na tebe</h3>
+            <h3 className="font-black text-[#6F2380] text-[15px] leading-tight mb-0.5">Súkromie máte vo svojich rukách.</h3>
             <p className="text-[#6F2380]/55 text-[13px] leading-relaxed">
-              Pri každom príspevku si vyberieš — písať pod menom alebo anonymne.
-              Tvoje skutočné meno nikdy neuvidí nikto iný okrem administrátora.
+              Vaša identita je viditeľná iba pre administrátora, ostatným
+              používateľom sa nezobrazuje.
             </p>
           </div>
         </div>
@@ -82,8 +94,8 @@ export default function OnkorumkyPage() {
 
       {/* Ukážkové príspevky */}
       <section className="px-5 pb-16">
-        <h2 className="text-xl font-black text-[#6F2380] mb-2">Záblesk z komunity</h2>
-        <p className="text-[#6F2380]/45 text-xs mb-6">Príspevky vidíš celé len po prihlásení.</p>
+        <h2 className="text-xl font-black text-[#6F2380] mb-2">Aktuálne z diskusií</h2>
+        <p className="text-[#6F2380]/45 text-xs mb-6">Po prihlásení získate prístup k plným zneniam príspevkov a rozhovorov.</p>
         <div className="flex flex-col gap-3">
           {SAMPLE_POSTS.map((post, i) => (
             <div key={i} className="bg-white rounded-2xl p-5 border border-[#FDA4C7]/15">
@@ -107,13 +119,19 @@ export default function OnkorumkyPage() {
 
       <section className="px-5 pb-16">
         <div className="rounded-[1.8rem] bg-[#6F2380] p-8 text-center">
-          <h2 className="text-2xl font-black text-white mb-3">Nie si v tom sám.</h2>
+          <h2 className="text-2xl font-black text-white mb-3">Nie ste v tom sami</h2>
           <p className="text-white/65 text-sm leading-relaxed mb-6">
-            Zaregistruj sa a okamžite získaš prístup ku všetkým 29 fóram. Môžeš aj len čítať.
+            Po registrácii získate okamžitý prístup ku všetkým diskusným fóram.
+            Môžete začať len čítaním, bez akéhokoľvek záväzku.
           </p>
-          <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-8 py-4">
-            Chcem sa zapojiť
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-8 py-4">
+              Zobraziť diskusie
+            </Link>
+            <Link href="/register" className="inline-block rounded-full border-2 border-white text-white font-black text-base px-8 py-4">
+              Vytvoriť príspevok
+            </Link>
+          </div>
         </div>
       </section>
 
