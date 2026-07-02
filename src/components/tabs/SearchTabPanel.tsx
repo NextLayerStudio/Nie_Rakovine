@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { FollowProfileButton } from "@/components/FollowProfileButton";
 import { searchTabAction } from "@/lib/actions/tabs";
 import { profileHrefWithReturn } from "@/lib/post-display";
+import { PROFILE_CATEGORY_LABELS } from "@/lib/profile-category";
 
 type CategoryFilter =
   | "ZDRAVA_VYZIVA"
@@ -18,11 +19,11 @@ type SearchResult = Awaited<ReturnType<typeof searchTabAction>> & { ok: true };
 
 const CATEGORY_FILTERS: { id: CategoryFilter; label: string }[] = [
   { id: null, label: "Všetky" },
-  { id: "ZDRAVA_VYZIVA", label: "Zdravá výživa" },
-  { id: "SPONZORI", label: "Sponzori" },
-  { id: "DIAGNOZY", label: "Diagnózy" },
-  { id: "NOVINKY", label: "Novinky" },
-  { id: "AKCIE", label: "Akcie" },
+  { id: "ZDRAVA_VYZIVA", label: PROFILE_CATEGORY_LABELS.ZDRAVA_VYZIVA },
+  { id: "SPONZORI", label: PROFILE_CATEGORY_LABELS.SPONZORI },
+  { id: "DIAGNOZY", label: PROFILE_CATEGORY_LABELS.DIAGNOZY },
+  { id: "NOVINKY", label: PROFILE_CATEGORY_LABELS.NOVINKY },
+  { id: "AKCIE", label: PROFILE_CATEGORY_LABELS.AKCIE },
 ];
 
 function ProfileList({

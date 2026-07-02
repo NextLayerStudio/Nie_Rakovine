@@ -190,21 +190,17 @@ export default async function AdminStatisticsPage({
           />
           <ChartCard
             title="Čo očakávajú od členstva"
-            hint="Odpovede na otázku o očakávaniach"
+            hint="Odpovede z registračného kroku 4 (vrátane starších odpovedí zo zrušenej otázky)"
             rows={d.expectations}
-            emptyNote="Zatiaľ bez voľných odpovedí."
           />
           <ChartCard
             title="S čím potrebujú pomôcť"
-            hint="Najčastejšie potreby členov"
+            hint="Najčastejšie potreby členov (registračný krok 4)"
             rows={d.help}
           />
           <ChartCard
-            title="Čo chcú získať od ONKO KLUBU"
-            rows={d.gain}
-          />
-          <ChartCard
             title="Odkiaľ sa o nás dozvedeli"
+            hint="Registračný krok 5"
             rows={d.hearAboutUs}
           />
           <ChartCard

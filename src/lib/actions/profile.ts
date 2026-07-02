@@ -180,14 +180,13 @@ export async function saveExpectationsAction(
 }
 
 // --------------------------------------------------------------------
-// Profile - step 5: gain (what they expect from us) + hear about us
+// Profile - step 5: hear about us
 // --------------------------------------------------------------------
 export async function saveSourceAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
   const user = await requireUser();
-  const gain = getStringArray(formData, "gain");
   const hearAboutUs = getStringArray(formData, "hearAboutUs");
 
   await prisma.userProfile.upsert({
@@ -195,12 +194,9 @@ export async function saveSourceAction(
     create: {
       userId: user.id,
       hearAboutUs,
-      // store "gain" alongside expectations with a tag prefix
-      expectations: gain.map((g) => `získať: ${g}`),
     },
     update: {
       hearAboutUs,
-      expectations: { push: gain.map((g) => `získať: ${g}`) },
     },
   });
 

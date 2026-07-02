@@ -9,14 +9,10 @@ import { useFormRedirect } from "@/hooks/useFormRedirect";
 const INITIAL: ActionState = { ok: false };
 
 export function SourceForm({
-  gainOptions,
   hearOptions,
-  defaultGain,
   defaultHear,
 }: {
-  gainOptions: string[];
   hearOptions: string[];
-  defaultGain: string[];
   defaultHear: string[];
 }) {
   const [state, formAction] = useActionState(saveSourceAction, INITIAL);
@@ -25,18 +21,8 @@ export function SourceForm({
   return (
     <form action={formAction} className="mt-8 flex flex-col items-center gap-5 px-5 pb-6">
       <h2 className="text-center text-xl font-bold leading-snug text-brand-purple">
-        Čo od ONKO KLUBU očakávate?
-      </h2>
-      <CheckboxList
-        name="gain"
-        options={gainOptions}
-        defaultSelected={defaultGain}
-        variant="plain"
-      />
-
-      <h3 className="text-center text-xl font-bold leading-snug text-brand-purple">
         Odkiaľ ste sa o nás dozvedeli?
-      </h3>
+      </h2>
       <CheckboxList
         name="hearAboutUs"
         options={hearOptions}

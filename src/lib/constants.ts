@@ -23,26 +23,57 @@ export const EXPECTATIONS_OPTIONS = [
   "komunitu ľudí s podobnou skúsenosťou",
   "pomoc pri liečbe",
   "psychickú podporu",
+  "zľavy u partnerov",
+  "tematické podujatia a workshopy",
+  "online obsah - videá, články, recepty",
   "iné",
 ];
 
 export const HELP_OPTIONS = [
   "odborné konzultácie",
-  "psychologickú podporu",
-  "podporu pri liečbe",
+  "psychologická podpora",
+  "podpora pri liečbe",
   "komunitné aktivity",
-  "informácie o nárokoch",
+  "informácie, na čo mám nárok",
   "iné",
 ];
 
-export const GAIN_OPTIONS = [
-  "prístup ku komunite",
-  "odborné poradenstvo",
-  "zľavy u partnerov",
-  "podujatia a workshopy",
-  "online obsah - videá, články, recepty",
-  "iné",
-];
+/** Legacy labels stored before copy updates — mapped to current HELP_OPTIONS. */
+export const HELP_LABEL_ALIASES: Record<string, string> = {
+  "psychologickú podporu": "psychologická podpora",
+  "podporu pri liečbe": "podpora pri liečbe",
+  "informácie o nárokoch": "informácie, na čo mám nárok",
+};
+
+/** Step-5 gain answers (removed from form) merged into expectations stats. */
+export const LEGACY_GAIN_TO_EXPECTATION: Record<string, string> = {
+  "podujatia a workshopy": "tematické podujatia a workshopy",
+};
+
+export function normalizeHelpLabel(label: string): string {
+  const trimmed = label.trim();
+  return HELP_LABEL_ALIASES[trimmed] ?? trimmed;
+}
+
+export function normalizeExpectationLabel(label: string): string {
+  const trimmed = label.trim();
+  return LEGACY_GAIN_TO_EXPECTATION[trimmed] ?? trimmed;
+}
+
+export function combinedExpectationAnswers(
+  general: string[],
+  gain: string[] = [],
+): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const raw of [...general, ...gain]) {
+    const label = normalizeExpectationLabel(raw);
+    if (!label || seen.has(label)) continue;
+    seen.add(label);
+    out.push(label);
+  }
+  return out;
+}
 
 export const HEAR_ABOUT_US_OPTIONS = [
   "sociálne siete (Facebook, Instagram…)",

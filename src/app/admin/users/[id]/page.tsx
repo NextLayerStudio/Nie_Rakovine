@@ -6,6 +6,7 @@ import {
   subscriptionPlanLabel,
   subscriptionStatusLabel,
 } from "@/lib/user-profile-display";
+import { combinedExpectationAnswers, normalizeHelpLabel } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +45,10 @@ export default async function AdminUserDetailPage({
 
   const p = user.profile;
   const expectations = p ? splitProfileExpectations(p.expectations) : null;
+  const membershipExpectations = expectations
+    ? combinedExpectationAnswers(expectations.general, expectations.gain)
+    : [];
+  const helpNeeds = expectations?.help.map(normalizeHelpLabel) ?? [];
 
   return (
     <div>
@@ -135,22 +140,15 @@ export default async function AdminUserDetailPage({
           <TagList items={p?.interests ?? []} empty="Neuvedené" />
         </Section>
 
-        <Section title="Očakávania od komunity">
-          <TagList
-            items={expectations?.general ?? []}
-            empty="Neuvedené"
-          />
+        <Section title="Čo očakávajú od členstva">
+          <TagList items={membershipExpectations} empty="Neuvedené" />
         </Section>
 
-        <Section title="S čím potrebujem pomôcť">
-          <TagList items={expectations?.help ?? []} empty="Neuvedené" />
+        <Section title="S čím potrebujú pomôcť">
+          <TagList items={helpNeeds} empty="Neuvedené" />
         </Section>
 
-        <Section title="Čo očakávam od ONKO KLUBU" className="lg:col-span-2">
-          <TagList items={expectations?.gain ?? []} empty="Neuvedené" />
-        </Section>
-
-        <Section title="Odkiaľ som sa dozvedel/a" className="lg:col-span-2">
+        <Section title="Odkiaľ sa dozvedeli" className="lg:col-span-2">
           <TagList items={p?.hearAboutUs ?? []} empty="Neuvedené" />
         </Section>
 

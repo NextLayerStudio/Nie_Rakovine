@@ -4,10 +4,12 @@ import type { CancerType, Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { CANCER_TYPES, cancerTypeShort } from "@/lib/cancer-type";
 import {
-  GAIN_OPTIONS,
+  EXPECTATIONS_OPTIONS,
   HEAR_ABOUT_US_OPTIONS,
   HELP_OPTIONS,
   INTEREST_OPTIONS,
+  normalizeHelpLabel,
+  combinedExpectationAnswers,
 } from "@/lib/constants";
 import { splitProfileExpectations } from "@/lib/user-profile-display";
 
@@ -35,7 +37,6 @@ export type RegistrationStats = {
     interests: DistributionRow[];
     expectations: DistributionRow[];
     help: DistributionRow[];
-    gain: DistributionRow[];
     hearAboutUs: DistributionRow[];
     plans: DistributionRow[];
     diagnosisPhase: DistributionRow[];
@@ -165,15 +166,15 @@ export async function getRegistrationStats(
     }))
     .sort((a, b) => b.count - a.count);
 
-  // Expectations split into general / help / gain
-  const generalArrays: string[][] = [];
+  // Expectations (step 4) + legacy step-5 gain answers folded in for stats continuity
+  const expectationArrays: string[][] = [];
   const helpArrays: string[][] = [];
-  const gainArrays: string[][] = [];
   for (const p of profiles) {
     const split = splitProfileExpectations(p.expectations);
-    generalArrays.push(split.general);
-    helpArrays.push(split.help);
-    gainArrays.push(split.gain);
+    expectationArrays.push(
+      combinedExpectationAnswers(split.general, split.gain),
+    );
+    helpArrays.push(split.help.map(normalizeHelpLabel));
   }
 
   // Diagnosis phase
@@ -245,9 +246,12 @@ export async function getRegistrationStats(
         INTEREST_OPTIONS,
         filteredUsers,
       ),
-      expectations: tally(generalArrays, [], filteredUsers),
+      expectations: tally(
+        expectationArrays,
+        EXPECTATIONS_OPTIONS,
+        filteredUsers,
+      ),
       help: tally(helpArrays, HELP_OPTIONS, filteredUsers),
-      gain: tally(gainArrays, GAIN_OPTIONS, filteredUsers),
       hearAboutUs: tally(
         profiles.map((p) => p.hearAboutUs),
         HEAR_ABOUT_US_OPTIONS,
