@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import {
-  Play, Mic, MapPin, MessageSquare, Tag, QrCode, Smile, BookOpen,
+  Play, Mic, MapPin, MessageSquare, Tag, QrCode, BookOpen,
   Check, ChevronRight,
 } from "lucide-react";
 
@@ -11,10 +11,10 @@ const FEATURES = [
     icon: Play,
     accent: "#FDA4C7",
     slug: "kontent-kniznica",
-    title: "Videoknižnica",
-    headline: "Stovky videí. Vždy po ruke.",
-    desc: "Joga, mindfulness, dýchacie cvičenia, prednášky o liečbe, výžive aj psychike. Videá od overených odborníkov — pozri si ich z gauča, z postele, z kdekoľvek. Kedykoľvek chceš, bez tlaku.",
-    detailItems: ["Jemná joga pre onkopacientov", "Mindfulness a meditácia", "Dýchacie cvičenia", "Výživa počas chemoterapie", "Psychologická podpora", "Prednášky o liečbe"],
+    title: "ONKO knižnica",
+    headline: "Desiatky videí vždy poruke",
+    desc: "Joga, mindfulness, jemné pohybové a dychové cvičenia, odborné diskusie o liečbe, výžive aj psychike. ONKO KLUB prináša exkluzívnu ONKO knižnicu vytvorenú špeciálne pre onkologických pacientov a ich blízkych. Sledujte kedykoľvek, kdekoľvek a vo vlastnom tempe.",
+    detailItems: ["Jemná joga pre onkologických pacientov", "Mindfulness a meditácia", "Výživa počas chemoterapie", "Psychologická podpora", "Fyzioterapia a rehabilitácia"],
     imgs: ["[IMG-02] Joga video thumbnail", "[IMG-03] Mindfulness video", "[IMG-26] Screenshot knižnice"],
   },
   {
@@ -22,39 +22,39 @@ const FEATURES = [
     accent: "#6F2380",
     slug: "prednasky-podcasty",
     title: "Prednášky & Podcasty",
-    headline: "Odborníci, ktorým môžeš veriť.",
-    desc: "Pravidelné odborné prednášky a podcasty s lekármi, psychológmi, fyzioterapeutmi a ďalšími špecialistami. Živé aj v archíve — všetko máš ako člen zadarmo.",
-    detailItems: ["Živé online prednášky", "Podcasty s odborníkmi", "Archív pre teba", "Otázky priamo odborníkovi", "Upozornenia na nové epizódy"],
+    headline: "Odborníci a lektori, ktorým môžete dôverovať",
+    desc: "Za každým podcastom a prednáškou stojí konkrétny odborník či lektor s overenými skúsenosťami. Všetky epizódy sú pre členov ONKO KLUBU dostupné bezplatne.",
+    detailItems: ["Odborné prednášky online", "Podcasty s odborníkmi na tému pohyb, výživa, genetika, liečba a iné", "Archív pre členov", "Upozornenia na nové epizódy"],
     imgs: ["[IMG-27] Screenshot podcastu", "[IMG-03] Prednáška live"],
   },
   {
     icon: MapPin,
     accent: "#FDA4C7",
     slug: "akcie",
-    title: "Eventy po Slovensku",
-    headline: "Stretni sa s nami vo tvojom meste.",
-    desc: "Workshopy, stretnutia a akcie sa konajú pravidelne v Bratislave, Nitre, Košiciach, Poprade a ďalších mestách. Rezervuj si miesto jedným kliknutím — pre členov zadarmo.",
-    detailItems: ["Joga workshopy", "Mindfulness skupiny", "Odborné stretnutia s lekármi", "Komunity meetupy", "SMS pripomienka 24h vopred"],
+    title: "Kalendár aktivít",
+    headline: "Nezmeškajte podujatie vo vašom okolí",
+    desc: "Workshopy, skupinové stretnutia a odborné podujatia sú dostupné vo viacerých regiónoch Slovenska. Ako člen/ka ONKO KLUBU máte možnosť prihlásiť sa na vybrané aktivity jednoducho priamo v aplikácii ONKO KLUB.",
+    detailItems: ["Jemná joga pre onkologických pacientov", "Mindfulness – skupinové workshopy", "Odborné stretnutia s lekármi a špecialistami", "Podporné skupinové stretnutia", "SMS pripomienka 24 hodín vopred"],
     imgs: ["[IMG-29] Kalendár eventov", "[IMG-04] Workshop foto"],
   },
   {
     icon: MessageSquare,
     accent: "#6F2380",
     slug: "onkorumky",
-    title: "Onkorumky — fóra",
-    headline: "Komunita, ktorá rozumie bez slov.",
-    desc: "29 tematických fór kde môžeš písať anonymne alebo pod vlastným menom. Témy od konkrétnych diagnóz až po každodenný život, rodinu a návrat do práce. Bezpečné, moderované prostredie.",
-    detailItems: ["29 tematických fór", "Anonymné príspevky", "Podľa diagnózy, témy aj liečby", "Moderované prostredie", "Zábleskový pohľad bez registrácie"],
+    title: "Diskusné fóra",
+    headline: "Podeľte sa o to, čím prechádzate",
+    desc: "Zdieľajte svoje skúsenosti, otázky, obavy či každodenné výzvy s ľuďmi, ktorí vedia, čo prežívate. Môžete prispievať pod vlastným menom alebo anonymne.",
+    detailItems: ["Tematické diskusné fóra", "Diskusie rozdelené podľa oblastí záujmu a potrieb", "Možnosť prispievať anonymne alebo pod vlastným menom", "Moderované a bezpečné prostredie", "Ukážka obsahu dostupná aj bez registrácie"],
     imgs: ["[IMG-28] Screenshot fóra", "[IMG-05] Detail vlákna"],
   },
   {
     icon: Tag,
     accent: "#FDA4C7",
     slug: "sponzori",
-    title: "Exkluzívne zľavy",
-    headline: "Stovky eur ušetrených ročne.",
-    desc: "Desiatky partnerských značiek z oblasti zdravia, výživy, pohybu a každodenného života ti pripravili špeciálne zľavy. Len pre členov OnkoKlubu — ukážeš OKkartu, dostaneš zľavu.",
-    detailItems: ["Zdravie a starostlivosť", "Výživa a doplnky", "Psychická pohoda", "Šport a pohyb", "Každodenný život"],
+    title: "Zľavy a benefity",
+    headline: "Špeciálne zľavy len pre členov ONKO KLUBU",
+    desc: "Ako člen/ka ONKO KLUBU máte vďaka našim partnerom možnosť využiť špeciálne zľavy. Stačí sa preukázať OKkartou a zľava sa vám automaticky uplatní.",
+    detailItems: ["Zdravie a starostlivosť o telo", "Výživa, doplnky a zdravý životný štýl", "Pohyb, rehabilitácia a fyzická aktivita", "Spánok a regenerácia", "Kozmetika a starostlivosť o pokožku", "Technológie pre zdravie", "Voľnočasové aktivity", "Duševná pohoda a relaxácia"],
     imgs: ["[IMG-30] Screenshot zliav", "[IMG-09] Partneri"],
   },
   {
@@ -62,28 +62,18 @@ const FEATURES = [
     accent: "#6F2380",
     slug: "sponzori",
     title: "OKkarta",
-    headline: "Jeden QR kód — desiatky výhod.",
-    desc: "Digitálna členská karta s unikátnym QR kódom — tvoj preukaz člena. Uplatníš ňou zľavy u partnerských značiek a vstúpiš na eventy. Vždy v telefóne, žiadna tlač.",
-    detailItems: ["Automaticky po registrácii", "Unikátny QR kód", "Uplatnenie zliav", "Vstup na eventy", "Doklad o členstve"],
+    headline: "Jeden QR kód – desiatky výhod",
+    desc: "Digitálna členská OKkarta s unikátnym QR kódom slúži ako váš členský preukaz. Umožňuje uplatniť zľavy u partnerských značiek a zároveň slúži ako vstupenka na podujatia a workshopy. Vždy dostupná vo vašom mobile, bez potreby tlačenej verzie.",
+    detailItems: ["OKkarta sa vytvorí ihneď po dokončení registrácie", "Každý člen má vlastný identifikátor", "Vstupenka na podujatia a workshopy", "Prehľadný preukaz člena vždy v mobile", "Uplatnenie zliav"],
     imgs: ["[IMG-24] Mockup OKkarty na telefóne"],
-  },
-  {
-    icon: Smile,
-    accent: "#FDA4C7",
-    slug: null,
-    title: "Mood Meter",
-    headline: "Sleduj svoju pohodu každý deň.",
-    desc: "Každý deň zaznač ako sa cítiš. Ak ti je dlhodobo zle, OnkoKlub ti odporučí odborníka. Tvoje záznamy sú súkromné — nevidí ich nikto iný.",
-    detailItems: ["Denná evidencia nálady", "Súkromné záznamy", "Odporúčanie odborníka", "Prehľad trendov"],
-    imgs: ["[IMG] Screenshot Mood Meter"],
   },
   {
     icon: BookOpen,
     accent: "#6F2380",
     slug: null,
     title: "Sociálny kompas",
-    headline: "Vieme, že to nie je len o zdraví.",
-    desc: "Prehľadné informácie o právach pacienta, invalidnom dôchodku, PN, príspevkoch a sociálnej pomoci. Nestrácaj čas v byrokratickom bludisku — máme to prehľadne za teba.",
+    headline: "Sme tu, aby sme vám pomohli",
+    desc: "Vieme, aké ťažké je prechádzať nielen fyzickými, ale aj psychickými výzvami počas onkologického ochorenia. Máte k dispozícii všetky informácie potrebné na zorientovanie sa v systéme sociálnej pomoci.",
     detailItems: ["Práva pacienta", "Invalidný dôchodok", "PN a pracovná neschopnosť", "Príspevky a dávky", "Návrat do práce", "Sociálna pomoc"],
     imgs: ["[IMG] Screenshot Sociálneho kompasu"],
   },
@@ -99,28 +89,26 @@ export default function CoZiskasPage() {
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="md:grid md:grid-cols-2 md:gap-16 md:items-center">
             <div>
-              <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">Čo získaš</p>
+              <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">Čo získate</p>
               <h1 className="text-[2.4rem] md:text-[3.2rem] font-black text-[#6F2380] leading-[1.1] mb-5">
-                Všetko, čo potrebuješ.
-                <br />
-                Na jednom mieste.
+                Všetko podstatné na jednom mieste
               </h1>
               <p className="text-[#6F2380]/70 text-base leading-relaxed mb-8">
-                OnkoKlub nie je len platforma — je to celý ekosystém podpory pre onkologických
-                pacientov a ich blízkych. Pozri sa, čo na teba čaká.
+                ONKO KLUB spája informácie a praktickú pomoc pre onkologických
+                pacientov a ich blízkych. Pozrite sa, čo všetko máte k dispozícii.
               </p>
               <div className="md:flex md:gap-3">
                 <Link
                   href="/register"
                   className="block w-full md:w-auto md:inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black py-4 md:px-8 text-center mb-3 md:mb-0"
                 >
-                  Chcem sa zapojiť
+                  Vytvoriť účet
                 </Link>
                 <Link
                   href="/cennik"
                   className="block w-full md:w-auto md:inline-block rounded-full border-2 border-[#FDA4C7] text-[#FDA4C7] text-base font-black py-4 md:px-8 text-center"
                 >
-                  Pozrieť cenník
+                  Formy členstva
                 </Link>
               </div>
             </div>

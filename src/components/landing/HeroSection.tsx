@@ -29,12 +29,16 @@ export function HeroSection() {
                 Uzavretá platforma · NIE RAKOVINE, o. z.
               </motion.p>
               <motion.h1 variants={fadeUp} className="text-[2.6rem] md:text-[3.4rem] lg:text-[4rem] font-black text-[#6F2380] leading-[1.1] mb-4">
-                Komunita, ktorá vie, čím si prechádzaš.
+                Vieme, čím si prechádzate
               </motion.h1>
               <motion.p variants={fadeUp} className="text-[#6F2380]/70 text-base md:text-lg leading-relaxed mb-8 max-w-sm md:max-w-none">
-                OnkoKlub je uzavretá platforma pre onkologických pacientov a ich blízkych.
-                Videá, odborníci, podcasty, workshopy po celom Slovensku, zľavy od overených
-                značiek a komunita ľudí, ktorí to žijú rovnako ako ty — všetko na jednom mieste.
+                Vitajte v ONKO KLUBE – bezpečnom priestore pre pacientov s onkologickým
+                ochorením a ich blízkych. Overený obsah, odborné videá, diskusné fóra,
+                podcasty, praktické rady, workshopy aj výhody pre členov. ONKO KLUB stojí
+                na tíme desiatok odborníkov, lektorov a pacientskych poradcov s osobnou
+                skúsenosťou s rakovinou. Jeho skutočnú hodnotu však tvoria samotní členovia
+                – ľudia, ktorí si prechádzajú podobnou cestou a rozumejú aj tichým obavám,
+                ktoré si v ťažkých chvíľach nechávame iba pre seba.
               </motion.p>
               <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start gap-3 mb-4">
                 <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black px-8 py-4">
@@ -45,7 +49,9 @@ export function HeroSection() {
                 </Link>
               </motion.div>
               <motion.p variants={fadeUp} className="text-[#6F2380]/40 text-[13px]">
-                Členstvo od 5 € / mesiac · prvý mesiac môžeš vyskúšať a kedykoľvek odísť.
+                Členstvo od 5 € mesačne.
+                <br />
+                Vyskúšajte si prvý mesiac bez záväzkov – členstvo môžete kedykoľvek ukončiť.
               </motion.p>
             </motion.div>
 

@@ -4,22 +4,26 @@ import { Footer } from "@/components/landing/Footer";
 import { Mic, Headphones, BookOpen, Circle, Play, User } from "lucide-react";
 
 const TOPICS = [
-  "Výživa počas chemoterapie a po nej",
-  "Zvládanie úzkosti a strachu z relapsu",
-  "Pohyb a fyzioterapia pre onkopacientov",
-  "Právne poradenstvo — práva pacienta",
-  "Sociálne dávky a invalidný dôchodok",
-  "Lymfedém — prevencia a každodenná starostlivosť",
-  "Intimita a sexualita počas liečby",
-  "Návrat do práce po onkologickej liečbe",
+  "Výživa počas onkologickej liečby a po jej ukončení",
+  "Zvládanie úzkosti a strachu z návratu ochorenia",
+  "Pohyb, rehabilitácia a fyzioterapia pre onkologických pacientov",
+  "Právne poradenstvo a práva pacienta",
+  "Sociálna podpora, dávky a invalidný dôchodok",
+  "Lymfedém – prevencia a každodenná starostlivosť",
+  "Onkogenetika – dedičné faktory ovplyvňujúce vznik rakoviny",
+  "Blízkosť a intimita počas onkologickej liečby",
+  "Návrat do práce po ukončení liečby",
   "Paliatívna starostlivosť a podpora blízkych",
-  "Onkogenetika — dedičné predispozície k rakovine",
+  "Ako byť oporou človeku s onkologickým ochorením",
+  "Psychická podpora a komunikácia s blízkymi počas liečby",
+  "Strata blízkeho po onkologickom ochorení – smútenie a vyrovnávanie sa so stratou",
+  "Prevencia a včasné odhalenie onkologických ochorení",
 ];
 
 const PILLARS = [
-  { icon: Mic,        accent: "#FDA4C7", title: "Živé prednášky",        desc: "Pravidelné online aj offline prednášky s odborníkmi. Môžeš sa pýtať, diskutovať a dostať odpovede priamo od špecialistu." },
-  { icon: Headphones, accent: "#6F2380", title: "Podcasty s odborníkmi", desc: "Séria rozhovorov s ľuďmi, ktorí sa onkológii venujú každý deň. Počúvaj kedykoľvek — v práci, pri varení, na prechádzke." },
-  { icon: BookOpen,   accent: "#FDA4C7", title: "Archív pre teba",       desc: "Každá prednáška a každý podcast zostane v knižnici. Ak nestihneš živé vysielanie, nič nestratíš." },
+  { icon: Mic,        accent: "#FDA4C7", title: "Odborné prednášky",            desc: "Pravidelné online aj prezenčné stretnutia s lekármi, psychológmi, fyzioterapeutmi a ďalšími odborníkmi. Získajte overené informácie a možnosť klásť otázky priamo špecialistom." },
+  { icon: Headphones, accent: "#6F2380", title: "Podcasty s odborníkmi",        desc: "Rozhovory s odborníkmi, ktorí sa venujú onkologickým pacientom v každodennej praxi. Počúvať ich môžete kedykoľvek a bez ďalších poplatkov." },
+  { icon: BookOpen,   accent: "#FDA4C7", title: "Archív prednášok a podcastov", desc: "Prednášky a podcasty sú pre členov ONKO KLUBU dostupné v ONKO knižnici bez časového obmedzenia a ďalších poplatkov." },
 ];
 
 const UKAZKY = [
@@ -39,16 +43,16 @@ export default function PrenasakyPodcastyPage() {
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="md:grid md:grid-cols-2 md:gap-16 md:items-center">
             <div>
-              <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">Zadarmo pre všetkých členov</p>
+              <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">Bezplatne pre všetkých členov</p>
               <h1 className="text-[2.4rem] md:text-[3.2rem] font-black text-[#6F2380] leading-[1.1] mb-5">
-                Odborníci,
-                <br />
-                ktorým môžeš veriť.
+                Odborníci a lektori, ktorým môžete dôverovať
               </h1>
               <p className="text-[#6F2380]/70 text-base leading-relaxed mb-8">
-                V OnkoKlube pravidelne organizujeme odborné prednášky a nahrávame podcasty
-                s lekármi, psychológmi, fyzioterapeutmi a ďalšími špecialistami.
-                Živé aj v archíve — všetko máš ako člen zadarmo.
+                Pravidelne pripravujeme odborné prednášky, diskusie a podcasty
+                s lekármi, psychológmi, fyzioterapeutmi a ďalšími odborníkmi.
+                Ako člen/ka ONKO KLUBU máte prístup k záznamom aj živým
+                vysielaniam, ktoré sú vám k dispozícii kedykoľvek a bez
+                ďalších poplatkov.
               </p>
               <Link
                 href="/register"
@@ -183,12 +187,13 @@ export default function PrenasakyPodcastyPage() {
       <section className="pb-16">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="rounded-[1.8rem] bg-[#6F2380] p-8 md:p-12 text-center">
-            <h2 className="text-2xl md:text-3xl font-black text-white mb-3">Prvá prednáška ťa čaká.</h2>
+            <h2 className="text-2xl md:text-3xl font-black text-white mb-3">Prednášky a podcasty vždy poruke</h2>
             <p className="text-white/65 text-sm leading-relaxed mb-6 md:max-w-sm md:mx-auto">
-              Zaregistruj sa a okamžite získaš prístup k celému archívu.
+              Po registrácii získate okamžitý prístup k prednáškam, podcastom
+              a ďalšiemu obsahu pre onkologických pacientov a ich blízkych.
             </p>
             <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-10 py-4">
-              Chcem sa zapojiť
+              Získať prístup
             </Link>
           </div>
         </div>

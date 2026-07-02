@@ -7,34 +7,34 @@ import { Leaf, Brain, Users, Coffee, MapPin, CheckCircle2 } from "lucide-react";
 const ACTIVITIES = [
   {
     icon: Leaf,
-    title: "Joga workshopy",
-    desc: "Jemné cvičenie špeciálne pre onkologických pacientov. Bez nároku na kondíciu, v bezpečnom prostredí.",
+    title: "Onko-joga workshopy",
+    desc: "Jemné cvičenie prispôsobené potrebám onkologických pacientov. V bezpečnom a podpornom prostredí, bez ohľadu na kondíciu či predchádzajúce skúsenosti.",
     accent: "#FDA4C7",
   },
   {
     icon: Brain,
     title: "Mindfulness a meditácia",
-    desc: "Skupinové sedenia zamerané na zvládanie stresu, dýchanie a prítomnosť v tele.",
+    desc: "Skupinové stretnutia zamerané na zvládanie stresu, vedomé dýchanie, uvoľnenie a vnímanie vlastného tela.",
     accent: "#6F2380",
   },
   {
     icon: Users,
-    title: "Odborné stretnutia",
-    desc: "Stretnutia s lekármi, psychológmi a špecialistami. Priestor na otázky a zdieľanie skúseností.",
+    title: "Odborné podujatia",
+    desc: "Diskusie a prednášky s lekármi, psychológmi a ďalšími odborníkmi. Priestor na otázky, nové informácie a zdieľanie skúseností.",
     accent: "#FDA4C7",
   },
   {
     icon: Coffee,
-    title: "Komunity meetupy",
-    desc: "Neformálne stretnutia členov OnkoKlubu — rozhovor, káva, ľudia s podobnou skúsenosťou.",
+    title: "Podporné stretnutia",
+    desc: "Neformálne stretnutia členov ONKO KLUBU – priestor na rozhovory, vzájomnú podporu a spájanie ľudí s podobnou životnou skúsenosťou.",
     accent: "#6F2380",
   },
 ];
 
 const REGIONS = [
-  { id: "zapad",  name: "Západ",  cities: ["Bratislava", "Nitra", "Trnava"] },
-  { id: "stred",  name: "Stred",  cities: ["Žilina", "B. Bystrica", "Trenčín"] },
-  { id: "vychod", name: "Východ", cities: ["Košice", "Prešov", "Poprad"] },
+  { id: "zapad",  name: "Západné Slovensko",  cities: ["Bratislava", "Nitra", "Trnava"] },
+  { id: "stred",  name: "Stredné Slovensko",  cities: ["Žilina", "B. Bystrica", "Trenčín"] },
+  { id: "vychod", name: "Východné Slovensko", cities: ["Košice", "Prešov", "Poprad"] },
 ];
 
 export function EventsSection() {
@@ -51,16 +51,15 @@ export function EventsSection() {
         transition={{ duration: 0.6 }}
       >
         <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
-          Po celom Slovensku
+          Podujatia po celom Slovensku
         </p>
         <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
-          Stretni sa s nami.
-          <br />
-          Aktivity vo tvojom kraji.
+          Príďte načerpať podporu a nové skúsenosti
         </h2>
         <p className="text-[#6F2380]/65 text-base leading-relaxed mb-10">
-          Workshopy, stretnutia a odborné akcie sa konajú pravidelne po celom Slovensku.
-          Ako člen si rezervuješ miesto priamo z platformy — jedným kliknutím, zadarmo.
+          Workshopy, skupinové stretnutia a odborné podujatia sú dostupné vo viacerých
+          regiónoch Slovenska. Ako člen/ka ONKO KLUBU máte možnosť prihlásiť sa na
+          vybrané aktivity jednoducho priamo v aplikácii ONKO KLUB.
         </p>
       </motion.div>
 
@@ -109,9 +108,9 @@ export function EventsSection() {
           />
 
           {[
-            { n: "1", title: "Pozri si kalendár", desc: "Všetky nadchádzajúce akcie nájdeš v členskej sekcii filtrované podľa tvojho kraja — žiadne hľadanie, všetko na jednom mieste." },
-            { n: "2", title: "Rezervuj si miesto", desc: "Jedným kliknutím — potvrdenie ti príde e-mailom a SMS pripomienka 24 hodín vopred, aby si nezabudol." },
-            { n: "3", title: "Príď a spoznaj komunitu", desc: "Akcie sú pre členov zadarmo alebo so zvýhodnenou cenou. Kapacita na každom stretnutí je obmedzená, preto rezervuj vopred." },
+            { n: "1", title: "Vyberte si podujatie", desc: "V členskej sekcii nájdete prehľad pripravovaných workshopov, stretnutí a podujatí z celého Slovenska, prehľadne usporiadaných podľa regiónov." },
+            { n: "2", title: "Prihláste sa online", desc: "Svoje miesto si rezervujete jednoducho priamo v aplikácii ONKO KLUB. Po registrácii vám zašleme potvrdenie a včas vám pripomenieme termín podujatia." },
+            { n: "3", title: "Stretnite ľudí, ktorí vám rozumejú", desc: "Podujatia sú určené členom ONKO KLUBU a mnohé z nich sú bezplatné alebo za zvýhodnených podmienok. Počet miest býva obmedzený, preto odporúčame prihlásiť sa vopred." },
           ].map((s, i) => (
             <motion.div
               key={s.n}
@@ -144,11 +143,11 @@ export function EventsSection() {
         className="rounded-[2rem] bg-[#6F2380] px-6 py-8"
       >
         <h3 className="text-[1.5rem] font-black text-white leading-snug mb-3">
-          Daj nám vedieť, kde si.
+          Nezmeškajte podujatia vo vašom okolí
         </h3>
         <p className="text-white/65 text-sm leading-relaxed mb-8">
-          Nechaj nám svoj email a my ťa upozorníme, keď sa bude konať akcia
-          vo tvojom okolí. Žiadny spam — len skutočné akcie v tvojom kraji.
+          Vyberte svoj región a zanechajte nám kontakt. Keď pripravíme workshop
+          vo vašom okolí, dáme vám o ňom vedieť.
         </p>
 
         <AnimatePresence mode="wait">
@@ -254,11 +253,12 @@ export function EventsSection() {
                 type="submit"
                 className="w-full rounded-full bg-[#FDA4C7] text-white font-black text-base py-4 mt-1 active:scale-[0.98] transition-transform"
               >
-                Chcem byť informovaný o akciách
+                Chcem vedieť o podujatiach v mojom okolí
               </button>
 
               <p className="text-white/25 text-[11px] text-center leading-relaxed">
-                Žiadny spam. Odhlásenie kedykoľvek jedným klikom.
+                Vaše údaje budeme používať výhradne na informovanie o podujatiach
+                ONKO KLUBU. Odber môžete kedykoľvek zrušiť.
               </p>
             </motion.form>
           )}

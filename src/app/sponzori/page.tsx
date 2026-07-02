@@ -4,42 +4,20 @@ import { Footer } from "@/components/landing/Footer";
 import { QrCode, ScanLine, BadgeCheck, Tag, Check } from "lucide-react";
 
 const KATEGORIE = [
-  {
-    accent: "#FDA4C7",
-    title: "Zdravie a starostlivosť",
-    desc: "Zdravotnícke pomôcky, paroché, kompresné oblečenie, liečebné kúpele, rehabilitácia.",
-    logos: ["[IMG-09]", "[IMG-10]", "[IMG-11]"],
-  },
-  {
-    accent: "#6F2380",
-    title: "Výživa a doplnky",
-    desc: "Zdravé potraviny, doplnky stravy, nutričné poradenstvo, organické produkty.",
-    logos: ["[IMG-12]", "[IMG-13]", "[IMG-14]"],
-  },
-  {
-    accent: "#FDA4C7",
-    title: "Psychická pohoda",
-    desc: "Wellness, masáže, aromaterapia, mindfulness aplikácie, relaxačné pobyty.",
-    logos: ["[IMG-15]", "[IMG-16]", "[IMG-17]"],
-  },
-  {
-    accent: "#6F2380",
-    title: "Šport a pohyb",
-    desc: "Fitness štúdiá, jogové štúdiá, športové oblečenie a vybavenie, plavárne.",
-    logos: ["[IMG-18]", "[IMG-19]", "[IMG-20]"],
-  },
-  {
-    accent: "#FDA4C7",
-    title: "Každodenný život",
-    desc: "Doprava, ubytovanie, reštaurácie, nákupy, kultúra, voľný čas.",
-    logos: ["[IMG-21]", "[IMG-22]", "[IMG-23]"],
-  },
+  "Zdravie a starostlivosť o telo",
+  "Výživa, doplnky a zdravý životný štýl",
+  "Pohyb, rehabilitácia a fyzická aktivita",
+  "Spánok a regenerácia",
+  "Kozmetika a starostlivosť o pokožku",
+  "Technológie pre zdravie",
+  "Voľnočasové aktivity",
+  "Duševná pohoda a relaxácia",
 ];
 
 const HOW_STEPS = [
-  { icon: BadgeCheck, title: "Zaregistruj sa",  desc: "Po aktivácii členstva ti OnkoKlub automaticky vygeneruje OKkartu s unikátnym QR kódom a ID." },
-  { icon: QrCode,     title: "Nájdi zľavu",     desc: "V sekcii Zľavy a benefity nájdeš všetky aktuálne ponuky partnerských značiek — filtrované podľa kategórie." },
-  { icon: ScanLine,   title: "Skenuj a šetri",  desc: "Pri nákupe v predajni alebo v e-shope naskenuješ QR kód alebo napíšeš svoje ID. Zľava sa uplatní okamžite." },
+  { icon: BadgeCheck, title: "Aktivujte svoje členstvo",      desc: "Po registrácii a aktivácii členstva sa vám automaticky vytvorí digitálna OKkarta s unikátnym QR kódom a členským ID." },
+  { icon: QrCode,     title: "Vyberte si partnerskú ponuku",  desc: "V sekcii Zľavy a benefity nájdete prehľad aktuálnych ponúk a zvýhodnení od partnerských značiek, ktoré si môžete jednoducho filtrovať podľa jednotlivých kategórií." },
+  { icon: ScanLine,   title: "Uplatnite si zľavu",            desc: "Pri nákupe v predajni alebo v e-shope sa preukážete svojou OKkartou alebo uvediete členské ID. Zľava alebo benefit sa vám uplatní podľa podmienok konkrétneho partnera." },
 ];
 
 export default function SponzoriPage() {
@@ -52,16 +30,14 @@ export default function SponzoriPage() {
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="md:grid md:grid-cols-2 md:gap-16 md:items-center">
             <div>
-              <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">Exkluzívne len pre členov</p>
+              <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">Exkluzívne len pre členov ONKO KLUBU</p>
               <h1 className="text-[2.4rem] md:text-[3.2rem] font-black text-[#6F2380] leading-[1.1] mb-5">
-                Stovky eur
-                <br />
-                ušetrených ročne.
+                Špeciálne zľavy len pre členov ONKO KLUBU
               </h1>
               <p className="text-[#6F2380]/70 text-base leading-relaxed mb-8">
-                Partnerské značky OnkoKlubu pripravili pre členov exkluzívne zľavy a benefity
-                z oblasti zdravia, výživy, pohybu, wellness a každodenného života.
-                Ako člen ich získavaš automaticky — stačí ukázať svoju OKkartu.
+                Ako člen/ka ONKO KLUBU máte vďaka našim partnerom možnosť
+                využiť špeciálne zľavy. Stačí sa preukázať OKkartou a zľava
+                sa vám automaticky uplatní.
               </p>
               <Link
                 href="/register"
@@ -75,7 +51,7 @@ export default function SponzoriPage() {
               <div className="rounded-[2rem] bg-[#6F2380] px-7 py-8 relative overflow-hidden">
                 <div className="absolute -top-10 -right-10 w-36 h-36 rounded-full bg-white/5" />
                 <p className="text-white font-black text-[1.5rem] leading-snug relative z-10">
-                  „Členstvo v OnkoKlube sa ti zaplatí len zo zliav u partnerských značiek.&rdquo;
+                  Partnerské zľavy prinášajú reálnu úsporu, ktorá môže prevýšiť náklady na členstvo.
                 </p>
               </div>
             </div>
@@ -89,7 +65,7 @@ export default function SponzoriPage() {
           <div className="rounded-[2rem] bg-[#6F2380] px-6 py-8 relative overflow-hidden">
             <div className="absolute -top-10 -right-10 w-36 h-36 rounded-full bg-white/5" />
             <p className="text-white font-black text-[1.5rem] leading-snug relative z-10">
-              „Členstvo v OnkoKlube sa ti zaplatí len zo zliav u partnerských značiek.&rdquo;
+              Partnerské zľavy prinášajú reálnu úsporu, ktorá môže prevýšiť náklady na členstvo.
             </p>
           </div>
         </div>
@@ -111,11 +87,11 @@ export default function SponzoriPage() {
             <div>
               <div className="flex flex-col gap-2">
                 {[
-                  "Vždy po ruke — v telefóne, kedykoľvek",
-                  "Unikátny QR kód priradený k tvojmu účtu",
-                  "Uplatnenie zliav u partnerských značiek",
-                  "Vstup na eventy a workshopy",
-                  "Doklad o členstve OnkoKlubu",
+                  "OKkarta sa vytvorí ihneď po dokončení registrácie",
+                  "Každý člen má vlastný identifikátor",
+                  "Vstupenka na podujatia a workshopy",
+                  "Prehľadný preukaz člena vždy v mobile",
+                  "Uplatnenie zliav",
                 ].map((b) => (
                   <div key={b} className="flex items-center gap-3">
                     <div className="w-5 h-5 rounded-full bg-[#FDA4C7]/20 flex items-center justify-center shrink-0">
@@ -133,7 +109,7 @@ export default function SponzoriPage() {
       {/* Ako to funguje */}
       <section className="pb-14">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
-          <h2 className="text-xl font-black text-[#6F2380] mb-8">Ako zľavy uplatniť</h2>
+          <h2 className="text-xl font-black text-[#6F2380] mb-8">Ako využívať zľavy a benefity</h2>
           <div className="relative pl-5 md:max-w-xl">
             <div className="absolute left-5 top-3 bottom-3 w-px bg-gradient-to-b from-[#FDA4C7] via-[#FDA4C7]/50 to-transparent" />
             {HOW_STEPS.map((s, i) => {
@@ -183,27 +159,21 @@ export default function SponzoriPage() {
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <h2 className="text-xl font-black text-[#6F2380] mb-2">Kategórie partnerov</h2>
           <p className="text-[#6F2380]/50 text-sm mb-8">
-            Logá partnerov budú doplnené po podpise partnerských zmlúv.
+            Zatiaľ ešte nevieme, ktoré značky sa k nám pridajú — tu je prehľad
+            kategórií, v ktorých partnerov hľadáme.
           </p>
-          <div className="flex flex-col gap-8 md:grid md:grid-cols-2 md:gap-10">
-            {KATEGORIE.map((kat) => (
-              <div key={kat.title}>
-                <p className="text-[11px] font-black uppercase tracking-widest mb-2" style={{ color: kat.accent }}>
-                  {kat.title}
-                </p>
-                <p className="text-[#6F2380]/55 text-[13px] leading-relaxed mb-4">{kat.desc}</p>
-                <div className="grid grid-cols-3 gap-3">
-                  {kat.logos.map((logo) => (
-                    <div
-                      key={logo}
-                      className="aspect-square rounded-2xl flex items-center justify-center"
-                      style={{ backgroundColor: kat.accent + "15", border: `1.5px solid ${kat.accent}25` }}
-                    >
-                      <p className="text-[9px] font-bold text-center" style={{ color: kat.accent + "60" }}>{logo}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+          <div className="flex flex-wrap gap-2">
+            {KATEGORIE.map((kat, i) => (
+              <span
+                key={kat}
+                className="text-sm font-semibold px-4 py-2 rounded-full text-[#6F2380]"
+                style={{
+                  backgroundColor: (i % 2 === 0 ? "#FDA4C7" : "#6F2380") + "18",
+                  border: `1.5px solid ${(i % 2 === 0 ? "#FDA4C7" : "#6F2380")}30`,
+                }}
+              >
+                {kat}
+              </span>
             ))}
           </div>
         </div>
@@ -213,9 +183,11 @@ export default function SponzoriPage() {
       <section className="pb-16">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="rounded-[2rem] bg-[#6F2380] px-6 py-10 md:py-14 text-center">
-            <h2 className="text-[2rem] md:text-[2.4rem] font-black text-white leading-tight mb-3">Získaj svoju OKkartu.</h2>
+            <h2 className="text-[2rem] md:text-[2.4rem] font-black text-white leading-tight mb-3">Získajte svoju OKkartu</h2>
             <p className="text-white/65 text-sm leading-relaxed mb-7 md:max-w-sm md:mx-auto">
-              Stačí sa zaregistrovať — karta čaká hneď po prvom prihlásení. Žiadne poplatky, žiadne formuláre.
+              Po registrácii a aktivácii členstva získate okamžitý prístup k
+              digitálnej OKkarte s unikátnym QR kódom. Nájdete ju vo svojom
+              profile, pripravenú na okamžité používanie.
             </p>
             <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-10 py-4">
               Chcem svoju OKkartu

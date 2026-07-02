@@ -8,7 +8,7 @@ import Image from "next/image";
 const NAV_LINKS = [
   { label: "Čo získaš",            href: "/co-ziskas" },
   { label: "Prednášky & Podcasty", href: "/prednasky-podcasty" },
-  { label: "Eventy",               href: "/akcie" },
+  { label: "Kalendár aktivít",     href: "/akcie" },
   { label: "Sponzori & Zľavy",     href: "/sponzori" },
   { label: "Cenník",               href: "/cennik" },
 ];

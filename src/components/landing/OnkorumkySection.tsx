@@ -8,7 +8,19 @@ const CATEGORIES = [
   {
     label: "Podľa diagnózy",
     accent: "#FDA4C7",
-    items: ["Rakovina prsníka", "Rakovina hrubého čreva", "Rakovina pľúc", "Rakovina prostaty", "Melanóm", "a ďalšie…"],
+    items: [
+      "Rakovina prsníka",
+      "Rakovina hrubého čreva a konečníka",
+      "Rakovina pľúc",
+      "Rakovina prostaty",
+      "Rakovina pankreasu",
+      "Rakovina semenníkov",
+      "Rakovina kože",
+      "Rakovina krčka maternice",
+      "Rakovina vaječníkov",
+      "Rakovina močového mechúra",
+      "Iné",
+    ],
   },
   {
     label: "Podľa témy",
@@ -58,19 +70,17 @@ export function OnkorumkySection() {
         className="mb-10"
       >
         <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
-          Onkorumky
+          Diskusné fóra
         </p>
         <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
-          Komunita,
+          Podeľte sa o to,
           <br />
-          ktorá rozumie
-          <br />
-          bez slov.
+          čím prechádzate
         </h2>
         <p className="text-[#6F2380]/65 text-base leading-relaxed">
-          V Onkorumky fórach sa každý deň stretávajú ľudia, ktorí prešli alebo
-          prechádzajú tým, čím si prechádzaš ty. Môžeš písať pod vlastným menom alebo
-          anonymne — vždy v bezpečnom, moderovanom prostredí.
+          Zdieľajte svoje skúsenosti, otázky, obavy či každodenné výzvy s ľuďmi,
+          ktorí vedia, čo prežívate. Môžete prispievať pod vlastným menom alebo
+          anonymne.
         </p>
       </motion.div>
 
@@ -108,11 +118,11 @@ export function OnkorumkySection() {
         </div>
         <div>
           <h3 className="font-black text-[#6F2380] text-[15px] leading-tight mb-0.5">
-            Anonymita je na tebe
+            Súkromie máte vo svojich rukách.
           </h3>
           <p className="text-[#6F2380]/55 text-[13px] leading-relaxed">
-            Pri každom príspevku si vyberieš — písať pod menom alebo anonymne.
-            Nikto okrem administrátora nevidí, kto si.
+            Vaša identita je viditeľná iba pre administrátora, ostatným
+            používateľom sa nezobrazuje.
           </p>
         </div>
       </motion.div>
@@ -153,9 +163,9 @@ export function OnkorumkySection() {
 
       {/* Ukážkové príspevky */}
       <div className="mb-10">
-        <h3 className="text-xl font-black text-[#6F2380] mb-1">Záblesk z komunity</h3>
+        <h3 className="text-xl font-black text-[#6F2380] mb-1">Aktuálne z diskusií</h3>
         <p className="text-[#6F2380]/40 text-xs mb-5">
-          Príspevky vidíš celé len po prihlásení.
+          Po prihlásení získate prístup k plným zneniam príspevkov a rozhovorov.
         </p>
         <div className="flex flex-col gap-3">
           {SAMPLE_POSTS.map((post, i) => (
@@ -215,24 +225,24 @@ export function OnkorumkySection() {
         className="rounded-[2rem] bg-[#6F2380] px-6 py-8"
       >
         <h3 className="text-[1.6rem] font-black text-white leading-snug mb-3">
-          Nie si v tom sám.
+          Nie ste v tom sami
         </h3>
         <p className="text-white/65 text-sm leading-relaxed mb-7">
-          Zaregistruj sa a okamžite získaš prístup ku všetkým 29 fóram.
-          Môžeš začať tým, že len čítaš — žiadny tlak.
+          Po registrácii získate okamžitý prístup ku všetkým diskusným fóram.
+          Môžete začať len čítaním, bez akéhokoľvek záväzku.
         </p>
         <Link
           href="/onkorumky"
           className="flex items-center justify-between bg-white/10 rounded-2xl px-5 py-4 mb-3 border border-white/15 active:scale-[0.98] transition-transform"
         >
-          <span className="text-white font-bold text-sm">Pozrieť si Onkorumky</span>
+          <span className="text-white font-bold text-sm">Zobraziť diskusie</span>
           <ChevronRight size={18} className="text-white/60" />
         </Link>
         <Link
           href="/register"
           className="block w-full rounded-full bg-[#FDA4C7] text-white font-black text-base py-4 text-center active:scale-[0.98] transition-transform"
         >
-          Vstúpiť do komunity
+          Vytvoriť príspevok
         </Link>
       </motion.div>
       </div>

@@ -8,26 +8,26 @@ import Link from "next/link";
 const FEATURES = [
   {
     id: "library" as const,
-    title: "Onko knižnica",
-    desc: "Stovky videí od overených odborníkov — joga, mindfulness, výživa, psychika. Pozri si ich kedykoľvek, odkiaľkoľvek, vo vlastnom tempe.",
+    title: "ONKO knižnica",
+    desc: "Desiatky videí od overených odborníkov na tému pohyb, výživa, psychika a iné. Sledujte kedykoľvek, kdekoľvek a vo vlastnom tempe.",
     href: "/kontent-kniznica",
   },
   {
     id: "podcasts" as const,
     title: "Odborné prednášky a podcasty",
-    desc: "Pravidelné prednášky s lekármi, psychológmi a fyzioterapeutmi. Živé aj v archíve — zadarmo pre všetkých členov OnkoKlubu.",
+    desc: "Prednášky s lekármi, psychológmi či fyzioterapeutmi dostupné naživo aj v archíve – bezplatne pre všetkých členov ONKO KLUBU.",
     href: "/prednasky-podcasty",
   },
   {
     id: "events" as const,
-    title: "Akcie po celom Slovensku",
-    desc: "Workshopy, stretnutia a joga v Bratislave, Nitre, Košiciach aj Poprade. Rezervácia miesta jedným kliknutím priamo z platformy.",
+    title: "Akcie na mieru po celom Slovensku",
+    desc: "Workshopy, stretnutia a cvičenia jogy v Bratislave, Banskej Bystrici a Košiciach. Miesto si môžete jednoducho rezervovať jedným kliknutím priamo v aplikácii ONKO KLUB.",
     href: "/akcie",
   },
   {
     id: "community" as const,
-    title: "Onkorumky",
-    desc: "29 tematických fór kde môžeš písať anonymne alebo pod vlastným menom. Komunita, ktorá ťa pochopí bez dlhého vysvetľovania.",
+    title: "Diskusné fórum",
+    desc: "Desiatky diskusných fór prepájajú ľudí s podobnou skúsenosťou a vytvárajú priestor pre zdieľanie, porozumenie a vzájomnú podporu aj bez dlhého vysvetľovania.",
     href: "/onkorumky",
   },
 ];
@@ -186,7 +186,7 @@ export function FeatureSection() {
         viewport={{ once: true }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        Všetko čo potrebuješ na jednom mieste.
+        Všetko, čo potrebujete, nájdete na jednom mieste
       </motion.h2>
       <motion.p
         className="text-[#6F2380]/65 text-base leading-relaxed mb-14 text-center max-w-xs mx-auto"
@@ -195,8 +195,9 @@ export function FeatureSection() {
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
       >
-        OnkoKlub nie je len platforma — je to celý ekosystém podpory.
-        Pozri sa, čo na teba čaká.
+        ONKO KLUB vznikol, aby bol oporou v momentoch, kedy potrebujete viac
+        než len informácie – keď hľadáte pochopenie, istotu a pocit, že v tom
+        nie ste sami. Pozrite sa, čo všetko na vás čaká!
       </motion.p>
 
       {/* 4 položky */}

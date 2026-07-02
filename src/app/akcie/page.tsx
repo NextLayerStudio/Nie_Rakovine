@@ -9,9 +9,9 @@ const EVENT_TYPES = [
   {
     icon: Leaf,
     accent: "#FDA4C7",
-    title: "Joga workshopy",
+    title: "Onko-joga workshopy",
     host: "Petra Joga",
-    desc: "Workshopy špeciálne prispôsobené pre onkologických pacientov. Jemný pohyb, dýchanie a regenerácia tela — bez nároku na fyzickú kondíciu. V bezpečnom, chápanom prostredí.",
+    desc: "Jemné cvičenie prispôsobené potrebám onkologických pacientov. V bezpečnom a podpornom prostredí, bez ohľadu na kondíciu či predchádzajúce skúsenosti.",
     imgs: ["[IMG-06] Foto Petra Joga", "[IMG] Workshop joga"],
   },
   {
@@ -19,31 +19,31 @@ const EVENT_TYPES = [
     accent: "#6F2380",
     title: "Mindfulness a meditácia",
     host: "Mirka Malejčíková / Zuzka Mindfulness",
-    desc: "Skupinové sedenia zamerané na zvládanie stresu, dýchanie a prítomnosť v tele. Techniky MBSR prispôsobené realite onkologických pacientov. Online aj offline.",
+    desc: "Skupinové stretnutia zamerané na zvládanie stresu, vedomé dýchanie, uvoľnenie a vnímanie vlastného tela.",
     imgs: ["[IMG-07] Foto Mirka", "[IMG] Mindfulness skupinka"],
   },
   {
     icon: Stethoscope,
     accent: "#FDA4C7",
-    title: "Odborné stretnutia",
+    title: "Odborné podujatia",
     host: "Lekári, psychológovia, odborníci",
-    desc: "Stretnutia s lekármi, psychológmi a ďalšími odborníkmi v malých skupinách. Priestor na otázky a zdieľanie skúseností bez časového tlaku. Témata vopred vyhlásené v kalendári.",
+    desc: "Diskusie a prednášky s lekármi, psychológmi a ďalšími odborníkmi. Priestor na otázky, nové informácie a zdieľanie skúseností.",
     imgs: ["[IMG] Odborné stretnutie", "[IMG] Rozhovor s lekárom"],
   },
   {
     icon: Coffee,
     accent: "#6F2380",
-    title: "Komunity meetupy",
-    host: "Komunita OnkoKlubu",
-    desc: "Neformálne stretnutia členov OnkoKlubu. Káva, rozhovor, ľudia s podobnou skúsenosťou. Žiadny program, žiadny tlak — len ľudia, ktorí si rozumejú.",
+    title: "Podporné stretnutia",
+    host: "Komunita ONKO KLUBU",
+    desc: "Neformálne stretnutia členov ONKO KLUBU – priestor na rozhovory, vzájomnú podporu a spájanie ľudí s podobnou životnou skúsenosťou.",
     imgs: ["[IMG] Komunity meetup", "[IMG] Stretnutie členov"],
   },
 ];
 
 const STEPS = [
-  { title: "Pozri si kalendár",       desc: "Všetky nadchádzajúce eventy nájdeš v členskej sekcii, filtrované podľa tvojho kraja." },
-  { title: "Rezervuj si miesto",      desc: "Jedným kliknutím — potvrdenie príde e-mailom. SMS pripomienka 24 hodín vopred." },
-  { title: "Príď a spoznaj komunitu", desc: "Eventy sú pre členov zadarmo alebo so zvýhodnenou cenou. Kapacita je obmedzená." },
+  { title: "Vyberte si podujatie",       desc: "V členskej sekcii nájdete prehľad pripravovaných workshopov, stretnutí a podujatí z celého Slovenska, prehľadne usporiadaných podľa regiónov." },
+  { title: "Prihláste sa online",        desc: "Svoje miesto si rezervujete jednoducho priamo v aplikácii ONKO KLUB. Po registrácii vám zašleme potvrdenie a včas vám pripomenieme termín podujatia." },
+  { title: "Stretnite ľudí, ktorí vám rozumejú", desc: "Podujatia sú určené členom ONKO KLUBU a mnohé z nich sú bezplatné alebo za zvýhodnených podmienok. Počet miest býva obmedzený, preto odporúčame prihlásiť sa vopred." },
 ];
 
 export default function AkciePage() {
@@ -56,22 +56,21 @@ export default function AkciePage() {
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="md:grid md:grid-cols-2 md:gap-16 md:items-center">
             <div>
-              <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">Po celom Slovensku</p>
+              <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">Podujatia po celom Slovensku</p>
               <h1 className="text-[2.4rem] md:text-[3.2rem] font-black text-[#6F2380] leading-[1.1] mb-5">
-                Stretni sa s nami
-                <br />
-                vo tvojom meste.
+                Príďte načerpať podporu a nové skúsenosti
               </h1>
               <p className="text-[#6F2380]/70 text-base leading-relaxed mb-8">
-                Živé workshopy, stretnutia a akcie sa konajú pravidelne po celom Slovensku.
-                Ako člen si rezervuješ miesto priamo z platformy — jedným kliknutím, zadarmo.
+                Workshopy, skupinové stretnutia a odborné podujatia sú dostupné vo viacerých
+                regiónoch Slovenska. Ako člen/ka ONKO KLUBU máte možnosť prihlásiť sa na
+                vybrané aktivity jednoducho priamo v aplikácii ONKO KLUB.
               </p>
               <div className="md:flex md:gap-3">
                 <Link
                   href="/register"
                   className="block w-full md:w-auto md:inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black py-4 md:px-10 text-center mb-3 md:mb-0"
                 >
-                  Chcem sa zapojiť
+                  Chcem vedieť o podujatiach v mojom okolí
                 </Link>
               </div>
             </div>
@@ -125,7 +124,7 @@ export default function AkciePage() {
       {/* Typy eventov */}
       <section className="pb-14">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
-          <h2 className="text-xl font-black text-[#6F2380] mb-8">Typy akcií</h2>
+          <h2 className="text-xl font-black text-[#6F2380] mb-8">Vyberte si z ponuky workshopov, prednášok a stretnutí</h2>
           <div className="flex flex-col gap-12 md:grid md:grid-cols-2 md:gap-10">
             {EVENT_TYPES.map((e, i) => {
               const Icon = e.icon;
@@ -186,12 +185,14 @@ export default function AkciePage() {
       <section className="pb-16">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="rounded-[1.8rem] bg-[#6F2380] p-8 md:p-12 text-center">
-            <h2 className="text-2xl md:text-3xl font-black text-white mb-3">Nájdi akciu vo tvojom kraji.</h2>
+            <h2 className="text-2xl md:text-3xl font-black text-white mb-3">Vyberte si podujatie, ktoré vám vyhovuje</h2>
             <p className="text-white/65 text-sm leading-relaxed mb-6 md:max-w-sm md:mx-auto">
-              Kalendár akcií je dostupný po registrácii. Kapacita na každom stretnutí je obmedzená.
+              Po registrácii získate prístup ku kalendáru workshopov, prednášok a podporných
+              stretnutí po celom Slovensku aj online. Miesta na vybraných podujatiach sú z
+              kapacitných dôvodov obmedzené.
             </p>
             <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-10 py-4">
-              Chcem sa zapojiť
+              Zobraziť podujatia
             </Link>
           </div>
         </div>

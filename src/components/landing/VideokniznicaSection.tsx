@@ -27,7 +27,7 @@ export function VideokniznicaSection() {
           className="px-5 md:max-w-6xl md:mx-auto md:px-8 mb-8"
         >
           <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
-            Onko knižnica
+            ONKO knižnica
           </p>
           <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
             Pozri sa, čo na teba
@@ -96,15 +96,12 @@ export function VideokniznicaSection() {
 
         {/* CTA */}
         <div className="px-5 mt-8 md:max-w-6xl md:mx-auto md:px-8">
-          <p className="text-[#6F2380]/50 text-sm text-center mb-5 md:text-left">
-            A stovky ďalších videí čaká na teba v členskej knižnici.
-          </p>
           <div className="md:flex md:justify-start">
             <Link
               href="/kontent-kniznica"
               className="flex items-center justify-between bg-white rounded-2xl px-5 py-4 border border-[#FDA4C7]/20 active:scale-[0.98] transition-transform md:inline-flex md:gap-3 md:justify-center md:rounded-full md:border-2 md:border-[#FDA4C7] md:px-7 md:py-3"
             >
-              <span className="text-[#6F2380] font-bold text-sm">Pozrieť si knižnicu</span>
+              <span className="text-[#6F2380] font-bold text-sm">Otvoriť ONKO knižnicu</span>
               <ChevronRight size={18} className="text-[#FDA4C7]" />
             </Link>
           </div>

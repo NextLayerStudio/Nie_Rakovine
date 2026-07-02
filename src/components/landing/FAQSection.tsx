@@ -6,36 +6,36 @@ import { Plus, Minus } from "lucide-react";
 
 const OTAZKY = [
   {
-    q: "Kto môže byť členom OnkoKlubu?",
-    a: "OnkoKlub je určený pre onkologických pacientov, ľudí po onkologickej liečbe a ich blízkych — partnerov, rodičov, deti, priateľov. Stačí sa zaregistrovať.",
+    q: "Kto sa môže stať členom ONKO KLUBU?",
+    a: "ONKO KLUB je určený pre onkologických pacientov, ľudí po ukončenej liečbe a ich blízkych – partnerov, rodičov, deti aj priateľov. Pre prístup stačí jednoduchá registrácia.",
   },
   {
-    q: "Je obsah na platforme odborne overený?",
-    a: "Áno. Všetok obsah na OnkoKlub platforme tvorí tím overených odborníkov — lekárov, psychológov, fyzioterapeutov a ďalších špecialistov. Nič sa nepublikuje bez schválenia.",
+    q: "Je obsah v aplikácii ONKO KLUB overený?",
+    a: "Áno. Obsah v aplikácii ONKO KLUB vytvára tím overených odborníkov – lekárov, psychológov, fyzioterapeutov a ďalších špecialistov. Pred zverejnením je vždy skontrolovaný a schválený.",
   },
   {
-    q: "Môžem písať vo fóre anonymne?",
-    a: "Áno. Pri každom príspevku vo fóre si môžeš vybrať, či chceš písať pod svojím menom alebo anonymne. Tvoje skutočné meno nikdy neuvidí nikto iný — len administrátor platformy.",
+    q: "Je možné prispievať do diskusných fór anonymne?",
+    a: "Áno. V rámci každého príspevku si môžete zvoliť, či chcete vystupovať pod svojím menom alebo anonymne. Vaša identita je viditeľná výhradne pre administrátora platformy, ostatným používateľom sa nezobrazuje.",
   },
   {
-    q: "Ako funguje platba?",
-    a: "Platíš kartou online cez platobnú bránu GoPay. Pre mesačné členstvo sa platba opakuje každý mesiac automaticky. Pre ročné členstvo platíš jednorazovo raz za rok. Platbu môžeš kedykoľvek zrušiť z nastavení svojho účtu. Ak preferuješ trvalý príkaz, kontaktuj nás na office@nierakovine.sk.",
+    q: "Ako prebieha platba za členstvo?",
+    a: "Platba prebieha online cez platobnú bránu GoPay. V rámci mesačného členstva sa suma automaticky obnovuje každý mesiac, v prípade ročného členstva ide o jednorazovú platbu raz ročne. Platbu je možné kedykoľvek zrušiť v nastaveniach vášho účtu. Ak uprednostňujete úhradu formou trvalého príkazu, kontaktujte nás, prosím, na office@nierakovine.sk.",
   },
   {
-    q: "Môžem členstvo kedykoľvek zrušiť?",
-    a: "Áno. Členstvo môžeš zrušiť kedykoľvek z nastavení svojho účtu — bez pokuty, bez záväzkov. Prístup k platforme ti zostane aktívny do konca aktuálneho zaplateného obdobia.",
+    q: "Je možné členstvo kedykoľvek zrušiť?",
+    a: "Áno. Členstvo môžete kedykoľvek zrušiť v nastaveniach svojho účtu bez sankcií a ďalších záväzkov. Prístup k platforme vám zostane aktívny do konca už zaplateného obdobia.",
   },
   {
-    q: "Kde sa konajú eventy? Musím cestovať?",
-    a: "Eventy sa konajú v Bratislave, Nitre, Košiciach, Poprade a ďalších mestách. Mnohé akcie sú aj online — tie sú dostupné pre všetkých členov bez ohľadu na bydlisko. V kalendári si môžeš filtrovať eventy podľa svojho kraja.",
+    q: "Kde sa konajú podujatia a workshopy? Je potrebné cestovanie?",
+    a: "Podujatia a workshopy sa konajú v Bratislave, Banskej Bystrici, Nitre, Košiciach, Poprade a ďalších mestách po celom Slovensku. Vybrané aktivity prebiehajú aj online a sú dostupné pre všetkých členov bez ohľadu na miesto bydliska. V kalendári si môžete jednoducho filtrovať podujatia podľa vášho regiónu.",
   },
   {
-    q: "Sú moje zdravotné údaje v bezpečí?",
-    a: "Áno. Citlivé údaje sú šifrované na úrovni aplikácie. Databáza beží v EÚ regióne (Frankfurt) a nikdy nevychádza z Európskej únie. Spracúvanie osobných údajov prebieha v súlade s GDPR.",
+    q: "Sú moje osobné a zdravotné údaje v bezpečí?",
+    a: "Áno. Citlivé údaje sú šifrované na úrovni aplikácie. Dáta sú ukladané na serveroch v rámci EÚ (región Frankfurt) a neopúšťajú územie Európskej únie. Spracúvanie osobných údajov prebieha v súlade s nariadením GDPR.",
   },
   {
-    q: "Kto stojí za OnkoKlubom?",
-    a: "OnkoKlub vytvára a prevádzkuje občianske združenie NIE RAKOVINE, o. z. — organizácia, ktorá sa od svojho vzniku venuje podpore onkologických pacientov na Slovensku. IČO: 50654896, sídlo: Cukrová 2272/14, Bratislava.",
+    q: "Kto stojí za vznikom ONKO KLUBU?",
+    a: "ONKO KLUB prevádzkuje občianske združenie NIE RAKOVINE, o. z., ktoré sa dlhodobo venuje podpore onkologických pacientov na Slovensku. IČO: 50654896, sídlo: Cukrová 2272/14, Bratislava.",
   },
 ];
 
@@ -55,9 +55,7 @@ export function FAQSection() {
           FAQ
         </p>
         <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1]">
-          Máš otázky?
-          <br />
-          Máme odpovede.
+          Máte otázky?
         </h2>
       </motion.div>
 

@@ -7,23 +7,23 @@ import { QrCode, ScanLine, Tag, BadgeCheck } from "lucide-react";
 const HOW_STEPS = [
   {
     icon: BadgeCheck,
-    title: "Zaregistruj sa",
-    desc: "Po registrácii ti OnkoKlub automaticky vygeneruje tvoju osobnú OKkartu s unikátnym QR kódom a ID.",
+    title: "Registrácia",
+    desc: "Po vytvorení účtu sa automaticky sprístupní vaša digitálna OKkarta s unikátnym QR kódom a identifikačným číslom.",
   },
   {
     icon: QrCode,
-    title: "OKkarta je vždy v telefóne",
-    desc: "Kartu nájdeš vo svojom profile alebo v sekcii OKkarta — kedykoľvek, offline aj online. Fyzickú kartu nepotrebuješ.",
+    title: "Vždy dostupná v mobile",
+    desc: "OKkarta je uložená vo vašom profile a máte k nej prístup kedykoľvek, online aj offline. Nie je potrebná fyzická karta.",
   },
   {
     icon: ScanLine,
-    title: "Skenuj a šetri",
-    desc: "Pri nákupe v predajni alebo v e-shope stačí naskenovať QR kód alebo napísať svoje ID. Zľava sa uplatní okamžite — len pre členov OnkoKlubu.",
+    title: "Uplatnenie výhod",
+    desc: "Pri využívaní zliav stačí predložiť QR kód alebo uviesť svoje ID. Výhoda sa uplatní okamžite.",
   },
   {
     icon: Tag,
-    title: "Evidencia workshopov",
-    desc: "OKkarta slúži aj ako vstupenka na workshopy a akcie — organizátor ťa odčíta skenovaním, žiadne papiere.",
+    title: "Vstup na podujatia",
+    desc: "OKkarta slúži aj ako vstup na workshopy a podujatia. Registrácia prebieha jednoducho naskenovaním kódu bez potreby papierovej evidencie.",
   },
 ];
 
@@ -48,17 +48,17 @@ export function OKkartaSection() {
         className="mb-10"
       >
         <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
-          Sponzori a zľavy
+          Zľavy a benefity
         </p>
         <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
-          Tvoja OKkarta.
+          Vaša OKkarta.
           <br />
-          Zľavy, ktoré si zaslúžiš.
+          Výhody, ktoré máte vždy pri sebe.
         </h2>
         <p className="text-[#6F2380]/65 text-base leading-relaxed">
-          Každý člen OnkoKlubu dostane automaticky svoju osobnú OKkartu —
-          digitálnu členskú kartu s QR kódom, ktorá otvára exkluzívne zľavy
-          u partnerov OnkoKlubu po celom Slovensku.
+          Ako člen/ka ONKO KLUBU získavate digitálnu OKkartu s QR kódom, vďaka
+          ktorej môžete využívať zvýhodnené ponuky a benefity u vybraných
+          partnerov po celom Slovensku.
         </p>
       </motion.div>
 
@@ -154,8 +154,9 @@ export function OKkartaSection() {
       <div className="mb-10">
         <h3 className="text-xl font-black text-[#6F2380] mb-2">Naši partneri</h3>
         <p className="text-[#6F2380]/50 text-sm leading-relaxed mb-7">
-          Rastúca sieť značiek, ktoré stoja za onkologickými pacientmi.
-          Každý partner ponúka exkluzívne zľavy len pre držiteľov OKkarty.
+          Sieť organizácií a značiek, ktoré podporujú onkologických pacientov
+          a ich blízkych. Zvýhodnené ponuky a benefity sú dostupné výhradne
+          pre členov ONKO KLUBU.
         </p>
 
         {/* [IMG] Logá partnerov — sem prídu skutočné logá */}
@@ -195,17 +196,17 @@ export function OKkartaSection() {
         className="rounded-[2rem] bg-[#6F2380] px-6 py-8 text-center"
       >
         <h3 className="text-[1.5rem] font-black text-white leading-snug mb-3">
-          Získaj svoju OKkartu.
+          Získajte svoju OKkartu
         </h3>
         <p className="text-white/65 text-sm leading-relaxed mb-7">
-          Stačí sa zaregistrovať — karta čaká hneď po prvom prihlásení.
-          Žiadne poplatky, žiadne formuláre.
+          Vaša OKkarta bude dostupná okamžite po prvom prihlásení. Bez
+          poplatkov a bez zbytočnej administratívy.
         </p>
         <Link
           href="/register"
           className="block w-full rounded-full bg-[#FDA4C7] text-white font-black text-base py-4 active:scale-[0.98] transition-transform"
         >
-          Chcem svoju OKkartu
+          Aktivovať OKkartu
         </Link>
       </motion.div>
       </div>

@@ -5,24 +5,24 @@ import { User } from "lucide-react";
 
 const LEKTORI = [
   {
-    img: "[IMG-06]",
-    meno: "Petra Joga",
-    titul: "Joga pre onkologických pacientov",
-    bio: "Petra vedie workshopy jogy špeciálne prispôsobené pre onkologických pacientov a ľudí po liečbe. Zameriava sa na jemný pohyb, dýchanie a regeneráciu tela — bez nároku na fyzickú kondíciu. V OnkoKlube vedie live workshopy, nahrávkové série a krátke cvičenia prístupné aj z postele.",
-    accent: "#FDA4C7",
-  },
-  {
     img: "[IMG-07]",
-    meno: "Mirka Malejčíková",
-    titul: "Mindfulness & psychosociálna podpora",
-    bio: "Mirka je odborníčka na mindfulness s osobnou aj odbornou skúsenosťou s kurzom MBSR. Hovorí z vlastnej skúsenosti aj z pozície odborníčky — čo jej dáva autentický, dôveryhodný hlas pre onkologickú komunitu. V OnkoKlube vedie prednášky, webináre a rozhovory o prepojení psychiky, pohybu a liečby.",
+    meno: "MUDr. Miroslava Malejčíková",
+    titul: "Národný onkologický ústav",
+    bio: "Vyhľadávaná klinická onkologička v prsníkovej ambulancii s mimoriadne empatickým a trpezlivým prístupom k pacientom. Vo svojej praxi kladie dôraz na hlboký rešpekt k človeku, vďaka čomu pacienti pod jej starostlivosťou nachádzajú nielen špičkovú odbornú liečbu, ale aj ľudskú oporu a dôstojné sprevádzanie počas celej liečby.",
     accent: "#6F2380",
   },
   {
     img: "[IMG-08]",
-    meno: "Zuzka Mindfulness",
-    titul: "Mindfulness & relaxačné techniky",
-    bio: "Bio bude doplnené po dodaní podkladov od NIE RAKOVINE.",
+    meno: "Zuzana Mičúchová",
+    titul: "kvalifikovaná lektorka Relational Mindfulness Training",
+    bio: "Osobná skúsenosť s onkologickou diagnózou ju naučila, ako dýchanie, meditácia a bdelé vedomie môžu pomôcť pri zvládaní psychických aj fyzických nárokov ochorenia. Ako hovorí, techniky mindfulness jej zmenili život a umožnili znovuobjaviť vnútorný pokoj, ktorý dnes pomáha nájsť ďalším pacientom s podobným príbehom.",
+    accent: "#FDA4C7",
+  },
+  {
+    img: "[IMG-06]",
+    meno: "Petra Hlaváčová",
+    titul: "lektorka jogy so zameraním na onkologických pacientov",
+    bio: "S empatiou a pochopením vedie jemnú onko-jogu zameranú na mobilitu a posilnenie dýchacieho systému. Jej cvičenia prinášajú pocit ľahkosti, pokoja a obnovy energie, ktorú je možné následne jednoducho zaradiť do každodenného života.",
     accent: "#FDA4C7",
   },
 ];
@@ -41,13 +41,12 @@ export function LektoriSection() {
           Naši lektori
         </p>
         <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
-          Tváre, ktorým
-          <br />
-          môžeš dôverovať.
+          Odborníci a lektori, ktorým môžete dôverovať
         </h2>
         <p className="text-[#6F2380]/65 text-base leading-relaxed">
-          Obsah v OnkoKlube netvorí nikto anonymný. Za každým videom, prednáškou
-          a kurzom stojí konkrétny odborník — s menom, tvárou a overenými skúsenosťami.
+          Obsah v ONKO KLUBE nevzniká anonymne. Za každým videom, podcastom
+          či prednáškou stojí konkrétny odborník či lektor s overenými
+          skúsenosťami.
         </p>
       </motion.div>
 
@@ -84,8 +83,8 @@ export function LektoriSection() {
       </div>
 
       <p className="text-[#6F2380]/40 text-sm text-center mt-8 leading-relaxed">
-        A ďalší odborníci, ktorí sa k OnkoKlubu pridávajú — lekári, fyzioterapeuti,
-        psychológovia, nutričné poradkyne a ďalší.
+        A ďalší odborníci a sprievodcovia z oblasti medicíny, pohybovej terapie,
+        rehabilitácie, psychológie, výživy a sociálneho poradenstva.
       </p>
       </div>
     </section>
