@@ -1,4 +1,8 @@
 import { BRAND, getAppUrlFromEnv } from "@/lib/email/brand";
+import {
+  renderEmailFooterLogo,
+  renderEmailHeroLogos,
+} from "@/lib/email/logos";
 
 function firstName(fullName: string): string {
   return fullName.trim().split(/\s+/)[0] ?? fullName;
@@ -29,8 +33,9 @@ const FEATURES = [
   },
   {
     emoji: "◎",
-    title: "Fóra a komunita",
-    text: "Pripojte sa k rozhovorom s ľuďmi, ktorí rozumejú.",
+    title: "DISKUSNÉ FÓRA",
+    subtitle: "komunita pre vás",
+    text: "Podeľte sa o svoje skúsenosti s ľuďmi, ktorí vám rozumejú.",
   },
   {
     emoji: "❋",
@@ -39,9 +44,35 @@ const FEATURES = [
   },
 ] as const;
 
+function membershipPillarsRow(): string {
+  const cell = (label: string) =>
+    `<td style="padding:6px 8px;text-align:center;vertical-align:middle;">
+      <span style="font-size:10px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:${BRAND.purple};">${escapeHtml(label)}</span>
+    </td>`;
+  const dot = `<td style="padding:6px 0;text-align:center;vertical-align:middle;font-size:10px;font-weight:700;color:${BRAND.pink};width:12px;">•</td>`;
+
+  return `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 24px;">
+    <tr>
+      <td style="padding:20px 14px;background:${BRAND.background};border-radius:18px;border:1px solid rgba(111,35,128,0.1);">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" align="center">
+          <tr>
+            ${cell("PODPORA")}${dot}${cell("ZDIEĽANIE")}${dot}${cell("POROZUMENIE")}${dot}${cell("PRAKTICKÉ INFORMÁCIE")}
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>`;
+}
+
 function featureCards(): string {
-  return FEATURES.map(
-    (f) => `<tr>
+  return FEATURES.map((f) => {
+    const titleHtml =
+      "subtitle" in f && f.subtitle
+        ? `<div style="font-size:14px;font-weight:800;color:${BRAND.purple};margin:0 0 2px;line-height:1.35;letter-spacing:0.02em;">${escapeHtml(f.title)}</div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:${BRAND.pink};margin:0 0 6px;">${escapeHtml(f.subtitle)}</div>`
+        : `<div style="font-size:14px;font-weight:700;color:${BRAND.purple};margin:0 0 4px;line-height:1.3;">${escapeHtml(f.title)}</div>`;
+
+    return `<tr>
       <td style="padding:0 0 10px;">
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:${BRAND.background};border-radius:16px;border:1px solid rgba(111,35,128,0.08);">
           <tr>
@@ -51,14 +82,14 @@ function featureCards(): string {
               </div>
             </td>
             <td style="padding:14px 16px 14px 4px;vertical-align:top;">
-              <div style="font-size:14px;font-weight:700;color:${BRAND.purple};margin:0 0 4px;line-height:1.3;">${escapeHtml(f.title)}</div>
+              ${titleHtml}
               <div style="font-size:13px;line-height:1.55;color:${BRAND.textMuted};margin:0;">${escapeHtml(f.text)}</div>
             </td>
           </tr>
         </table>
       </td>
-    </tr>`,
-  ).join("");
+    </tr>`;
+  }).join("");
 }
 
 export function renderWelcomeEmail(fullName: string): string {
@@ -66,7 +97,7 @@ export function renderWelcomeEmail(fullName: string): string {
   const appUrl = getAppUrlFromEnv();
   const setupUrl = `${appUrl}/register/subscription`;
   const homeUrl = `${appUrl}/home`;
-  const previewText = `${name}, vitajte v Onko Klube — váš účet je pripravený.`;
+  const previewText = `${name}, vitajte v ONKO KLUBE — váš účet je pripravený.`;
 
   return `<!DOCTYPE html>
 <html lang="sk">
@@ -75,7 +106,7 @@ export function renderWelcomeEmail(fullName: string): string {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light" />
   <meta name="supported-color-schemes" content="light" />
-  <title>Vitajte v Onko Klube</title>
+  <title>Vitajte v ONKO KLUBE</title>
 </head>
 <body style="margin:0;padding:0;background:${BRAND.background};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
   <div style="display:none;max-height:0;overflow:hidden;opacity:0;mso-hide:all;">${escapeHtml(previewText)}&#847;&zwnj;&nbsp;</div>
@@ -84,24 +115,21 @@ export function renderWelcomeEmail(fullName: string): string {
     <tr>
       <td align="center">
 
-        <!-- Outer card -->
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:520px;background:${BRAND.white};border-radius:28px;overflow:hidden;box-shadow:0 12px 40px rgba(111,35,128,0.14);">
 
-          <!-- Hero -->
+          <!-- Fialová časť -->
           <tr>
-            <td style="background:linear-gradient(180deg, ${BRAND.pink} 0%, ${BRAND.pinkDark} 52%, ${BRAND.purple} 100%);padding:0;text-align:center;position:relative;">
+            <td style="background:linear-gradient(180deg, ${BRAND.pink} 0%, ${BRAND.pinkDark} 48%, ${BRAND.purple} 100%);padding:0;text-align:center;">
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                 <tr>
-                  <td style="padding:36px 32px 32px;">
-                    <div style="font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.78);margin-bottom:20px;">NIE RAKOVINE · ONKO KLUB</div>
+                  <td style="padding:36px 32px 36px;">
+                    ${renderEmailHeroLogos(appUrl)}
 
-                    <div style="display:inline-block;width:64px;height:64px;line-height:64px;border-radius:20px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.28);font-size:28px;margin-bottom:18px;">♡</div>
-
-                    <div style="font-size:28px;font-weight:800;color:${BRAND.white};line-height:1.2;letter-spacing:-0.02em;margin:0 0 8px;">
+                    <div style="font-size:26px;font-weight:800;color:${BRAND.white};line-height:1.25;letter-spacing:-0.02em;margin:0 0 16px;">
                       Ahoj, ${escapeHtml(name)}!
                     </div>
-                    <div style="font-size:15px;font-weight:600;color:rgba(255,255,255,0.92);line-height:1.5;max-width:340px;margin:0 auto;">
-                      Vitajte v komunite, kde nájdete podporu a porozumenie.
+                    <div style="font-size:15px;font-weight:600;color:rgba(255,255,255,0.94);line-height:1.65;max-width:380px;margin:0 auto;">
+                      Vitajte v ONKO KLUBE – bezpečnom priestore pre ľudí, ktorých život zasiahlo onkologické ochorenie.
                     </div>
                   </td>
                 </tr>
@@ -109,20 +137,13 @@ export function renderWelcomeEmail(fullName: string): string {
             </td>
           </tr>
 
-          <!-- Tagline strip -->
+          <!-- Biela časť -->
           <tr>
-            <td style="background:${BRAND.background};padding:18px 28px;text-align:center;border-bottom:1px solid rgba(111,35,128,0.06);">
-              <p style="margin:0;font-size:13px;line-height:1.65;color:${BRAND.purple};font-weight:600;">
-                Miesto podpory a porozumenia na ceste s onkologickým ochorením.
-              </p>
-            </td>
-          </tr>
+            <td style="padding:32px 28px 8px;background:${BRAND.white};">
+              ${membershipPillarsRow()}
 
-          <!-- Body -->
-          <tr>
-            <td style="padding:28px 28px 8px;">
-              <p style="margin:0 0 18px;font-size:15px;line-height:1.7;color:${BRAND.text};">
-                Ďakujeme za registráciu. Váš účet je aktívny a pripravený — nižšie nájdete, čo vás v aplikácii čaká.
+              <p style="margin:0 0 22px;font-size:15px;line-height:1.75;color:${BRAND.text};">
+                Ďakujeme, že ste sa k nám pridali. Váš účet je aktívny a pripravený. Nižšie sa dozviete, čo všetko máte v rámci členstva k dispozícii.
               </p>
 
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 8px;">
@@ -133,7 +154,7 @@ export function renderWelcomeEmail(fullName: string): string {
 
           <!-- CTAs -->
           <tr>
-            <td style="padding:8px 28px 32px;text-align:center;">
+            <td style="padding:8px 28px 32px;text-align:center;background:${BRAND.white};">
               <table role="presentation" cellspacing="0" cellpadding="0" align="center" style="margin:0 auto 14px;">
                 <tr>
                   <td style="border-radius:999px;background:${BRAND.pink};box-shadow:0 6px 20px rgba(202,106,138,0.38);">
@@ -153,9 +174,7 @@ export function renderWelcomeEmail(fullName: string): string {
           <!-- Footer -->
           <tr>
             <td style="padding:22px 28px 28px;border-top:1px solid rgba(111,35,128,0.08);background:${BRAND.background};text-align:center;">
-              <p style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:${BRAND.textMuted};">
-                NIE RAKOVINE, o. z.
-              </p>
+              ${renderEmailFooterLogo(appUrl)}
               <p style="margin:0 0 14px;font-size:12px;line-height:1.6;color:${BRAND.textMuted};">
                 Ak ste sa neregistrovali vy, ignorujte tento e-mail alebo nás kontaktujte.
               </p>

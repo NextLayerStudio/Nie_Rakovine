@@ -1,4 +1,8 @@
 import { BRAND, getAppUrlFromEnv } from "@/lib/email/brand";
+import {
+  renderEmailFooterLogo,
+  renderEmailHeroLogos,
+} from "@/lib/email/logos";
 
 export function firstName(fullName: string): string {
   return fullName.trim().split(/\s+/)[0] ?? fullName;
@@ -96,7 +100,8 @@ export function emailAmountBadge(amount: string): string {
 type EmailShellOptions = {
   previewText: string;
   pageTitle: string;
-  heroIcon: string;
+  /** @deprecated Logos are shown in the hero instead of emoji icons. */
+  heroIcon?: string;
   heroTitle: string;
   heroSubtitle?: string;
   bodyHtml: string;
@@ -108,7 +113,6 @@ type EmailShellOptions = {
 export function renderEmailShell({
   previewText,
   pageTitle,
-  heroIcon,
   heroTitle,
   heroSubtitle,
   bodyHtml,
@@ -159,9 +163,8 @@ export function renderEmailShell({
       <td align="center">
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:520px;background:${BRAND.white};border-radius:28px;overflow:hidden;box-shadow:0 12px 40px rgba(111,35,128,0.14);">
           <tr>
-            <td style="background:linear-gradient(180deg, ${BRAND.pink} 0%, ${BRAND.pinkDark} 52%, ${BRAND.purple} 100%);padding:36px 32px 32px;text-align:center;">
-              <div style="font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.78);margin-bottom:18px;">NIE RAKOVINE · ONKO KLUB</div>
-              <div style="display:inline-block;width:60px;height:60px;line-height:60px;border-radius:18px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.28);font-size:26px;margin-bottom:16px;">${heroIcon}</div>
+            <td style="background:linear-gradient(180deg, ${BRAND.pink} 0%, ${BRAND.pinkDark} 52%, ${BRAND.purple} 100%);padding:32px 32px 28px;text-align:center;">
+              ${renderEmailHeroLogos(appUrl)}
               <div style="font-size:24px;font-weight:800;color:${BRAND.white};line-height:1.25;letter-spacing:-0.02em;margin:0 0 8px;">${escapeHtml(heroTitle)}</div>
               ${heroSubtitle ? `<div style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.9);line-height:1.5;max-width:360px;margin:0 auto;">${escapeHtml(heroSubtitle)}</div>` : ""}
             </td>
@@ -174,7 +177,7 @@ export function renderEmailShell({
           ${ctaBlock}
           <tr>
             <td style="padding:22px 28px 28px;border-top:1px solid rgba(111,35,128,0.08);background:${BRAND.background};text-align:center;">
-              <p style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:${BRAND.textMuted};">NIE RAKOVINE, o. z.</p>
+              ${renderEmailFooterLogo(appUrl)}
               ${footerNote ? `<p style="margin:0 0 14px;font-size:12px;line-height:1.6;color:${BRAND.textMuted};">${escapeHtml(footerNote)}</p>` : ""}
               <a href="${escapeAttr(appUrl)}" style="font-size:12px;font-weight:600;color:${BRAND.purple};text-decoration:none;">${escapeHtml(appUrl.replace(/^https?:\/\//, ""))}</a>
             </td>
