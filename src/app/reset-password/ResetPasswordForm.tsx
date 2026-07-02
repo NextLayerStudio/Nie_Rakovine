@@ -1,13 +1,13 @@
 "use client";
 
 import { useActionState } from "react";
-import { resetPasswordAction, type ActionState } from "@/lib/actions/auth";
+import { requestPasswordResetAction, type ActionState } from "@/lib/actions/auth";
 import { FormError, SubmitButton } from "@/components/FormError";
 
 const INITIAL: ActionState = { ok: false };
 
 export function ResetPasswordForm() {
-  const [state, formAction] = useActionState(resetPasswordAction, INITIAL);
+  const [state, formAction] = useActionState(requestPasswordResetAction, INITIAL);
 
   return (
     <form action={formAction} className="mt-6 flex flex-1 flex-col gap-4 px-6">
@@ -26,47 +26,17 @@ export function ResetPasswordForm() {
         />
       </div>
 
-      <div>
-        <label className="label" htmlFor="password">
-          Heslo
-        </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          minLength={6}
-          placeholder="Nové heslo"
-          className="input-light"
-          autoComplete="new-password"
-        />
-      </div>
-      <div>
-        <label className="label" htmlFor="confirmPassword">
-          Potvrdiť heslo
-        </label>
-        <input
-          id="confirmPassword"
-          name="confirmPassword"
-          type="password"
-          required
-          minLength={6}
-          placeholder="Potvrdiť heslo"
-          className="input-light"
-          autoComplete="new-password"
-        />
-      </div>
-
-      <FormError message={state.message} />
       {state.ok && state.message ? (
-        <p className="text-center text-xs font-medium text-brand-purple">
+        <p className="rounded-2xl bg-emerald-50 px-4 py-3 text-center text-xs font-medium text-emerald-700">
           {state.message}
         </p>
-      ) : null}
+      ) : (
+        <FormError message={state.message} />
+      )}
 
       <div className="mt-6 flex justify-center">
-        <SubmitButton className="btn-secondary w-56" pendingLabel="Ukladám…">
-          Vytvoriť nové heslo
+        <SubmitButton className="btn-secondary w-56" pendingLabel="Odosielam…">
+          Poslať odkaz
         </SubmitButton>
       </div>
     </form>

@@ -103,6 +103,9 @@ export const getCurrentUser = cache(async () => {
 export async function requireUser() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
+  // Block access until the registration e-mail code has been confirmed.
+  // (Existing accounts were backfilled as verified in the migration.)
+  if (!user.emailVerified) redirect("/register/verify-email");
   return user;
 }
 

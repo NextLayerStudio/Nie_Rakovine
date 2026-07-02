@@ -9,10 +9,12 @@ import {
   hashPassword,
   verifyPassword,
 } from "@/lib/auth";
+import { trackLoginDevice } from "@/lib/email/send";
+import { createAndSendVerificationCode } from "@/lib/email-verification";
 import {
-  queueWelcomeEmail,
-  trackLoginDevice,
-} from "@/lib/email/send";
+  resetPasswordWithToken,
+  sendPasswordResetLink,
+} from "@/lib/password-reset";
 import { headers } from "next/headers";
 
 export type ActionState = {
@@ -56,27 +58,27 @@ export async function registerAction(
       fullName,
       passwordHash: await hashPassword(password),
       birthDate: birthDateRaw ? new Date(birthDateRaw) : null,
+      // emailVerified defaults to false — the user must confirm the code next.
       profile: { create: {} },
     },
   });
 
+  // Log the user in so the verification step can identify them, but the
+  // emailVerified gate (see requireUser) blocks the rest of the app until
+  // the emailed code is confirmed.
   await createSession({ userId: user.id, role: user.role });
 
-  queueWelcomeEmail({ email: user.email, fullName: user.fullName });
-
-  const headerStore = await headers();
   try {
-    await trackLoginDevice({
+    await createAndSendVerificationCode({
       userId: user.id,
       email: user.email,
       fullName: user.fullName,
-      userAgent: headerStore.get("user-agent") ?? "Neznáme zariadenie",
     });
   } catch (error) {
-    console.error("trackLoginDevice failed during register:", error);
+    console.error("Failed to send verification code during register:", error);
   }
 
-  return { ok: true, redirectTo: "/register/subscription" };
+  return { ok: true, redirectTo: "/register/verify-email" };
 }
 
 // ---------- Login -------------------------------------------------------
@@ -100,6 +102,21 @@ export async function loginAction(
   }
 
   await createSession({ userId: user.id, role: user.role });
+
+  // Unverified accounts (registration abandoned before the code step) must
+  // finish e-mail verification before they can use the app.
+  if (!user.emailVerified) {
+    try {
+      await createAndSendVerificationCode({
+        userId: user.id,
+        email: user.email,
+        fullName: user.fullName,
+      });
+    } catch (error) {
+      console.error("Failed to resend verification code during login:", error);
+    }
+    return { ok: true, redirectTo: "/register/verify-email" };
+  }
 
   const headerStore = await headers();
   await trackLoginDevice({
@@ -127,20 +144,51 @@ export async function logoutAction(): Promise<void> {
   redirect("/welcome");
 }
 
-// ---------- Reset password (no email step yet, just lets the user set
-// a new password if they're logged in) ---------------------------------
-export async function resetPasswordAction(
+// ---------- Forgot password: e-mail a one-time reset link ---------------
+export async function requestPasswordResetAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
   const email = String(formData.get("email") ?? "")
     .trim()
     .toLowerCase();
+
+  if (!email) {
+    return { ok: false, message: "Zadajte e-mail." };
+  }
+
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (user) {
+    try {
+      await sendPasswordResetLink({
+        userId: user.id,
+        email: user.email,
+        fullName: user.fullName,
+      });
+    } catch (error) {
+      console.error("Failed to send password reset link:", error);
+    }
+  }
+
+  // Always return success so we don't leak which e-mails have accounts.
+  return {
+    ok: true,
+    message:
+      "Ak účet s týmto e-mailom existuje, poslali sme naň odkaz na zmenu hesla. Skontrolujte si schránku.",
+  };
+}
+
+// ---------- Set a new password from a valid reset token -----------------
+export async function setNewPasswordAction(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const token = String(formData.get("token") ?? "");
   const password = String(formData.get("password") ?? "");
   const confirmPassword = String(formData.get("confirmPassword") ?? "");
 
-  if (!email || !password) {
-    return { ok: false, message: "Vyplňte e-mail a heslo." };
+  if (!password) {
+    return { ok: false, message: "Zadajte nové heslo." };
   }
   if (password.length < 6) {
     return { ok: false, message: "Heslo musí mať aspoň 6 znakov." };
@@ -149,16 +197,14 @@ export async function resetPasswordAction(
     return { ok: false, message: "Heslá sa nezhodujú." };
   }
 
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) {
-    // Return success either way so we don't leak which e-mails exist.
-    return { ok: true, message: "Ak účet existuje, heslo bolo aktualizované." };
+  const result = await resetPasswordWithToken(token, password);
+  if (!result.ok) {
+    return { ok: false, message: result.message };
   }
 
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { passwordHash: await hashPassword(password) },
-  });
-
-  return { ok: true, message: "Heslo bolo aktualizované. Môžete sa prihlásiť." };
+  return {
+    ok: true,
+    redirectTo: "/login",
+    message: "Heslo bolo zmenené. Prihláste sa novým heslom.",
+  };
 }

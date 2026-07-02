@@ -61,6 +61,10 @@ model User {
   birthDate       DateTime?
   role            UserRole @default(USER)
 
+  // Email verification (registration confirmation code)
+  emailVerified   Boolean   @default(false)
+  emailVerifiedAt DateTime?
+
   // Profile populated by the multi-step registration form
   profile         UserProfile?
 
@@ -87,9 +91,38 @@ model User {
   notifications      Notification[]
   savedDiscountOffers SavedDiscountOffer[]
   knownDevices       UserKnownDevice[]
+  emailVerificationCodes EmailVerificationCode[]
+  passwordResetTokens    PasswordResetToken[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// One-time 6-digit code emailed during registration to confirm the address.
+model EmailVerificationCode {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  codeHash   String
+  expiresAt  DateTime
+  attempts   Int       @default(0)
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId])
+}
+
+// One-time, time-limited token emailed for secure password changes/resets.
+model PasswordResetToken {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash  String    @unique
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId])
 }
 
 model UserProfile {

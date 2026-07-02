@@ -6,7 +6,7 @@ import { ConsentCheckbox } from "@/components/ConsentCheckbox";
 import { FormError, SubmitButton } from "@/components/FormError";
 import { SettingSwitch } from "@/components/SettingSwitch";
 import {
-  changePasswordAction,
+  requestPasswordChangeLinkAction,
   updateAccountAction,
   updatePreferencesAction,
   type SettingsActionState,
@@ -75,7 +75,7 @@ export function SettingsForms({
     INITIAL,
   );
   const [passwordState, passwordAction] = useActionState(
-    changePasswordAction,
+    requestPasswordChangeLinkAction,
     INITIAL,
   );
   const [prefsState, prefsAction] = useActionState(
@@ -165,7 +165,7 @@ export function SettingsForms({
                   Zmena hesla
                 </span>
                 <span className="text-[11px] text-brand-purple/55">
-                  {passwordOpen ? "Skryť formulár" : "Kliknite pre zmenu hesla"}
+                  {passwordOpen ? "Skryť" : "Poslať odkaz na e-mail"}
                 </span>
               </span>
             </span>
@@ -174,39 +174,20 @@ export function SettingsForms({
 
           {passwordOpen && (
             <form action={passwordAction} className="mt-4 space-y-4">
-              <Field label="Súčasné heslo">
-                <input
-                  name="currentPassword"
-                  type="password"
-                  required
-                  autoComplete="current-password"
-                  className="input-light"
-                />
-              </Field>
-              <Field label="Nové heslo">
-                <input
-                  name="newPassword"
-                  type="password"
-                  required
-                  minLength={6}
-                  autoComplete="new-password"
-                  placeholder="Min. 6 znakov"
-                  className="input-light"
-                />
-              </Field>
-              <Field label="Potvrdiť nové heslo">
-                <input
-                  name="confirmPassword"
-                  type="password"
-                  required
-                  minLength={6}
-                  autoComplete="new-password"
-                  className="input-light"
-                />
-              </Field>
+              <p className="rounded-2xl bg-brand-purple/[0.04] px-4 py-3 text-xs leading-relaxed text-brand-purple/70">
+                Z bezpečnostných dôvodov nemeníme heslo priamo v aplikácii.
+                Pošleme vám na e-mail{" "}
+                <span className="font-semibold text-brand-purple">
+                  jednorazový odkaz s platnosťou 30 minút
+                </span>
+                . Po kliknutí naň si nastavíte nové heslo.
+              </p>
               <Feedback state={passwordState} />
-              <SubmitButton className="btn-primary w-full py-2.5 text-sm">
-                Zmeniť heslo
+              <SubmitButton
+                className="btn-primary w-full py-2.5 text-sm"
+                pendingLabel="Odosielam…"
+              >
+                Poslať odkaz na zmenu hesla
               </SubmitButton>
             </form>
           )}

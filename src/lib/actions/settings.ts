@@ -2,44 +2,38 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { hashPassword, requireUser, verifyPassword } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
+import { sendPasswordResetLink } from "@/lib/password-reset";
 
 export type SettingsActionState = { ok: boolean; message?: string };
 
-export async function changePasswordAction(
+// Secure change: e-mail a one-time, time-limited link (30 min) instead of
+// letting the password be changed directly in the form.
+export async function requestPasswordChangeLinkAction(
   _prev: SettingsActionState,
-  formData: FormData,
+  _formData: FormData,
 ): Promise<SettingsActionState> {
   const user = await requireUser();
-  const currentPassword = String(formData.get("currentPassword") ?? "");
-  const newPassword = String(formData.get("newPassword") ?? "");
-  const confirmPassword = String(formData.get("confirmPassword") ?? "");
 
-  if (!currentPassword || !newPassword || !confirmPassword) {
-    return { ok: false, message: "Vyplňte všetky polia." };
-  }
-  if (newPassword.length < 6) {
-    return { ok: false, message: "Nové heslo musí mať aspoň 6 znakov." };
-  }
-  if (newPassword !== confirmPassword) {
-    return { ok: false, message: "Nové heslá sa nezhodujú." };
-  }
-
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id } });
-  if (
-    !dbUser ||
-    !(await verifyPassword(currentPassword, dbUser.passwordHash))
-  ) {
-    return { ok: false, message: "Súčasné heslo nie je správne." };
+  try {
+    await sendPasswordResetLink({
+      userId: user.id,
+      email: user.email,
+      fullName: user.fullName,
+    });
+  } catch (error) {
+    console.error("Failed to send password change link:", error);
+    return {
+      ok: false,
+      message: "Odkaz sa nepodarilo odoslať. Skúste to znova.",
+    };
   }
 
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { passwordHash: await hashPassword(newPassword) },
-  });
-
-  revalidatePath("/menu/nastavenia");
-  return { ok: true, message: "Heslo bolo úspešne zmenené." };
+  return {
+    ok: true,
+    message:
+      "Poslali sme vám e-mail s odkazom na zmenu hesla. Odkaz je platný 30 minút.",
+  };
 }
 
 export async function updateAccountAction(
