@@ -29,20 +29,19 @@ export function FinalCTA() {
 
         <div className="relative z-10">
           <h2 className="text-[2.4rem] font-black text-white leading-[1.1] mb-4">
-            Prvý krok stačí.
+            Vstúpte do ONKO KLUBU
           </h2>
           <p className="text-white/65 text-base leading-relaxed mb-8 max-w-xs mx-auto">
-            Registrácia trvá 2 minúty. Bez záväzkov — prvý mesiac môžeš
-            vyskúšať a kedykoľvek odísť.
+            Registrácia je jednoduchá a nezáväzná. Prístup získate okamžite.
           </p>
           <Link
             href="/register"
             className="block w-full rounded-full bg-[#FDA4C7] text-white font-black text-xl py-5 text-center active:scale-[0.98] transition-transform mb-4"
           >
-            Chcem sa pripojiť
+            Vytvoriť účet
           </Link>
           <Link href="/login" className="text-white/40 text-sm underline underline-offset-2">
-            Už som člen — Prihlásiť sa
+            Už som členom — Prihlásiť sa
           </Link>
         </div>
       </motion.div>

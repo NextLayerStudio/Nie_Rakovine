@@ -5,19 +5,19 @@ import { Quote } from "lucide-react";
 
 const CITATY = [
   {
-    text: "Najdôležitejšie pre mňa bolo vedieť, že nie som sama. V Onkorumky fórach som prvýkrát stretla ženy, ktoré prešli úplne tým istým čím som prechádzala ja — a vedeli mi poradiť veci, ktoré mi žiadny lekár nepovedal.",
+    text: "Po začiatku liečby som mala pocit, že moje telo už nie je „moje“. Na onko-jogu s Peťou som prišla skôr zo zvedavosti než s očakávaním. Jemné pohyby a dýchanie pod kontrolou mi prvýkrát po dlhom čase dovolili cítiť sa v tele pokojne. Nikto odo mňa nič nechcel, nič som nemusela zvládať. Odchádzala som s pocitom, že som sa aspoň na chvíľu mohla nadýchnuť.",
     meno: "Marta, 47 rokov",
     mesto: "Bratislava",
     accent: "#FDA4C7",
   },
   {
-    text: "Workshopy s Petrou sú niečo, na čo sa každý týždeň teším. Nikdy som si nemyslela, že budem robiť jogu — ale tieto cvičenia sú také jemné a prispôsobené, že to zvládnem aj keď mi je zle.",
+    text: "Najťažšie pre mňa nebola samotná liečba, ale ten chaos okolo papierov a všetkých povinností, ktoré som musela riešiť. Nevedela som, kde začať, ani na čo mám ako onkologická pacientka nárok. Vďaka ONKO KLUBU som získala jasný prehľad a konkrétne usmernenie, kde začať.",
     meno: "Jana, 52 rokov",
     mesto: "Nitra",
     accent: "#6F2380",
   },
   {
-    text: "Vďaka Sociálnemu kompasu som konečne pochopila, na čo mám nárok zo Sociálnej poisťovne. Ušetrilo mi to hodiny hľadania a stres.",
+    text: "Najviac mi pomohli rozhovory s pacientskymi poradcami z organizácie NIE RAKOVINE, ktorí si sami prešli liečbou. Nepodávali teórie, ale reálne skúsenosti, čo funguje, čo čakať a ako si pomôcť. Bolo to úprimné a bez prikrášľovania. Prvýkrát som mal pocit, že mi niekto naozaj rozumie.",
     meno: "Peter, 61 rokov",
     mesto: "Košice",
     accent: "#FDA4C7",
@@ -39,9 +39,7 @@ export function TestimonialsSection() {
           Príbehy členov
         </p>
         <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1]">
-          Ľudia, ktorí to žijú
-          <br />
-          ako ty.
+          Rovnaká cesta, rôzne príbehy
         </h2>
       </motion.div>
 

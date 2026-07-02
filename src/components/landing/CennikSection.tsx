@@ -60,9 +60,9 @@ export function CennikSection() {
           Cenník
         </p>
         <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-3">
-          Vyberte si spôsob členstva, ktorý vám vyhovuje
+          Zvoľte si spôsob členstva, ktorý vám najviac vyhovuje.
         </h2>
-        <p className="text-[#6F2380]/55 text-base mb-6">Transparentné podmienky bez skrytých poplatkov.</p>
+        <p className="text-[#6F2380]/55 text-base mb-6">Bez viazanosti – členstvo môžete kedykoľvek zrušiť.</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {CENNIK_INFO.map((info) => {
