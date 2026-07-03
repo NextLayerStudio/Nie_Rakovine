@@ -188,12 +188,12 @@ export default function CennikPage() {
       <section className="pb-16">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="rounded-[2rem] bg-[#6F2380] px-6 py-10 md:py-14 text-center">
-            <h2 className="text-[2rem] md:text-[2.4rem] font-black text-white leading-tight mb-3">Prvý krok stačí.</h2>
+            <h2 className="text-[2rem] md:text-[2.4rem] font-black text-white leading-tight mb-3">Vstúpte do ONKO KLUBU</h2>
             <p className="text-white/65 text-sm leading-relaxed mb-7 md:max-w-sm md:mx-auto">
-              Registrácia trvá 2 minúty. Kedykoľvek môžeš odísť.
+              Registrácia je jednoduchá a nezáväzná. Prístup získate okamžite.
             </p>
             <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-10 py-4">
-              Chcem sa pripojiť
+              Vytvoriť účet
             </Link>
           </div>
         </div>
