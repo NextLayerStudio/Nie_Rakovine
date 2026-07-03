@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Navbar } from "@/components/landing/Navbar";
 import { Leaf, Brain, Apple, MessageCircle, Stethoscope, Heart } from "lucide-react";
+import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const CATEGORIES = [
   { icon: Leaf,          accent: "#FDA4C7", title: "Joga a pohyb",           desc: "Jemné cvičenia špeciálne prispôsobené pre onkologických pacientov. Od 10-minútových ranných cvičení až po hodinové lekcie." },
@@ -23,12 +24,16 @@ export default function KontentKniznicaPage() {
         <h1 className="text-[2.4rem] font-black text-[#6F2380] leading-[1.1] mb-5 max-w-xs">
           Desiatky videí vždy poruke
         </h1>
-        <p className="text-[#6F2380]/70 text-base leading-relaxed mb-8 max-w-sm">
-          Joga, mindfulness, jemné pohybové a dychové cvičenia, odborné diskusie
-          o liečbe, výžive aj psychike. ONKO KLUB prináša exkluzívnu ONKO
-          knižnicu vytvorenú špeciálne pre onkologických pacientov a ich
-          blízkych. Sledujte kedykoľvek, kdekoľvek a vo vlastnom tempe.
-        </p>
+        <div className="mb-8 max-w-sm">
+          <ExpandableText maxHeight={100} fadeColor="#FFF3F9">
+            <p className="text-[#6F2380]/70 text-base leading-relaxed">
+              Joga, mindfulness, jemné pohybové a dychové cvičenia, odborné diskusie
+              o liečbe, výžive aj psychike. ONKO KLUB prináša exkluzívnu ONKO
+              knižnicu vytvorenú špeciálne pre onkologických pacientov a ich
+              blízkych. Sledujte kedykoľvek, kdekoľvek a vo vlastnom tempe.
+            </p>
+          </ExpandableText>
+        </div>
         <Link
           href="/register"
           className="block w-full rounded-full bg-[#FDA4C7] text-white text-xl font-black py-5 text-center"
@@ -51,9 +56,11 @@ export default function KontentKniznicaPage() {
                 <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: cat.accent }}>
                   <Icon size={18} className="text-white" strokeWidth={2} />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <h3 className="font-black text-[#6F2380] text-[15px] leading-tight mb-0.5">{cat.title}</h3>
-                  <p className="text-[#6F2380]/55 text-[13px] leading-relaxed">{cat.desc}</p>
+                  <ExpandableText maxHeight={56} fadeColor="#FFFFFF">
+                    <p className="text-[#6F2380]/55 text-[13px] leading-relaxed">{cat.desc}</p>
+                  </ExpandableText>
                 </div>
               </div>
             );

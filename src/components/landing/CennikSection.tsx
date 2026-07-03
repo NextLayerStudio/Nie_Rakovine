@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Check, Star, ShieldCheck, RefreshCw, CreditCard, ChevronDown } from "lucide-react";
+import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const BENEFITY = [
   "Prístup ku všetkým videám a materiálom prispôsobeným potrebám onkologických pacientov",
@@ -132,9 +133,13 @@ export function CennikSection() {
             Začať ročne — 60 €
           </Link>
 
-          <p className="text-white/45 text-[11px] leading-relaxed mt-5">
-            {REINVESTICIA_TEXT}
-          </p>
+          <div className="mt-5">
+            <ExpandableText maxHeight={48} fadeColor="#6F2380">
+              <p className="text-white/45 text-[11px] leading-relaxed">
+                {REINVESTICIA_TEXT}
+              </p>
+            </ExpandableText>
+          </div>
         </motion.div>
 
         {/* Mesačné */}
@@ -170,9 +175,13 @@ export function CennikSection() {
             Začať mesačne — 5 €
           </Link>
 
-          <p className="text-[#6F2380]/40 text-[11px] leading-relaxed mt-5">
-            {REINVESTICIA_TEXT}
-          </p>
+          <div className="mt-5">
+            <ExpandableText maxHeight={48} fadeColor="#FFFFFF">
+              <p className="text-[#6F2380]/40 text-[11px] leading-relaxed">
+                {REINVESTICIA_TEXT}
+              </p>
+            </ExpandableText>
+          </div>
         </motion.div>
       </div>
 

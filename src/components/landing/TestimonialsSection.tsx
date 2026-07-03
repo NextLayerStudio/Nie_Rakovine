@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
+import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const CITATY = [
   {
@@ -60,9 +61,13 @@ export function TestimonialsSection() {
             >
               <Quote size={18} className="text-white" />
             </div>
-            <p className="text-[#6F2380]/80 text-[15px] leading-relaxed italic mb-5">
-              „{c.text}&rdquo;
-            </p>
+            <div className="mb-5">
+              <ExpandableText maxHeight={96} fadeColor="#FFFFFF">
+                <p className="text-[#6F2380]/80 text-[15px] leading-relaxed italic">
+                  „{c.text}&rdquo;
+                </p>
+              </ExpandableText>
+            </div>
             <div className="flex items-center gap-2">
               <div
                 className="w-1.5 h-6 rounded-full"

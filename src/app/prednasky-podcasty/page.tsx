@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Mic, Headphones, BookOpen, Circle, Play, User } from "lucide-react";
+import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const TOPICS = [
   "Výživa počas onkologickej liečby a po jej ukončení",
@@ -47,13 +48,17 @@ export default function PrenasakyPodcastyPage() {
               <h1 className="text-[2.4rem] md:text-[3.2rem] font-black text-[#6F2380] leading-[1.1] mb-5">
                 Odborníci a lektori, ktorým môžete dôverovať
               </h1>
-              <p className="text-[#6F2380]/70 text-base leading-relaxed mb-8">
-                Pravidelne pripravujeme odborné prednášky, diskusie a podcasty
-                s lekármi, psychológmi, fyzioterapeutmi a ďalšími odborníkmi.
-                Ako člen/ka ONKO KLUBU máte prístup k záznamom aj živým
-                vysielaniam, ktoré sú vám k dispozícii kedykoľvek a bez
-                ďalších poplatkov.
-              </p>
+              <div className="mb-8">
+                <ExpandableText maxHeight={100} fadeColor="#FFF3F9">
+                  <p className="text-[#6F2380]/70 text-base leading-relaxed">
+                    Pravidelne pripravujeme odborné prednášky, diskusie a podcasty
+                    s lekármi, psychológmi, fyzioterapeutmi a ďalšími odborníkmi.
+                    Ako člen/ka ONKO KLUBU máte prístup k záznamom aj živým
+                    vysielaniam, ktoré sú vám k dispozícii kedykoľvek a bez
+                    ďalších poplatkov.
+                  </p>
+                </ExpandableText>
+              </div>
               <Link
                 href="/register"
                 className="block w-full md:w-auto md:inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black py-4 md:px-10 text-center"
@@ -95,9 +100,11 @@ export default function PrenasakyPodcastyPage() {
                   <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: p.accent }}>
                     <Icon size={18} className="text-white" strokeWidth={2} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <h3 className="font-black text-[#6F2380] text-[15px] leading-tight mb-1">{p.title}</h3>
-                    <p className="text-[#6F2380]/55 text-[13px] leading-relaxed">{p.desc}</p>
+                    <ExpandableText maxHeight={56} fadeColor="#FFFFFF">
+                      <p className="text-[#6F2380]/55 text-[13px] leading-relaxed">{p.desc}</p>
+                    </ExpandableText>
                   </div>
                 </div>
               );

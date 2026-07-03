@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { HelpCircle } from "lucide-react";
+import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const OTAZKY = [
   "Kde môžem požiadať o poskytovanie peňažného príspevku?",
@@ -28,15 +29,17 @@ export function SocialnyKompassSection() {
         <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
           Sme tu, aby sme vám pomohli
         </h2>
-        <p className="text-[#6F2380]/65 text-base leading-relaxed">
-          Vieme, aké ťažké je prechádzať nielen fyzickými, ale aj psychickými
-          výzvami počas onkologického ochorenia. Ako člen/ka ONKO KLUBU máte
-          k dispozícii všetky informácie potrebné na zorientovanie sa v
-          systéme sociálnej pomoci. Našou misiou je ušetriť vám čas a stres –
-          pomôžeme vám s formulármi k peňažným príspevkom, invalidnému
-          dôchodku, preukazu ŤZP či inou administratívou, ktorá sa môže
-          vyskytnúť počas vašej liečby.
-        </p>
+        <ExpandableText maxHeight={104} fadeColor="#FFF3F9">
+          <p className="text-[#6F2380]/65 text-base leading-relaxed">
+            Vieme, aké ťažké je prechádzať nielen fyzickými, ale aj psychickými
+            výzvami počas onkologického ochorenia. Ako člen/ka ONKO KLUBU máte
+            k dispozícii všetky informácie potrebné na zorientovanie sa v
+            systéme sociálnej pomoci. Našou misiou je ušetriť vám čas a stres –
+            pomôžeme vám s formulármi k peňažným príspevkom, invalidnému
+            dôchodku, preukazu ŤZP či inou administratívou, ktorá sa môže
+            vyskytnúť počas vašej liečby.
+          </p>
+        </ExpandableText>
       </motion.div>
 
       <div className="rounded-[2rem] bg-white border border-[#FDA4C7]/15 p-6 md:p-8">

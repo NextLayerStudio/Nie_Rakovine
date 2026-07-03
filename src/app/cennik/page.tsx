@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Check, Star, ShieldCheck, CreditCard, RefreshCw } from "lucide-react";
+import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const BENEFITY = [
   "Prístup ku všetkým videám a materiálom prispôsobeným potrebám onkologických pacientov",
@@ -114,9 +115,13 @@ export default function CennikPage() {
               <Link href="/register?plan=annual" className="block w-full rounded-full bg-[#FDA4C7] text-white font-black text-base py-4 text-center">
                 Začať ročne — 60 €
               </Link>
-              <p className="text-white/45 text-[11px] leading-relaxed mt-5">
-                {REINVESTICIA_TEXT}
-              </p>
+              <div className="mt-5">
+                <ExpandableText maxHeight={48} fadeColor="#6F2380">
+                  <p className="text-white/45 text-[11px] leading-relaxed">
+                    {REINVESTICIA_TEXT}
+                  </p>
+                </ExpandableText>
+              </div>
             </div>
 
             {/* Mesačné */}
@@ -140,9 +145,13 @@ export default function CennikPage() {
               <Link href="/register?plan=monthly" className="block w-full rounded-full border-2 border-[#FDA4C7] text-[#FDA4C7] font-black text-base py-4 text-center">
                 Začať mesačne — 5 €
               </Link>
-              <p className="text-[#6F2380]/40 text-[11px] leading-relaxed mt-5">
-                {REINVESTICIA_TEXT}
-              </p>
+              <div className="mt-5">
+                <ExpandableText maxHeight={48} fadeColor="#FFFFFF">
+                  <p className="text-[#6F2380]/40 text-[11px] leading-relaxed">
+                    {REINVESTICIA_TEXT}
+                  </p>
+                </ExpandableText>
+              </div>
             </div>
           </div>
         </div>
@@ -177,7 +186,9 @@ export default function CennikPage() {
             {FAQ.map((item) => (
               <div key={item.q} className="bg-white rounded-2xl p-5 border border-[#FDA4C7]/15">
                 <p className="font-black text-[#6F2380] text-[14px] mb-2">{item.q}</p>
-                <p className="text-[#6F2380]/55 text-[13px] leading-relaxed">{item.a}</p>
+                <ExpandableText maxHeight={60} fadeColor="#FFFFFF">
+                  <p className="text-[#6F2380]/55 text-[13px] leading-relaxed">{item.a}</p>
+                </ExpandableText>
               </div>
             ))}
           </div>

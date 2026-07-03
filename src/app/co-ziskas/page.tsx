@@ -5,6 +5,7 @@ import {
   Play, Mic, MapPin, MessageSquare, Tag, QrCode, BookOpen,
   Check, ChevronRight,
 } from "lucide-react";
+import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const FEATURES = [
   {
@@ -93,10 +94,14 @@ export default function CoZiskasPage() {
               <h1 className="text-[2.4rem] md:text-[3.2rem] font-black text-[#6F2380] leading-[1.1] mb-5">
                 Všetko podstatné na jednom mieste
               </h1>
-              <p className="text-[#6F2380]/70 text-base leading-relaxed mb-8">
-                ONKO KLUB spája informácie a praktickú pomoc pre onkologických
-                pacientov a ich blízkych. Pozrite sa, čo všetko máte k dispozícii.
-              </p>
+              <div className="mb-8">
+                <ExpandableText maxHeight={72} fadeColor="#FFF3F9">
+                  <p className="text-[#6F2380]/70 text-base leading-relaxed">
+                    ONKO KLUB spája informácie a praktickú pomoc pre onkologických
+                    pacientov a ich blízkych. Pozrite sa, čo všetko máte k dispozícii.
+                  </p>
+                </ExpandableText>
+              </div>
               <div className="md:flex md:gap-3">
                 <Link
                   href="/register"
@@ -154,7 +159,11 @@ export default function CoZiskasPage() {
                     <p className="text-[#6F2380]/50 text-xs font-bold uppercase tracking-wider">{f.title}</p>
                   </div>
                   <h2 className="text-[1.8rem] font-black text-[#6F2380] leading-[1.15] mb-3">{f.headline}</h2>
-                  <p className="text-[#6F2380]/65 text-[15px] leading-relaxed mb-6">{f.desc}</p>
+                  <div className="mb-6">
+                    <ExpandableText maxHeight={80} fadeColor="#FFF3F9">
+                      <p className="text-[#6F2380]/65 text-[15px] leading-relaxed">{f.desc}</p>
+                    </ExpandableText>
+                  </div>
 
                   {/* Screenshot placeholdery */}
                   <div className="flex flex-col gap-3 mb-6">

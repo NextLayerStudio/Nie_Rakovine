@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { QrCode, ScanLine, BadgeCheck, Tag, Check } from "lucide-react";
+import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const KATEGORIE = [
   "Zdravie a starostlivosť o telo",
@@ -34,11 +35,15 @@ export default function SponzoriPage() {
               <h1 className="text-[2.4rem] md:text-[3.2rem] font-black text-[#6F2380] leading-[1.1] mb-5">
                 Špeciálne zľavy len pre členov ONKO KLUBU
               </h1>
-              <p className="text-[#6F2380]/70 text-base leading-relaxed mb-8">
-                Ako člen/ka ONKO KLUBU máte vďaka našim partnerom možnosť
-                využiť špeciálne zľavy. Stačí sa preukázať OKkartou a zľava
-                sa vám automaticky uplatní.
-              </p>
+              <div className="mb-8">
+                <ExpandableText maxHeight={72} fadeColor="#FFF3F9">
+                  <p className="text-[#6F2380]/70 text-base leading-relaxed">
+                    Ako člen/ka ONKO KLUBU máte vďaka našim partnerom možnosť
+                    využiť špeciálne zľavy. Stačí sa preukázať OKkartou a zľava
+                    sa vám automaticky uplatní.
+                  </p>
+                </ExpandableText>
+              </div>
               <Link
                 href="/register"
                 className="block w-full md:w-auto md:inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black py-4 md:px-10 text-center"
@@ -50,9 +55,13 @@ export default function SponzoriPage() {
             <div className="hidden md:block">
               <div className="rounded-[2rem] bg-[#6F2380] px-7 py-8 relative overflow-hidden">
                 <div className="absolute -top-10 -right-10 w-36 h-36 rounded-full bg-white/5" />
-                <p className="text-white font-black text-[1.5rem] leading-snug relative z-10">
-                  Partnerské zľavy prinášajú reálnu úsporu, ktorá môže prevýšiť náklady na členstvo.
-                </p>
+                <div className="relative z-10">
+                  <ExpandableText maxHeight={120} fadeColor="#6F2380">
+                    <p className="text-white font-black text-[1.5rem] leading-snug">
+                      Partnerské zľavy prinášajú reálnu úsporu, ktorá môže prevýšiť náklady na členstvo.
+                    </p>
+                  </ExpandableText>
+                </div>
               </div>
             </div>
           </div>
@@ -64,9 +73,13 @@ export default function SponzoriPage() {
         <div className="px-5">
           <div className="rounded-[2rem] bg-[#6F2380] px-6 py-8 relative overflow-hidden">
             <div className="absolute -top-10 -right-10 w-36 h-36 rounded-full bg-white/5" />
-            <p className="text-white font-black text-[1.5rem] leading-snug relative z-10">
-              Partnerské zľavy prinášajú reálnu úsporu, ktorá môže prevýšiť náklady na členstvo.
-            </p>
+            <div className="relative z-10">
+              <ExpandableText maxHeight={120} fadeColor="#6F2380">
+                <p className="text-white font-black text-[1.5rem] leading-snug">
+                  Partnerské zľavy prinášajú reálnu úsporu, ktorá môže prevýšiť náklady na členstvo.
+                </p>
+              </ExpandableText>
+            </div>
           </div>
         </div>
       </section>
@@ -122,9 +135,11 @@ export default function SponzoriPage() {
                   >
                     <Icon size={17} className="text-white" strokeWidth={2} />
                   </div>
-                  <div className="pt-1.5">
+                  <div className="pt-1.5 min-w-0">
                     <p className="font-black text-[#6F2380] text-[16px] mb-1">{s.title}</p>
-                    <p className="text-[#6F2380]/55 text-[13px] leading-relaxed">{s.desc}</p>
+                    <ExpandableText maxHeight={56} fadeColor="#FFF3F9">
+                      <p className="text-[#6F2380]/55 text-[13px] leading-relaxed">{s.desc}</p>
+                    </ExpandableText>
                   </div>
                 </div>
               );

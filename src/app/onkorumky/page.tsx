@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Navbar } from "@/components/landing/Navbar";
 import { Lock, Circle } from "lucide-react";
+import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const CATEGORIES = [
   {
@@ -47,11 +48,15 @@ export default function OnkorumkyPage() {
         <h1 className="text-[2.4rem] font-black text-[#6F2380] leading-[1.1] mb-5 max-w-xs">
           Podeľte sa o to, čím prechádzate
         </h1>
-        <p className="text-[#6F2380]/70 text-base leading-relaxed mb-8 max-w-sm">
-          Zdieľajte svoje skúsenosti, otázky, obavy či každodenné výzvy s
-          ľuďmi, ktorí vedia, čo prežívate. Môžete prispievať pod vlastným
-          menom alebo anonymne.
-        </p>
+        <div className="mb-8 max-w-sm">
+          <ExpandableText maxHeight={80} fadeColor="#FFF3F9">
+            <p className="text-[#6F2380]/70 text-base leading-relaxed">
+              Zdieľajte svoje skúsenosti, otázky, obavy či každodenné výzvy s
+              ľuďmi, ktorí vedia, čo prežívate. Môžete prispievať pod vlastným
+              menom alebo anonymne.
+            </p>
+          </ExpandableText>
+        </div>
         <Link href="/register" className="block w-full rounded-full bg-[#FDA4C7] text-white text-xl font-black py-5 text-center">
           Vstúpiť do komunity
         </Link>
@@ -63,12 +68,14 @@ export default function OnkorumkyPage() {
           <div className="w-11 h-11 rounded-xl bg-[#6F2380] flex items-center justify-center shrink-0">
             <Lock size={18} className="text-white" strokeWidth={2} />
           </div>
-          <div>
+          <div className="min-w-0">
             <h3 className="font-black text-[#6F2380] text-[15px] leading-tight mb-0.5">Súkromie máte vo svojich rukách.</h3>
-            <p className="text-[#6F2380]/55 text-[13px] leading-relaxed">
-              Vaša identita je viditeľná iba pre administrátora, ostatným
-              používateľom sa nezobrazuje.
-            </p>
+            <ExpandableText maxHeight={56} fadeColor="#FFFFFF">
+              <p className="text-[#6F2380]/55 text-[13px] leading-relaxed">
+                Vaša identita je viditeľná iba pre administrátora, ostatným
+                používateľom sa nezobrazuje.
+              </p>
+            </ExpandableText>
           </div>
         </div>
       </section>
@@ -103,9 +110,13 @@ export default function OnkorumkyPage() {
                 <span className="text-[#FDA4C7] text-xs font-bold">{post.forum}</span>
                 <span className="text-[#6F2380]/30 text-xs">{post.time}</span>
               </div>
-              <p className="text-[#6F2380]/75 text-sm leading-relaxed mb-3 italic">
-                „{post.text}&rdquo;
-              </p>
+              <div className="mb-3">
+                <ExpandableText maxHeight={60} fadeColor="#FFFFFF">
+                  <p className="text-[#6F2380]/75 text-sm leading-relaxed italic">
+                    „{post.text}&rdquo;
+                  </p>
+                </ExpandableText>
+              </div>
               <div className="flex items-center gap-2">
                 <Circle size={5} className="text-[#FDA4C7] fill-[#FDA4C7]" />
                 <p className="text-[#6F2380]/35 text-xs">
@@ -120,10 +131,14 @@ export default function OnkorumkyPage() {
       <section className="px-5 pb-16">
         <div className="rounded-[1.8rem] bg-[#6F2380] p-8 text-center">
           <h2 className="text-2xl font-black text-white mb-3">Nie ste v tom sami</h2>
-          <p className="text-white/65 text-sm leading-relaxed mb-6">
-            Po registrácii získate okamžitý prístup ku všetkým diskusným fóram.
-            Môžete začať len čítaním, bez akéhokoľvek záväzku.
-          </p>
+          <div className="mb-6">
+            <ExpandableText maxHeight={56} fadeColor="#6F2380" align="center">
+              <p className="text-white/65 text-sm leading-relaxed">
+                Po registrácii získate okamžitý prístup ku všetkým diskusným fóram.
+                Môžete začať len čítaním, bez akéhokoľvek záväzku.
+              </p>
+            </ExpandableText>
+          </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-8 py-4">
               Zobraziť diskusie

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Clock, ChevronRight, X } from "lucide-react";
+import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const VIDEOS = [
   { src: "/videos/adriana.mp4",  title: "Jemná joga pri únave — 20 minút",                        lektor: "Adriana",                  dur: "20 min", accent: "#FDA4C7" },
@@ -29,10 +30,14 @@ export function VideokniznicaSection() {
           <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
             ONKO knižnica
           </p>
-          <p className="text-[#6F2380]/65 text-base leading-relaxed md:max-w-xl">
-            Desiatky videí od overených odborníkov na tému pohyb, výživa, psychika
-            a iné. Sledujte kedykoľvek, kdekoľvek a vo vlastnom tempe.
-          </p>
+          <div className="md:max-w-xl">
+            <ExpandableText maxHeight={72} fadeColor="#FFF3F9">
+              <p className="text-[#6F2380]/65 text-base leading-relaxed">
+                Desiatky videí od overených odborníkov na tému pohyb, výživa, psychika
+                a iné. Sledujte kedykoľvek, kdekoľvek a vo vlastnom tempe.
+              </p>
+            </ExpandableText>
+          </div>
         </motion.div>
 
         {/* Karty — mobile: horizontálny scroll, desktop: grid */}
@@ -90,11 +95,15 @@ export function VideokniznicaSection() {
 
         {/* CTA */}
         <div className="px-5 mt-8 md:max-w-6xl md:mx-auto md:px-8">
-          <p className="text-[#6F2380]/50 text-sm mb-5 md:max-w-xl">
-            Ako člen/ka ONKO KLUBU získavate prístup k bohatej videotéke
-            vytvorenej špeciálne pre potreby onkologických pacientov a ich
-            blízkych.
-          </p>
+          <div className="mb-5 md:max-w-xl">
+            <ExpandableText maxHeight={64} fadeColor="#FFF3F9">
+              <p className="text-[#6F2380]/50 text-sm">
+                Ako člen/ka ONKO KLUBU získavate prístup k bohatej videotéke
+                vytvorenej špeciálne pre potreby onkologických pacientov a ich
+                blízkych.
+              </p>
+            </ExpandableText>
+          </div>
           <div className="md:flex md:justify-start">
             <Link
               href="/kontent-kniznica"

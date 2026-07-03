@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Lock, ChevronRight, Circle } from "lucide-react";
+import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const CATEGORIES = [
   {
@@ -77,11 +78,13 @@ export function OnkorumkySection() {
           <br />
           čím prechádzate
         </h2>
-        <p className="text-[#6F2380]/65 text-base leading-relaxed">
-          Zdieľajte svoje skúsenosti, otázky, obavy či každodenné výzvy s ľuďmi,
-          ktorí vedia, čo prežívate. Môžete prispievať pod vlastným menom alebo
-          anonymne.
-        </p>
+        <ExpandableText maxHeight={80} fadeColor="#FFF3F9">
+          <p className="text-[#6F2380]/65 text-base leading-relaxed">
+            Zdieľajte svoje skúsenosti, otázky, obavy či každodenné výzvy s ľuďmi,
+            ktorí vedia, čo prežívate. Môžete prispievať pod vlastným menom alebo
+            anonymne.
+          </p>
+        </ExpandableText>
       </motion.div>
 
       {/* Placeholder — screenshot fóra (1) */}
@@ -181,9 +184,13 @@ export function OnkorumkySection() {
                 <span className="text-[#FDA4C7] text-xs font-bold">{post.forum}</span>
                 <span className="text-[#6F2380]/25 text-xs">{post.time}</span>
               </div>
-              <p className="text-[#6F2380]/70 text-sm leading-relaxed mb-3 italic">
-                „{post.text}&rdquo;
-              </p>
+              <div className="mb-3">
+                <ExpandableText maxHeight={60} fadeColor="#FFFFFF">
+                  <p className="text-[#6F2380]/70 text-sm leading-relaxed italic">
+                    „{post.text}&rdquo;
+                  </p>
+                </ExpandableText>
+              </div>
               <div className="flex items-center gap-2">
                 <Circle size={5} className="text-[#FDA4C7] fill-[#FDA4C7]" />
                 <span className="text-[#6F2380]/30 text-xs">

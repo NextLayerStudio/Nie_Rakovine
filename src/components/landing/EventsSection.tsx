@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Leaf, Brain, Users, Coffee, MapPin, CheckCircle2 } from "lucide-react";
+import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const ACTIVITIES = [
   {
@@ -56,11 +57,15 @@ export function EventsSection() {
         <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
           Príďte načerpať podporu a nové skúsenosti
         </h2>
-        <p className="text-[#6F2380]/65 text-base leading-relaxed mb-10">
-          Workshopy, skupinové stretnutia a odborné podujatia sú dostupné vo viacerých
-          regiónoch Slovenska. Ako člen/ka ONKO KLUBU máte možnosť prihlásiť sa na
-          vybrané aktivity jednoducho priamo v aplikácii ONKO KLUB.
-        </p>
+        <div className="mb-10">
+          <ExpandableText maxHeight={80} fadeColor="#FFF3F9">
+            <p className="text-[#6F2380]/65 text-base leading-relaxed">
+              Workshopy, skupinové stretnutia a odborné podujatia sú dostupné vo viacerých
+              regiónoch Slovenska. Ako člen/ka ONKO KLUBU máte možnosť prihlásiť sa na
+              vybrané aktivity jednoducho priamo v aplikácii ONKO KLUB.
+            </p>
+          </ExpandableText>
+        </div>
       </motion.div>
 
       {/* Typy aktivít */}
@@ -82,11 +87,13 @@ export function EventsSection() {
               >
                 <Icon size={18} className="text-white" strokeWidth={2} />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h3 className="font-black text-[#6F2380] text-[15px] leading-tight mb-0.5">
                   {a.title}
                 </h3>
-                <p className="text-[#6F2380]/55 text-[13px] leading-relaxed">{a.desc}</p>
+                <ExpandableText maxHeight={56} fadeColor="#FFFFFF">
+                  <p className="text-[#6F2380]/55 text-[13px] leading-relaxed">{a.desc}</p>
+                </ExpandableText>
               </div>
             </motion.div>
           );

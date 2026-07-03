@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { ExpandableText } from "@/components/landing/ExpandableText";
 
 /* ─── dáta ─── */
 
@@ -217,9 +218,13 @@ export function FeatureSection() {
               <Icon />
               <div>
                 <h3 className="text-xl font-black text-[#6F2380] mb-2">{feature.title}</h3>
-                <p className="text-[#6F2380]/60 text-[15px] leading-relaxed max-w-[280px] mx-auto mb-5">
-                  {feature.desc}
-                </p>
+                <div className="max-w-[280px] mx-auto mb-5">
+                  <ExpandableText maxHeight={72} fadeColor="#FFF3F9" align="center">
+                    <p className="text-[#6F2380]/60 text-[15px] leading-relaxed text-center">
+                      {feature.desc}
+                    </p>
+                  </ExpandableText>
+                </div>
                 <Link
                   href={feature.href}
                   className="inline-block rounded-full border-2 border-[#FDA4C7] text-[#FDA4C7] text-sm font-bold px-6 py-2.5 hover:bg-[#FDA4C7] hover:text-white transition-colors"

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { QrCode, ScanLine, Tag, BadgeCheck } from "lucide-react";
+import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const HOW_STEPS = [
   {
@@ -55,11 +56,13 @@ export function OKkartaSection() {
           <br />
           Výhody, ktoré máte vždy pri sebe.
         </h2>
-        <p className="text-[#6F2380]/65 text-base leading-relaxed">
-          Ako člen/ka ONKO KLUBU získavate digitálnu OKkartu s QR kódom, vďaka
-          ktorej môžete využívať zvýhodnené ponuky a benefity u vybraných
-          partnerov po celom Slovensku.
-        </p>
+        <ExpandableText maxHeight={80} fadeColor="#FFF3F9">
+          <p className="text-[#6F2380]/65 text-base leading-relaxed">
+            Ako člen/ka ONKO KLUBU získavate digitálnu OKkartu s QR kódom, vďaka
+            ktorej môžete využívať zvýhodnené ponuky a benefity u vybraných
+            partnerov po celom Slovensku.
+          </p>
+        </ExpandableText>
       </motion.div>
 
       {/* Vizuál karty */}
@@ -140,9 +143,11 @@ export function OKkartaSection() {
                 >
                   <Icon size={17} className="text-white" strokeWidth={2} />
                 </div>
-                <div className="pt-1.5">
+                <div className="pt-1.5 min-w-0">
                   <p className="font-black text-[#6F2380] text-[16px] mb-1">{s.title}</p>
-                  <p className="text-[#6F2380]/55 text-[13px] leading-relaxed">{s.desc}</p>
+                  <ExpandableText maxHeight={56} fadeColor="#FFF3F9">
+                    <p className="text-[#6F2380]/55 text-[13px] leading-relaxed">{s.desc}</p>
+                  </ExpandableText>
                 </div>
               </motion.div>
             );
@@ -153,11 +158,15 @@ export function OKkartaSection() {
       {/* Partneri */}
       <div className="mb-10">
         <h3 className="text-xl font-black text-[#6F2380] mb-2">Naši partneri</h3>
-        <p className="text-[#6F2380]/50 text-sm leading-relaxed mb-7">
-          Sieť organizácií a značiek, ktoré podporujú onkologických pacientov
-          a ich blízkych. Zvýhodnené ponuky a benefity sú dostupné výhradne
-          pre členov ONKO KLUBU.
-        </p>
+        <div className="mb-7">
+          <ExpandableText maxHeight={64} fadeColor="#FFF3F9">
+            <p className="text-[#6F2380]/50 text-sm leading-relaxed">
+              Sieť organizácií a značiek, ktoré podporujú onkologických pacientov
+              a ich blízkych. Zvýhodnené ponuky a benefity sú dostupné výhradne
+              pre členov ONKO KLUBU.
+            </p>
+          </ExpandableText>
+        </div>
 
         {/* [IMG] Logá partnerov — sem prídu skutočné logá */}
         <div className="grid grid-cols-3 gap-3">
@@ -198,10 +207,14 @@ export function OKkartaSection() {
         <h3 className="text-[1.5rem] font-black text-white leading-snug mb-3">
           Získajte svoju OKkartu
         </h3>
-        <p className="text-white/65 text-sm leading-relaxed mb-7">
-          Vaša OKkarta bude dostupná okamžite po prvom prihlásení. Bez
-          poplatkov a bez zbytočnej administratívy.
-        </p>
+        <div className="mb-7">
+          <ExpandableText maxHeight={60} fadeColor="#6F2380" align="center">
+            <p className="text-white/65 text-sm leading-relaxed">
+              Vaša OKkarta bude dostupná okamžite po prvom prihlásení. Bez
+              poplatkov a bez zbytočnej administratívy.
+            </p>
+          </ExpandableText>
+        </div>
         <Link
           href="/register"
           className="block w-full rounded-full bg-[#FDA4C7] text-white font-black text-base py-4 active:scale-[0.98] transition-transform"

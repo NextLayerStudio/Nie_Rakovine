@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { User } from "lucide-react";
+import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const LEKTORI = [
   {
@@ -43,11 +44,13 @@ export function LektoriSection() {
         <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
           Odborníci a lektori, ktorým môžete dôverovať
         </h2>
-        <p className="text-[#6F2380]/65 text-base leading-relaxed">
-          Obsah v ONKO KLUBE nevzniká anonymne. Za každým videom, podcastom
-          či prednáškou stojí konkrétny odborník či lektor s overenými
-          skúsenosťami.
-        </p>
+        <ExpandableText maxHeight={80} fadeColor="#FFF3F9">
+          <p className="text-[#6F2380]/65 text-base leading-relaxed">
+            Obsah v ONKO KLUBE nevzniká anonymne. Za každým videom, podcastom
+            či prednáškou stojí konkrétny odborník či lektor s overenými
+            skúsenosťami.
+          </p>
+        </ExpandableText>
       </motion.div>
 
       <div className="flex flex-col gap-6 md:grid md:grid-cols-3">
@@ -76,7 +79,9 @@ export function LektoriSection() {
               >
                 {l.titul}
               </p>
-              <p className="text-[#6F2380]/55 text-[12px] leading-relaxed">{l.bio}</p>
+              <ExpandableText maxHeight={70} fadeColor="#FFF3F9">
+                <p className="text-[#6F2380]/55 text-[12px] leading-relaxed">{l.bio}</p>
+              </ExpandableText>
             </div>
           </motion.div>
         ))}

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -20,25 +21,21 @@ export function NieSiVTomSamSection() {
             <h2 className="text-[2.2rem] md:text-[2.8rem] font-black text-[#6F2380] leading-[1.1] mb-4">
               Nie ste v tom sami
             </h2>
-            <p className="text-[#6F2380]/70 text-base leading-relaxed mb-6">
-              Za vznikom ONKO KLUBU stojí pacientská organizácia{" "}
-              <span className="font-bold text-[#6F2380]">NIE RAKOVINE, o. z.</span>,
-              ktorá už viac ako 10 rokov prináša osvetu, prevenciu a podporu ľudí s
-              onkologickým ochorením a ich blízkych.
-            </p>
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2, ease }}
-              className="text-[#6F2380]/70 text-base leading-relaxed"
-            >
-              Štruktúra ONKO KLUBU bola navrhnutá na základe zahraničných skúseností a
-              odborných poznatkov o význame pohybu, psychickej pohody a komunity počas
-              liečby aj po nej. Využíva overené prístupy z fyzioterapie, psychológie a
-              relaxačných techník, aplikované v bezpečnom, zrozumiteľnom a podporujúcom
-              prostredí.
-            </motion.p>
+            <ExpandableText maxHeight={168} fadeColor="#FFF3F9">
+              <p className="text-[#6F2380]/70 text-base leading-relaxed mb-4">
+                Za vznikom ONKO KLUBU stojí pacientská organizácia{" "}
+                <span className="font-bold text-[#6F2380]">NIE RAKOVINE, o. z.</span>,
+                ktorá už viac ako 10 rokov prináša osvetu, prevenciu a podporu ľudí s
+                onkologickým ochorením a ich blízkych.
+              </p>
+              <p className="text-[#6F2380]/70 text-base leading-relaxed">
+                Štruktúra ONKO KLUBU bola navrhnutá na základe zahraničných skúseností a
+                odborných poznatkov o význame pohybu, psychickej pohody a komunity počas
+                liečby aj po nej. Využíva overené prístupy z fyzioterapie, psychológie a
+                relaxačných techník, aplikované v bezpečnom, zrozumiteľnom a podporujúcom
+                prostredí.
+              </p>
+            </ExpandableText>
 
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -47,14 +44,16 @@ export function NieSiVTomSamSection() {
               transition={{ duration: 0.5, delay: 0.28, ease }}
               className="mt-6 rounded-2xl bg-[#FDA4C7]/10 p-5"
             >
-              <p className="text-[#6F2380]/70 text-sm leading-relaxed">
-                Prostriedky získané prostredníctvom ONKO KLUBU smerujú späť do systému
-                pomoci pre onkologických pacientov. Zabezpečujú fungovanie pacientskych
-                poradní NIE RAKOVINE, bezplatné poradenstvo a rozvoj praktickej podpory
-                pre ľudí s onkologickým ochorením na Slovensku. Prispievajú tiež k
-                vzdelávaniu pacientov a ich blízkych, šíreniu overených informácií a
-                zlepšovaniu dostupnosti pomoci v náročných životných situáciách.
-              </p>
+              <ExpandableText maxHeight={80} fadeColor="#FCE9F0">
+                <p className="text-[#6F2380]/70 text-sm leading-relaxed">
+                  Prostriedky získané prostredníctvom ONKO KLUBU smerujú späť do systému
+                  pomoci pre onkologických pacientov. Zabezpečujú fungovanie pacientskych
+                  poradní NIE RAKOVINE, bezplatné poradenstvo a rozvoj praktickej podpory
+                  pre ľudí s onkologickým ochorením na Slovensku. Prispievajú tiež k
+                  vzdelávaniu pacientov a ich blízkych, šíreniu overených informácií a
+                  zlepšovaniu dostupnosti pomoci v náročných životných situáciách.
+                </p>
+              </ExpandableText>
             </motion.div>
 
             <motion.div
