@@ -1,8 +1,17 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { Frown, Annoyed, Meh, Smile, Laugh, type LucideIcon } from "lucide-react";
 import { MOOD_OPTIONS, type MoodScore } from "@/lib/mood-options";
 import { submitMoodEntryAction } from "@/lib/actions/mood";
+
+const MOOD_ICONS: Record<MoodScore, LucideIcon> = {
+  1: Frown,
+  2: Annoyed,
+  3: Meh,
+  4: Smile,
+  5: Laugh,
+};
 
 const DISMISS_KEY = "onko_mood_prompt_dismissed_on";
 
@@ -69,9 +78,12 @@ export function MoodMeterPrompt({ hasLoggedToday }: { hasLoggedToday: boolean })
       <div className="w-full max-w-sm rounded-3xl bg-white p-5 shadow-card">
         {submitted ? (
           <div className="flex flex-col items-center gap-2 py-4 text-center">
-            <span className="text-3xl">
-              {MOOD_OPTIONS.find((o) => o.score === selected)?.emoji}
-            </span>
+            <div className="grid h-12 w-12 place-items-center rounded-full bg-brand-pink-soft text-brand-purple">
+              {(() => {
+                const Icon = selected ? MOOD_ICONS[selected] : Smile;
+                return <Icon size={26} strokeWidth={1.8} />;
+              })()}
+            </div>
             <p className="text-sm font-bold text-brand-purple">Ďakujeme za odpoveď.</p>
             <p className="text-xs text-brand-purple/60">
               Nálada bola uložená do vášho profilu.
@@ -90,24 +102,28 @@ export function MoodMeterPrompt({ hasLoggedToday }: { hasLoggedToday: boolean })
             </p>
 
             <div className="mt-5 flex justify-between gap-1.5">
-              {MOOD_OPTIONS.map((opt) => (
-                <button
-                  key={opt.score}
-                  type="button"
-                  onClick={() => setSelected(opt.score)}
-                  aria-pressed={selected === opt.score}
-                  className={`flex flex-1 flex-col items-center gap-1 rounded-2xl py-2.5 transition-colors ${
-                    selected === opt.score
-                      ? "bg-brand-pink-soft"
-                      : "bg-brand-purple/5 hover:bg-brand-purple/10"
-                  }`}
-                >
-                  <span className="text-2xl leading-none">{opt.emoji}</span>
-                  <span className="text-center text-[10px] font-semibold leading-tight text-brand-purple/70">
-                    {opt.label}
-                  </span>
-                </button>
-              ))}
+              {MOOD_OPTIONS.map((opt) => {
+                const Icon = MOOD_ICONS[opt.score];
+                const active = selected === opt.score;
+                return (
+                  <button
+                    key={opt.score}
+                    type="button"
+                    onClick={() => setSelected(opt.score)}
+                    aria-pressed={active}
+                    className={`flex flex-1 flex-col items-center gap-1 rounded-2xl py-2.5 transition-colors ${
+                      active
+                        ? "bg-brand-pink-soft text-brand-purple"
+                        : "bg-brand-purple/5 text-brand-purple/50 hover:bg-brand-purple/10"
+                    }`}
+                  >
+                    <Icon size={22} strokeWidth={1.8} />
+                    <span className="text-center text-[10px] font-semibold leading-tight text-brand-purple/70">
+                      {opt.label}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
 
             <textarea

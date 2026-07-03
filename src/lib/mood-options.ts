@@ -1,11 +1,11 @@
 // Shared between client (popup UI) and server (validation) — no server-only import here.
 
 export const MOOD_OPTIONS = [
-  { score: 1, emoji: "😔", label: "Veľmi zle" },
-  { score: 2, emoji: "🙁", label: "Zle" },
-  { score: 3, emoji: "😐", label: "Priemerne" },
-  { score: 4, emoji: "🙂", label: "Dobre" },
-  { score: 5, emoji: "😄", label: "Výborne" },
+  { score: 1, label: "Veľmi zle" },
+  { score: 2, label: "Zle" },
+  { score: 3, label: "Priemerne" },
+  { score: 4, label: "Dobre" },
+  { score: 5, label: "Výborne" },
 ] as const;
 
 export type MoodScore = (typeof MOOD_OPTIONS)[number]["score"];
