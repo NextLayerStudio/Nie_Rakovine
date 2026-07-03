@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { ProfileIdentityCard } from "@/components/profile/ProfileIdentityCard";
 import { ProfileTabBar } from "@/components/profile/ProfileTabBar";
 import { ProfileView } from "@/components/profile/ProfileView";
+import { MoodHistoryCard } from "@/components/mood/MoodHistoryCard";
 import type { MembershipSubscriptionInfo } from "@/lib/membership-card";
 import type {
   fetchProfileCalendarAction,
@@ -29,6 +30,7 @@ export type ProfileInitialData = {
   initialCalendarData: CalendarData;
   initialForumsData?: ForumsData;
   initialDiscountsData?: DiscountsData;
+  moodHistory?: { score: number; createdAt: string }[];
 };
 
 function TabSpinner() {
@@ -49,6 +51,7 @@ export function ProfileTabPanel({ data }: { data: ProfileInitialData }) {
         subscription={data.subscription}
         avatarUrl={data.avatarUrl}
       />
+      <MoodHistoryCard entries={data.moodHistory ?? []} />
       <ProfileTabBar initialTab="calendar" basePath="/home/profile" />
       <Suspense fallback={<TabSpinner />}>
         <ProfileView

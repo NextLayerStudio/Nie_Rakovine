@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { FeedProfileHeader } from "@/components/FeedProfileHeader";
 import { FeedPostItem } from "@/components/FeedPostItem";
 import { FeedEventItem } from "@/components/FeedEventItem";
+import { MoodSupportBanner } from "@/components/mood/MoodSupportBanner";
 import { fetchFeedTabAction } from "@/lib/actions/tabs";
 import { buildHomeFeed } from "@/lib/feed";
 import {
@@ -78,14 +79,18 @@ export function FeedTabPanel({ initialData }: { initialData?: FeedData }) {
 
   if (feed.length === 0) {
     return (
-      <div className="mx-4 mt-4 rounded-3xl bg-white p-6 text-center text-xs text-brand-purple/70 shadow-card">
-        Zatiaľ žiadny obsah. Admin môže pridať príspevky v profiloch.
-      </div>
+      <>
+        <MoodSupportBanner />
+        <div className="mx-4 mt-4 rounded-3xl bg-white p-6 text-center text-xs text-brand-purple/70 shadow-card">
+          Zatiaľ žiadny obsah. Admin môže pridať príspevky v profiloch.
+        </div>
+      </>
     );
   }
 
   return (
     <section>
+      <MoodSupportBanner />
       {feed.map((item) => {
         if (item.kind === "event") {
           const e = item.event;

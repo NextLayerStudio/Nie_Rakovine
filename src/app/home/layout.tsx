@@ -5,9 +5,11 @@ import { HomeTabShell } from "@/components/HomeTabShell";
 import { MenuDrawer } from "@/components/MenuDrawer";
 import { NotificationsDrawer } from "@/components/NotificationsDrawer";
 import { HomeAvatarPrompt } from "@/components/profile/HomeAvatarPrompt";
+import { MoodMeterPrompt } from "@/components/mood/MoodMeterPrompt";
 import { PhoneShell } from "@/components/PhoneShell";
 import { requireUser } from "@/lib/auth";
 import { getUnreadNotificationCount } from "@/lib/notifications";
+import { getMoodPromptData } from "@/lib/mood";
 import { loadFeedTabData, loadForumsTabData, loadCalendarTabData } from "@/lib/tab-data";
 import { loadProfileCalendarData, loadProfileForumsData, loadProfileDiscountsData } from "@/lib/profile-data";
 import { membershipSubscriptionInfo } from "@/lib/membership-card";
@@ -28,7 +30,7 @@ export default async function HomeLayout({
       }
     : null;
 
-  const [unreadCount, feedData, forumsData, calendarData, profileCalendarData, profileForumsData, profileDiscountsData] = await Promise.all([
+  const [unreadCount, feedData, forumsData, calendarData, profileCalendarData, profileForumsData, profileDiscountsData, moodData] = await Promise.all([
     getUnreadNotificationCount(user.id),
     loadFeedTabData(user.id, user.fullName, tabProfile),
     loadForumsTabData(user.id, tabProfile),
@@ -36,6 +38,7 @@ export default async function HomeLayout({
     loadProfileCalendarData(user.id, user.fullName),
     loadProfileForumsData(user.id, user.fullName),
     loadProfileDiscountsData(user.id),
+    getMoodPromptData(user.id),
   ]);
 
   const profileInitialData = {
@@ -54,6 +57,7 @@ export default async function HomeLayout({
     initialCalendarData: profileCalendarData,
     initialForumsData: profileForumsData,
     initialDiscountsData: profileDiscountsData,
+    moodHistory: moodData.monthHistory,
   };
 
   return (
@@ -87,6 +91,7 @@ export default async function HomeLayout({
           avatarUrl={user.profile?.avatarUrl ?? null}
         />
       </Suspense>
+      <MoodMeterPrompt hasLoggedToday={moodData.hasLoggedToday} />
     </PhoneShell>
   );
 }

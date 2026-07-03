@@ -93,6 +93,7 @@ model User {
   knownDevices       UserKnownDevice[]
   emailVerificationCodes EmailVerificationCode[]
   passwordResetTokens    PasswordResetToken[]
+  moodEntries        MoodEntry[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -608,4 +609,19 @@ model ForumCommentLike {
   createdAt DateTime @default(now())
 
   @@unique([userId, commentId])
+}
+
+// ---------------- Mood Meter ----------------
+
+// Daily mood check-in. Individual entries are private to the member —
+// only anonymised/aggregated data may ever be surfaced to admins.
+model MoodEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score     Int      // 1 (veľmi zle) – 5 (výborne)
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt(sort: Desc)])
 }
