@@ -2,9 +2,19 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Check, Star, ShieldCheck, RefreshCw, CreditCard, ChevronDown } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
+
+const PAYMENT_LOGOS = [
+  { src: "/images/platby/gopay.png", alt: "GoPay", w: 100, h: 35 },
+  { src: "/images/platby/visa.png", alt: "VISA", w: 67, h: 23 },
+  { src: "/images/platby/verified-by-visa.png", alt: "Verified by VISA", w: 67, h: 30 },
+  { src: "/images/platby/mastercard.png", alt: "Mastercard", w: 67, h: 43 },
+  { src: "/images/platby/mastercard-securecode.png", alt: "Mastercard SecureCode", w: 86, h: 40 },
+  { src: "/images/platby/maestro.png", alt: "Maestro", w: 67, h: 43 },
+];
 
 const BENEFITY = [
   "Prístup ku všetkým videám a materiálom prispôsobeným potrebám onkologických pacientov",
@@ -80,6 +90,19 @@ export function CennikSection() {
               </div>
             );
           })}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-5 mt-3 bg-white rounded-2xl p-4 border border-[#FDA4C7]/15">
+          {PAYMENT_LOGOS.map((logo) => (
+            <Image
+              key={logo.alt}
+              src={logo.src}
+              alt={logo.alt}
+              width={logo.w}
+              height={logo.h}
+              className="h-7 w-auto object-contain"
+            />
+          ))}
         </div>
       </motion.div>
 

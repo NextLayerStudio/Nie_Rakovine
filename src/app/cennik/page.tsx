@@ -1,8 +1,18 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Check, Star, ShieldCheck, CreditCard, RefreshCw } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
+
+const PAYMENT_LOGOS = [
+  { src: "/images/platby/gopay.png", alt: "GoPay", w: 100, h: 35 },
+  { src: "/images/platby/visa.png", alt: "VISA", w: 67, h: 23 },
+  { src: "/images/platby/verified-by-visa.png", alt: "Verified by VISA", w: 67, h: 30 },
+  { src: "/images/platby/mastercard.png", alt: "Mastercard", w: 67, h: 43 },
+  { src: "/images/platby/mastercard-securecode.png", alt: "Mastercard SecureCode", w: 86, h: 40 },
+  { src: "/images/platby/maestro.png", alt: "Maestro", w: 67, h: 43 },
+];
 
 const BENEFITY = [
   "Prístup ku všetkým videám a materiálom prispôsobeným potrebám onkologických pacientov",
@@ -81,15 +91,17 @@ export default function CennikPage() {
           </div>
 
           {/* Platobné karty a 3D-Secure — GoPay vyžaduje viditeľné logá na prvej
-              stránke s cenami. [TODO] Nahradiť skutočnými logo súbormi od GoPay. */}
-          <div className="flex flex-wrap items-center gap-3 mt-5">
-            {["VISA", "Mastercard", "Verified by Visa", "Mastercard SecureCode"].map((label) => (
-              <span
-                key={label}
-                className="text-[#6F2380]/40 text-[11px] font-bold uppercase tracking-wide px-3 py-1.5 rounded-lg border border-[#6F2380]/10"
-              >
-                {label}
-              </span>
+              stránke s cenami. */}
+          <div className="flex flex-wrap items-center gap-5 mt-6 bg-white rounded-2xl p-4 border border-[#FDA4C7]/15 md:max-w-2xl">
+            {PAYMENT_LOGOS.map((logo) => (
+              <Image
+                key={logo.alt}
+                src={logo.src}
+                alt={logo.alt}
+                width={logo.w}
+                height={logo.h}
+                className="h-7 w-auto object-contain"
+              />
             ))}
           </div>
         </div>
