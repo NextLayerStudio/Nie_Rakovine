@@ -79,6 +79,19 @@ export default function CennikPage() {
               );
             })}
           </div>
+
+          {/* Platobné karty a 3D-Secure — GoPay vyžaduje viditeľné logá na prvej
+              stránke s cenami. [TODO] Nahradiť skutočnými logo súbormi od GoPay. */}
+          <div className="flex flex-wrap items-center gap-3 mt-5">
+            {["VISA", "Mastercard", "Verified by Visa", "Mastercard SecureCode"].map((label) => (
+              <span
+                key={label}
+                className="text-[#6F2380]/40 text-[11px] font-bold uppercase tracking-wide px-3 py-1.5 rounded-lg border border-[#6F2380]/10"
+              >
+                {label}
+              </span>
+            ))}
+          </div>
         </div>
       </section>
 

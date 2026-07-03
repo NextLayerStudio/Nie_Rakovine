@@ -2,10 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 const NAV = [
-  { label: "Čo získaš",            href: "/co-ziskas" },
+  { label: "Čo získate",           href: "/co-ziskas" },
   { label: "Prednášky & Podcasty", href: "/prednasky-podcasty" },
-  { label: "Eventy",               href: "/akcie" },
-  { label: "Sponzori a zľavy",     href: "/sponzori" },
+  { label: "Kalendár aktivít",     href: "/akcie" },
+  { label: "Zľavy a benefity",     href: "/sponzori" },
   { label: "Cenník",               href: "/cennik" },
   { label: "Prihlásiť sa",         href: "/login" },
   { label: "Registrácia",          href: "/register" },
@@ -56,6 +56,9 @@ export function Footer() {
             <p className="text-white/30 text-[10px] font-bold uppercase tracking-widest mb-3">Kontakt</p>
             <a href="mailto:office@nierakovine.sk" className="text-[#FDA4C7] text-sm font-semibold block mb-1">
               office@nierakovine.sk
+            </a>
+            <a href="tel:+421911843336" className="text-white/65 text-sm block mb-1">
+              +421 911 843 336
             </a>
             <a href="https://nierakovine.sk" target="_blank" rel="noopener noreferrer" className="text-white/50 text-sm block mb-6">
               nierakovine.sk

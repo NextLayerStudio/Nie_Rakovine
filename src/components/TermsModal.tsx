@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
+import { TermsContent } from "@/components/legal/TermsContent";
 
 export function TermsModal({
   onAccept,
@@ -66,95 +67,15 @@ export function TermsModal({
         ref={scrollRef}
         className="no-scrollbar flex-1 overflow-y-auto px-5 py-6 text-sm leading-relaxed text-brand-purple/80"
       >
-        <h3 className="mb-3 text-sm font-bold text-brand-purple">
-          1. Všeobecné ustanovenia
-        </h3>
-        <p className="mb-4">
-          Tieto obchodné podmienky a podmienky používania (ďalej len „Podmienky“)
-          upravujú práva a povinnosti registrovaných členov platformy OnkoKlub,
-          ktorú prevádzkuje NIE RAKOVINE, o. z. so sídlom Cukrová 2272/14,
-          811 01 Bratislava-Staré Mesto, IČO: 50654896 (ďalej len „Prevádzkovateľ“).
-        </p>
         <p className="mb-4">
           Registráciou na platforme OnkoKlub potvrdzujete, že ste si tieto
           Podmienky prečítali, porozumeli im a súhlasíte s ich dodržiavaním.
           Ak s niektorou časťou Podmienok nesúhlasíte, nevyužívajte naše služby.
         </p>
 
-        <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-          2. Členstvo a prístup k platforme
-        </h3>
-        <p className="mb-4">
-          Členstvo na platforme OnkoKlub je určené pre onkologických pacientov,
-          ich rodinných príslušníkov a osoby blízke tejto téme. Prevádzkovateľ
-          si vyhradzuje právo odmietnuť registráciu alebo zrušiť členstvo
-          v prípade porušenia týchto Podmienok.
-        </p>
-        <p className="mb-4">
-          Členstvo je spoplatnené podľa aktuálneho cenníka zverejneného na
-          platforme (mesačné alebo ročné predplatné). Platby sú spracovávané
-          cez platobnú bránu GoPay. Prevádzkovateľ nezodpovedá za technické
-          výpadky platobnej brány.
-        </p>
+        <TermsContent className="mb-2" />
 
-        <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-          3. Pravidlá správania vo fóre a komunite
-        </h3>
-        <p className="mb-4">
-          Všetci členovia sú povinní správať sa k ostatným s úctou a rešpektom.
-          Zakazuje sa zverejňovanie urážlivého, diskriminačného alebo
-          nenávistného obsahu. Príspevky s lekárskymi odporúčaniami musia byť
-          jasne označené ako osobná skúsenosť, nie odborná rada.
-        </p>
-        <p className="mb-4">
-          Prevádzkovateľ si vyhradzuje právo odstrániť akýkoľvek obsah, ktorý
-          porušuje tieto pravidlá, a to bez predchádzajúceho upozornenia.
-          Opakované porušovanie pravidiel môže viesť k trvalému zrušeniu
-          členstva bez nároku na vrátenie platby.
-        </p>
-
-        <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-          4. Ochrana osobných údajov
-        </h3>
-        <p className="mb-4">
-          Spracovanie osobných údajov sa riadi Zásadami ochrany osobných
-          údajov, ktoré sú dostupné na platforme. Vaše zdravotné údaje
-          (diagnóza) sú šifrované a prístupné výlučne vám. Prevádzkovateľ
-          ich nesprístupňuje tretím stranám bez vášho výslovného súhlasu.
-        </p>
-        <p className="mb-4">
-          Máte právo na prístup k svojim údajom, ich opravu, vymazanie
-          a prenosnosť v zmysle nariadenia GDPR. Žiadosti o výkon práv
-          zasielajte na adresu office@nierakovine.sk.
-        </p>
-
-        <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-          5. Zodpovednosť a obmedzenie záväzkov
-        </h3>
-        <p className="mb-4">
-          Obsah dostupný na platforme OnkoKlub (videá, články, prednášky)
-          má informatívny charakter a nenahrádza odbornú lekársku pomoc.
-          Prevádzkovateľ nenesie zodpovednosť za zdravotné rozhodnutia
-          prijaté na základe informácií zverejnených na platforme.
-        </p>
-        <p className="mb-4">
-          Prevádzkovateľ nezodpovedá za dočasnú nedostupnosť platformy
-          spôsobenú technickou údržbou alebo okolnosťami mimo jeho kontroly.
-        </p>
-
-        <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-          6. Zmeny podmienok
-        </h3>
-        <p className="mb-4">
-          Prevádzkovateľ si vyhradzuje právo tieto Podmienky kedykoľvek
-          zmeniť. O zmenách budete informovaní e-mailom najmenej 14 dní
-          vopred. Pokračovanie v používaní platformy po nadobudnutí
-          účinnosti zmien sa považuje za súhlas s novými Podmienkami.
-        </p>
-        <p className="mb-6">
-          Tieto Podmienky nadobúdajú účinnosť dňom registrácie člena
-          na platforme OnkoKlub.
-        </p>
+        <div className="mb-4" />
 
         {/* Divider + agreement checkbox */}
         <div className="border-t border-brand-purple/10 pt-6">
