@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { destroySession, requireUser } from "@/lib/auth";
 import { sendTransactionalEmail } from "@/lib/email/client";
 import { renderAccountDeletedEmail } from "@/lib/email/templates/account-deleted";
+import { enforceAuthRateLimit } from "@/lib/rate-limit";
 import { sendPasswordResetLink } from "@/lib/password-reset";
 
 export type SettingsActionState = { ok: boolean; message?: string };
@@ -27,6 +28,14 @@ export async function requestPasswordChangeLinkAction(
   _formData: FormData,
 ): Promise<SettingsActionState> {
   const user = await requireUser();
+
+  const rateLimit = await enforceAuthRateLimit({
+    scope: "reset-password",
+    email: user.email,
+  });
+  if (!rateLimit.allowed) {
+    return { ok: false, message: rateLimit.message };
+  }
 
   try {
     const result = await sendPasswordResetLink({

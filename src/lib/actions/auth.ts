@@ -15,6 +15,7 @@ import {
   resetPasswordWithToken,
   sendPasswordResetLink,
 } from "@/lib/password-reset";
+import { enforceAuthRateLimit } from "@/lib/rate-limit";
 import { headers } from "next/headers";
 
 export type ActionState = {
@@ -45,6 +46,11 @@ export async function registerAction(
   }
   if (password !== confirmPassword) {
     return { ok: false, message: "Heslá sa nezhodujú." };
+  }
+
+  const rateLimit = await enforceAuthRateLimit({ scope: "register", email });
+  if (!rateLimit.allowed) {
+    return { ok: false, message: rateLimit.message };
   }
 
   const existing = await prisma.user.findUnique({ where: { email } });
@@ -108,6 +114,11 @@ export async function loginAction(
     return { ok: false, message: "Zadajte e-mail aj heslo." };
   }
 
+  const rateLimit = await enforceAuthRateLimit({ scope: "login", email });
+  if (!rateLimit.allowed) {
+    return { ok: false, message: rateLimit.message };
+  }
+
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user || !(await verifyPassword(password, user.passwordHash))) {
     return { ok: false, message: "Nesprávny e-mail alebo heslo." };
@@ -169,6 +180,14 @@ export async function requestPasswordResetAction(
 
   if (!email) {
     return { ok: false, message: "Zadajte e-mail." };
+  }
+
+  const rateLimit = await enforceAuthRateLimit({
+    scope: "reset-password",
+    email,
+  });
+  if (!rateLimit.allowed) {
+    return { ok: false, message: rateLimit.message };
   }
 
   const user = await prisma.user.findUnique({ where: { email } });
