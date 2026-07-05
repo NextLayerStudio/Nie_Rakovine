@@ -1,8 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { requireUser } from "@/lib/auth";
+import { destroySession, requireUser } from "@/lib/auth";
+import { sendTransactionalEmail } from "@/lib/email/client";
+import { renderAccountDeletedEmail } from "@/lib/email/templates/account-deleted";
 import { sendPasswordResetLink } from "@/lib/password-reset";
 
 export type SettingsActionState = { ok: boolean; message?: string };
@@ -111,4 +114,23 @@ export async function updatePreferencesAction(
   revalidatePath("/menu/nastavenia");
   revalidatePath("/profile");
   return { ok: true, message: "Notifikácie boli uložené." };
+}
+
+export async function deleteAccountAction(): Promise<void> {
+  const user = await requireUser();
+
+  const emailResult = await sendTransactionalEmail({
+    to: user.email,
+    subject: "Váš účet v Onko Klube bol zrušený",
+    html: renderAccountDeletedEmail({ fullName: user.fullName }),
+  });
+
+  if (!emailResult.ok) {
+    console.error("Account deletion email failed:", emailResult.error);
+  }
+
+  await prisma.user.delete({ where: { id: user.id } });
+  await destroySession();
+  revalidatePath("/");
+  redirect("/welcome");
 }

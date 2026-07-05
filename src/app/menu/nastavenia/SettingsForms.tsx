@@ -6,12 +6,15 @@ import { ConsentCheckbox } from "@/components/ConsentCheckbox";
 import { FormError, SubmitButton } from "@/components/FormError";
 import { SettingSwitch } from "@/components/SettingSwitch";
 import {
+  deleteAccountAction,
   requestPasswordChangeLinkAction,
   updateAccountAction,
   updatePreferencesAction,
   type SettingsActionState,
 } from "@/lib/actions/settings";
+import type { RegistrationHistoryItem } from "@/lib/settings-data";
 import { cn } from "@/lib/utils";
+import { RegistrationHistoryList } from "./RegistrationHistoryList";
 
 const INITIAL: SettingsActionState = { ok: false };
 
@@ -62,6 +65,7 @@ export function SettingsForms({
   notifyRadiusKm,
   notificationPrefs,
   subscriptionActive,
+  registrationHistory,
 }: {
   fullName: string;
   email: string;
@@ -69,6 +73,7 @@ export function SettingsForms({
   notifyRadiusKm: number;
   notificationPrefs: NotificationPrefs;
   subscriptionActive: boolean;
+  registrationHistory: RegistrationHistoryItem[];
 }) {
   const [accountState, accountAction] = useActionState(
     updateAccountAction,
@@ -84,6 +89,7 @@ export function SettingsForms({
   );
   const [radius, setRadius] = useState(notifyRadiusKm);
   const [passwordOpen, setPasswordOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const enabledCount = [
     notificationPrefs.notifyNewPosts,
@@ -102,6 +108,7 @@ export function SettingsForms({
           { href: "#ucet", label: "Účet" },
           { href: "#notifikacie", label: "Notifikácie" },
           { href: "#predplatne", label: "Predplatné" },
+          { href: "#registracie", label: "Registrácie" },
           { href: "#pravne", label: "Právne" },
         ].map((item) => (
           <button
@@ -189,6 +196,57 @@ export function SettingsForms({
               >
                 Poslať odkaz na zmenu hesla
               </SubmitButton>
+            </form>
+          )}
+        </div>
+
+        <div className="mt-5 border-t border-brand-purple/8 pt-4">
+          <button
+            type="button"
+            onClick={() => setDeleteOpen((v) => !v)}
+            className="flex w-full items-center justify-between rounded-2xl bg-red-50 px-4 py-3 text-left transition hover:bg-red-100/80"
+          >
+            <span className="flex items-center gap-3">
+              <span className="grid h-9 w-9 place-items-center rounded-full bg-red-100 text-red-600">
+                <TrashIcon />
+              </span>
+              <span>
+                <span className="block text-sm font-semibold text-red-700">
+                  Zrušiť účet
+                </span>
+                <span className="text-[11px] text-red-600/70">
+                  {deleteOpen ? "Skryť" : "Natrvalo odstrániť účet a údaje"}
+                </span>
+              </span>
+            </span>
+            <ChevronDown open={deleteOpen} />
+          </button>
+
+          {deleteOpen && (
+            <form action={deleteAccountAction} className="mt-4 space-y-4">
+              <p className="rounded-2xl bg-red-50 px-4 py-3 text-xs leading-relaxed text-red-700/80">
+                Táto akcia je{" "}
+                <span className="font-semibold text-red-700">nezvratná</span>.
+                Váš účet, profil, príspevky vo fóre a všetky súvisiace údaje
+                budú natrvalo odstránené. Na e-mail{" "}
+                <span className="font-semibold text-red-700">{email}</span>{" "}
+                vám pošleme potvrdenie o zrušení účtu.
+              </p>
+              <button
+                type="submit"
+                onClick={(e) => {
+                  if (
+                    !window.confirm(
+                      "Naozaj chcete natrvalo zrušiť svoj účet? Táto akcia sa nedá vrátiť späť.",
+                    )
+                  ) {
+                    e.preventDefault();
+                  }
+                }}
+                className="w-full rounded-pill border border-red-200 bg-white py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+              >
+                Natrvalo zrušiť účet
+              </button>
             </form>
           )}
         </div>
@@ -310,8 +368,22 @@ export function SettingsForms({
       </SectionCard>
 
       <SectionCard
-        id="pravne"
+        id="registracie"
         step="4"
+        icon={<CalendarIcon />}
+        title="História registrácií"
+        subtitle={
+          registrationHistory.length > 0
+            ? `${registrationHistory.length} ${registrationHistory.length === 1 ? "registrácia" : registrationHistory.length < 5 ? "registrácie" : "registrácií"} na podujatia`
+            : "Zatiaľ bez registrácií"
+        }
+      >
+        <RegistrationHistoryList registrations={registrationHistory} />
+      </SectionCard>
+
+      <SectionCard
+        id="pravne"
+        step="5"
         icon={<DocIcon />}
         title="Právne informácie"
         subtitle="Dokumenty a zásady"
@@ -479,6 +551,23 @@ function MailIcon() {
     <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0 text-brand-purple/40" fill="none" aria-hidden>
       <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.8" />
       <path d="M3 7l9 6 9-6" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function TrashIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+      <path d="M4 7h16M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function CalendarIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden>
+      <rect x="4" y="5" width="16" height="15" rx="2" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M4 9h16M8 3v4M16 3v4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   );
 }

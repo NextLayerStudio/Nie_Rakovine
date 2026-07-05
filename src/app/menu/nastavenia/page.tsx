@@ -4,6 +4,7 @@ import { PhoneShell } from "@/components/PhoneShell";
 import { TopBar } from "@/components/TopBar";
 import { requireUser } from "@/lib/auth";
 import { profileAvatarStyle } from "@/lib/avatar-style";
+import { loadRegistrationHistory } from "@/lib/settings-data";
 import { SettingsForms } from "./SettingsForms";
 
 export const dynamic = "force-dynamic";
@@ -12,6 +13,7 @@ export default async function SettingsPage() {
   const user = await requireUser();
   const subscription = planInfo(user.subscriptionPlan, user.subscriptionStatus);
   const avatarUrl = user.profile?.avatarUrl ?? null;
+  const registrationHistory = await loadRegistrationHistory(user.id);
 
   return (
     <PhoneShell>
@@ -63,6 +65,7 @@ export default async function SettingsPage() {
               notifyEventsNearby: user.profile?.notifyEventsNearby ?? true,
             }}
             subscriptionActive={subscription.active}
+            registrationHistory={registrationHistory}
           />
         </section>
       </div>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { buildAdminUsersWhere } from "@/lib/admin-users-export";
 import { subscriptionPlanLabel } from "@/lib/user-profile-display";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 
@@ -14,20 +15,14 @@ export default async function AdminUsersPage({
   const query = q?.trim() ?? "";
 
   const users = await prisma.user.findMany({
-    where: {
-      role: "USER",
-      ...(query
-        ? {
-            OR: [
-              { fullName: { contains: query, mode: "insensitive" } },
-              { email: { contains: query, mode: "insensitive" } },
-            ],
-          }
-        : {}),
-    },
+    where: buildAdminUsersWhere(query),
     orderBy: { createdAt: "desc" },
     include: { profile: true },
   });
+
+  const exportHref = query
+    ? `/api/admin/users/export?q=${encodeURIComponent(query)}`
+    : "/api/admin/users/export";
 
   return (
     <div>
@@ -35,9 +30,14 @@ export default async function AdminUsersPage({
         title="Používatelia"
         description="Vyhľadajte člena a kliknite na riadok pre kompletné údaje z registrácie."
         actions={
-          <Link href="/admin/statistics" className="admin-btn-outline">
-            Štatistiky →
-          </Link>
+          <>
+            <a href={exportHref} className="admin-btn-outline">
+              Exportovať CSV
+            </a>
+            <Link href="/admin/statistics" className="admin-btn-outline">
+              Štatistiky →
+            </Link>
+          </>
         }
       />
 
