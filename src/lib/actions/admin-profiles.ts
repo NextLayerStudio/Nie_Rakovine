@@ -36,7 +36,7 @@ export async function createClubProfileAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const displayName = String(formData.get("displayName") ?? "").trim();
   const handleRaw = String(formData.get("handle") ?? "").trim();
   const handle = slugify(handleRaw || displayName);
@@ -57,12 +57,14 @@ export async function createClubProfileAction(
       "avatarFile",
       "avatarUrl",
       "profiles",
+      admin.id,
     );
     coverUrl = await resolveImageField(
       formData,
       "coverFile",
       "coverUrl",
       "profiles",
+      admin.id,
     );
   } catch (err) {
     return {
@@ -89,7 +91,7 @@ export async function updateClubProfileAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const id = String(formData.get("id") ?? "");
   const displayName = String(formData.get("displayName") ?? "").trim();
   const handleRaw = String(formData.get("handle") ?? "").trim();
@@ -113,12 +115,14 @@ export async function updateClubProfileAction(
       "avatarFile",
       "avatarUrl",
       "profiles",
+      admin.id,
     );
     coverUrl = await resolveImageField(
       formData,
       "coverFile",
       "coverUrl",
       "profiles",
+      admin.id,
     );
   } catch (err) {
     return {

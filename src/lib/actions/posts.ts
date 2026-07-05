@@ -22,6 +22,7 @@ type DbClient = Prisma.TransactionClient | typeof prisma;
 async function syncPostGallery(
   postId: string,
   formData: FormData,
+  uploadedById: string,
   db: DbClient = prisma,
 ): Promise<void> {
   const removeIds = formData
@@ -35,7 +36,12 @@ async function syncPostGallery(
     });
   }
 
-  const newUrls = await saveUploadedImages(formData, "galleryFiles", "posts");
+  const newUrls = await saveUploadedImages(
+    formData,
+    "galleryFiles",
+    "posts",
+    uploadedById,
+  );
   if (newUrls.length === 0) return;
 
   const existingCount = await db.postImage.count({ where: { postId } });
@@ -76,7 +82,7 @@ export async function createPostAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const type = String(formData.get("type") ?? "") as PostType;
   const title = String(formData.get("title") ?? "").trim();
   const excerpt = String(formData.get("excerpt") ?? "").trim() || null;
@@ -100,6 +106,7 @@ export async function createPostAction(
       "coverFile",
       "coverUrl",
       "posts",
+      admin.id,
     );
   } catch (err) {
     return {
@@ -110,7 +117,7 @@ export async function createPostAction(
 
   let videoUrl: string | null;
   try {
-    videoUrl = (await resolveVideoField(formData, "videoFile", "videoUrl")) ?? null;
+    videoUrl = (await resolveVideoField(formData, "videoFile", "videoUrl", undefined, admin.id)) ?? null;
   } catch (err) {
     return {
       ok: false,
@@ -120,7 +127,7 @@ export async function createPostAction(
 
   let audioUrl: string | null;
   try {
-    audioUrl = (await resolveAudioField(formData, "audioFile", "audioUrl")) ?? null;
+    audioUrl = (await resolveAudioField(formData, "audioFile", "audioUrl", undefined, admin.id)) ?? null;
   } catch (err) {
     return {
       ok: false,
@@ -152,7 +159,7 @@ export async function createPostAction(
         include: { profile: { select: { id: true, displayName: true } } },
       });
 
-      await syncPostGallery(created.id, formData, tx);
+      await syncPostGallery(created.id, formData, admin.id, tx);
       return created;
     });
   } catch (err) {
@@ -174,7 +181,7 @@ export async function updatePostAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const id = String(formData.get("id") ?? "");
   if (!id) return { ok: false, message: "Chýba identifikátor." };
 
@@ -197,6 +204,7 @@ export async function updatePostAction(
       "coverFile",
       "coverUrl",
       "posts",
+      admin.id,
     );
   } catch (err) {
     return {
@@ -216,6 +224,7 @@ export async function updatePostAction(
       "videoFile",
       "videoUrl",
       existing?.videoUrl,
+      admin.id,
     );
   } catch (err) {
     return {
@@ -231,6 +240,7 @@ export async function updatePostAction(
       "audioFile",
       "audioUrl",
       existing?.audioUrl,
+      admin.id,
     );
   } catch (err) {
     return {
@@ -271,7 +281,7 @@ export async function updatePostAction(
   }
 
   try {
-    await syncPostGallery(post.id, formData);
+    await syncPostGallery(post.id, formData, admin.id);
   } catch (err) {
     return { ok: false, message: galleryErrorMessage(err) };
   }

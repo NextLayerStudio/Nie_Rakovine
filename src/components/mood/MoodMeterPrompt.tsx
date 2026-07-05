@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Frown, Annoyed, Meh, Smile, Laugh, type LucideIcon } from "lucide-react";
 import { MOOD_OPTIONS, type MoodScore } from "@/lib/mood-options";
 import { submitMoodEntryAction } from "@/lib/actions/mood";
@@ -30,14 +30,20 @@ function wasDismissedToday(): boolean {
 
 /** Daily, dismissible mood check-in — mirrors the avatar-prompt gate pattern. */
 export function MoodMeterPrompt({ hasLoggedToday }: { hasLoggedToday: boolean }) {
-  const [dismissed, setDismissed] = useState(wasDismissedToday);
+  const [ready, setReady] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [selected, setSelected] = useState<MoodScore | null>(null);
   const [note, setNote] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
-  if (hasLoggedToday || dismissed) return null;
+  useEffect(() => {
+    setDismissed(wasDismissedToday());
+    setReady(true);
+  }, []);
+
+  if (hasLoggedToday || !ready || dismissed) return null;
 
   const handleDismiss = () => {
     try {

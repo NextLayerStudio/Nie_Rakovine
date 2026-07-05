@@ -32,7 +32,7 @@ export async function createDiscountPartnerAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const displayName = String(formData.get("displayName") ?? "").trim();
   const handleRaw = String(formData.get("handle") ?? "").trim();
   const handle = slugify(handleRaw || displayName);
@@ -54,12 +54,14 @@ export async function createDiscountPartnerAction(
       "avatarFile",
       "avatarUrl",
       "profiles",
+      admin.id,
     );
     coverUrl = await resolveImageField(
       formData,
       "coverFile",
       "coverUrl",
       "profiles",
+      admin.id,
     );
   } catch (err) {
     return {
@@ -95,7 +97,7 @@ export async function updateDiscountPartnerAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const id = String(formData.get("id") ?? "");
   const displayName = String(formData.get("displayName") ?? "").trim();
   const handleRaw = String(formData.get("handle") ?? "").trim();
@@ -120,12 +122,14 @@ export async function updateDiscountPartnerAction(
       "avatarFile",
       "avatarUrl",
       "profiles",
+      admin.id,
     );
     coverUrl = await resolveImageField(
       formData,
       "coverFile",
       "coverUrl",
       "profiles",
+      admin.id,
     );
   } catch (err) {
     return {
@@ -185,7 +189,7 @@ export async function createDiscountOfferAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const partnerId = String(formData.get("partnerId") ?? "");
   const published = formData.get("published") === "on";
   const sortOrder = Number(formData.get("sortOrder") ?? 0) || 0;
@@ -197,6 +201,7 @@ export async function createDiscountOfferAction(
       "imageFile",
       "imageUrl",
       "profiles",
+      admin.id,
     );
   } catch (err) {
     return {
@@ -231,7 +236,7 @@ export async function updateDiscountOfferAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const id = String(formData.get("id") ?? "");
   const partnerId = String(formData.get("partnerId") ?? "");
   const published = formData.get("published") === "on";
@@ -250,6 +255,7 @@ export async function updateDiscountOfferAction(
       "imageFile",
       "imageUrl",
       "profiles",
+      admin.id,
     );
   } catch (err) {
     return {
@@ -300,7 +306,7 @@ export async function createReklamaPostAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const partnerId = String(formData.get("partnerId") ?? "");
   const title = String(formData.get("title") ?? "").trim();
   const excerpt = String(formData.get("excerpt") ?? "").trim() || null;
@@ -313,7 +319,13 @@ export async function createReklamaPostAction(
 
   let coverUrl: string | null;
   try {
-    coverUrl = await resolveImageField(formData, "coverFile", "coverUrl", "posts");
+    coverUrl = await resolveImageField(
+      formData,
+      "coverFile",
+      "coverUrl",
+      "posts",
+      admin.id,
+    );
   } catch (err) {
     return {
       ok: false,
@@ -350,7 +362,7 @@ export async function updateReklamaPostAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const id = String(formData.get("id") ?? "");
   const partnerId = String(formData.get("partnerId") ?? "");
   const title = String(formData.get("title") ?? "").trim();
@@ -366,7 +378,13 @@ export async function updateReklamaPostAction(
 
   let coverUrl: string | null;
   try {
-    coverUrl = await resolveImageField(formData, "coverFile", "coverUrl", "posts");
+    coverUrl = await resolveImageField(
+      formData,
+      "coverFile",
+      "coverUrl",
+      "posts",
+      admin.id,
+    );
   } catch (err) {
     return {
       ok: false,

@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const avatarUrl = await saveUploadedImage(file, "profiles");
+    const avatarUrl = await saveUploadedImage(file, "profiles", session.userId);
 
     await prisma.userProfile.upsert({
       where: { userId: session.userId },

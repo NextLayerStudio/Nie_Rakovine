@@ -1,10 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ForumFollowButton } from "@/components/ForumFollowButton";
 import { fetchForumsTabAction } from "@/lib/actions/tabs";
 import { forumAvatarStyle } from "@/lib/avatar-style";
+import {
+  applyForumMembershipChange,
+  FORUM_MEMBERSHIP_EVENT,
+  type ForumMembershipDetail,
+} from "@/lib/forum-membership-sync";
 
 type ForumFilter = "all" | "popular" | "following";
 
@@ -34,6 +40,8 @@ function TabSkeleton() {
 }
 
 export function ForumsTabPanel({ initialData }: { initialData?: ForumsData }) {
+  const pathname = usePathname();
+  const prevPathRef = useRef(pathname);
   const [data, setData] = useState<ForumsData | null>(initialData ?? null);
   const [failed, setFailed] = useState(false);
   const [activeFilter, setActiveFilter] = useState<ForumFilter>("all");
@@ -47,6 +55,39 @@ export function ForumsTabPanel({ initialData }: { initialData?: ForumsData }) {
       })
       .catch(() => setFailed(true));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const { forumId, following } = (event as CustomEvent<ForumMembershipDetail>)
+        .detail;
+      setData((prev) =>
+        prev ? applyForumMembershipChange(prev, forumId, following) : prev,
+      );
+    };
+
+    window.addEventListener(FORUM_MEMBERSHIP_EVENT, handler);
+    return () => window.removeEventListener(FORUM_MEMBERSHIP_EVENT, handler);
+  }, []);
+
+  useEffect(() => {
+    const prev = prevPathRef.current;
+    const returnedToForumsList =
+      pathname === "/home/forums" &&
+      prev.startsWith("/home/forums/") &&
+      prev !== "/home/forums";
+
+    prevPathRef.current = pathname;
+
+    if (!returnedToForumsList) return;
+
+    fetchForumsTabAction()
+      .then((res) => {
+        if (res.ok) setData(res as ForumsData);
+      })
+      .catch(() => {
+        // Keep optimistic local state if refetch fails.
+      });
+  }, [pathname]);
 
   const followingIds = new Set(data?.followingForumIds ?? []);
 

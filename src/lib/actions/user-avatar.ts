@@ -29,7 +29,7 @@ export async function uploadUserAvatarAction(
       return { ok: false, message: "Vyberte obrázok (JPG, PNG, WebP…)." };
     }
 
-    const avatarUrl = await saveUploadedImage(file, "profiles");
+    const avatarUrl = await saveUploadedImage(file, "profiles", auth.user.id);
 
     await prisma.userProfile.upsert({
       where: { userId: auth.user.id },

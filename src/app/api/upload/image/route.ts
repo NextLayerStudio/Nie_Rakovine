@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const url = await saveUploadedImage(file, "posts");
+    const url = await saveUploadedImage(file, "posts", user.id);
     return NextResponse.json({ url });
   } catch (err) {
     return NextResponse.json(

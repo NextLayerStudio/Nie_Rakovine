@@ -3,9 +3,10 @@ import { saveUploadedImage } from "@/lib/uploads";
 /** Save a forum or thread image to the database (works on Vercel). */
 export async function saveForumImage(
   file: File | null,
+  uploadedById?: string,
 ): Promise<string | null> {
   if (!file || file.size === 0) return null;
-  return saveUploadedImage(file, "forums");
+  return saveUploadedImage(file, "forums", uploadedById);
 }
 
 /** @deprecated use saveForumImage — kept for existing call sites. */

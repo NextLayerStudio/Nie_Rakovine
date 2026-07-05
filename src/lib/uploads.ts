@@ -39,6 +39,7 @@ async function saveUploadedFile(
   category: UploadFolder,
   allowedTypes: Map<string, string>,
   maxBytes: number,
+  uploadedById?: string,
 ): Promise<string> {
   if (!(file instanceof File) || file.size === 0) {
     throw new Error("Nebol vybraný žiadny súbor.");
@@ -70,6 +71,7 @@ async function saveUploadedFile(
       category,
       size: optimized.size,
       data: optimized.buffer,
+      uploadedById: uploadedById ?? null,
     },
     select: { id: true },
   });
@@ -81,23 +83,31 @@ async function saveUploadedFile(
 export async function saveUploadedImage(
   file: File,
   folder: UploadFolder,
+  uploadedById?: string,
 ): Promise<string> {
   return saveUploadedFile(
     file,
     folder,
     IMAGE_TYPES,
     maxImageUploadBytes(),
+    uploadedById,
   );
 }
 
 /** Save an uploaded video to the database and return its API URL. */
-export async function saveUploadedVideo(file: File): Promise<string> {
-  return saveUploadedFile(file, "videos", VIDEO_TYPES, MAX_VIDEO_BYTES);
+export async function saveUploadedVideo(
+  file: File,
+  uploadedById?: string,
+): Promise<string> {
+  return saveUploadedFile(file, "videos", VIDEO_TYPES, MAX_VIDEO_BYTES, uploadedById);
 }
 
 /** Save an uploaded audio file to the database and return its API URL. */
-export async function saveUploadedAudio(file: File): Promise<string> {
-  return saveUploadedFile(file, "videos", AUDIO_TYPES, MAX_AUDIO_BYTES);
+export async function saveUploadedAudio(
+  file: File,
+  uploadedById?: string,
+): Promise<string> {
+  return saveUploadedFile(file, "videos", AUDIO_TYPES, MAX_AUDIO_BYTES, uploadedById);
 }
 
 /**
@@ -109,10 +119,11 @@ export async function resolveImageField(
   fileField: string,
   urlField: string,
   folder: UploadFolder,
+  uploadedById?: string,
 ): Promise<string | null> {
   const file = formData.get(fileField);
   if (file instanceof File && file.size > 0) {
-    return saveUploadedImage(file, folder);
+    return saveUploadedImage(file, folder, uploadedById);
   }
 
   const url = String(formData.get(urlField) ?? "").trim();
@@ -129,10 +140,11 @@ export async function resolveVideoField(
   fileField: string,
   urlField: string,
   keepExisting?: string | null,
+  uploadedById?: string,
 ): Promise<string | null | undefined> {
   const file = formData.get(fileField);
   if (file instanceof File && file.size > 0) {
-    return saveUploadedVideo(file);
+    return saveUploadedVideo(file, uploadedById);
   }
 
   const url = String(formData.get(urlField) ?? "").trim();
@@ -151,10 +163,11 @@ export async function resolveAudioField(
   fileField: string,
   urlField: string,
   keepExisting?: string | null,
+  uploadedById?: string,
 ): Promise<string | null | undefined> {
   const file = formData.get(fileField);
   if (file instanceof File && file.size > 0) {
-    return saveUploadedAudio(file);
+    return saveUploadedAudio(file, uploadedById);
   }
 
   const url = String(formData.get(urlField) ?? "").trim();
@@ -168,13 +181,14 @@ export async function saveUploadedImages(
   formData: FormData,
   fileField: string,
   folder: UploadFolder,
+  uploadedById?: string,
 ): Promise<string[]> {
   const entries = formData.getAll(fileField);
   const urls: string[] = [];
 
   for (const entry of entries) {
     if (entry instanceof File && entry.size > 0) {
-      urls.push(await saveUploadedImage(entry, folder));
+      urls.push(await saveUploadedImage(entry, folder, uploadedById));
     }
   }
 

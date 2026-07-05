@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { toggleForumFollowAction } from "@/lib/actions/forums";
+import { emitForumMembershipChange } from "@/lib/forum-membership-sync";
 
 export function ForumFollowButton({
   forumId,
@@ -9,26 +10,38 @@ export function ForumFollowButton({
   size = "sm",
   joinLabel = "Sledovať",
   joinedLabel = "Sledujem",
+  onFollowingChange,
 }: {
   forumId: string;
   isFollowing: boolean;
   size?: "sm" | "md";
   joinLabel?: string;
   joinedLabel?: string;
+  onFollowingChange?: (following: boolean) => void;
 }) {
   const [isFollowing, setIsFollowing] = useState(initialFollowing);
   const [, startTransition] = useTransition();
   const sizing =
     size === "md" ? "px-3.5 py-1.5 text-sm" : "px-3.5 py-1 text-sm";
 
+  useEffect(() => {
+    setIsFollowing(initialFollowing);
+  }, [initialFollowing]);
+
   const handleClick = () => {
     const next = !isFollowing;
     setIsFollowing(next);
+    onFollowingChange?.(next);
+    emitForumMembershipChange(forumId, next);
     const fd = new FormData();
     fd.set("forumId", forumId);
     startTransition(async () => {
       const result = await toggleForumFollowAction(fd);
-      if (!result.ok) setIsFollowing(!next);
+      if (!result.ok) {
+        setIsFollowing(!next);
+        onFollowingChange?.(!next);
+        emitForumMembershipChange(forumId, !next);
+      }
     });
   };
 

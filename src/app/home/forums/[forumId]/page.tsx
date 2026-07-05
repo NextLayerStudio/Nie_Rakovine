@@ -1,10 +1,8 @@
 import { notFound } from "next/navigation";
-import { ForumDetailHeader } from "@/components/ForumDetailHeader";
-import { ForumFollowButton } from "@/components/ForumFollowButton";
+import { ForumDetailLayout } from "@/components/ForumDetailLayout";
 import { ForumPostCard } from "@/components/ForumPostCard";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
-import { forumAvatarStyle } from "@/lib/avatar-style";
 import { safeReturnHref } from "@/lib/post-display";
 import {
   APPROVED,
@@ -55,44 +53,16 @@ export default async function ForumDetailPage({
 
   return (
     <div className="forum-page min-h-full">
-      <ForumDetailHeader
+      <ForumDetailLayout
         backHref={backHref}
+        forumId={forum.id}
+        initialJoined={joined}
         imageUrl={forum.imageUrl}
         accentColor={forum.accentColor}
         title={forum.title}
-        newPostHref={`/home/forums/${forum.id}/new`}
-      />
-
-      <section className="px-5 pt-4">
-        <div className="flex items-start gap-4">
-          <div
-            aria-hidden
-            className="h-[72px] w-[72px] shrink-0 rounded-2xl bg-cover bg-center ring-[3px] ring-white shadow-md"
-            style={forumAvatarStyle(forum)}
-          />
-          <div className="min-w-0 flex-1">
-            <div className="flex items-start justify-between gap-2">
-              <h1 className="text-base font-bold leading-snug text-brand-purple">
-                {forum.title}
-              </h1>
-              <ForumFollowButton
-                forumId={forum.id}
-                isFollowing={joined}
-                size="md"
-              />
-            </div>
-            <span className="forum-chip mt-2">
-              {forum._count.members} členov
-            </span>
-          </div>
-        </div>
-        {forum.description && (
-          <p className="mt-4 text-sm leading-relaxed text-brand-purple/80">
-            {forum.description}
-          </p>
-        )}
-      </section>
-
+        description={forum.description}
+        memberCount={forum._count.members}
+      >
       {pending === "1" && (
         <div className="forum-banner mx-5 mt-4 text-center">
           Príspevok bol odoslaný a čaká na schválenie administrátorom.
@@ -129,6 +99,7 @@ export default async function ForumDetailPage({
           </div>
         )}
       </section>
+      </ForumDetailLayout>
     </div>
   );
 }

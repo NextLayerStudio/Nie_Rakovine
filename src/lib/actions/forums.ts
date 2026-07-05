@@ -94,7 +94,10 @@ export async function toggleForumFollowAction(
     }
   }
 
-  // Client refresh updates the current forum page.
+  // Client refresh updates forum pages and the cached forums tab.
+  revalidatePath("/home");
+  revalidatePath("/home/forums");
+  revalidatePath(`/home/forums/${forumId}`);
   return { ok: true };
 }
 
@@ -366,6 +369,7 @@ export async function createThreadAction(
     const { saveForumImage } = await import("@/lib/forum-image");
     coverUrl = await saveForumImage(
       imageFile instanceof File ? imageFile : null,
+      user.id,
     );
   } catch (err) {
     return {
@@ -430,6 +434,7 @@ export async function createForumByUserAction(
     const { saveForumImage } = await import("@/lib/forum-image");
     imageUrl = await saveForumImage(
       imageFile instanceof File ? imageFile : null,
+      user.id,
     );
   } catch (err) {
     return {
