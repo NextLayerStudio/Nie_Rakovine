@@ -115,6 +115,11 @@ export async function createPostAction(
     };
   }
 
+  if (!coverUrl) {
+    const autoThumb = String(formData.get("videoAutoThumbnailUrl") ?? "").trim();
+    if (autoThumb) coverUrl = autoThumb;
+  }
+
   let videoUrl: string | null;
   try {
     videoUrl = (await resolveVideoField(formData, "videoFile", "videoUrl", undefined, admin.id)) ?? null;
@@ -215,6 +220,11 @@ export async function updatePostAction(
 
   if (coverUrl === null && existing?.coverUrl) {
     coverUrl = existing.coverUrl;
+  }
+
+  if (!coverUrl) {
+    const autoThumb = String(formData.get("videoAutoThumbnailUrl") ?? "").trim();
+    if (autoThumb) coverUrl = autoThumb;
   }
 
   let videoUrl: string | null | undefined;

@@ -176,3 +176,17 @@ export function extractVideoEmbedUrl(url: string): string | null {
 export function isLocalMedia(url: string) {
   return url.startsWith("/api/media/") || url.startsWith("/uploads/");
 }
+
+/**
+ * Whether a URL can be dropped straight into a <video> tag. Covers our own
+ * DB-backed media, Vercel Blob URLs (signed GET URLs carry a query-string
+ * signature, so a plain `.endsWith(".mp4")` check would miss them), and
+ * plain file links by extension — tolerant of a trailing query string.
+ */
+export function isPlayableVideoUrl(url: string) {
+  return (
+    isLocalMedia(url) ||
+    url.includes(".blob.vercel-storage.com") ||
+    /\.(mp4|webm|mov)(\?|$)/i.test(url)
+  );
+}

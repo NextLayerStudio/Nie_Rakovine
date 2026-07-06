@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { buildPostGallery } from "@/lib/post-display";
 import { requireActionUser } from "@/lib/safe-action";
+import { resolveVideoPlaybackUrl } from "@/lib/video-blob";
 
 export type PostDetailPayload = {
   id: string;
@@ -52,6 +53,9 @@ export async function fetchPostDetailAction(postId: string): Promise<
     }),
   ]);
 
+  const videoUrl =
+    post.type === "VIDEO" ? await resolveVideoPlaybackUrl(post.videoUrl) : post.videoUrl;
+
   return {
     ok: true,
     post: {
@@ -60,7 +64,7 @@ export async function fetchPostDetailAction(postId: string): Promise<
       title: post.title,
       excerpt: post.excerpt,
       body: post.body,
-      videoUrl: post.videoUrl,
+      videoUrl,
       audioUrl: post.audioUrl,
       gallery: buildPostGallery(post.coverUrl, post.images),
       profileName: post.profile?.displayName ?? null,

@@ -25,8 +25,24 @@ const AUDIO_TYPES = new Map([
   ["audio/webm", ".webm"],
 ]);
 
+/**
+ * Uploaded whole through a single request/server action (legacy path — kept
+ * for the "paste a link" fallback and any external caller). Real video
+ * uploads from the admin UI go straight to Vercel Blob instead (see
+ * /api/upload/video/blob), which isn't limited by Vercel's per-request body
+ * size and doesn't hit Postgres's 1 GB per-field ceiling.
+ */
 const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
 const MAX_AUDIO_BYTES = 25 * 1024 * 1024;
+
+/** Max size for videos uploaded via the Vercel Blob presigned-upload flow. */
+export const MAX_BLOB_VIDEO_BYTES = 5 * 1024 * 1024 * 1024;
+
+export const VIDEO_CONTENT_TYPES = [...VIDEO_TYPES.keys()];
+
+export function isAllowedVideoMimeType(mimeType: string): boolean {
+  return VIDEO_TYPES.has(mimeType);
+}
 
 export type UploadFolder = "posts" | "events" | "profiles" | "forums" | "videos";
 

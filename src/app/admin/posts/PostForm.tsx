@@ -26,10 +26,13 @@ export function PostForm({
   mode,
   post,
   profileId,
+  videoPreviewUrl,
 }: {
   mode: "create" | "edit";
   post?: PostWithImages;
   profileId?: string;
+  /** Freshly signed, playable URL for an existing Blob-backed video (see AdminVideoField). */
+  videoPreviewUrl?: string;
 }) {
   const [state, formAction] = useActionState(
     mode === "create" ? createPostAction : updatePostAction,
@@ -108,7 +111,10 @@ export function PostForm({
           previewAspect="video"
         />
         <AdminMultiImageField existingImages={post?.images ?? []} />
-        <AdminVideoField defaultValue={post?.videoUrl ?? ""} />
+        <AdminVideoField
+          defaultValue={post?.videoUrl ?? ""}
+          previewSignedUrl={videoPreviewUrl}
+        />
         <AdminAudioField defaultValue={post?.audioUrl ?? ""} />
         <label className="block">
           <span className="admin-label">Dĺžka (minúty)</span>

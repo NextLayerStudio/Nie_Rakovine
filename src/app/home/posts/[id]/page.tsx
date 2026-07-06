@@ -6,10 +6,11 @@ import { LikeButton } from "@/components/LikeButton";
 import { PostImageCarousel } from "@/components/PostImageCarousel";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
+import { resolveVideoPlaybackUrl } from "@/lib/video-blob";
 import {
   buildPostGallery,
   isEmbeddableVideo,
-  isLocalMedia,
+  isPlayableVideoUrl,
   postKindLabel,
   safeReturnHref,
 } from "@/lib/post-display";
@@ -51,6 +52,9 @@ export default async function PostDetailPage({
     : "/home";
   const backHref = safeReturnHref(from, profileBack);
 
+  const playableVideoUrl =
+    post.type === "VIDEO" ? await resolveVideoPlaybackUrl(post.videoUrl) : null;
+
   if (isEditorial) {
     return (
       <>
@@ -88,8 +92,8 @@ export default async function PostDetailPage({
             )}
           </div>
 
-          {post.type === "VIDEO" && post.videoUrl ? (
-            <VideoBlock url={post.videoUrl} coverUrl={post.coverUrl} />
+          {post.type === "VIDEO" && playableVideoUrl ? (
+            <VideoBlock url={playableVideoUrl} coverUrl={post.coverUrl} />
           ) : post.type === "AUDIO" && post.audioUrl ? (
             <div className="mt-3 px-4">
               <FeedAudioPlayer audioUrl={post.audioUrl} coverUrl={post.coverUrl} />
@@ -218,6 +222,22 @@ function EditorialArticle({
         </div>
       )}
 
+      {/* Extra photos from the gallery (beyond the cover image) */}
+      {gallery.length > 1 && (
+        <div className="mt-6 px-5">
+          <h2 className="mb-3 text-[13px] font-bold uppercase tracking-wide text-zinc-400">
+            Fotogaléria
+          </h2>
+          <PostImageCarousel
+            images={gallery.slice(1)}
+            type={post.type}
+            aspectClass="aspect-[4/3]"
+            maxHeightClass=""
+            className="overflow-hidden rounded-2xl"
+          />
+        </div>
+      )}
+
       {/* Actions */}
       <div className="mt-8 flex items-center gap-4 border-t border-zinc-100 px-5 pt-5">
         <LikeButton postId={post.id} liked={liked} count={post._count.likes} />
@@ -297,7 +317,7 @@ function MarkdownBody({ text }: { text: string }) {
 /* ─── Video block (unchanged) ─── */
 
 function VideoBlock({ url, coverUrl }: { url: string; coverUrl: string | null }) {
-  if (isLocalMedia(url) || url.endsWith(".mp4") || url.endsWith(".webm") || url.endsWith(".mov")) {
+  if (isPlayableVideoUrl(url)) {
     return (
       <div className="mt-3 bg-black">
         <video src={url} controls playsInline poster={coverUrl ?? undefined} className="aspect-video w-full" />

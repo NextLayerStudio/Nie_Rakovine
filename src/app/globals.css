@@ -314,6 +314,13 @@ body.membership-no-screenshot {
 .article-body a { @apply text-brand-purple underline underline-offset-2 hover:text-brand-pink; }
 .article-body img { @apply my-5 w-full rounded-lg object-cover; }
 
+/* Image with caption + photo credit (figure.article-figure, see TiptapImageFigure) */
+.article-body figure.article-figure { @apply my-5; }
+.article-body figure.article-figure img { @apply m-0; }
+.article-body figure.article-figure figcaption { @apply mt-2 space-y-0.5 text-center; }
+.article-body figure.article-figure .caption-text { @apply block text-sm leading-snug text-zinc-500; }
+.article-body figure.article-figure .caption-credit { @apply block text-xs not-italic text-zinc-400; }
+
 /* Tiptap editor content mirrors article-body styles */
 .tiptap-content .ProseMirror { @apply article-body; }
 .tiptap-content .ProseMirror:focus { outline: none; }

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { PostForm } from "../PostForm";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { resolveVideoPlaybackUrl } from "@/lib/video-blob";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,8 @@ export default async function EditPostPage({
   });
   if (!post) notFound();
 
+  const videoPreviewUrl = await resolveVideoPlaybackUrl(post.videoUrl);
+
   return (
     <div className="max-w-2xl">
       <AdminPageHeader
@@ -27,7 +30,7 @@ export default async function EditPostPage({
         }
         backLabel="Späť na profil"
       />
-      <PostForm mode="edit" post={post} />
+      <PostForm mode="edit" post={post} videoPreviewUrl={videoPreviewUrl ?? undefined} />
     </div>
   );
 }

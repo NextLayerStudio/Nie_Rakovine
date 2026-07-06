@@ -2,12 +2,12 @@
 
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import Typography from "@tiptap/extension-typography";
 import { useRef } from "react";
 import type { Editor } from "@tiptap/react";
+import { ImageFigure } from "@/components/admin/TiptapImageFigure";
 
 async function uploadImageFile(file: File): Promise<string | null> {
   const fd = new FormData();
@@ -56,7 +56,7 @@ function Toolbar({ editor }: { editor: Editor }) {
     const file = e.target.files?.[0];
     if (!file) return;
     const url = await uploadImageFile(file);
-    if (url) editor.chain().focus().setImage({ src: url }).run();
+    if (url) editor.chain().focus().setImageFigure({ src: url }).run();
     e.target.value = "";
   }
 
@@ -192,7 +192,7 @@ export function TiptapEditor({
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Image.configure({ inline: false, allowBase64: false }),
+      ImageFigure,
       Link.configure({ openOnClick: false }),
       Placeholder.configure({ placeholder }),
       Typography,
@@ -217,7 +217,7 @@ export function TiptapEditor({
         uploadImageFile(file).then((url) => {
           if (url && view.state) {
             const { schema, tr } = view.state;
-            const node = schema.nodes.image?.create({ src: url });
+            const node = schema.nodes.imageFigure?.create({ src: url });
             if (node) {
               view.dispatch(tr.replaceSelectionWith(node));
             }
@@ -237,7 +237,7 @@ export function TiptapEditor({
               left: event.clientX,
               top: event.clientY,
             });
-            const node = schema.nodes.image?.create({ src: url });
+            const node = schema.nodes.imageFigure?.create({ src: url });
             if (node && pos) {
               view.dispatch(tr.insert(pos.pos, node));
             }

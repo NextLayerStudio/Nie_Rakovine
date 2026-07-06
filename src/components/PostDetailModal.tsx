@@ -15,7 +15,7 @@ import { togglePostLikeAction } from "@/lib/actions/post-likes";
 import {
   extractVideoEmbedUrl,
   isEmbeddableVideo,
-  isLocalMedia,
+  isPlayableVideoUrl,
   postKindLabel,
 } from "@/lib/post-display";
 
@@ -286,12 +286,7 @@ function VideoBlock({
     );
   }
 
-  if (
-    isLocalMedia(url) ||
-    url.endsWith(".mp4") ||
-    url.endsWith(".webm") ||
-    url.endsWith(".mov")
-  ) {
+  if (isPlayableVideoUrl(url)) {
     return (
       <div className="mt-3 bg-black">
         <video
