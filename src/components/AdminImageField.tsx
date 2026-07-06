@@ -66,15 +66,19 @@ export function AdminImageField({
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+  const [cropOrientation, setCropOrientation] = useState<"landscape" | "portrait">("landscape");
 
-  const cropAspect = previewAspect === "video" ? 16 / 9 : 1;
+  const cropAspect =
+    previewAspect === "video" ? (cropOrientation === "portrait" ? 9 / 16 : 16 / 9) : 1;
   const cropShape: "round" | "rect" = shape === "circle" ? "round" : "rect";
 
   const previewClass =
     shape === "circle"
       ? "h-20 w-20 rounded-full"
       : previewAspect === "video"
-        ? "h-24 w-40 rounded-xl"
+        ? cropOrientation === "portrait"
+          ? "h-40 w-24 rounded-xl"
+          : "h-24 w-40 rounded-xl"
         : "h-20 w-32 rounded-xl";
 
   const previewSrc = filePreview || url.trim() || null;
@@ -89,8 +93,20 @@ export function AdminImageField({
   function onFileChange(file: File | undefined) {
     if (!file) { setFilePreview(null); setFileName(null); return; }
     const objectUrl = URL.createObjectURL(file);
+    // Default the crop frame to match the source photo's own orientation.
+    const probe = new Image();
+    probe.onload = () => {
+      setCropOrientation(probe.naturalHeight > probe.naturalWidth ? "portrait" : "landscape");
+    };
+    probe.src = objectUrl;
     setCropSrc(objectUrl);
     setCropOrigName(file.name);
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+  }
+
+  function setOrientation(next: "landscape" | "portrait") {
+    setCropOrientation(next);
     setCrop({ x: 0, y: 0 });
     setZoom(1);
   }
@@ -196,6 +212,32 @@ export function AdminImageField({
 
           {/* Controls */}
           <div className="flex flex-col items-center gap-4 border-t border-brand-purple/10 bg-white px-6 py-5">
+            {previewAspect === "video" && (
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setOrientation("landscape")}
+                  className={`rounded-full px-4 py-1.5 text-xs font-semibold transition ${
+                    cropOrientation === "landscape"
+                      ? "bg-brand-purple text-white"
+                      : "border border-brand-purple/20 text-brand-purple/60 hover:bg-brand-purple/5"
+                  }`}
+                >
+                  Na šírku
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setOrientation("portrait")}
+                  className={`rounded-full px-4 py-1.5 text-xs font-semibold transition ${
+                    cropOrientation === "portrait"
+                      ? "bg-brand-purple text-white"
+                      : "border border-brand-purple/20 text-brand-purple/60 hover:bg-brand-purple/5"
+                  }`}
+                >
+                  Na výšku
+                </button>
+              </div>
+            )}
             <div className="flex w-full max-w-xs items-center gap-3">
               <span className="text-xs text-brand-purple/40 w-10 text-right">−</span>
               <input
