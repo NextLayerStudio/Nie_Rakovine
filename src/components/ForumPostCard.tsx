@@ -51,7 +51,7 @@ export function ForumPostCard({
             src={coverUrl}
             alt=""
             className={`block w-full h-auto object-contain ${
-              compact ? "max-h-[220px]" : "max-h-[360px]"
+              compact ? "max-h-[340px]" : "max-h-[75vh]"
             }`}
           />
         </div>

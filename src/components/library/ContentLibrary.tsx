@@ -411,7 +411,7 @@ function VideoItem({
             <img
               src={cover}
               alt=""
-              className="block max-h-[420px] w-full h-auto object-contain"
+              className="block max-h-[75vh] w-full h-auto object-contain"
             />
           ) : (
             <div

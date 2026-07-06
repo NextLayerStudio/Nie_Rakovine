@@ -84,7 +84,7 @@ export function FeedPostMedia({
               >
                 {typeof slide === "string" && slide.startsWith("linear-gradient") ? (
                   <div
-                    className="aspect-[4/3] max-h-[420px] w-full"
+                    className="aspect-[4/3] max-h-[75vh] w-full"
                     style={{ background: slide }}
                   />
                 ) : (
@@ -92,7 +92,7 @@ export function FeedPostMedia({
                   <img
                     src={slide as string}
                     alt=""
-                    className="block max-h-[420px] w-full h-auto object-contain"
+                    className="block max-h-[75vh] w-full h-auto object-contain"
                     draggable={false}
                   />
                 )}

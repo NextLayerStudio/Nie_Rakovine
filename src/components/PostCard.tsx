@@ -52,7 +52,7 @@ export function PostCard({
         <PostImageCarousel
           images={imageUrls}
           type={type}
-          maxHeightClass={compact ? "max-h-[220px]" : "max-h-[420px]"}
+          maxHeightClass={compact ? "max-h-[340px]" : "max-h-[75vh]"}
           showDots={!compact}
         />
       </div>
