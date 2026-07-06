@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IMAGE_FILE_INPUT_ACCEPT } from "@/lib/image-upload-limits";
 
 type ExistingImage = { id: string; url: string };
+type PendingImage = { key: string; file: File; src: string };
 
 /** Admin gallery — upload multiple files; manage existing images on edit. */
 export function AdminMultiImageField({
@@ -12,21 +13,36 @@ export function AdminMultiImageField({
   existingImages?: ExistingImage[];
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
-  const [newPreviews, setNewPreviews] = useState<
-    { key: string; src: string; name: string }[]
-  >([]);
+  const [pending, setPending] = useState<PendingImage[]>([]);
   const [removedIds, setRemovedIds] = useState<Set<string>>(new Set());
 
   const visibleExisting = existingImages.filter((img) => !removedIds.has(img.id));
 
+  // Keep the real <input> in sync with `pending` so a removed preview is also
+  // removed from what actually gets submitted.
+  useEffect(() => {
+    if (!fileRef.current) return;
+    const dt = new DataTransfer();
+    pending.forEach(({ file }) => dt.items.add(file));
+    fileRef.current.files = dt.files;
+  }, [pending]);
+
   function onFilesChange(files: FileList | null) {
     if (!files) return;
     const next = Array.from(files).map((file) => ({
-      key: `${file.name}-${file.lastModified}`,
+      key: `${file.name}-${file.lastModified}-${Math.random().toString(36).slice(2)}`,
+      file,
       src: URL.createObjectURL(file),
-      name: file.name,
     }));
-    setNewPreviews((prev) => [...prev, ...next]);
+    setPending((prev) => [...prev, ...next]);
+  }
+
+  function removePending(key: string) {
+    setPending((prev) => {
+      const target = prev.find((p) => p.key === key);
+      if (target) URL.revokeObjectURL(target.src);
+      return prev.filter((p) => p.key !== key);
+    });
   }
 
   function toggleRemove(id: string) {
@@ -97,18 +113,25 @@ export function AdminMultiImageField({
         JPG, PNG, WebP alebo GIF · do 20 MB · automaticky zmenšené
       </p>
 
-      {newPreviews.length > 0 && (
+      {pending.length > 0 && (
         <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {newPreviews.map((preview) => (
-            <li key={preview.key}>
+          {pending.map((item) => (
+            <li key={item.key}>
               <div
                 aria-hidden
                 className="aspect-square w-full rounded-xl border border-brand-purple/10 bg-cover bg-center"
-                style={{ backgroundImage: `url(${preview.src})` }}
+                style={{ backgroundImage: `url(${item.src})` }}
               />
               <p className="mt-1 truncate text-[11px] text-brand-purple/60">
-                {preview.name}
+                {item.file.name}
               </p>
+              <button
+                type="button"
+                onClick={() => removePending(item.key)}
+                className="mt-1 w-full rounded-lg border border-red-200 px-2 py-1 text-[11px] font-semibold text-red-600 hover:bg-red-50"
+              >
+                Odstrániť
+              </button>
             </li>
           ))}
         </ul>
