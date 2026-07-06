@@ -45,12 +45,16 @@ export function ForumPostCard({
   const content = (
     <>
       {coverUrl && (
-        <div
-          className={`mb-3 w-full overflow-hidden rounded-2xl bg-cover bg-center ring-1 ring-brand-purple/10 ${
-            compact ? "aspect-[4/3]" : "aspect-[16/10]"
-          }`}
-          style={{ backgroundImage: `url(${coverUrl})` }}
-        />
+        <div className="mb-3 w-full overflow-hidden rounded-2xl ring-1 ring-brand-purple/10">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={coverUrl}
+            alt=""
+            className={`block w-full h-auto object-contain ${
+              compact ? "max-h-[220px]" : "max-h-[360px]"
+            }`}
+          />
+        </div>
       )}
       {title && (
         <h3

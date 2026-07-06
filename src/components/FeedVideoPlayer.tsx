@@ -25,7 +25,7 @@ export function FeedVideoPlayer({
   if (!playing || !embedUrl) {
     return (
       <div
-        className="relative aspect-video w-full cursor-pointer overflow-hidden bg-black"
+        className="relative w-full cursor-pointer overflow-hidden bg-black"
         onClick={() => setPlaying(true)}
       >
         {coverUrl ? (
@@ -33,11 +33,11 @@ export function FeedVideoPlayer({
           <img
             src={coverUrl}
             alt=""
-            className="h-full w-full object-cover opacity-80"
+            className="block max-h-[70vh] w-full h-auto object-contain opacity-80"
             draggable={false}
           />
         ) : (
-          <div className="h-full w-full bg-gradient-to-b from-[#f3c3a2] to-[#d98c80]" />
+          <div className="aspect-video w-full bg-gradient-to-b from-[#f3c3a2] to-[#d98c80]" />
         )}
 
         {/* Play button */}

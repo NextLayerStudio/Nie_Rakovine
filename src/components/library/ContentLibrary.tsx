@@ -405,14 +405,20 @@ function VideoItem({
   return (
     <article className="border-b border-brand-purple/10 px-4 py-4">
       <Link href={href} onClick={saveLibraryScroll} className="block">
-        <div
-          className="relative aspect-video w-full overflow-hidden rounded-2xl bg-cover bg-center"
-          style={
-            cover
-              ? { backgroundImage: `url(${cover})` }
-              : { background: postCoverFallback(post.type) }
-          }
-        >
+        <div className="relative w-full overflow-hidden rounded-2xl">
+          {cover ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={cover}
+              alt=""
+              className="block max-h-[420px] w-full h-auto object-contain"
+            />
+          ) : (
+            <div
+              className="aspect-video w-full"
+              style={{ background: postCoverFallback(post.type) }}
+            />
+          )}
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="grid h-14 w-14 place-items-center rounded-full bg-white/90 text-brand-purple shadow-lg">
               <PlayIcon large />

@@ -199,8 +199,6 @@ function PostModalBody({
           <PostImageCarousel
             images={post.gallery}
             type={type}
-            aspectClass="aspect-[4/3]"
-            maxHeightClass=""
             showDots={post.gallery.length > 1}
           />
         </div>
@@ -294,7 +292,7 @@ function VideoBlock({
           controls
           playsInline
           poster={coverUrl ?? undefined}
-          className="aspect-video w-full"
+          className="block max-h-[70vh] w-full h-auto"
         />
       </div>
     );

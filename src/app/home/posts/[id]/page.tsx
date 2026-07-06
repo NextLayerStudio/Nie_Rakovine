@@ -103,8 +103,6 @@ export default async function PostDetailPage({
               <PostImageCarousel
                 images={gallery}
                 type={post.type}
-                aspectClass="aspect-[4/3]"
-                maxHeightClass=""
                 showDots={gallery.length > 1}
               />
             </div>
@@ -209,9 +207,13 @@ function EditorialArticle({
 
       {/* Cover image — full bleed, no rounding */}
       {coverUrl && !coverUrl.startsWith("linear-gradient") && (
-        <div className="mb-6 aspect-[3/2] w-full overflow-hidden">
+        <div className="mb-6 w-full overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={coverUrl} alt={post.title} className="h-full w-full object-cover" />
+          <img
+            src={coverUrl}
+            alt={post.title}
+            className="block max-h-[60vh] w-full h-auto object-contain"
+          />
         </div>
       )}
 
@@ -231,8 +233,6 @@ function EditorialArticle({
           <PostImageCarousel
             images={gallery.slice(1)}
             type={post.type}
-            aspectClass="aspect-[4/3]"
-            maxHeightClass=""
             className="overflow-hidden rounded-2xl"
           />
         </div>
@@ -320,7 +320,7 @@ function VideoBlock({ url, coverUrl }: { url: string; coverUrl: string | null })
   if (isPlayableVideoUrl(url)) {
     return (
       <div className="mt-3 bg-black">
-        <video src={url} controls playsInline poster={coverUrl ?? undefined} className="aspect-video w-full" />
+        <video src={url} controls playsInline poster={coverUrl ?? undefined} className="block max-h-[70vh] w-full h-auto" />
       </div>
     );
   }

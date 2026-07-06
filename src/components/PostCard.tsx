@@ -52,8 +52,7 @@ export function PostCard({
         <PostImageCarousel
           images={imageUrls}
           type={type}
-          aspectClass={compact ? "aspect-[4/3]" : "aspect-[16/9]"}
-          maxHeightClass=""
+          maxHeightClass={compact ? "max-h-[220px]" : "max-h-[420px]"}
           showDots={!compact}
         />
       </div>

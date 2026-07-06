@@ -7,15 +7,14 @@ import { postCoverFallback } from "@/lib/post-display";
 export function PostImageCarousel({
   images,
   type = "ARTICLE",
-  aspectClass = "aspect-[4/3]",
-  maxHeightClass = "max-h-[220px]",
+  maxHeightClass = "max-h-[70vh]",
   overlay,
   showDots = true,
   className = "",
 }: {
   images: string[];
   type?: PostType;
-  aspectClass?: string;
+  /** Caps how tall a single slide can grow — width always stays 100%, height follows the image's own ratio up to this cap. */
   maxHeightClass?: string;
   overlay?: React.ReactNode;
   showDots?: boolean;
@@ -26,7 +25,6 @@ export function PostImageCarousel({
 
   const slides = images.length > 0 ? images : [postCoverFallback(type)];
   const multi = slides.length > 1;
-  const sizeClass = [aspectClass, maxHeightClass].filter(Boolean).join(" ");
 
   const updateIndex = useCallback(() => {
     const el = scrollRef.current;
@@ -42,7 +40,7 @@ export function PostImageCarousel({
         <div
           ref={scrollRef}
           onScroll={updateIndex}
-          className={`no-scrollbar flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth`}
+          className="no-scrollbar flex items-start snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth"
           aria-label={multi ? "Galéria obrázkov — potiahnite do strán" : undefined}
         >
           {slides.map((slide, index) => {
@@ -51,16 +49,19 @@ export function PostImageCarousel({
             return (
               <div
                 key={`${slide}-${index}`}
-                className={`w-full shrink-0 snap-center snap-always ${sizeClass}`}
+                className="w-full shrink-0 snap-center snap-always"
               >
                 {isGradient ? (
-                  <div className="h-full w-full" style={{ background: slide }} />
+                  <div
+                    className={`aspect-[4/3] w-full ${maxHeightClass}`}
+                    style={{ background: slide }}
+                  />
                 ) : (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={slide}
                     alt=""
-                    className={`h-full w-full object-cover ${maxHeightClass}`}
+                    className={`block w-full h-auto object-contain ${maxHeightClass}`}
                     draggable={false}
                   />
                 )}

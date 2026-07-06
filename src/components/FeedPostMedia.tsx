@@ -74,22 +74,25 @@ export function FeedPostMedia({
           <div
             ref={scrollRef}
             onScroll={updateIndex}
-            className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth"
+            className="no-scrollbar flex items-start snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth"
             aria-label={multi ? "Galéria — potiahnite do strán" : undefined}
           >
             {slides.map((slide, index) => (
               <div
                 key={typeof slide === "string" ? `${slide}-${index}` : index}
-                className="aspect-[4/3] max-h-[300px] w-full shrink-0 snap-center snap-always"
+                className="w-full shrink-0 snap-center snap-always"
               >
                 {typeof slide === "string" && slide.startsWith("linear-gradient") ? (
-                  <div className="h-full w-full" style={{ background: slide }} />
+                  <div
+                    className="aspect-[4/3] max-h-[420px] w-full"
+                    style={{ background: slide }}
+                  />
                 ) : (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={slide as string}
                     alt=""
-                    className="h-full max-h-[300px] w-full object-cover"
+                    className="block max-h-[420px] w-full h-auto object-contain"
                     draggable={false}
                   />
                 )}
