@@ -62,20 +62,18 @@ export default async function PodujatiaPage({
     <main className="min-h-screen bg-[#FFF3F9] font-sans">
       <Navbar />
 
-      <section className="pt-28 pb-6">
+      <section className="pt-24 pb-5">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
-          <p className="mb-3 text-sm font-bold uppercase tracking-widest text-[#FDA4C7]">
-            Podujatia
-          </p>
-          <h1 className="text-[2rem] font-black leading-tight text-[#6F2380] md:text-[2.6rem]">
-            Kalendár podujatí ONKO KLUBU
-          </h1>
-          <p className="mt-3 max-w-2xl text-base leading-relaxed text-[#6F2380]/70">
-            Workshopy, prednášky a stretnutia komunity — niektoré otvorené pre
-            všetkých, iné len pre členov ONKO KLUBU.
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h1 className="text-xl font-black text-[#6F2380] md:text-2xl">
+              Podujatia ONKO KLUBU
+            </h1>
+            <span className="text-xs font-semibold text-[#6F2380]/50">
+              {publicEvents.length} {publicEvents.length === 1 ? "podujatie" : "podujatí"}
+            </span>
+          </div>
 
-          <div className="mt-6 flex flex-wrap gap-2">
+          <div className="mt-4 flex flex-wrap gap-2">
             {EVENT_CATEGORY_FILTER_OPTIONS.map((c) => {
               const active = c.value === category;
               return (
