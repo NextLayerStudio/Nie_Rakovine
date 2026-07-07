@@ -7,6 +7,7 @@ import {
 } from "@/components/EventDetailModal";
 import { EventCommentDrawer } from "@/components/EventCommentDrawer";
 import { toggleEventLikeAction } from "@/lib/actions/event-likes";
+import { EVENT_TIME_ZONE } from "@/lib/timezone";
 
 export function FeedEventItem({
   id,
@@ -70,11 +71,13 @@ export function FeedEventItem({
     : { background: "linear-gradient(180deg, #f3c3a2 0%, #d98c80 100%)" };
 
   const dateFormatted = new Intl.DateTimeFormat("sk-SK", {
+    timeZone: EVENT_TIME_ZONE,
     day: "numeric",
     month: "long",
   }).format(new Date(startsAt));
 
   const timeFormatted = new Intl.DateTimeFormat("sk-SK", {
+    timeZone: EVENT_TIME_ZONE,
     hour: "2-digit",
     minute: "2-digit",
   }).format(new Date(startsAt));

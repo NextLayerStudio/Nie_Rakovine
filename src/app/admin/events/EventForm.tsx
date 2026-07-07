@@ -12,13 +12,12 @@ import { LocationPicker } from "@/components/map/LocationPicker";
 import { CancerTypeSelect } from "@/components/CancerTypeSelect";
 import { AdminImageField } from "@/components/AdminImageField";
 import { EVENT_CATEGORIES, EVENT_CATEGORY_META } from "@/lib/event-category";
+import { toZonedDateTimeLocal } from "@/lib/timezone";
 
 const INITIAL: ActionState = { ok: false };
 
 function toLocalDateTime(d: Date | null | undefined) {
-  if (!d) return "";
-  const offset = d.getTimezoneOffset() * 60_000;
-  return new Date(d.getTime() - offset).toISOString().slice(0, 16);
+  return d ? toZonedDateTimeLocal(d) : "";
 }
 
 export function EventForm({

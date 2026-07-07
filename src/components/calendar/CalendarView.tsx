@@ -12,6 +12,7 @@ import {
   categoryLabel,
 } from "@/lib/event-category";
 import { formatDistance } from "@/lib/geo";
+import { EVENT_TIME_ZONE } from "@/lib/timezone";
 
 export type CalendarEvent = {
   id: string;
@@ -462,6 +463,7 @@ function buildMonthGrid(month: Date): (Date | null)[] {
 
 function formatEventDate(iso: string): string {
   return new Intl.DateTimeFormat("sk-SK", {
+    timeZone: EVENT_TIME_ZONE,
     day: "numeric",
     month: "long",
     hour: "2-digit",

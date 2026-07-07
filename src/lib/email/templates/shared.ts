@@ -3,6 +3,7 @@ import {
   renderEmailFooterLogo,
   renderEmailHeroLogos,
 } from "@/lib/email/logos";
+import { EVENT_TIME_ZONE } from "@/lib/timezone";
 
 export function firstName(fullName: string): string {
   return fullName.trim().split(/\s+/)[0] ?? fullName;
@@ -32,6 +33,7 @@ export function formatSkDateTime(date: Date): string {
 
 export function formatSkTime(date: Date): string {
   return new Intl.DateTimeFormat("sk-SK", {
+    timeZone: EVENT_TIME_ZONE,
     hour: "2-digit",
     minute: "2-digit",
   }).format(date);
@@ -39,6 +41,7 @@ export function formatSkTime(date: Date): string {
 
 export function formatSkDate(date: Date): string {
   return new Intl.DateTimeFormat("sk-SK", {
+    timeZone: EVENT_TIME_ZONE,
     weekday: "long",
     day: "numeric",
     month: "long",

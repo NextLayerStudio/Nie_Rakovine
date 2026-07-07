@@ -36,7 +36,7 @@ export function EventCard({ event }: { event: PublicEvent }) {
           isMembersOnly ? "grayscale opacity-70" : ""
         }`}
       >
-        <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#6F2380]/10">
+        <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#6F2380]/10">
           {event.coverUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -60,7 +60,7 @@ export function EventCard({ event }: { event: PublicEvent }) {
           )}
         </div>
 
-        <div className="flex flex-1 flex-col gap-2 p-4">
+        <div className="flex flex-1 flex-col gap-1.5 p-3.5">
           <p className="text-[11px] font-bold uppercase tracking-wide text-[#FDA4C7]">
             {formatEventDate(startsAt)} · {formatTimeRange(startsAt, endsAt)}
           </p>

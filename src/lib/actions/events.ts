@@ -10,6 +10,7 @@ import { notifyNearbyUsersNewEvent } from "@/lib/notifications";
 import { EVENT_CATEGORIES } from "@/lib/event-category";
 import { parseCancerTypes } from "@/lib/cancer-type";
 import { resolveImageField } from "@/lib/uploads";
+import { parseZonedDateTime } from "@/lib/timezone";
 import { queueEventRegistrationEmail } from "@/lib/email/send";
 
 export type ActionState = { ok: boolean; message?: string };
@@ -75,8 +76,8 @@ export async function createEventAction(
       title,
       description,
       category: parseCategory(formData),
-      startsAt: new Date(startsAtStr),
-      endsAt: endsAtStr ? new Date(endsAtStr) : null,
+      startsAt: parseZonedDateTime(startsAtStr),
+      endsAt: endsAtStr ? parseZonedDateTime(endsAtStr) : null,
       location,
       latitude: parseCoord(formData, "latitude"),
       longitude: parseCoord(formData, "longitude"),
@@ -135,8 +136,8 @@ export async function updateEventAction(
       title,
       description,
       category: parseCategory(formData),
-      startsAt: new Date(startsAtStr),
-      endsAt: endsAtStr ? new Date(endsAtStr) : null,
+      startsAt: parseZonedDateTime(startsAtStr),
+      endsAt: endsAtStr ? parseZonedDateTime(endsAtStr) : null,
       location,
       latitude: parseCoord(formData, "latitude"),
       longitude: parseCoord(formData, "longitude"),

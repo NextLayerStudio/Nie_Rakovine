@@ -1,9 +1,11 @@
 import Link from "next/link";
 import type { RegistrationHistoryItem } from "@/lib/settings-data";
 import { cn } from "@/lib/utils";
+import { EVENT_TIME_ZONE } from "@/lib/timezone";
 
 function formatEventDate(iso: string): string {
   return new Intl.DateTimeFormat("sk-SK", {
+    timeZone: EVENT_TIME_ZONE,
     weekday: "short",
     day: "numeric",
     month: "long",

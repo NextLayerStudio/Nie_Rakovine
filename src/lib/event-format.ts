@@ -1,5 +1,8 @@
+import { EVENT_TIME_ZONE } from "@/lib/timezone";
+
 export function formatTimeRange(start: Date, end: Date | null): string {
   const time = new Intl.DateTimeFormat("sk-SK", {
+    timeZone: EVENT_TIME_ZONE,
     hour: "2-digit",
     minute: "2-digit",
   });
@@ -9,6 +12,7 @@ export function formatTimeRange(start: Date, end: Date | null): string {
 
 export function formatEventDate(date: Date): string {
   return new Intl.DateTimeFormat("sk-SK", {
+    timeZone: EVENT_TIME_ZONE,
     day: "numeric",
     month: "numeric",
     year: "numeric",
@@ -16,7 +20,10 @@ export function formatEventDate(date: Date): string {
 }
 
 export function formatEventWeekday(date: Date): string {
-  return new Intl.DateTimeFormat("sk-SK", { weekday: "long" }).format(date);
+  return new Intl.DateTimeFormat("sk-SK", {
+    timeZone: EVENT_TIME_ZONE,
+    weekday: "long",
+  }).format(date);
 }
 
 export function formatRegistrationCount(

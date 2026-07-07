@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { PostType } from "@prisma/client";
 import { PostImageCarousel } from "@/components/PostImageCarousel";
 import { postKindLabel } from "@/lib/post-display";
+import { EVENT_TIME_ZONE } from "@/lib/timezone";
 
 export function PostCard({
   href,
@@ -131,6 +132,7 @@ export function EventCard({
     ? { backgroundImage: `url(${coverUrl})`, backgroundSize: "cover", backgroundPosition: "center" }
     : { background: "linear-gradient(180deg, #f3c3a2 0%, #d98c80 100%)" };
   const date = new Intl.DateTimeFormat("sk-SK", {
+    timeZone: EVENT_TIME_ZONE,
     day: "numeric",
     month: compact ? "short" : "long",
     hour: "2-digit",

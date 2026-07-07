@@ -3,6 +3,7 @@ import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { EventRegistrationForm } from "./EventRegistrationForm";
+import { EVENT_TIME_ZONE } from "@/lib/timezone";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +39,7 @@ export default async function EventPage({
       };
 
   const date = new Intl.DateTimeFormat("sk-SK", {
+    timeZone: EVENT_TIME_ZONE,
     day: "numeric",
     month: "long",
     year: "numeric",
