@@ -134,6 +134,13 @@ export default async function MenuPage() {
 
         <div className="px-3 pb-4">
           <Link
+            href="/?preview=1"
+            className="flex items-center gap-4 rounded-2xl px-4 py-3 text-sm font-medium hover:bg-white/15"
+          >
+            <MenuIcon name="globe" />
+            <span>Web NIE RAKOVINE</span>
+          </Link>
+          <Link
             href="/menu/nastavenia"
             className="flex items-center gap-4 rounded-2xl px-4 py-3 text-sm font-medium hover:bg-white/15"
           >
@@ -161,7 +168,7 @@ function MenuIcon({
   name,
   muted = false,
 }: {
-  name: (typeof MAIN_ITEMS)[number]["icon"] | "settings" | "info";
+  name: (typeof MAIN_ITEMS)[number]["icon"] | "settings" | "info" | "globe";
   muted?: boolean;
 }) {
   const path: Record<string, React.ReactNode> = {
@@ -210,6 +217,13 @@ function MenuIcon({
       <>
         <circle cx="12" cy="12" r="3" />
         <path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4l1.4-1.4M17 7l1.4-1.4" />
+      </>
+    ),
+    globe: (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M3 12h18" />
+        <path d="M12 3a14 14 0 010 18 14 14 0 010-18z" />
       </>
     ),
   };

@@ -149,8 +149,16 @@ export function MenuDrawer({
           </ul>
         </nav>
 
-        {/* Nastavenia + Odhlásiť */}
+        {/* Web + Nastavenia + Odhlásiť */}
         <div className="shrink-0 px-3 pt-2">
+          <Link
+            href="/?preview=1"
+            onClick={close}
+            className="flex items-center gap-4 rounded-2xl px-4 py-3.5 text-base font-medium hover:bg-white/15"
+          >
+            <MenuIcon name="globe" />
+            <span>Web NIE RAKOVINE</span>
+          </Link>
           <Link
             href="/menu/nastavenia"
             onClick={close}
@@ -187,6 +195,7 @@ function MenuIcon({ name, muted = false }: { name: string; muted?: boolean }) {
     forum: (<><path d="M6 9.5a5.5 5.5 0 0110.4-1.8A4.5 4.5 0 0119 12c0 2.4-2 4.3-4.5 4.3H12l-3.8 2.8V16.5A5.5 5.5 0 016 9.5z" /><circle cx="9" cy="11.5" r="0.9" fill="currentColor" stroke="none" /><circle cx="12" cy="11.5" r="0.9" fill="currentColor" stroke="none" /><circle cx="15" cy="11.5" r="0.9" fill="currentColor" stroke="none" /></>),
     bookmark: <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" strokeLinejoin="round" />,
     settings: (<><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></>),
+    globe: (<><circle cx="12" cy="12" r="9" /><path d="M3 12h18" /><path d="M12 3a14 14 0 010 18 14 14 0 010-18z" /></>),
   };
   return (
     <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${muted ? "bg-white/10" : "bg-white/20"}`}>
