@@ -123,10 +123,10 @@ export default function CennikPage() {
               </div>
               <p className="text-white/55 text-xs font-bold uppercase tracking-wider mb-1">Ročné členstvo</p>
               <div className="flex items-end gap-2 mb-1">
-                <span className="text-white font-black text-[3rem] leading-none">60 €</span>
+                <span className="text-white font-black text-[3rem] leading-none">50 €</span>
                 <span className="text-white/50 text-sm mb-2">/ rok</span>
               </div>
-              <p className="text-[#FDA4C7] text-sm font-bold mb-6">= 5 € mesačne · platíš raz ročne</p>
+              <p className="text-[#FDA4C7] text-sm font-bold mb-6">Ušetríš 10 € oproti mesačnému plánu</p>
               <div className="flex flex-col gap-2.5 mb-7">
                 {[...BENEFITY, "Jednorazová platba bez nutnosti aktualizácie počas roka"].map((b) => (
                   <div key={b} className="flex items-center gap-3">
@@ -138,7 +138,7 @@ export default function CennikPage() {
                 ))}
               </div>
               <Link href="/register?plan=annual" className="block w-full rounded-full bg-[#FDA4C7] text-white font-black text-base py-4 text-center">
-                Začať ročne — 60 €
+                Začať ročne — 50 €
               </Link>
               <div className="mt-5">
                 <ExpandableText maxHeight={48} fadeColor="#6F2380">

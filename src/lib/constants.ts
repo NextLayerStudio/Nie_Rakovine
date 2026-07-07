@@ -89,7 +89,7 @@ export const SUBSCRIPTION_PLANS = [
     name: "Ročné predplatné",
     description:
       "Zaplatíte raz ročne. Predplatné môžete kedykoľvek zrušiť.",
-    price: "60€ / rok",
+    price: "50€ / rok",
     accent: "secondary" as const,
   },
   {

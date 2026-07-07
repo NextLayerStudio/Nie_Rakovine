@@ -157,7 +157,7 @@ export function MenuDrawer({
             className="flex items-center gap-4 rounded-2xl px-4 py-3.5 text-base font-medium hover:bg-white/15"
           >
             <MenuIcon name="globe" />
-            <span>Web NIE RAKOVINE</span>
+            <span>Web ONKO KLUBU</span>
           </Link>
           <Link
             href="/menu/nastavenia"
