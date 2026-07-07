@@ -19,19 +19,35 @@ export function RegisterForm() {
   return (
     <>
       <form action={formAction} className="mt-4 flex flex-1 flex-col gap-3 px-6 pb-6">
-        <div>
-          <label className="label" htmlFor="fullName">
-            Celé meno
-          </label>
-          <input
-            id="fullName"
-            name="fullName"
-            type="text"
-            required
-            placeholder="Jana Nováková"
-            className="input-light"
-            autoComplete="name"
-          />
+        <div className="flex gap-3">
+          <div className="flex-1">
+            <label className="label" htmlFor="firstName">
+              Meno
+            </label>
+            <input
+              id="firstName"
+              name="firstName"
+              type="text"
+              required
+              placeholder="Jana"
+              className="input-light"
+              autoComplete="given-name"
+            />
+          </div>
+          <div className="flex-1">
+            <label className="label" htmlFor="lastName">
+              Priezvisko
+            </label>
+            <input
+              id="lastName"
+              name="lastName"
+              type="text"
+              required
+              placeholder="Nováková"
+              className="input-light"
+              autoComplete="family-name"
+            />
+          </div>
         </div>
 
         <div>

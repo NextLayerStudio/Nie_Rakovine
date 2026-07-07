@@ -58,6 +58,8 @@ model User {
   email           String   @unique
   passwordHash    String
   fullName        String
+  firstName       String?
+  lastName        String?
   birthDate       DateTime?
   role            UserRole @default(USER)
 

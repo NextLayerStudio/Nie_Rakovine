@@ -30,7 +30,9 @@ export async function registerAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  const fullName = String(formData.get("fullName") ?? "").trim();
+  const firstName = String(formData.get("firstName") ?? "").trim();
+  const lastName = String(formData.get("lastName") ?? "").trim();
+  const fullName = `${firstName} ${lastName}`.trim();
   const email = String(formData.get("email") ?? "")
     .trim()
     .toLowerCase();
@@ -38,7 +40,7 @@ export async function registerAction(
   const confirmPassword = String(formData.get("confirmPassword") ?? "");
   const birthDateRaw = String(formData.get("birthDate") ?? "");
 
-  if (!fullName || !email || !password) {
+  if (!firstName || !lastName || !email || !password) {
     return { ok: false, message: "Vyplňte všetky polia." };
   }
   if (password.length < 6) {
@@ -62,6 +64,8 @@ export async function registerAction(
     data: {
       email,
       fullName,
+      firstName,
+      lastName,
       passwordHash: await hashPassword(password),
       birthDate: birthDateRaw ? new Date(birthDateRaw) : null,
       // emailVerified defaults to false — the user must confirm the code next.

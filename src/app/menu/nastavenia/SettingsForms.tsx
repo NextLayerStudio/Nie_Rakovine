@@ -59,7 +59,8 @@ type NotificationPrefs = {
 };
 
 export function SettingsForms({
-  fullName,
+  firstName,
+  lastName,
   email,
   consentNewsletter,
   notifyRadiusKm,
@@ -67,7 +68,8 @@ export function SettingsForms({
   subscriptionActive,
   registrationHistory,
 }: {
-  fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   consentNewsletter: boolean;
   notifyRadiusKm: number;
@@ -141,16 +143,28 @@ export function SettingsForms({
               E-mail nie je možné zmeniť v aplikácii.
             </p>
           </Field>
-          <Field label="Meno a priezvisko">
-            <input
-              name="fullName"
-              type="text"
-              required
-              defaultValue={fullName}
-              className="input-light"
-              autoComplete="name"
-            />
-          </Field>
+          <div className="flex gap-3">
+            <Field label="Meno" className="flex-1">
+              <input
+                name="firstName"
+                type="text"
+                required
+                defaultValue={firstName}
+                className="input-light"
+                autoComplete="given-name"
+              />
+            </Field>
+            <Field label="Priezvisko" className="flex-1">
+              <input
+                name="lastName"
+                type="text"
+                required
+                defaultValue={lastName}
+                className="input-light"
+                autoComplete="family-name"
+              />
+            </Field>
+          </div>
           <Feedback state={accountState} />
           <SubmitButton className="btn-secondary w-full py-2.5 text-sm">
             Uložiť meno
@@ -456,12 +470,14 @@ function SectionCard({
 function Field({
   label,
   children,
+  className,
 }: {
   label: string;
   children: React.ReactNode;
+  className?: string;
 }) {
   return (
-    <div>
+    <div className={className}>
       <label className="mb-1.5 block text-xs font-semibold text-brand-purple/80">
         {label}
       </label>

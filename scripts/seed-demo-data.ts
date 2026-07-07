@@ -128,11 +128,15 @@ async function main() {
 
   for (const u of DEMO_USERS) {
     const email = `demo-${u.key}${DEMO_EMAIL_SUFFIX}`;
+    const [firstName, ...lastNameParts] = u.fullName.split(" ");
+    const lastName = lastNameParts.join(" ");
     const user = await prisma.user.upsert({
       where: { email },
       create: {
         email,
         fullName: u.fullName,
+        firstName,
+        lastName,
         passwordHash,
         role: "USER",
         birthDate: new Date(1975 + DEMO_USERS.indexOf(u), 2, 15),
@@ -149,7 +153,7 @@ async function main() {
           },
         },
       },
-      update: { passwordHash, fullName: u.fullName },
+      update: { passwordHash, fullName: u.fullName, firstName, lastName },
     });
     users.push({ id: user.id, email: user.email, fullName: user.fullName });
   }

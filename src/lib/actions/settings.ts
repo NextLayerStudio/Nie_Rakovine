@@ -67,15 +67,17 @@ export async function updateAccountAction(
   formData: FormData,
 ): Promise<SettingsActionState> {
   const user = await requireUser();
-  const fullName = String(formData.get("fullName") ?? "").trim();
+  const firstName = String(formData.get("firstName") ?? "").trim();
+  const lastName = String(formData.get("lastName") ?? "").trim();
+  const fullName = `${firstName} ${lastName}`.trim();
 
-  if (!fullName) {
+  if (!firstName || !lastName) {
     return { ok: false, message: "Zadajte meno a priezvisko." };
   }
 
   await prisma.user.update({
     where: { id: user.id },
-    data: { fullName },
+    data: { fullName, firstName, lastName },
   });
 
   revalidatePath("/menu/nastavenia");

@@ -15,6 +15,14 @@ export default async function SettingsPage() {
   const avatarUrl = user.profile?.avatarUrl ?? null;
   const registrationHistory = await loadRegistrationHistory(user.id);
 
+  // Accounts created before the first/last name split only have fullName —
+  // best-effort split it so the settings form isn't blank for them.
+  const [fallbackFirstName, ...fallbackLastNameParts] = user.fullName
+    .trim()
+    .split(/\s+/);
+  const firstName = user.firstName ?? fallbackFirstName ?? "";
+  const lastName = user.lastName ?? fallbackLastNameParts.join(" ");
+
   return (
     <PhoneShell>
       <div
@@ -54,7 +62,8 @@ export default async function SettingsPage() {
 
         <section className="px-5 pb-32">
           <SettingsForms
-            fullName={user.fullName}
+            firstName={firstName}
+            lastName={lastName}
             email={user.email}
             consentNewsletter={user.profile?.consentNewsletter ?? false}
             notifyRadiusKm={user.profile?.notifyRadiusKm ?? 50}
