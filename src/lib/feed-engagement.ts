@@ -31,11 +31,7 @@ export async function loadFeedEngagement(
     eventIds.length
       ? prisma.eventRegistration.findMany({
           where: { userId, eventId: { in: eventIds } },
-          select: {
-            eventId: true,
-            paymentStatus: true,
-            event: { select: { isPaid: true } },
-          },
+          select: { eventId: true },
         })
       : [],
     eventIds.length
@@ -50,13 +46,7 @@ export async function loadFeedEngagement(
     likedIds: new Set(userLikes.map((l) => l.postId)),
     savedIds: new Set(userSaves.map((s) => s.postId)),
     followingIds: new Set(follows.map((f) => f.profileId)),
-    registeredEventIds: new Set(
-      eventRegistrations
-        .filter(
-          (r) => !r.event.isPaid || r.paymentStatus === "PAID",
-        )
-        .map((r) => r.eventId),
-    ),
+    registeredEventIds: new Set(eventRegistrations.map((r) => r.eventId)),
     likedEventIds: new Set(userEventLikes.map((l) => l.eventId)),
   };
 }

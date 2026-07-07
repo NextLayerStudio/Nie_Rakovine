@@ -22,9 +22,6 @@ export type ProfileRegisteredEvent = {
   location: string | null;
   registrationCount: number;
   capacity: number | null;
-  isPaid?: boolean;
-  priceCents?: number | null;
-  currency?: string;
 };
 
 function dayKey(d: Date): string {
@@ -106,10 +103,6 @@ export function ProfileCalendarTab({
       capacity: event.capacity,
       defaultName,
       defaultSurname,
-      isPaid: event.isPaid ?? false,
-      priceCents: event.priceCents ?? null,
-      currency: event.currency ?? "EUR",
-      pendingPayment: false,
     });
   }
 

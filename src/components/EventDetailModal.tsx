@@ -3,7 +3,12 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { EventRegistrationForm } from "@/app/home/events/[id]/EventRegistrationForm";
-import { EventPaidLabel } from "@/components/events/EventPriceBadge";
+import {
+  formatEventDate,
+  formatEventWeekday,
+  formatRegistrationCount,
+  formatTimeRange,
+} from "@/lib/event-format";
 
 export type EventModalData = {
   id: string;
@@ -18,10 +23,6 @@ export type EventModalData = {
   capacity: number | null;
   defaultName: string;
   defaultSurname: string;
-  isPaid: boolean;
-  priceCents: number | null;
-  currency: string;
-  pendingPayment: boolean;
 };
 
 export function EventDetailModal({
@@ -68,8 +69,8 @@ export function EventDetailModal({
   const endsAt = event.endsAt ? new Date(event.endsAt) : null;
 
   const timeLabel = formatTimeRange(startsAt, endsAt);
-  const dateLabel = formatDate(startsAt);
-  const weekdayLabel = formatWeekday(startsAt);
+  const dateLabel = formatEventDate(startsAt);
+  const weekdayLabel = formatEventWeekday(startsAt);
   const isFull =
     event.capacity !== null &&
     registrationCount >= event.capacity &&
@@ -125,19 +126,9 @@ export function EventDetailModal({
             style={cover}
           />
 
-          {event.isPaid && event.priceCents ? (
-            <div className="mx-auto mt-4 flex max-w-[280px] justify-center">
-              <EventPaidLabel
-                priceCents={event.priceCents}
-                currency={event.currency}
-              />
-            </div>
-          ) : null}
-
           {registered ? (
             <p className="mx-auto mt-5 max-w-[280px] rounded-pill bg-white/15 py-2.5 text-center text-sm font-semibold text-white">
               Ste prihlásení na toto podujatie
-              {event.isPaid ? " · zaplatené" : ""}
             </p>
           ) : isFull ? (
             <p className="mx-auto mt-5 max-w-[280px] rounded-pill bg-white/15 py-2.5 text-center text-sm font-semibold text-white">
@@ -146,15 +137,10 @@ export function EventDetailModal({
           ) : (
             <EventRegistrationForm
               eventId={event.id}
-              eventTitle={event.title}
               defaultName={event.defaultName}
               defaultSurname={event.defaultSurname}
               variant="modal"
               stayOnPage
-              isPaid={event.isPaid}
-              priceCents={event.priceCents}
-              currency={event.currency}
-              pendingPayment={event.pendingPayment}
               onSuccess={() => {
                 setRegistered(true);
                 setRegistrationCount((c) => c + 1);
@@ -216,34 +202,6 @@ export function EventDetailModal({
     </div>,
     document.body,
   );
-}
-
-function formatTimeRange(start: Date, end: Date | null) {
-  const time = new Intl.DateTimeFormat("sk-SK", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  if (end) return `${time.format(start)} - ${time.format(end)}`;
-  return time.format(start);
-}
-
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("sk-SK", {
-    day: "numeric",
-    month: "numeric",
-    year: "numeric",
-  }).format(date);
-}
-
-function formatWeekday(date: Date) {
-  return new Intl.DateTimeFormat("sk-SK", { weekday: "long" }).format(date);
-}
-
-function formatRegistrationCount(count: number, capacity: number | null) {
-  if (capacity !== null) {
-    return `${count} / ${capacity} prihlásených`;
-  }
-  return `${count} prihlásených`;
 }
 
 function UsersIcon() {

@@ -2,20 +2,15 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import type { EventCategory } from "@prisma/client";
-import { Prisma } from "@prisma/client";
+import type { EventCategory, EventVisibility } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { getSessionUserForAction, requireAdmin } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth";
 import { prismaActionError, requireActionUser } from "@/lib/safe-action";
 import { notifyNearbyUsersNewEvent } from "@/lib/notifications";
 import { EVENT_CATEGORIES } from "@/lib/event-category";
 import { parseCancerTypes } from "@/lib/cancer-type";
-import { parsePriceToCents } from "@/lib/event-payment";
 import { resolveImageField } from "@/lib/uploads";
-import {
-  queueEventPaymentEmail,
-  queueEventRegistrationEmail,
-} from "@/lib/email/send";
+import { queueEventRegistrationEmail } from "@/lib/email/send";
 
 export type ActionState = { ok: boolean; message?: string };
 
@@ -33,30 +28,9 @@ function parseCoord(formData: FormData, name: string): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
-function parsePaidFields(formData: FormData): {
-  isPaid: boolean;
-  priceCents: number | null;
-  currency: string;
-  error?: string;
-} {
-  const isPaid = formData.get("isPaid") === "on";
-  const currency = String(formData.get("currency") ?? "EUR").trim() || "EUR";
-
-  if (!isPaid) {
-    return { isPaid: false, priceCents: null, currency };
-  }
-
-  const priceCents = parsePriceToCents(String(formData.get("price") ?? ""));
-  if (priceCents === null) {
-    return {
-      isPaid: true,
-      priceCents: null,
-      currency,
-      error: "Zadajte platnú sumu pre platené podujatie.",
-    };
-  }
-
-  return { isPaid: true, priceCents, currency };
+function parseVisibility(formData: FormData): EventVisibility {
+  const raw = String(formData.get("visibility") ?? "").trim();
+  return raw === "MEMBERS_ONLY" ? "MEMBERS_ONLY" : "PUBLIC";
 }
 
 // ------ Admin: create / edit / delete -----------------------------------
@@ -94,9 +68,6 @@ export async function createEventAction(
     return { ok: false, message: "Vyplňte aspoň názov a čas začiatku." };
   }
 
-  const paid = parsePaidFields(formData);
-  if (paid.error) return { ok: false, message: paid.error };
-
   const profileId = String(formData.get("profileId") ?? "").trim() || null;
 
   const event = await prisma.event.create({
@@ -113,9 +84,7 @@ export async function createEventAction(
       coverUrl,
       profileId,
       cancerTypes: parseCancerTypes(formData.getAll("cancerTypes")),
-      isPaid: paid.isPaid,
-      priceCents: paid.priceCents,
-      currency: paid.currency,
+      visibility: parseVisibility(formData),
     },
   });
 
@@ -158,9 +127,6 @@ export async function updateEventAction(
     };
   }
 
-  const paid = parsePaidFields(formData);
-  if (paid.error) return { ok: false, message: paid.error };
-
   const profileId = String(formData.get("profileId") ?? "").trim() || null;
 
   await prisma.event.update({
@@ -179,9 +145,7 @@ export async function updateEventAction(
       published,
       profileId,
       cancerTypes: parseCancerTypes(formData.getAll("cancerTypes")),
-      isPaid: paid.isPaid,
-      priceCents: paid.priceCents,
-      currency: paid.currency,
+      visibility: parseVisibility(formData),
     },
   });
 
@@ -240,20 +204,11 @@ export async function registerForEventAction(
       startsAt: true,
       endsAt: true,
       location: true,
-      isPaid: true,
-      priceCents: true,
       capacity: true,
       _count: { select: { registrations: true } },
     },
   });
   if (!event) return { ok: false, message: "Podujatie neexistuje." };
-
-  if (event.isPaid) {
-    return {
-      ok: false,
-      message: "Pre toto podujatie je potrebná platba pred registráciou.",
-    };
-  }
 
   const alreadyRegistered = await prisma.eventRegistration.findUnique({
     where: { eventId_userId: { eventId, userId: user.id } },
@@ -273,13 +228,7 @@ export async function registerForEventAction(
   try {
     await prisma.eventRegistration.upsert({
       where: { eventId_userId: { eventId, userId: user.id } },
-      create: {
-        eventId,
-        userId: user.id,
-        name,
-        surname,
-        paymentStatus: "NOT_REQUIRED",
-      },
+      create: { eventId, userId: user.id, name, surname },
       update: { name, surname },
     });
   } catch (err) {
@@ -311,137 +260,4 @@ export async function registerForEventAction(
   }
 
   redirect(`/home/events/${eventId}/registered`);
-}
-
-/** Placeholder for future payment gateway — creates a pending registration record. */
-export async function initiateEventPaymentAction(
-  _prev: ActionState,
-  formData: FormData,
-): Promise<ActionState> {
-  const auth = await requireActionUser();
-  if (!auth.ok) return { ok: false, message: auth.message };
-  const user = auth.user;
-
-  const eventId = String(formData.get("eventId") ?? "");
-  if (!eventId) return { ok: false, message: "Chýba podujatie." };
-
-  const event = await prisma.event.findFirst({
-    where: { id: eventId, published: true, isPaid: true },
-    select: {
-      priceCents: true,
-      capacity: true,
-      _count: { select: { registrations: true } },
-    },
-  });
-  if (!event?.priceCents) {
-    return { ok: false, message: "Podujatie nie je dostupné na platbu." };
-  }
-
-  const existing = await prisma.eventRegistration.findUnique({
-    where: { eventId_userId: { eventId, userId: user.id } },
-    select: { paymentStatus: true },
-  });
-  if (existing?.paymentStatus === "PAID") {
-    return { ok: false, message: "Už ste zaregistrovaní a zaplatili." };
-  }
-
-  if (
-    !existing &&
-    event.capacity !== null &&
-    event._count.registrations >= event.capacity
-  ) {
-    return { ok: false, message: "Podujatie je plne obsadené." };
-  }
-
-  // Payment gateway hook: replace this block when Stripe / GoPay is integrated.
-  return {
-    ok: false,
-    message:
-      "Platobná brána bude čoskoro dostupná. Registrácia sa dokončí po úspešnej platbe.",
-  };
-
-  // Future flow (kept for reference):
-  // await prisma.eventRegistration.upsert({
-  //   where: { eventId_userId: { eventId, userId: user.id } },
-  //   create: {
-  //     eventId,
-  //     userId: user.id,
-  //     name,
-  //     surname,
-  //     paymentStatus: "PENDING",
-  //   },
-  //   update: { name, surname, paymentStatus: "PENDING" },
-  // });
-  // const checkoutUrl = await createPaymentSession({ eventId, userId: user.id, amount: event.priceCents });
-  // redirect(checkoutUrl);
-}
-
-/** Call from payment webhook after successful charge. */
-export async function finalizePaidEventRegistration(input: {
-  eventId: string;
-  userId: string;
-  name?: string | null;
-  surname?: string | null;
-}): Promise<{ ok: true } | { ok: false; message: string }> {
-  const [user, event] = await Promise.all([
-    prisma.user.findUnique({
-      where: { id: input.userId },
-      select: { id: true, email: true, fullName: true },
-    }),
-    prisma.event.findFirst({
-      where: { id: input.eventId, published: true, isPaid: true },
-      select: {
-        title: true,
-        startsAt: true,
-        endsAt: true,
-        location: true,
-        priceCents: true,
-        currency: true,
-      },
-    }),
-  ]);
-
-  if (!user || !event?.priceCents) {
-    return { ok: false, message: "Platba sa nepodarila overiť." };
-  }
-
-  const now = new Date();
-
-  await prisma.eventRegistration.upsert({
-    where: {
-      eventId_userId: { eventId: input.eventId, userId: input.userId },
-    },
-    create: {
-      eventId: input.eventId,
-      userId: input.userId,
-      name: input.name ?? null,
-      surname: input.surname ?? null,
-      paymentStatus: "PAID",
-      paidAt: now,
-    },
-    update: {
-      name: input.name ?? undefined,
-      surname: input.surname ?? undefined,
-      paymentStatus: "PAID",
-      paidAt: now,
-    },
-  });
-
-  queueEventPaymentEmail({
-    email: user.email,
-    fullName: user.fullName,
-    eventTitle: event.title,
-    amountCents: event.priceCents,
-    currency: event.currency,
-    startsAt: event.startsAt,
-    location: event.location,
-    eventId: input.eventId,
-  });
-
-  revalidatePath(`/home/events/${input.eventId}`);
-  revalidatePath("/home");
-  revalidatePath("/home/calendar");
-  revalidatePath("/profile");
-
-  return { ok: true };
 }

@@ -60,9 +60,6 @@ export const feedEventSelect = {
   cancerTypes: true,
   profile: { select: feedProfileSelect },
   capacity: true,
-  isPaid: true,
-  priceCents: true,
-  currency: true,
   _count: { select: { registrations: true, likes: true, comments: true } },
 } satisfies Prisma.EventSelect;
 

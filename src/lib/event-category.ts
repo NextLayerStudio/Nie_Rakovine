@@ -24,3 +24,9 @@ export const EVENT_CATEGORY_META: Record<EventCategory, CategoryMeta> = {
 export function categoryLabel(category: EventCategory | null | undefined): string {
   return category ? EVENT_CATEGORY_META[category].label : "Aktivita";
 }
+
+/** Category filter chips for the public /podujatia page — "Všetky" first. */
+export const EVENT_CATEGORY_FILTER_OPTIONS: { value: EventCategory | ""; label: string }[] = [
+  { value: "", label: "Všetky" },
+  ...EVENT_CATEGORIES.map((c) => ({ value: c, label: EVENT_CATEGORY_META[c].label })),
+];

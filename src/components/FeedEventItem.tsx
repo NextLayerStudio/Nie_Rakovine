@@ -7,7 +7,6 @@ import {
 } from "@/components/EventDetailModal";
 import { EventCommentDrawer } from "@/components/EventCommentDrawer";
 import { toggleEventLikeAction } from "@/lib/actions/event-likes";
-import { formatEventPrice } from "@/lib/event-payment";
 
 export function FeedEventItem({
   id,
@@ -22,10 +21,6 @@ export function FeedEventItem({
   capacity,
   defaultName,
   defaultSurname,
-  isPaid = false,
-  priceCents = null,
-  currency = "EUR",
-  pendingPayment = false,
   liked: initialLiked = false,
   likeCount: initialLikeCount = 0,
   commentCount: initialCommentCount = 0,
@@ -42,10 +37,6 @@ export function FeedEventItem({
   capacity?: number;
   defaultName: string;
   defaultSurname: string;
-  isPaid?: boolean;
-  priceCents?: number | null;
-  currency?: string;
-  pendingPayment?: boolean;
   liked?: boolean;
   likeCount?: number;
   commentCount?: number;
@@ -101,10 +92,6 @@ export function FeedEventItem({
     capacity: capacity ?? null,
     defaultName,
     defaultSurname,
-    isPaid,
-    priceCents,
-    currency,
-    pendingPayment,
   };
 
   return (
@@ -133,11 +120,6 @@ export function FeedEventItem({
                   <CheckIcon />
                   Prihlásený
                 </span>
-              ) : isPaid && priceCents ? (
-                <>
-                  <span>Zaplatiť · {formatEventPrice(priceCents, currency)}</span>
-                  <ChevronRight />
-                </>
               ) : (
                 <>
                   <span>Zaregistrovať sa</span>

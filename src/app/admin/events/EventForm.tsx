@@ -35,10 +35,6 @@ export function EventForm({
     INITIAL,
   );
   const [location, setLocation] = useState(event?.location ?? "");
-  const [isPaid, setIsPaid] = useState(event?.isPaid ?? false);
-
-  const defaultPrice =
-    event?.priceCents != null ? (event.priceCents / 100).toFixed(2) : "";
 
   return (
     <form action={formAction} className="space-y-6">
@@ -153,35 +149,18 @@ export function EventForm({
       </fieldset>
 
       <fieldset className="admin-fieldset">
-        <legend>Platba</legend>
-        <label className="flex items-center gap-3 rounded-lg bg-brand-purple/5 px-4 py-3 text-sm font-medium text-brand-purple">
-          <input
-            type="checkbox"
-            name="isPaid"
-            checked={isPaid}
-            onChange={(e) => setIsPaid(e.target.checked)}
-            className="h-4 w-4 accent-brand-purple"
-          />
-          Platené podujatie (registrácia až po zaplatení)
+        <legend>Prístupnosť</legend>
+        <label className="block">
+          <span className="admin-label">Kto vidí toto podujatie na verejnom webe</span>
+          <select
+            name="visibility"
+            defaultValue={event?.visibility ?? "PUBLIC"}
+            className="admin-input"
+          >
+            <option value="PUBLIC">Prístupné všetkým</option>
+            <option value="MEMBERS_ONLY">Prístupné len členom ONKO KLUBU</option>
+          </select>
         </label>
-
-        {isPaid && (
-          <div className="mt-3 grid grid-cols-2 gap-3">
-            <label className="block">
-              <span className="admin-label">Suma (EUR)</span>
-              <input
-                name="price"
-                type="text"
-                inputMode="decimal"
-                defaultValue={defaultPrice}
-                placeholder="napr. 25,00"
-                required
-                className="admin-input"
-              />
-            </label>
-            <input type="hidden" name="currency" value={event?.currency ?? "EUR"} />
-          </div>
-        )}
       </fieldset>
 
       {mode === "edit" && (

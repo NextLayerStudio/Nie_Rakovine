@@ -5,7 +5,6 @@ import { readSession } from "@/lib/auth";
 import { visibleThreadsWhere, approvedCommentsCountWhere } from "@/lib/forum-moderation";
 import { feedPostSelect } from "@/lib/feed-queries";
 import { buildPostGallery, postPublicHref } from "@/lib/post-display";
-import { isEventRegistrationComplete } from "@/lib/event-payment";
 
 async function getProfileUser() {
   const session = await readSession();
@@ -27,7 +26,6 @@ export async function fetchProfileCalendarAction() {
     where: { userId: user.id, event: { published: true } },
     orderBy: { event: { startsAt: "asc" } },
     select: {
-      paymentStatus: true,
       event: {
         select: {
           id: true,
@@ -38,9 +36,6 @@ export async function fetchProfileCalendarAction() {
           endsAt: true,
           location: true,
           capacity: true,
-          isPaid: true,
-          priceCents: true,
-          currency: true,
           _count: { select: { registrations: true } },
         },
       },
@@ -53,22 +48,17 @@ export async function fetchProfileCalendarAction() {
     ok: true as const,
     defaultName: nameParts[0] ?? "",
     defaultSurname: nameParts.slice(1).join(" "),
-    registeredEvents: registrations
-      .filter((r) => isEventRegistrationComplete(r, r.event.isPaid))
-      .map((r) => ({
-        id: r.event.id,
-        title: r.event.title,
-        description: r.event.description,
-        coverUrl: r.event.coverUrl,
-        startsAt: r.event.startsAt.toISOString(),
-        endsAt: r.event.endsAt?.toISOString() ?? null,
-        location: r.event.location,
-        registrationCount: r.event._count.registrations,
-        capacity: r.event.capacity,
-        isPaid: r.event.isPaid,
-        priceCents: r.event.priceCents,
-        currency: r.event.currency,
-      })),
+    registeredEvents: registrations.map((r) => ({
+      id: r.event.id,
+      title: r.event.title,
+      description: r.event.description,
+      coverUrl: r.event.coverUrl,
+      startsAt: r.event.startsAt.toISOString(),
+      endsAt: r.event.endsAt?.toISOString() ?? null,
+      location: r.event.location,
+      registrationCount: r.event._count.registrations,
+      capacity: r.event.capacity,
+    })),
   };
 }
 

@@ -7,6 +7,16 @@ export function mediaAssetPath(id: string): string {
   return `/api/media/${id}`;
 }
 
+/** Cover images of published events are shown to anonymous visitors on the public /podujatia page. */
+export async function isPublishedEventCoverAsset(assetId: string): Promise<boolean> {
+  const path = mediaAssetPath(assetId);
+  const event = await prisma.event.findFirst({
+    where: { published: true, coverUrl: path },
+    select: { id: true },
+  });
+  return event !== null;
+}
+
 type MediaAssetRecord = {
   id: string;
   category: string | null;

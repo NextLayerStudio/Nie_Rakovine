@@ -147,24 +147,11 @@ export async function fetchCalendarTabAction() {
     }),
     prisma.eventRegistration.findMany({
       where: { userId: user.id },
-      select: {
-        eventId: true,
-        paymentStatus: true,
-        event: { select: { isPaid: true } },
-      },
+      select: { eventId: true },
     }),
   ]);
 
-  const registeredIds = new Set(
-    registrations
-      .filter((r) => !r.event.isPaid || r.paymentStatus === "PAID")
-      .map((r) => r.eventId),
-  );
-  const pendingPaymentIds = new Set(
-    registrations
-      .filter((r) => r.event.isPaid && r.paymentStatus === "PENDING")
-      .map((r) => r.eventId),
-  );
+  const registeredIds = new Set(registrations.map((r) => r.eventId));
   const me = {
     latitude: user.profile?.latitude ?? null,
     longitude: user.profile?.longitude ?? null,
@@ -189,10 +176,6 @@ export async function fetchCalendarTabAction() {
       registrationCount: e._count.registrations,
       capacity: e.capacity,
       distanceKm: distanceKm(me, e),
-      isPaid: e.isPaid,
-      priceCents: e.priceCents,
-      currency: e.currency,
-      pendingPayment: pendingPaymentIds.has(e.id),
     })),
     hasLocation: me.latitude !== null && me.longitude !== null,
     radiusKm: user.profile?.notifyRadiusKm ?? 50,

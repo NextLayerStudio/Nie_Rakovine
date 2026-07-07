@@ -115,9 +115,6 @@ export function FeedTabPanel({ initialData }: { initialData?: FeedData }) {
                 capacity={e.capacity ?? undefined}
                 defaultName={firstName ?? ""}
                 defaultSurname={lastName}
-                isPaid={e.isPaid}
-                priceCents={e.priceCents}
-                currency={e.currency}
                 liked={likedEventIds.has(e.id)}
                 likeCount={e._count.likes}
                 commentCount={e._count.comments}

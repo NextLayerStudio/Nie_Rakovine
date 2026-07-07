@@ -13,31 +13,20 @@ function formatEventDate(iso: string): string {
   }).format(new Date(iso));
 }
 
-function registrationStatusLabel(
-  item: RegistrationHistoryItem,
-  isPast: boolean,
-): string {
-  if (isPast) return "Ukončené";
-  if (item.isPaid && item.paymentStatus === "PENDING") return "Čaká na platbu";
-  if (item.isPaid && item.paymentStatus === "PAID") return "Zaplatené";
-  return "Registrovaný";
+function registrationStatusLabel(isPast: boolean): string {
+  return isPast ? "Ukončené" : "Registrovaný";
 }
 
-function statusBadgeClass(
-  item: RegistrationHistoryItem,
-  isPast: boolean,
-): string {
-  if (isPast) return "bg-brand-purple/10 text-brand-purple/60";
-  if (item.isPaid && item.paymentStatus === "PENDING") {
-    return "bg-amber-50 text-amber-700";
-  }
-  return "bg-emerald-50 text-emerald-700";
+function statusBadgeClass(isPast: boolean): string {
+  return isPast
+    ? "bg-brand-purple/10 text-brand-purple/60"
+    : "bg-emerald-50 text-emerald-700";
 }
 
 function RegistrationRow({ item }: { item: RegistrationHistoryItem }) {
   const startsAt = new Date(item.startsAt);
   const isPast = startsAt.getTime() < Date.now();
-  const statusLabel = registrationStatusLabel(item, isPast);
+  const statusLabel = registrationStatusLabel(isPast);
   const content = (
     <>
       <div
@@ -66,7 +55,7 @@ function RegistrationRow({ item }: { item: RegistrationHistoryItem }) {
       <span
         className={cn(
           "shrink-0 rounded-pill px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide",
-          statusBadgeClass(item, isPast),
+          statusBadgeClass(isPast),
         )}
       >
         {statusLabel}

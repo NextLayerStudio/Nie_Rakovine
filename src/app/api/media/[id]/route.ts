@@ -1,5 +1,5 @@
 import { readSession } from "@/lib/auth";
-import { canAccessMediaAsset } from "@/lib/media-access";
+import { canAccessMediaAsset, isPublishedEventCoverAsset } from "@/lib/media-access";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -37,11 +37,15 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await readSession();
-  if (!session) {
-    return new Response("Unauthorized", { status: 401 });
-  }
-
   const { id } = await params;
+
+  if (!session) {
+    // Anonymous visitors only get published event covers (public /podujatia page).
+    const isPublicEventCover = await isPublishedEventCoverAsset(id);
+    if (!isPublicEventCover) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+  }
 
   // Metadata-only lookup first — the actual bytes are fetched separately as a
   // byte-range slice so large videos never need to be buffered in full.
@@ -60,7 +64,7 @@ export async function GET(
     return new Response("Not found", { status: 404 });
   }
 
-  const allowed = await canAccessMediaAsset(asset, session);
+  const allowed = session ? await canAccessMediaAsset(asset, session) : true;
   if (!allowed) {
     return new Response("Forbidden", { status: 403 });
   }

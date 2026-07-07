@@ -111,9 +111,6 @@ export function EventCard({
   coverUrl,
   footerSlot,
   statusBadge,
-  isPaid = false,
-  priceCents = null,
-  currency = "EUR",
   fullContent = false,
   compact = false,
   className = "mx-4 mb-4",
@@ -126,9 +123,6 @@ export function EventCard({
   coverUrl: string | null;
   footerSlot?: React.ReactNode;
   statusBadge?: React.ReactNode;
-  isPaid?: boolean;
-  priceCents?: number | null;
-  currency?: string;
   fullContent?: boolean;
   compact?: boolean;
   className?: string;
@@ -195,15 +189,6 @@ export function EventCard({
             {location}
           </p>
         )}
-        {isPaid && priceCents ? (
-          <p className="mt-1 text-[10px] font-semibold text-amber-700">
-            Platené ·{" "}
-            {new Intl.NumberFormat("sk-SK", {
-              style: "currency",
-              currency,
-            }).format(priceCents / 100)}
-          </p>
-        ) : null}
         {!footerSlot && (
           <div className="mt-3 flex justify-end">
             <Link

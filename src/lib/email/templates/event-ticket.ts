@@ -1,0 +1,65 @@
+import { getAppUrlFromEnv } from "@/lib/email/brand";
+import {
+  emailDetailRows,
+  emailTicketCard,
+  formatSkDate,
+  formatSkTime,
+  renderEmailShell,
+} from "@/lib/email/templates/shared";
+
+export function renderEventTicketEmail(input: {
+  firstName: string;
+  ticketId: string;
+  eventTitle: string;
+  startsAt: Date;
+  endsAt: Date | null;
+  location: string | null;
+  description: string | null;
+}): string {
+  const appUrl = getAppUrlFromEnv();
+  const ticketUrl = `${appUrl}/podujatia/listok/${input.ticketId}`;
+  const qrUrl = `${appUrl}/api/tickets/${input.ticketId}/qr`;
+
+  const dateLabel = formatSkDate(input.startsAt);
+  const timeLabel = input.endsAt
+    ? `${formatSkTime(input.startsAt)} – ${formatSkTime(input.endsAt)}`
+    : formatSkTime(input.startsAt);
+
+  const details = [
+    { icon: "◷", label: "Dátum", value: dateLabel },
+    { icon: "◔", label: "Čas", value: timeLabel },
+  ];
+  if (input.location) {
+    details.push({ icon: "◎", label: "Miesto", value: input.location });
+  }
+
+  const bodyHtml = `
+    <p style="margin:0 0 18px;">Ahoj ${input.firstName},</p>
+    <p style="margin:0 0 20px;">tvoja registrácia na podujatie je potvrdená. Nižšie nájdeš svoj lístok.</p>
+    ${emailTicketCard(input.eventTitle, `Lístok č. ${input.ticketId}`)}
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+      ${emailDetailRows(details)}
+    </table>
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:18px 0 0;">
+      <tr>
+        <td style="text-align:center;padding:20px;background:#FFF3F9;border-radius:16px;">
+          <img src="${qrUrl}" alt="QR kód lístka" width="160" height="160" style="display:block;margin:0 auto 10px;border-radius:8px;" />
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#6F2380B3;">Ukážte tento kód na podujatí</div>
+        </td>
+      </tr>
+    </table>
+    ${input.description ? `<p style="margin:16px 0 0;font-size:13px;line-height:1.6;color:#6F2380B3;">${input.description}</p>` : ""}`;
+
+  return renderEmailShell({
+    previewText: `Tvoj lístok na ${input.eventTitle}`,
+    pageTitle: `Lístok — ${input.eventTitle}`,
+    heroTitle: "Tvoj lístok je pripravený!",
+    heroSubtitle: "Ukáž QR kód na mieste konania podujatia.",
+    bodyHtml,
+    cta: { label: "Zobraziť lístok", href: ticketUrl, variant: "pink" },
+  });
+}
+
+export function renderEventTicketEmailSubject(eventTitle: string): string {
+  return `Tvoj lístok: ${eventTitle}`;
+}

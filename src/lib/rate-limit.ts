@@ -11,7 +11,11 @@ const WINDOW_MS = 15 * 60 * 1000;
 export const RATE_LIMIT_MESSAGE =
   "Príliš veľa pokusov. Skúste to znova o 15 minút.";
 
-export type AuthRateLimitScope = "login" | "register" | "reset-password";
+export type AuthRateLimitScope =
+  | "login"
+  | "register"
+  | "reset-password"
+  | "event-ticket";
 
 type RateLimitResult =
   | { allowed: true }

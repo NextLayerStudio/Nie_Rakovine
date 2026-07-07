@@ -4,13 +4,13 @@ import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { sendTransactionalEmailAsync } from "@/lib/email/client";
 import {
-  renderEventPaymentEmail,
-  renderEventPaymentEmailSubject,
-} from "@/lib/email/templates/event-payment";
-import {
   renderEventRegistrationEmail,
   renderEventRegistrationEmailSubject,
 } from "@/lib/email/templates/event-registration";
+import {
+  renderEventTicketEmail,
+  renderEventTicketEmailSubject,
+} from "@/lib/email/templates/event-ticket";
 import { renderNewDeviceLoginEmail } from "@/lib/email/templates/new-device-login";
 import { renderWelcomeEmail } from "@/lib/email/templates/welcome";
 
@@ -73,21 +73,21 @@ export function queueEventRegistrationEmail(input: {
   });
 }
 
-/** Call after successful event payment (Stripe / GoPay webhook). */
-export function queueEventPaymentEmail(input: {
+/** Guest (no-account) ticket registration from the public landing page. */
+export function queueEventTicketEmail(input: {
   email: string;
-  fullName: string;
+  firstName: string;
+  ticketId: string;
   eventTitle: string;
-  amountCents: number;
-  currency: string;
   startsAt: Date;
+  endsAt: Date | null;
   location: string | null;
-  eventId: string;
+  description: string | null;
 }): void {
   sendTransactionalEmailAsync({
     to: input.email,
-    subject: renderEventPaymentEmailSubject(input.eventTitle),
-    html: renderEventPaymentEmail(input),
+    subject: renderEventTicketEmailSubject(input.eventTitle),
+    html: renderEventTicketEmail(input),
   });
 }
 

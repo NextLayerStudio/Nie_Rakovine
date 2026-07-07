@@ -342,10 +342,9 @@ enum EventCategory {
   INTERNE
 }
 
-enum EventPaymentStatus {
-  NOT_REQUIRED
-  PENDING
-  PAID
+enum EventVisibility {
+  PUBLIC
+  MEMBERS_ONLY
 }
 
 model Post {
@@ -462,11 +461,10 @@ model Event {
   capacity    Int?
   published   Boolean  @default(true)
   cancerTypes CancerType[] @default([])
-  isPaid      Boolean  @default(false)
-  priceCents  Int?
-  currency    String   @default("EUR")
+  visibility  EventVisibility @default(PUBLIC)
 
   registrations EventRegistration[]
+  tickets       EventTicket[]
   likes         EventLike[]
   comments      EventComment[]
 
@@ -500,18 +498,29 @@ model EventComment {
 }
 
 model EventRegistration {
-  id            String             @id @default(cuid())
-  eventId       String
-  userId        String
-  name          String?
-  surname       String?
-  paymentStatus EventPaymentStatus @default(NOT_REQUIRED)
-  paidAt        DateTime?
-  event         Event              @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt     DateTime           @default(now())
+  id        String   @id @default(cuid())
+  eventId   String
+  userId    String
+  name      String?
+  surname   String?
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 
   @@unique([eventId, userId])
+}
+
+/// Guest ticket registrations from the public landing page — no account required.
+model EventTicket {
+  id        String   @id @default(cuid())
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  firstName String
+  lastName  String
+  email     String
+  createdAt DateTime @default(now())
+
+  @@index([eventId])
 }
 
 // ---------------- Forums (Fóra) ----------------

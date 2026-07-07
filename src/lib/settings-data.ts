@@ -1,6 +1,5 @@
 import "server-only";
 
-import type { EventPaymentStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
 export type RegistrationHistoryItem = {
@@ -11,8 +10,6 @@ export type RegistrationHistoryItem = {
   endsAt: string | null;
   location: string | null;
   coverUrl: string | null;
-  isPaid: boolean;
-  paymentStatus: EventPaymentStatus;
   registeredAt: string;
   published: boolean;
 };
@@ -26,7 +23,6 @@ export async function loadRegistrationHistory(
     select: {
       id: true,
       createdAt: true,
-      paymentStatus: true,
       event: {
         select: {
           id: true,
@@ -35,7 +31,6 @@ export async function loadRegistrationHistory(
           endsAt: true,
           location: true,
           coverUrl: true,
-          isPaid: true,
           published: true,
         },
       },
@@ -50,8 +45,6 @@ export async function loadRegistrationHistory(
     endsAt: r.event.endsAt?.toISOString() ?? null,
     location: r.event.location,
     coverUrl: r.event.coverUrl,
-    isPaid: r.event.isPaid,
-    paymentStatus: r.paymentStatus,
     registeredAt: r.createdAt.toISOString(),
     published: r.event.published,
   }));

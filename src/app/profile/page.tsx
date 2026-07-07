@@ -11,7 +11,6 @@ import { ProfileView } from "@/components/profile/ProfileView";
 import { readSession } from "@/lib/auth";
 import { membershipSubscriptionInfo } from "@/lib/membership-card";
 import { parseProfileTab } from "@/lib/profile-page";
-import { isEventRegistrationComplete } from "@/lib/event-payment";
 import { loadProfileForumsData, loadProfileDiscountsData } from "@/lib/profile-data";
 import { prisma } from "@/lib/prisma";
 
@@ -51,7 +50,6 @@ export default async function ProfilePage({
       where: { userId: session.userId, event: { published: true } },
       orderBy: { event: { startsAt: "asc" } },
       select: {
-        paymentStatus: true,
         event: {
           select: {
             id: true,
@@ -62,9 +60,6 @@ export default async function ProfilePage({
             endsAt: true,
             location: true,
             capacity: true,
-            isPaid: true,
-            priceCents: true,
-            currency: true,
             _count: { select: { registrations: true } },
           },
         },
@@ -87,22 +82,17 @@ export default async function ProfilePage({
     ok: true as const,
     defaultName: nameParts[0] ?? "",
     defaultSurname: nameParts.slice(1).join(" "),
-    registeredEvents: registrations
-      .filter((r) => isEventRegistrationComplete(r, r.event.isPaid))
-      .map((r) => ({
-        id: r.event.id,
-        title: r.event.title,
-        description: r.event.description,
-        coverUrl: r.event.coverUrl,
-        startsAt: r.event.startsAt.toISOString(),
-        endsAt: r.event.endsAt?.toISOString() ?? null,
-        location: r.event.location,
-        registrationCount: r.event._count.registrations,
-        capacity: r.event.capacity,
-        isPaid: r.event.isPaid,
-        priceCents: r.event.priceCents,
-        currency: r.event.currency,
-      })),
+    registeredEvents: registrations.map((r) => ({
+      id: r.event.id,
+      title: r.event.title,
+      description: r.event.description,
+      coverUrl: r.event.coverUrl,
+      startsAt: r.event.startsAt.toISOString(),
+      endsAt: r.event.endsAt?.toISOString() ?? null,
+      location: r.event.location,
+      registrationCount: r.event._count.registrations,
+      capacity: r.event.capacity,
+    })),
   };
 
   return (
