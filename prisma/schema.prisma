@@ -347,6 +347,17 @@ enum EventVisibility {
   MEMBERS_ONLY
 }
 
+enum EventRegion {
+  BRATISLAVSKY
+  TRNAVSKY
+  TRENCIANSKY
+  NITRIANSKY
+  ZILINSKY
+  BANSKOBYSTRICKY
+  PRESOVSKY
+  KOSICKY
+}
+
 model Post {
   id          String   @id @default(cuid())
   profileId   String?
@@ -454,6 +465,7 @@ model Event {
   category    EventCategory?
   coverUrl    String?
   location    String?
+  region      EventRegion?
   latitude    Float?
   longitude   Float?
   startsAt    DateTime

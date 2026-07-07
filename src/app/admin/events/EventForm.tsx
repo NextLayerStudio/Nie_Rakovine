@@ -12,6 +12,7 @@ import { LocationPicker } from "@/components/map/LocationPicker";
 import { CancerTypeSelect } from "@/components/CancerTypeSelect";
 import { AdminImageField } from "@/components/AdminImageField";
 import { EVENT_CATEGORIES, EVENT_CATEGORY_META } from "@/lib/event-category";
+import { EVENT_REGIONS, EVENT_REGION_LABELS } from "@/lib/event-region";
 import { toZonedDateTimeLocal } from "@/lib/timezone";
 
 const INITIAL: ActionState = { ok: false };
@@ -98,6 +99,22 @@ export function EventForm({
             onChange={(e) => setLocation(e.target.value)}
             className="admin-input"
           />
+        </label>
+
+        <label className="block">
+          <span className="admin-label">Región</span>
+          <select
+            name="region"
+            defaultValue={event?.region ?? ""}
+            className="admin-input"
+          >
+            <option value="">— bez regiónu —</option>
+            {EVENT_REGIONS.map((r) => (
+              <option key={r} value={r}>
+                {EVENT_REGION_LABELS[r]}
+              </option>
+            ))}
+          </select>
         </label>
 
         <div>

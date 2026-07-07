@@ -2,12 +2,13 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import type { EventCategory, EventVisibility } from "@prisma/client";
+import type { EventCategory, EventRegion, EventVisibility } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
 import { prismaActionError, requireActionUser } from "@/lib/safe-action";
 import { notifyNearbyUsersNewEvent } from "@/lib/notifications";
 import { EVENT_CATEGORIES } from "@/lib/event-category";
+import { EVENT_REGIONS } from "@/lib/event-region";
 import { parseCancerTypes } from "@/lib/cancer-type";
 import { resolveImageField } from "@/lib/uploads";
 import { parseZonedDateTime } from "@/lib/timezone";
@@ -32,6 +33,11 @@ function parseCoord(formData: FormData, name: string): number | null {
 function parseVisibility(formData: FormData): EventVisibility {
   const raw = String(formData.get("visibility") ?? "").trim();
   return raw === "MEMBERS_ONLY" ? "MEMBERS_ONLY" : "PUBLIC";
+}
+
+function parseRegion(formData: FormData): EventRegion | null {
+  const raw = String(formData.get("region") ?? "").trim();
+  return (EVENT_REGIONS as string[]).includes(raw) ? (raw as EventRegion) : null;
 }
 
 // ------ Admin: create / edit / delete -----------------------------------
@@ -86,6 +92,7 @@ export async function createEventAction(
       profileId,
       cancerTypes: parseCancerTypes(formData.getAll("cancerTypes")),
       visibility: parseVisibility(formData),
+      region: parseRegion(formData),
     },
   });
 
@@ -147,6 +154,7 @@ export async function updateEventAction(
       profileId,
       cancerTypes: parseCancerTypes(formData.getAll("cancerTypes")),
       visibility: parseVisibility(formData),
+      region: parseRegion(formData),
     },
   });
 

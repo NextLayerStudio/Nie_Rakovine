@@ -1,16 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import type { EventRegion } from "@prisma/client";
 import { EventCard, type PublicEvent } from "@/components/landing/EventCard";
+import { EVENT_REGION_FILTER_OPTIONS } from "@/lib/event-region";
 
 const WEEKDAYS = ["Po", "Ut", "St", "Št", "Pi", "So", "Ne"];
 const MONTHS = [
   "Január", "Február", "Marec", "Apríl", "Máj", "Jún",
   "Júl", "August", "September", "Október", "November", "December",
-];
-const CITIES = [
-  "Bratislava", "Košice", "Žilina", "Nitra", "Banská Bystrica",
-  "Prešov", "Trnava", "Trenčín", "Piešťany",
 ];
 
 function dayKey(d: Date): string {
@@ -46,13 +44,12 @@ export function PublicEventsExplorer({ events }: { events: PublicEvent[] }) {
     new Date(now.getFullYear(), now.getMonth(), 1),
   );
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
-  const [search, setSearch] = useState("");
+  const [region, setRegion] = useState<EventRegion | "">("");
 
   const baseFiltered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    if (!q) return events;
-    return events.filter((e) => (e.location ?? "").toLowerCase().includes(q));
-  }, [events, search]);
+    if (!region) return events;
+    return events.filter((e) => e.region === region);
+  }, [events, region]);
 
   const eventDays = useMemo(() => {
     const set = new Set<string>();
@@ -87,42 +84,24 @@ export function PublicEventsExplorer({ events }: { events: PublicEvent[] }) {
   return (
     <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[320px_1fr]">
       <div className="flex h-fit flex-col gap-5">
-        {/* Location filter */}
+        {/* Region filter */}
         <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-[#6F2380]/10">
           <p className="text-sm font-black text-[#6F2380]">Poloha</p>
-          <div className="relative mt-3">
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Hľadať mesto alebo región"
-              className="w-full rounded-full border border-[#6F2380]/15 bg-[#FFF3F9] py-2.5 pl-4 pr-9 text-sm text-[#6F2380] placeholder-[#6F2380]/40 outline-none focus:border-[#FDA4C7]"
-            />
-            {search && (
-              <button
-                type="button"
-                onClick={() => setSearch("")}
-                aria-label="Vymazať"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6F2380]/40"
-              >
-                ✕
-              </button>
-            )}
-          </div>
           <div className="mt-3 flex flex-wrap gap-1.5">
-            {CITIES.map((city) => {
-              const active = search.toLowerCase() === city.toLowerCase();
+            {EVENT_REGION_FILTER_OPTIONS.map((r) => {
+              const active = r.value === region;
               return (
                 <button
-                  key={city}
+                  key={r.value || "all"}
                   type="button"
-                  onClick={() => setSearch(active ? "" : city)}
+                  onClick={() => setRegion(active ? "" : r.value)}
                   className={`rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
                     active
                       ? "bg-[#6F2380] text-white"
                       : "bg-[#6F2380]/8 text-[#6F2380]/70 hover:bg-[#6F2380]/15"
                   }`}
                 >
-                  {city}
+                  {r.label}
                 </button>
               );
             })}

@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import type { EventCategory } from "@prisma/client";
+import type { EventCategory, EventRegion } from "@prisma/client";
 import { EVENT_CATEGORY_META } from "@/lib/event-category";
+import { regionLabel } from "@/lib/event-region";
 import { formatEventDate, formatRegistrationCount, formatTimeRange } from "@/lib/event-format";
 import { EventTicketModal } from "@/components/landing/EventTicketModal";
 
@@ -14,6 +15,7 @@ export type PublicEvent = {
   category: EventCategory | null;
   coverUrl: string | null;
   location: string | null;
+  region: EventRegion | null;
   startsAt: string;
   endsAt: string | null;
   capacity: number | null;
@@ -72,8 +74,10 @@ export function EventCard({ event }: { event: PublicEvent }) {
               {event.description}
             </p>
           )}
-          {event.location && (
-            <p className="text-xs text-[#6F2380]/55">{event.location}</p>
+          {(event.location || event.region) && (
+            <p className="text-xs text-[#6F2380]/55">
+              {[event.location, regionLabel(event.region)].filter(Boolean).join(" · ")}
+            </p>
           )}
 
           <div className="mt-auto flex flex-col gap-3 pt-3">
