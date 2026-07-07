@@ -11,6 +11,7 @@ import { notifyNearbyUsersNewEvent } from "@/lib/notifications";
 import { EVENT_CATEGORIES } from "@/lib/event-category";
 import { parseCancerTypes } from "@/lib/cancer-type";
 import { parsePriceToCents } from "@/lib/event-payment";
+import { resolveImageField } from "@/lib/uploads";
 import {
   queueEventPaymentEmail,
   queueEventRegistrationEmail,
@@ -63,7 +64,7 @@ export async function createEventAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
 
   const title = String(formData.get("title") ?? "").trim();
   const description =
@@ -72,7 +73,22 @@ export async function createEventAction(
   const endsAtStr = String(formData.get("endsAt") ?? "");
   const location = String(formData.get("location") ?? "").trim() || null;
   const capacityStr = String(formData.get("capacity") ?? "");
-  const coverUrl = String(formData.get("coverUrl") ?? "").trim() || null;
+
+  let coverUrl: string | null;
+  try {
+    coverUrl = await resolveImageField(
+      formData,
+      "coverFile",
+      "coverUrl",
+      "events",
+      admin.id,
+    );
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Nepodarilo sa nahrať obrázok.",
+    };
+  }
 
   if (!title || !startsAtStr) {
     return { ok: false, message: "Vyplňte aspoň názov a čas začiatku." };
@@ -113,7 +129,7 @@ export async function updateEventAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const id = String(formData.get("id") ?? "");
   if (!id) return { ok: false, message: "Chýba identifikátor." };
 
@@ -124,8 +140,23 @@ export async function updateEventAction(
   const endsAtStr = String(formData.get("endsAt") ?? "");
   const location = String(formData.get("location") ?? "").trim() || null;
   const capacityStr = String(formData.get("capacity") ?? "");
-  const coverUrl = String(formData.get("coverUrl") ?? "").trim() || null;
   const published = formData.get("published") === "on";
+
+  let coverUrl: string | null;
+  try {
+    coverUrl = await resolveImageField(
+      formData,
+      "coverFile",
+      "coverUrl",
+      "events",
+      admin.id,
+    );
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Nepodarilo sa nahrať obrázok.",
+    };
+  }
 
   const paid = parsePaidFields(formData);
   if (paid.error) return { ok: false, message: paid.error };

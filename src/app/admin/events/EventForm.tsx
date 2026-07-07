@@ -10,6 +10,7 @@ import {
 import { FormError, SubmitButton } from "@/components/FormError";
 import { LocationPicker } from "@/components/map/LocationPicker";
 import { CancerTypeSelect } from "@/components/CancerTypeSelect";
+import { AdminImageField } from "@/components/AdminImageField";
 import { EVENT_CATEGORIES, EVENT_CATEGORY_META } from "@/lib/event-category";
 
 const INITIAL: ActionState = { ok: false };
@@ -133,19 +134,22 @@ export function EventForm({
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <Field
-            label="Kapacita"
-            name="capacity"
-            type="number"
-            defaultValue={event?.capacity?.toString() ?? ""}
-          />
-          <Field
-            label="Cover (URL)"
-            name="coverUrl"
-            defaultValue={event?.coverUrl ?? ""}
-          />
-        </div>
+        <Field
+          label="Kapacita"
+          name="capacity"
+          type="number"
+          defaultValue={event?.capacity?.toString() ?? ""}
+        />
+
+        <AdminImageField
+          name="coverUrl"
+          uploadName="coverFile"
+          label="Titulný obrázok"
+          hint="Náhľad podujatia. Nahrajte z počítača alebo vložte odkaz."
+          defaultValue={event?.coverUrl ?? ""}
+          shape="rounded"
+          previewAspect="video"
+        />
       </fieldset>
 
       <fieldset className="admin-fieldset">
