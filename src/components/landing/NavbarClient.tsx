@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
-const NAV_LINKS = [
+const ABOUT_LINKS = [
   { label: "Čo získaš",            href: "/co-ziskas" },
   { label: "Prednášky & Podcasty", href: "/prednasky-podcasty" },
   { label: "Kalendár aktivít",     href: "/akcie" },
@@ -17,29 +17,75 @@ export function NavbarClient({ isLoggedIn }: { isLoggedIn: boolean }) {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
 
-  // Logged-in users browsing the landing arrived via /?preview=1 — the logo
+  const [aboutOpen, setAboutOpen] = useState(false);
+  const [mobileAboutOpen, setMobileAboutOpen] = useState(false);
+  const aboutRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!aboutOpen) return;
+    function onClickOutside(e: MouseEvent) {
+      if (aboutRef.current && !aboutRef.current.contains(e.target as Node)) {
+        setAboutOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, [aboutOpen]);
+
+  // Logged-in users browsing the landing arrived via /?preview=1 — Domov/logo
   // must keep that flag, otherwise middleware bounces them back to /home.
-  const logoHref = isLoggedIn ? "/?preview=1" : "/";
+  const homeHref = isLoggedIn ? "/?preview=1" : "/";
 
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#FFF3F9]/90 backdrop-blur-md border-b border-[#FDA4C7]/10">
         <div className="max-w-6xl mx-auto px-5 md:px-8 flex items-center justify-between py-3.5">
-          <Link href={logoHref} className="shrink-0">
+          <Link href={homeHref} className="shrink-0">
             <Image src="/images/logo-horizontal.png" alt="OnkoKlub" width={140} height={48} className="h-9 w-auto" priority />
           </Link>
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-1">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-[#6F2380]/70 text-sm font-semibold px-3 py-2 rounded-xl hover:text-[#6F2380] hover:bg-[#FDA4C7]/10 transition-colors"
+            <Link
+              href={homeHref}
+              className="text-[#6F2380]/70 text-sm font-semibold px-3 py-2 rounded-xl hover:text-[#6F2380] hover:bg-[#FDA4C7]/10 transition-colors"
+            >
+              Domov
+            </Link>
+
+            <div className="relative" ref={aboutRef}>
+              <button
+                type="button"
+                onClick={() => setAboutOpen((v) => !v)}
+                aria-expanded={aboutOpen}
+                className="flex items-center gap-1 text-[#6F2380]/70 text-sm font-semibold px-3 py-2 rounded-xl hover:text-[#6F2380] hover:bg-[#FDA4C7]/10 transition-colors"
               >
-                {link.label}
-              </Link>
-            ))}
+                O ONKO KLUBE
+                <ChevronDown size={14} className={`transition-transform ${aboutOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              {aboutOpen && (
+                <div className="absolute left-0 top-full mt-2 w-64 rounded-2xl bg-white py-2 shadow-lg ring-1 ring-[#FDA4C7]/15">
+                  {ABOUT_LINKS.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setAboutOpen(false)}
+                      className="block px-4 py-2.5 text-sm font-semibold text-[#6F2380]/70 hover:text-[#6F2380] hover:bg-[#FDA4C7]/10 transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <Link
+              href="/podujatia"
+              className="text-[#6F2380]/70 text-sm font-semibold px-3 py-2 rounded-xl hover:text-[#6F2380] hover:bg-[#FDA4C7]/10 transition-colors"
+            >
+              Podujatia
+            </Link>
           </nav>
 
           <div className="flex items-center gap-2">
@@ -99,17 +145,52 @@ export function NavbarClient({ isLoggedIn }: { isLoggedIn: boolean }) {
 
         <nav className="flex-1 px-3">
           <ul className="flex flex-col gap-0.5">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  onClick={close}
-                  className="flex items-center px-4 py-4 rounded-2xl text-lg font-black text-white hover:bg-white/15 transition-colors"
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
+            <li>
+              <Link
+                href={homeHref}
+                onClick={close}
+                className="flex items-center px-4 py-4 rounded-2xl text-lg font-black text-white hover:bg-white/15 transition-colors"
+              >
+                Domov
+              </Link>
+            </li>
+
+            <li>
+              <button
+                type="button"
+                onClick={() => setMobileAboutOpen((v) => !v)}
+                aria-expanded={mobileAboutOpen}
+                className="flex w-full items-center justify-between px-4 py-4 rounded-2xl text-lg font-black text-white hover:bg-white/15 transition-colors"
+              >
+                O ONKO KLUBE
+                <ChevronDown size={18} className={`transition-transform ${mobileAboutOpen ? "rotate-180" : ""}`} />
+              </button>
+              {mobileAboutOpen && (
+                <ul className="flex flex-col gap-0.5 pl-4">
+                  {ABOUT_LINKS.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        onClick={close}
+                        className="flex items-center px-4 py-3 rounded-2xl text-base font-bold text-white/90 hover:bg-white/15 transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+
+            <li>
+              <Link
+                href="/podujatia"
+                onClick={close}
+                className="flex items-center px-4 py-4 rounded-2xl text-lg font-black text-white hover:bg-white/15 transition-colors"
+              >
+                Podujatia
+              </Link>
+            </li>
           </ul>
         </nav>
 
