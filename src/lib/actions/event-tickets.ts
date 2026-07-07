@@ -1,9 +1,14 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { prismaActionError } from "@/lib/safe-action";
 import { enforceAuthRateLimit } from "@/lib/rate-limit";
 import { queueEventTicketEmail } from "@/lib/email/send";
+
+const ALREADY_REGISTERED_MESSAGE =
+  "S týmto e-mailom ste už na toto podujatie zaregistrovaný/á. Lístok vám prišiel na e-mail.";
 
 export type ActionState = { ok: boolean; message?: string; ticketId?: string };
 
@@ -52,6 +57,14 @@ export async function registerGuestForEventAction(
     return { ok: false, message: "Toto podujatie nie je dostupné na verejnú registráciu." };
   }
 
+  const existingTicket = await prisma.eventTicket.findUnique({
+    where: { eventId_email: { eventId, email } },
+    select: { id: true },
+  });
+  if (existingTicket) {
+    return { ok: false, message: ALREADY_REGISTERED_MESSAGE };
+  }
+
   const totalRegistered =
     event._count.registrations + event._count.tickets;
   if (event.capacity !== null && totalRegistered >= event.capacity) {
@@ -66,6 +79,12 @@ export async function registerGuestForEventAction(
     });
     ticketId = ticket.id;
   } catch (err) {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === "P2002"
+    ) {
+      return { ok: false, message: ALREADY_REGISTERED_MESSAGE };
+    }
     return {
       ok: false,
       message: prismaActionError(err, "Registrácia zlyhala. Skúste to znova."),
@@ -82,6 +101,9 @@ export async function registerGuestForEventAction(
     location: event.location,
     description: event.description,
   });
+
+  revalidatePath("/podujatia");
+  revalidatePath(`/admin/events/${eventId}`);
 
   return { ok: true, ticketId };
 }

@@ -532,6 +532,7 @@ model EventTicket {
   email     String
   createdAt DateTime @default(now())
 
+  @@unique([eventId, email])
   @@index([eventId])
 }
 

@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   registerGuestForEventAction,
@@ -20,6 +21,7 @@ export function EventTicketModal({
   eventTitle: string;
   onClose: () => void;
 }) {
+  const router = useRouter();
   const [state, formAction] = useActionState(
     registerGuestForEventAction,
     INITIAL,
@@ -32,6 +34,12 @@ export function EventTicketModal({
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [onClose]);
+
+  useEffect(() => {
+    // Refresh the server-rendered event list so the updated registration
+    // count / capacity shows up without the visitor reloading the page.
+    if (state.ok) router.refresh();
+  }, [state.ok, router]);
 
   return createPortal(
     <div
