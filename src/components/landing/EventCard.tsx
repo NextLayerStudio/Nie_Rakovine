@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 import type { EventCategory, EventRegion } from "@prisma/client";
 import { EVENT_CATEGORY_META } from "@/lib/event-category";
 import { regionLabel } from "@/lib/event-region";
@@ -25,6 +26,7 @@ export type PublicEvent = {
 
 export function EventCard({ event }: { event: PublicEvent }) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const startsAt = new Date(event.startsAt);
   const endsAt = event.endsAt ? new Date(event.endsAt) : null;
   const isFull =
@@ -34,7 +36,17 @@ export function EventCard({ event }: { event: PublicEvent }) {
   return (
     <>
       <article
-        className={`group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-[#6F2380]/10 transition hover:shadow-md ${
+        onClick={() => setExpanded((v) => !v)}
+        role="button"
+        tabIndex={0}
+        aria-expanded={expanded}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setExpanded((v) => !v);
+          }
+        }}
+        className={`group flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-[#6F2380]/10 transition hover:shadow-md ${
           isMembersOnly ? "grayscale opacity-70" : ""
         }`}
       >
@@ -70,7 +82,11 @@ export function EventCard({ event }: { event: PublicEvent }) {
             {event.title}
           </h3>
           {event.description && (
-            <p className="line-clamp-2 text-sm text-[#6F2380]/65">
+            <p
+              className={`text-sm text-[#6F2380]/65 ${
+                expanded ? "whitespace-pre-line" : "line-clamp-2"
+              }`}
+            >
               {event.description}
             </p>
           )}
@@ -78,6 +94,16 @@ export function EventCard({ event }: { event: PublicEvent }) {
             <p className="text-xs text-[#6F2380]/55">
               {[event.location, regionLabel(event.region)].filter(Boolean).join(" · ")}
             </p>
+          )}
+
+          {event.description && event.description.length > 90 && (
+            <span className="mt-0.5 flex items-center gap-1 text-[11px] font-semibold text-[#FDA4C7]">
+              {expanded ? "Menej informácií" : "Viac informácií"}
+              <ChevronDown
+                size={13}
+                className={`transition-transform ${expanded ? "rotate-180" : ""}`}
+              />
+            </span>
           )}
 
           <div className="mt-auto flex flex-col gap-3 pt-3">
@@ -92,6 +118,7 @@ export function EventCard({ event }: { event: PublicEvent }) {
                 </p>
                 <Link
                   href="/register"
+                  onClick={(e) => e.stopPropagation()}
                   className="mt-2 inline-block rounded-full bg-[#6F2380] px-4 py-1.5 text-xs font-bold text-white"
                 >
                   Staň sa členom
@@ -104,7 +131,10 @@ export function EventCard({ event }: { event: PublicEvent }) {
             ) : (
               <button
                 type="button"
-                onClick={() => setModalOpen(true)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setModalOpen(true);
+                }}
                 className="rounded-full bg-[#FDA4C7] px-4 py-2 text-xs font-bold text-white transition hover:brightness-105"
               >
                 Registrovať sa
