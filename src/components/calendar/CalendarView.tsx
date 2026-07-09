@@ -132,8 +132,11 @@ export function CalendarView({
         const hay = `${e.title} ${e.location ?? ""}`.toLowerCase();
         if (!hay.includes(q)) return false;
       } else if (locationMode === "near" && hasLocation) {
-        // Near me = within radius OR already registered.
-        const near = e.distanceKm !== null && e.distanceKm <= radiusKm;
+        // Near me = within radius OR already registered. Events without a
+        // map pin have no distance to judge, so they stay visible instead
+        // of being silently hidden (same rule as "no cancer type = general").
+        const near =
+          e.distanceKm === null || e.distanceKm <= radiusKm;
         if (!near && !e.registered) return false;
       }
       return true;
