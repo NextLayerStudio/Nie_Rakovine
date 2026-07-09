@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { extractVideoEmbedUrl } from "@/lib/post-display";
+import { extractVideoEmbedUrl, isPlayableVideoUrl } from "@/lib/post-display";
 
 export function FeedVideoPlayer({
   videoUrl,
@@ -13,16 +13,18 @@ export function FeedVideoPlayer({
   const [playing, setPlaying] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const embedUrl = extractVideoEmbedUrl(videoUrl);
+  const isDirectVideo = !embedUrl && isPlayableVideoUrl(videoUrl);
 
   const goFullscreen = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const el = iframeRef.current ?? containerRef.current;
+    const el = iframeRef.current ?? videoRef.current ?? containerRef.current;
     el?.requestFullscreen?.().catch(() => {});
   };
 
-  if (!playing || !embedUrl) {
+  if (!playing || (!embedUrl && !isDirectVideo)) {
     return (
       <div
         className="relative w-full cursor-pointer overflow-hidden bg-black"
@@ -62,14 +64,26 @@ export function FeedVideoPlayer({
       ref={containerRef}
       className="relative aspect-video w-full overflow-hidden bg-black"
     >
-      <iframe
-        ref={iframeRef}
-        src={embedUrl}
-        className="h-full w-full"
-        allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-        title="Video"
-      />
+      {isDirectVideo ? (
+        <video
+          ref={videoRef}
+          src={videoUrl}
+          controls
+          autoPlay
+          playsInline
+          poster={coverUrl ?? undefined}
+          className="h-full w-full"
+        />
+      ) : (
+        <iframe
+          ref={iframeRef}
+          src={embedUrl!}
+          className="h-full w-full"
+          allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          title="Video"
+        />
+      )}
 
       {/* Fullscreen button */}
       <button

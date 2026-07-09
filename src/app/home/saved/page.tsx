@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { buildPostGallery, postPublicHref } from "@/lib/post-display";
 import { feedPostSelect } from "@/lib/feed-queries";
+import { resolvePostListVideoUrls } from "@/lib/video-blob";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +20,7 @@ export default async function SavedPostsPage() {
     },
   });
 
-  const posts = saved.map((s) => s.post);
+  const posts = await resolvePostListVideoUrls(saved.map((s) => s.post));
 
   const likedSet = posts.length
     ? new Set(

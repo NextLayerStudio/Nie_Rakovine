@@ -5,6 +5,7 @@ import { readSession } from "@/lib/auth";
 import { visibleThreadsWhere, approvedCommentsCountWhere } from "@/lib/forum-moderation";
 import { feedPostSelect } from "@/lib/feed-queries";
 import { buildPostGallery, postPublicHref } from "@/lib/post-display";
+import { resolvePostListVideoUrls } from "@/lib/video-blob";
 
 async function getProfileUser() {
   const session = await readSession();
@@ -227,7 +228,7 @@ export async function fetchProfileSavedAction() {
     select: { post: { select: feedPostSelect } },
   });
 
-  const savedPosts = savedPostRows.map((row) => row.post);
+  const savedPosts = await resolvePostListVideoUrls(savedPostRows.map((row) => row.post));
 
   const likedSet =
     savedPosts.length > 0

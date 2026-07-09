@@ -38,3 +38,19 @@ export async function resolveVideoPlaybackUrl(
 
   return presignedUrl;
 }
+
+/**
+ * Resolves videoUrl on a batch of VIDEO posts in place (e.g. feed pages).
+ * Non-video posts and posts without a videoUrl pass through untouched.
+ */
+export async function resolvePostListVideoUrls<
+  T extends { type: string; videoUrl: string | null },
+>(posts: T[]): Promise<T[]> {
+  return Promise.all(
+    posts.map(async (post) =>
+      post.type === "VIDEO" && post.videoUrl
+        ? { ...post, videoUrl: await resolveVideoPlaybackUrl(post.videoUrl) }
+        : post,
+    ),
+  );
+}

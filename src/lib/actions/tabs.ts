@@ -5,6 +5,7 @@ import { loadFeedEngagement } from "@/lib/feed-engagement";
 import { relevantWhere, sortByRelevance } from "@/lib/cancer-personalization";
 import { distanceKm } from "@/lib/geo";
 import { readSession } from "@/lib/auth";
+import { resolvePostListVideoUrls } from "@/lib/video-blob";
 import {
   FEED_POST_POOL,
   FEED_EVENT_LIMIT,
@@ -44,7 +45,7 @@ export async function fetchFeedTabAction() {
   const userTypes = (user.profile?.cancerTypes ?? []) as CancerType[];
   const relevant = relevantWhere(userTypes);
 
-  const [posts, events] = await Promise.all([
+  const [postsRaw, events] = await Promise.all([
     prisma.post.findMany({
       where: { published: true, ...relevant },
       orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
@@ -58,6 +59,7 @@ export async function fetchFeedTabAction() {
       select: feedEventSelect,
     }),
   ]);
+  const posts = await resolvePostListVideoUrls(postsRaw);
 
   const postIds = posts.map((p) => p.id);
   const profileIds = [
