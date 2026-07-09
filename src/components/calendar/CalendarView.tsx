@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { EventCategory } from "@prisma/client";
+import type { EventCategory, EventRegion } from "@prisma/client";
 import {
   EventDetailModal,
   type EventModalData,
@@ -11,6 +11,7 @@ import {
   EVENT_CATEGORY_META,
   categoryLabel,
 } from "@/lib/event-category";
+import { EVENT_REGION_FILTER_OPTIONS, regionLabel } from "@/lib/event-region";
 import { formatDistance } from "@/lib/geo";
 import { EVENT_TIME_ZONE } from "@/lib/timezone";
 
@@ -21,6 +22,7 @@ export type CalendarEvent = {
   location: string | null;
   coverUrl: string | null;
   category: EventCategory | null;
+  region: EventRegion | null;
   startsAt: string;
   endsAt: string | null;
   profileName: string;
@@ -34,11 +36,6 @@ const WEEKDAYS = ["Po", "Ut", "St", "Št", "Pi", "So", "Ne"];
 const MONTHS = [
   "Január", "Február", "Marec", "Apríl", "Máj", "Jún",
   "Júl", "August", "September", "Október", "November", "December",
-];
-// Quick-pick Slovak cities (matches the registration region idea).
-const CITIES = [
-  "Bratislava", "Košice", "Žilina", "Nitra", "Banská Bystrica",
-  "Prešov", "Trnava", "Trenčín", "Piešťany",
 ];
 
 type LocationMode = "near" | "all";
@@ -74,7 +71,7 @@ export function CalendarView({
   const [locationMode, setLocationMode] = useState<LocationMode>(
     hasLocation ? "near" : "all",
   );
-  const [search, setSearch] = useState("");
+  const [region, setRegion] = useState<EventRegion | "">("");
   const [locationOpen, setLocationOpen] = useState(false);
   const [detail, setDetail] = useState<EventModalData | null>(null);
 
@@ -122,30 +119,26 @@ export function CalendarView({
     );
   }
 
-  // Category + search always apply; "near me" is applied separately below
-  // so it can fall back instead of leaving the screen blank.
-  const categoryAndSearchFiltered = useMemo(() => {
-    const q = search.trim().toLowerCase();
+  // Category + region always apply (region matches the same field used on
+  // the public /podujatia page); "near me" is applied separately below so
+  // it can fall back instead of leaving the screen blank.
+  const categoryAndRegionFiltered = useMemo(() => {
     return eventsState.filter((e) => {
       if (category && e.category !== category) return false;
-      if (q) {
-        const hay = `${e.title} ${e.location ?? ""}`.toLowerCase();
-        if (!hay.includes(q)) return false;
-      }
+      if (region && e.region !== region) return false;
       return true;
     });
-  }, [eventsState, category, search]);
+  }, [eventsState, category, region]);
 
   const nearFiltered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    if (q || locationMode !== "near" || !hasLocation) {
-      return categoryAndSearchFiltered;
+    if (region || locationMode !== "near" || !hasLocation) {
+      return categoryAndRegionFiltered;
     }
-    return categoryAndSearchFiltered.filter((e) => {
+    return categoryAndRegionFiltered.filter((e) => {
       const near = e.distanceKm === null || e.distanceKm <= radiusKm;
       return near || e.registered;
     });
-  }, [categoryAndSearchFiltered, search, locationMode, hasLocation, radiusKm]);
+  }, [categoryAndRegionFiltered, region, locationMode, hasLocation, radiusKm]);
 
   // If "near me" would leave nothing to show, fall back to the full list
   // instead of a silently empty screen — matches the public /podujatia page,
@@ -153,15 +146,15 @@ export function CalendarView({
   const baseFiltered = useMemo(() => {
     return nearFiltered.length > 0
       ? nearFiltered
-      : categoryAndSearchFiltered;
-  }, [nearFiltered, categoryAndSearchFiltered]);
+      : categoryAndRegionFiltered;
+  }, [nearFiltered, categoryAndRegionFiltered]);
 
   const usedNearFallback =
-    categoryAndSearchFiltered.length > 0 &&
+    categoryAndRegionFiltered.length > 0 &&
     nearFiltered.length === 0 &&
+    !region &&
     locationMode === "near" &&
-    hasLocation &&
-    !search.trim();
+    hasLocation;
 
   // Days in the visible month that have events, flagged by registration.
   const eventDays = useMemo(() => {
@@ -213,10 +206,10 @@ export function CalendarView({
         >
           <span className="flex items-center gap-2 text-sm font-semibold text-brand-purple">
             <PinIcon />
-            {locationMode === "near" && hasLocation && !search
-              ? "Moja poloha"
-              : search
-                ? search
+            {region
+              ? regionLabel(region)
+              : locationMode === "near" && hasLocation
+                ? "Moja poloha"
                 : "Všetky aktivity"}
           </span>
           <Chevron open={locationOpen} />
@@ -229,11 +222,11 @@ export function CalendarView({
                 type="button"
                 onClick={() => {
                   setLocationMode("near");
-                  setSearch("");
+                  setRegion("");
                   setLocationOpen(false);
                 }}
                 className={`mb-2 flex w-full items-center gap-2 rounded-pill px-4 py-2 text-sm font-semibold ${
-                  locationMode === "near" && !search
+                  locationMode === "near" && !region
                     ? "bg-brand-purple text-white"
                     : "bg-brand-pink-soft/40 text-brand-purple"
                 }`}
@@ -242,34 +235,26 @@ export function CalendarView({
               </button>
             )}
 
-            <div className="relative">
-              <input
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setLocationMode("all");
-                }}
-                placeholder="Hľadať mesto alebo región"
-                className="w-full rounded-full border border-brand-purple/10 bg-white py-2.5 pl-4 pr-10 text-sm text-brand-purple placeholder-brand-purple/50 shadow-sm outline-none transition focus:border-brand-pink/40 focus:ring-4 focus:ring-brand-pink/10"
-              />
-              <SearchIcon />
-            </div>
-
-            <div className="mt-3 flex flex-col">
-              {CITIES.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  onClick={() => {
-                    setSearch(c);
-                    setLocationMode("all");
-                    setLocationOpen(false);
-                  }}
-                  className="border-b border-brand-purple/5 py-2 text-left text-sm text-brand-purple/80 last:border-0"
-                >
-                  {c}
-                </button>
-              ))}
+            <div className="flex flex-col">
+              {EVENT_REGION_FILTER_OPTIONS.map((r) => {
+                const active = r.value === region;
+                return (
+                  <button
+                    key={r.value || "all"}
+                    type="button"
+                    onClick={() => {
+                      setRegion(r.value);
+                      setLocationMode("all");
+                      setLocationOpen(false);
+                    }}
+                    className={`border-b border-brand-purple/5 py-2 text-left text-sm last:border-0 ${
+                      active ? "font-bold text-brand-purple" : "text-brand-purple/80"
+                    }`}
+                  >
+                    {r.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
@@ -505,20 +490,6 @@ function PinIcon() {
   return (
     <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0" fill="currentColor" aria-hidden>
       <path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7zm0 9.5A2.5 2.5 0 1012 6a2.5 2.5 0 000 5.5z" />
-    </svg>
-  );
-}
-
-function SearchIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-purple/60"
-      fill="none"
-      aria-hidden
-    >
-      <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
-      <path d="M21 21l-4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
 }

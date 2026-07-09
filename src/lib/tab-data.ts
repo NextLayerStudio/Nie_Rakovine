@@ -122,6 +122,7 @@ export async function loadCalendarTabData(
       select: {
         ...feedEventSelect,
         category: true,
+        region: true,
         latitude: true,
         longitude: true,
         capacity: true,
@@ -153,6 +154,7 @@ export async function loadCalendarTabData(
       location: e.location,
       coverUrl: e.coverUrl,
       category: e.category,
+      region: e.region,
       startsAt: e.startsAt.toISOString(),
       endsAt: e.endsAt ? e.endsAt.toISOString() : null,
       profileName: e.profile?.displayName ?? "ONKO KLUB",
