@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { EventCategory } from "@prisma/client";
-import { Navbar } from "@/components/landing/Navbar";
-import { Footer } from "@/components/landing/Footer";
+import { PublicEventsHeader } from "@/components/landing/PublicEventsHeader";
+import { PublicEventsFooter } from "@/components/landing/PublicEventsFooter";
 import { PublicEventsExplorer } from "@/components/landing/PublicEventsExplorer";
 import type { PublicEvent } from "@/components/landing/EventCard";
 import { prisma } from "@/lib/prisma";
@@ -62,7 +62,7 @@ export default async function PodujatiaPage({
 
   return (
     <main className="min-h-screen bg-[#FFF3F9] font-sans">
-      <Navbar />
+      <PublicEventsHeader />
 
       <section className="pt-24 pb-5">
         <div className="mx-auto max-w-6xl px-5 md:px-8">
@@ -102,7 +102,7 @@ export default async function PodujatiaPage({
         </div>
       </section>
 
-      <Footer />
+      <PublicEventsFooter />
     </main>
   );
 }

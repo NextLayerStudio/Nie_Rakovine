@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import { Navbar } from "@/components/landing/Navbar";
-import { Footer } from "@/components/landing/Footer";
+import { PublicEventsHeader } from "@/components/landing/PublicEventsHeader";
+import { PublicEventsFooter } from "@/components/landing/PublicEventsFooter";
 import { TicketQrCode } from "@/components/landing/TicketQrCode";
 import { prisma } from "@/lib/prisma";
 import { getAppUrlFromEnv } from "@/lib/email/brand";
@@ -45,7 +45,7 @@ export default async function TicketPage({
 
   return (
     <main className="min-h-screen bg-[#FFF3F9] font-sans">
-      <Navbar />
+      <PublicEventsHeader />
 
       <section className="pt-28 pb-20">
         <div className="mx-auto max-w-md px-5">
@@ -102,7 +102,7 @@ export default async function TicketPage({
         </div>
       </section>
 
-      <Footer />
+      <PublicEventsFooter />
     </main>
   );
 }
