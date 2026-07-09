@@ -7,55 +7,40 @@ import { jwtVerify } from "jose";
 
 const COOKIE_NAME = "onko_session";
 const STAFF_BYPASS_COOKIE = "onko_staff_access";
-const STAFF_BYPASS_QUERY = "staff";
+const ACCESS_GATE_PATH = "/access";
 
 const PROTECTED_PREFIXES = ["/home", "/menu", "/profile", "/admin"];
 
 // The rest of the app (landing page, login/register, admin, ...) isn't
-// finished yet. Only the events flow is public; everything else requires
-// the staff bypass cookie (set via ?staff=<STAFF_BYPASS_TOKEN>).
-const PUBLIC_EVENT_PREFIXES = ["/podujatia", "/api/tickets"];
+// finished yet. Only the events flow — and the password gate itself — is
+// public; everything else requires the staff bypass cookie, which is set
+// by entering STAFF_PASSWORD on /access (see lib/actions/staff-access.ts).
+const PUBLIC_ROUTE_PREFIXES = ["/podujatia", "/api/tickets", ACCESS_GATE_PATH];
 
 function isProtected(pathname: string): boolean {
   return PROTECTED_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }
 
-function isPublicEventRoute(pathname: string): boolean {
-  return PUBLIC_EVENT_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+function isPublicRoute(pathname: string): boolean {
+  return PUBLIC_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  if (isPublicEventRoute(pathname)) {
+  if (isPublicRoute(pathname)) {
     return NextResponse.next();
   }
 
   const bypassSecret = process.env.STAFF_BYPASS_TOKEN?.trim();
-  const queryToken = req.nextUrl.searchParams.get(STAFF_BYPASS_QUERY);
-
-  // Visiting with ?staff=<secret> mints the bypass cookie for 90 days.
-  if (bypassSecret && queryToken === bypassSecret) {
-    const url = req.nextUrl.clone();
-    url.searchParams.delete(STAFF_BYPASS_QUERY);
-    const res = NextResponse.redirect(url);
-    res.cookies.set(STAFF_BYPASS_COOKIE, bypassSecret, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 90,
-      path: "/",
-    });
-    return res;
-  }
-
   const hasStaffBypass =
     !!bypassSecret && req.cookies.get(STAFF_BYPASS_COOKIE)?.value === bypassSecret;
 
   if (!hasStaffBypass) {
     const url = req.nextUrl.clone();
-    url.pathname = "/podujatia";
-    url.search = "";
+    const next = pathname + url.search;
+    url.pathname = ACCESS_GATE_PATH;
+    url.search = next && next !== "/" ? `?next=${encodeURIComponent(next)}` : "";
     return NextResponse.redirect(url);
   }
 

@@ -15,7 +15,8 @@ export type AuthRateLimitScope =
   | "login"
   | "register"
   | "reset-password"
-  | "event-ticket";
+  | "event-ticket"
+  | "site-access";
 
 type RateLimitResult =
   | { allowed: true }
