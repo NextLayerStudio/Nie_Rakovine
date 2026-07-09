@@ -122,26 +122,46 @@ export function CalendarView({
     );
   }
 
-  // Apply location, search and category filters (but not the selected day).
-  const baseFiltered = useMemo(() => {
+  // Category + search always apply; "near me" is applied separately below
+  // so it can fall back instead of leaving the screen blank.
+  const categoryAndSearchFiltered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return eventsState.filter((e) => {
       if (category && e.category !== category) return false;
-
       if (q) {
         const hay = `${e.title} ${e.location ?? ""}`.toLowerCase();
         if (!hay.includes(q)) return false;
-      } else if (locationMode === "near" && hasLocation) {
-        // Near me = within radius OR already registered. Events without a
-        // map pin have no distance to judge, so they stay visible instead
-        // of being silently hidden (same rule as "no cancer type = general").
-        const near =
-          e.distanceKm === null || e.distanceKm <= radiusKm;
-        if (!near && !e.registered) return false;
       }
       return true;
     });
-  }, [eventsState, category, search, locationMode, hasLocation, radiusKm]);
+  }, [eventsState, category, search]);
+
+  const nearFiltered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (q || locationMode !== "near" || !hasLocation) {
+      return categoryAndSearchFiltered;
+    }
+    return categoryAndSearchFiltered.filter((e) => {
+      const near = e.distanceKm === null || e.distanceKm <= radiusKm;
+      return near || e.registered;
+    });
+  }, [categoryAndSearchFiltered, search, locationMode, hasLocation, radiusKm]);
+
+  // If "near me" would leave nothing to show, fall back to the full list
+  // instead of a silently empty screen — matches the public /podujatia page,
+  // which has no distance filter at all.
+  const baseFiltered = useMemo(() => {
+    return nearFiltered.length > 0
+      ? nearFiltered
+      : categoryAndSearchFiltered;
+  }, [nearFiltered, categoryAndSearchFiltered]);
+
+  const usedNearFallback =
+    categoryAndSearchFiltered.length > 0 &&
+    nearFiltered.length === 0 &&
+    locationMode === "near" &&
+    hasLocation &&
+    !search.trim();
 
   // Days in the visible month that have events, flagged by registration.
   const eventDays = useMemo(() => {
@@ -380,8 +400,13 @@ export function CalendarView({
         <h3 className="px-1 text-xs font-bold uppercase tracking-wide text-brand-purple/70">
           {selectedDay
             ? `Aktivity ${selectedDay.getDate()}. ${MONTHS[selectedDay.getMonth()]}`
-            : "Pripravované aktivity"}
+            : "Nadchádzajúce aktivity"}
         </h3>
+        {usedNearFallback && (
+          <p className="px-1 -mt-2 text-[11px] text-brand-purple/50">
+            Žiadne aktivity vo vašom okolí — zobrazujeme všetky.
+          </p>
+        )}
 
         {listEvents.length === 0 ? (
           <div className="card p-5 text-center text-xs text-brand-purple/70">
