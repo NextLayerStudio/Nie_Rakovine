@@ -16,9 +16,11 @@ export default async function EventPage({
   const user = await requireUser();
   const event = await prisma.event.findUnique({
     where: { id },
-    include: { _count: { select: { registrations: true } } },
+    include: { _count: { select: { registrations: true, tickets: true } } },
   });
   if (!event || !event.published) notFound();
+
+  const registrationCount = event._count.registrations + event._count.tickets;
 
   const myRegistration = await prisma.eventRegistration.findUnique({
     where: { eventId_userId: { eventId: id, userId: user.id } },
@@ -76,7 +78,7 @@ export default async function EventPage({
             {event.capacity ? (
               <li className="flex items-center gap-2">
                 <Dot /> Voľných miest:{" "}
-                {Math.max(event.capacity - event._count.registrations, 0)} /{" "}
+                {Math.max(event.capacity - registrationCount, 0)} /{" "}
                 {event.capacity}
               </li>
             ) : null}

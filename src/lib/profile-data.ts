@@ -19,7 +19,7 @@ export async function loadProfileCalendarData(userId: string, fullName: string) 
           endsAt: true,
           location: true,
           capacity: true,
-          _count: { select: { registrations: true } },
+          _count: { select: { registrations: true, tickets: true } },
         },
       },
     },
@@ -37,7 +37,7 @@ export async function loadProfileCalendarData(userId: string, fullName: string) 
       startsAt: r.event.startsAt.toISOString(),
       endsAt: r.event.endsAt?.toISOString() ?? null,
       location: r.event.location,
-      registrationCount: r.event._count.registrations,
+      registrationCount: r.event._count.registrations + r.event._count.tickets,
       capacity: r.event.capacity,
     })),
   };

@@ -214,7 +214,7 @@ export async function registerForEventAction(
       endsAt: true,
       location: true,
       capacity: true,
-      _count: { select: { registrations: true } },
+      _count: { select: { registrations: true, tickets: true } },
     },
   });
   if (!event) return { ok: false, message: "Podujatie neexistuje." };
@@ -227,7 +227,7 @@ export async function registerForEventAction(
   if (
     !alreadyRegistered &&
     event.capacity !== null &&
-    event._count.registrations >= event.capacity
+    event._count.registrations + event._count.tickets >= event.capacity
   ) {
     return { ok: false, message: "Podujatie je plne obsadené." };
   }
