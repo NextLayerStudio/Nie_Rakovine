@@ -7,6 +7,7 @@ import { ExpandableText } from "@/components/landing/ExpandableText";
 const LEKTORI = [
   {
     img: "/images/lektori/malejcikova.jpg",
+    imgPosition: "object-top",
     meno: "MUDr. Miroslava Malejčíková",
     titul: "Národný onkologický ústav",
     bio: "Vyhľadávaná klinická onkologička v prsníkovej ambulancii s mimoriadne empatickým a trpezlivým prístupom k pacientom. Vo svojej praxi kladie dôraz na hlboký rešpekt k človeku, vďaka čomu pacienti pod jej starostlivosťou nachádzajú nielen špičkovú odbornú liečbu, ale aj ľudskú oporu a dôstojné sprevádzanie počas celej liečby.",
@@ -14,6 +15,7 @@ const LEKTORI = [
   },
   {
     img: "/images/lektori/micuchova.jpg",
+    imgPosition: "object-top",
     meno: "Zuzana Mičúchová",
     titul: "kvalifikovaná lektorka Relational Mindfulness Training",
     bio: "Osobná skúsenosť s onkologickou diagnózou ju naučila, ako dýchanie, meditácia a bdelé vedomie môžu pomôcť pri zvládaní psychických aj fyzických nárokov ochorenia. Ako hovorí, techniky mindfulness jej zmenili život a umožnili znovuobjaviť vnútorný pokoj, ktorý dnes pomáha nájsť ďalším pacientom s podobným príbehom.",
@@ -21,9 +23,26 @@ const LEKTORI = [
   },
   {
     img: "/images/lektori/hlavacova.jpg",
+    imgPosition: "object-center",
     meno: "Petra Hlaváčová",
     titul: "lektorka jogy so zameraním na onkologických pacientov",
     bio: "S empatiou a pochopením vedie jemnú onko-jogu zameranú na mobilitu a posilnenie dýchacieho systému. Jej cvičenia prinášajú pocit ľahkosti, pokoja a obnovy energie, ktorú je možné následne jednoducho zaradiť do každodenného života.",
+    accent: "#FDA4C7",
+  },
+  {
+    img: "/images/lektori/jessica.jpg",
+    imgPosition: "object-top",
+    meno: "Jessica",
+    titul: "",
+    bio: "",
+    accent: "#6F2380",
+  },
+  {
+    img: "/images/lektori/viktor-oliva.jpg",
+    imgPosition: "object-top",
+    meno: "Viktor Oliva",
+    titul: "",
+    bio: "",
     accent: "#FDA4C7",
   },
 ];
@@ -53,7 +72,7 @@ export function LektoriSection() {
         </ExpandableText>
       </motion.div>
 
-      <div className="flex flex-col gap-6 md:grid md:grid-cols-3">
+      <div className="no-scrollbar flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2 -mx-5 px-5 md:-mx-8 md:px-8">
         {LEKTORI.map((l, i) => (
           <motion.div
             key={l.meno}
@@ -61,28 +80,32 @@ export function LektoriSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-30px" }}
             transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="flex gap-4 items-start md:flex-col"
+            className="w-[220px] md:w-[280px] shrink-0 snap-start"
           >
-            <div className="relative w-20 h-20 rounded-2xl shrink-0 overflow-hidden md:w-full md:h-48 md:rounded-3xl">
+            <div className="relative w-full h-56 md:h-64 rounded-3xl shrink-0 overflow-hidden">
               <Image
                 src={l.img}
                 alt={l.meno}
                 fill
-                sizes="(min-width: 768px) 33vw, 80px"
-                className="object-cover"
+                sizes="280px"
+                className={`object-cover ${l.imgPosition}`}
               />
             </div>
-            <div className="flex-1 min-w-0">
+            <div className="mt-3">
               <p className="font-black text-[#6F2380] text-[16px] leading-tight">{l.meno}</p>
-              <p
-                className="text-xs font-bold mb-2 mt-0.5"
-                style={{ color: l.accent }}
-              >
-                {l.titul}
-              </p>
-              <ExpandableText maxHeight={70} fadeColor="#FFF3F9">
-                <p className="text-[#6F2380]/55 text-[12px] leading-relaxed">{l.bio}</p>
-              </ExpandableText>
+              {l.titul && (
+                <p
+                  className="text-xs font-bold mb-2 mt-0.5"
+                  style={{ color: l.accent }}
+                >
+                  {l.titul}
+                </p>
+              )}
+              {l.bio && (
+                <ExpandableText maxHeight={70} fadeColor="#FFF3F9">
+                  <p className="text-[#6F2380]/55 text-[12px] leading-relaxed">{l.bio}</p>
+                </ExpandableText>
+              )}
             </div>
           </motion.div>
         ))}
