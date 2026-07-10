@@ -1,26 +1,26 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { User } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const LEKTORI = [
   {
-    img: "[IMG-07]",
+    img: "/images/lektori/malejcikova.jpg",
     meno: "MUDr. Miroslava Malejčíková",
     titul: "Národný onkologický ústav",
     bio: "Vyhľadávaná klinická onkologička v prsníkovej ambulancii s mimoriadne empatickým a trpezlivým prístupom k pacientom. Vo svojej praxi kladie dôraz na hlboký rešpekt k človeku, vďaka čomu pacienti pod jej starostlivosťou nachádzajú nielen špičkovú odbornú liečbu, ale aj ľudskú oporu a dôstojné sprevádzanie počas celej liečby.",
     accent: "#6F2380",
   },
   {
-    img: "[IMG-08]",
+    img: "/images/lektori/micuchova.jpg",
     meno: "Zuzana Mičúchová",
     titul: "kvalifikovaná lektorka Relational Mindfulness Training",
     bio: "Osobná skúsenosť s onkologickou diagnózou ju naučila, ako dýchanie, meditácia a bdelé vedomie môžu pomôcť pri zvládaní psychických aj fyzických nárokov ochorenia. Ako hovorí, techniky mindfulness jej zmenili život a umožnili znovuobjaviť vnútorný pokoj, ktorý dnes pomáha nájsť ďalším pacientom s podobným príbehom.",
     accent: "#FDA4C7",
   },
   {
-    img: "[IMG-06]",
+    img: "/images/lektori/hlavacova.jpg",
     meno: "Petra Hlaváčová",
     titul: "lektorka jogy so zameraním na onkologických pacientov",
     bio: "S empatiou a pochopením vedie jemnú onko-jogu zameranú na mobilitu a posilnenie dýchacieho systému. Jej cvičenia prinášajú pocit ľahkosti, pokoja a obnovy energie, ktorú je možné následne jednoducho zaradiť do každodenného života.",
@@ -63,13 +63,14 @@ export function LektoriSection() {
             transition={{ duration: 0.5, delay: i * 0.1 }}
             className="flex gap-4 items-start md:flex-col"
           >
-            {/* Foto placeholder */}
-            <div
-              className="w-20 h-20 rounded-2xl shrink-0 flex items-center justify-center md:w-full md:h-48 md:rounded-3xl"
-              style={{ backgroundColor: l.accent + "25" }}
-            >
-              {/* [IMG] profilová fotka */}
-              <User size={28} style={{ color: l.accent + "80" }} />
+            <div className="relative w-20 h-20 rounded-2xl shrink-0 overflow-hidden md:w-full md:h-48 md:rounded-3xl">
+              <Image
+                src={l.img}
+                alt={l.meno}
+                fill
+                sizes="(min-width: 768px) 33vw, 80px"
+                className="object-cover"
+              />
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-black text-[#6F2380] text-[16px] leading-tight">{l.meno}</p>
