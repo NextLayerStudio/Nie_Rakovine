@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { QrCode, ScanLine, Tag, BadgeCheck } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
@@ -28,13 +29,15 @@ const HOW_STEPS = [
   },
 ];
 
-const PARTNERS: { name: string; category: string }[] = [
-  { name: "Partner 1", category: "Lekáreň" },
-  { name: "Partner 2", category: "Výživa" },
-  { name: "Partner 3", category: "Wellness" },
-  { name: "Partner 4", category: "Oblečenie" },
-  { name: "Partner 5", category: "Online obchod" },
-  { name: "Partner 6", category: "Zdravotné pomôcky" },
+const PARTNERS: { name: string; logo: string }[] = [
+  { name: "Nadácia SPP", logo: "/images/partneri/nadacia-spp.jpg" },
+  { name: "Raj Zdravia", logo: "/images/partneri/raj-zdravia.png" },
+  { name: "Meditesty", logo: "/images/partneri/meditesty-tmave-pozadie.png" },
+  { name: "Národný onkologický ústav", logo: "/images/partneri/narodny-onkologicky-ustav.jpg" },
+  { name: "Hyundai", logo: "/images/partneri/hyundai.jpg" },
+  { name: "Všeobecná zdravotná poisťovňa", logo: "/images/partneri/vszp.jpeg" },
+  { name: "Visibility", logo: "/images/partneri/visibility.png" },
+  { name: "Bratislava - Staré Mesto", logo: "/images/partneri/bratislava-stare-mesto.png" },
 ];
 
 export function OKkartaSection() {
@@ -168,8 +171,7 @@ export function OKkartaSection() {
           </ExpandableText>
         </div>
 
-        {/* [IMG] Logá partnerov — sem prídu skutočné logá */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {PARTNERS.map((p, i) => (
             <motion.div
               key={p.name}
@@ -177,16 +179,18 @@ export function OKkartaSection() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: "-20px" }}
               transition={{ duration: 0.35, delay: i * 0.06 }}
-              className="aspect-square rounded-2xl flex flex-col items-center justify-center gap-1.5"
-              style={{ backgroundColor: i % 2 === 0 ? "#FDA4C7" + "15" : "#6F2380" + "0D", border: `1.5px solid ${i % 2 === 0 ? "#FDA4C7" : "#6F2380"}22` }}
+              className="aspect-square rounded-2xl bg-white flex items-center justify-center p-3"
+              style={{ border: `1.5px solid ${i % 2 === 0 ? "#FDA4C7" : "#6F2380"}22` }}
             >
-              {/* [LOGO] */}
-              <div
-                className="w-8 h-8 rounded-full"
-                style={{ backgroundColor: i % 2 === 0 ? "#FDA4C7" + "40" : "#6F2380" + "25" }}
-              />
-              <p className="text-[#6F2380] text-[10px] font-black text-center leading-tight px-1">{p.name}</p>
-              <p className="text-[#6F2380]/35 text-[9px] text-center">{p.category}</p>
+              <div className="relative w-full h-full">
+                <Image
+                  src={p.logo}
+                  alt={p.name}
+                  fill
+                  sizes="140px"
+                  className="object-contain"
+                />
+              </div>
             </motion.div>
           ))}
         </div>
