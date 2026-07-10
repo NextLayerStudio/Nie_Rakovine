@@ -171,7 +171,7 @@ export function OKkartaSection() {
           </ExpandableText>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {PARTNERS.map((p, i) => (
             <motion.div
               key={p.name}
@@ -179,7 +179,8 @@ export function OKkartaSection() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: "-20px" }}
               transition={{ duration: 0.35, delay: i * 0.06 }}
-              className="aspect-square flex items-center justify-center p-2"
+              className="aspect-square rounded-2xl bg-white flex items-center justify-center p-3"
+              style={{ border: `1.5px solid ${i % 2 === 0 ? "#FDA4C7" : "#6F2380"}22` }}
             >
               <div className="relative w-full h-full">
                 <Image
