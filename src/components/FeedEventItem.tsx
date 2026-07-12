@@ -107,7 +107,7 @@ export function FeedEventItem({
           className="relative block w-full text-left"
         >
           <div
-            className="aspect-[4/3] max-h-[220px] w-full bg-cover bg-center"
+            className="aspect-[16/9] w-full bg-cover bg-center"
             style={cover}
           />
           <span className="absolute bottom-3 left-4">

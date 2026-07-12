@@ -46,6 +46,7 @@ export function AdminImageField({
   defaultValue = "",
   shape = "circle",
   previewAspect = "square",
+  mandatoryAspect = false,
 }: {
   name: string;
   uploadName?: string;
@@ -54,6 +55,8 @@ export function AdminImageField({
   defaultValue?: string;
   shape?: "circle" | "rounded";
   previewAspect?: "square" | "video";
+  /** When set with previewAspect="video", forces every upload through a mandatory 16:9 crop (no orientation choice). */
+  mandatoryAspect?: boolean;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [url, setUrl] = useState(defaultValue);
@@ -76,11 +79,13 @@ export function AdminImageField({
   const cropAspect =
     previewAspect !== "video"
       ? 1
-      : cropOrientation === "landscape"
+      : mandatoryAspect
         ? 16 / 9
-        : cropOrientation === "portrait"
-          ? 9 / 16
-          : (naturalAspect ?? 16 / 9);
+        : cropOrientation === "landscape"
+          ? 16 / 9
+          : cropOrientation === "portrait"
+            ? 9 / 16
+            : (naturalAspect ?? 16 / 9);
   const cropShape: "round" | "rect" = shape === "circle" ? "round" : "rect";
 
   const previewClass =
@@ -112,7 +117,7 @@ export function AdminImageField({
     setLocalFileSrc(objectUrl);
     setCropOrigName(file.name);
 
-    if (previewAspect === "video") {
+    if (previewAspect === "video" && !mandatoryAspect) {
       // Cover photos behave exactly like gallery uploads by default — no forced
       // crop. The file already sits in the real <input>, so nothing else to do
       // besides updating the preview; cropping is available on demand below.
@@ -121,9 +126,9 @@ export function AdminImageField({
       return;
     }
 
-    // Square/circle avatars still go straight into the crop tool (consistent round crop).
+    // Square/circle avatars, and covers with a mandatory aspect, go straight into the crop tool.
     setCropSrc(objectUrl);
-    setCropOrientation("original");
+    setCropOrientation(mandatoryAspect ? "landscape" : "original");
     setCrop({ x: 0, y: 0 });
     setZoom(1);
   }
@@ -131,7 +136,7 @@ export function AdminImageField({
   function openCropTool() {
     if (!localFileSrc) return;
     setCropSrc(localFileSrc);
-    setCropOrientation("original");
+    setCropOrientation(mandatoryAspect ? "landscape" : "original");
     setCrop({ x: 0, y: 0 });
     setZoom(1);
   }
@@ -254,7 +259,7 @@ export function AdminImageField({
 
           {/* Controls */}
           <div className="flex flex-col items-center gap-4 border-t border-brand-purple/10 bg-white px-6 py-5">
-            {previewAspect === "video" && (
+            {previewAspect === "video" && !mandatoryAspect && (
               <div className="flex gap-2">
                 <button
                   type="button"

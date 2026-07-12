@@ -122,7 +122,7 @@ export function EventDetailModal({
           </h2>
 
           <div
-            className="mx-auto mt-5 aspect-square w-full max-w-[280px] rounded-2xl bg-cover bg-center"
+            className="mx-auto mt-5 aspect-[16/9] w-full max-w-[280px] rounded-2xl bg-cover bg-center"
             style={cover}
           />
 

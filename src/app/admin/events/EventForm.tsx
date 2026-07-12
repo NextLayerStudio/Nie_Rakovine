@@ -157,10 +157,11 @@ export function EventForm({
           name="coverUrl"
           uploadName="coverFile"
           label="Titulný obrázok"
-          hint="Náhľad podujatia. Nahrajte z počítača alebo vložte odkaz."
+          hint="Náhľad podujatia. Fotka sa vždy oreže na pomer 16:9, aby sedela rovnako všade v appke aj na webe."
           defaultValue={event?.coverUrl ?? ""}
           shape="rounded"
           previewAspect="video"
+          mandatoryAspect
         />
       </fieldset>
 

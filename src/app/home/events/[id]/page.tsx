@@ -54,7 +54,7 @@ export default async function EventPage({
       <FeedHeaderWrapper />
 
       <article className="mx-4 overflow-hidden rounded-3xl bg-white shadow-card">
-        <div className="aspect-[5/3] w-full" style={cover} />
+        <div className="aspect-[16/9] w-full" style={cover} />
         <div className="-mt-12 rounded-t-3xl bg-brand-pink p-5 text-white">
           <h2 className="text-center text-xl font-extrabold tracking-wide">
             {event.title}
