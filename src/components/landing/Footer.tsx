@@ -81,6 +81,7 @@ export function Footer() {
           <div className="flex gap-4 flex-wrap">
             <Link href="/ochrana-sukromia" className="underline hover:text-white/60 transition-colors">Ochrana súkromia</Link>
             <Link href="/podmienky" className="underline hover:text-white/60 transition-colors">Podmienky</Link>
+            <Link href="/cookies" className="underline hover:text-white/60 transition-colors">Cookies</Link>
             <Link href="/kontakt" className="underline hover:text-white/60 transition-colors">Kontakt</Link>
           </div>
         </div>

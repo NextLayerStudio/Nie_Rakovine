@@ -403,6 +403,42 @@ export function SettingsForms({
         subtitle="Dokumenty a zásady"
       >
         <Link
+          href="/menu/nastavenia/podmienky"
+          className="flex items-center gap-3 rounded-2xl px-1 py-2 transition hover:bg-brand-purple/5"
+        >
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand-purple/10 text-brand-purple">
+            <DocIcon />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-sm font-semibold text-brand-purple">
+              Obchodné podmienky
+            </span>
+            <span className="text-xs text-brand-purple/60">
+              Pravidlá členstva a používania platformy
+            </span>
+          </span>
+          <ChevronRight />
+        </Link>
+
+        <Link
+          href="/menu/nastavenia/ochrana-sukromia"
+          className="flex items-center gap-3 rounded-2xl px-1 py-2 transition hover:bg-brand-purple/5"
+        >
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand-purple/10 text-brand-purple">
+            <DocIcon />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-sm font-semibold text-brand-purple">
+              Ochrana súkromia
+            </span>
+            <span className="text-xs text-brand-purple/60">
+              Ako spracúvame vaše osobné údaje
+            </span>
+          </span>
+          <ChevronRight />
+        </Link>
+
+        <Link
           href="/cookies?from=/menu/nastavenia"
           className="flex items-center gap-3 rounded-2xl px-1 py-2 transition hover:bg-brand-purple/5"
         >
