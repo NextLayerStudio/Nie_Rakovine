@@ -77,7 +77,37 @@ export function TermsContent({ className }: { className?: string }) {
       </p>
 
       <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-        5. Členstvo a prístup k platforme
+        5. Reklamačný poriadok
+      </h3>
+      <p className="mb-4">
+        Ak sa domnievate, že vám bola členská platforma poskytnutá vadne, že
+        vám bola omylom strhnutá platba, alebo že vám nebol umožnený prístup
+        k funkciám zodpovedajúcim vášmu predplatnému, môžete si túto
+        skutočnosť reklamovať.
+      </p>
+      <p className="mb-4">
+        <strong>Ako reklamáciu podať:</strong> e-mailom na{" "}
+        <a href="mailto:office@nierakovine.sk" className="font-semibold underline underline-offset-2">
+          office@nierakovine.sk
+        </a>{" "}
+        s uvedením mena, e-mailu použitého pri registrácii, dátumu platby a
+        popisu problému. Keďže ide o digitálnu službu bez fyzického tovaru,
+        reklamácia sa nezasiela poštou ani na žiadnu fyzickú adresu.
+      </p>
+      <p className="mb-4">
+        <strong>Vybavenie:</strong> reklamáciu vybavíme najneskôr do 30 dní
+        od jej doručenia a o výsledku vás budeme informovať e-mailom na
+        adresu, z ktorej bola reklamácia podaná.
+      </p>
+      <p className="mb-4">
+        <strong>Kedy reklamáciu nemožno uplatniť:</strong> ak bol dôvod na
+        strane používateľa (napr. zabudnuté prihlasovacie údaje, vlastné
+        zrušenie členstva pred koncom už zaplateného obdobia, alebo
+        porušenie týchto Podmienok vedúce k zrušeniu členstva).
+      </p>
+
+      <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
+        6. Členstvo a prístup k platforme
       </h3>
       <p className="mb-4">
         Členstvo na platforme OnkoKlub je určené pre onkologických pacientov,
@@ -87,7 +117,7 @@ export function TermsContent({ className }: { className?: string }) {
       </p>
 
       <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-        6. Pravidlá správania vo fóre a komunite
+        7. Pravidlá správania vo fóre a komunite
       </h3>
       <p className="mb-4">
         Všetci členovia sú povinní správať sa k ostatným s úctou a rešpektom.
@@ -103,7 +133,7 @@ export function TermsContent({ className }: { className?: string }) {
       </p>
 
       <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-        7. Ochrana osobných údajov
+        8. Ochrana osobných údajov
       </h3>
       <p className="mb-4">
         Spracovanie osobných údajov sa riadi Zásadami ochrany osobných
@@ -118,7 +148,7 @@ export function TermsContent({ className }: { className?: string }) {
       </p>
 
       <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-        8. Zodpovednosť a obmedzenie záväzkov
+        9. Zodpovednosť a obmedzenie záväzkov
       </h3>
       <p className="mb-4">
         Obsah dostupný na platforme OnkoKlub (videá, články, prednášky)
@@ -132,7 +162,7 @@ export function TermsContent({ className }: { className?: string }) {
       </p>
 
       <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-        9. Alternatívne riešenie sporov
+        10. Alternatívne riešenie sporov
       </h3>
       <p className="mb-4">
         Ak nie ste spokojní s vybavením vašej reklamácie alebo sťažnosti,
@@ -142,7 +172,7 @@ export function TermsContent({ className }: { className?: string }) {
       </p>
 
       <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-        10. Zmeny podmienok
+        11. Zmeny podmienok
       </h3>
       <p className="mb-4">
         Prevádzkovateľ si vyhradzuje právo tieto Podmienky kedykoľvek

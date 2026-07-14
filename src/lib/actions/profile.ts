@@ -22,9 +22,32 @@ function getStringArray(formData: FormData, name: string): string[] {
 }
 
 // --------------------------------------------------------------------
-// Subscription
+// Subscription — step 1: pick a plan, move to checkout (no charge yet)
 // --------------------------------------------------------------------
-export async function chooseSubscriptionAction(
+export async function selectSubscriptionPlanAction(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  await requireUser();
+  const plan = String(formData.get("plan") ?? "");
+  if (plan !== "MONTHLY" && plan !== "YEARLY") {
+    return { ok: false, message: "Vyberte balíček." };
+  }
+
+  return {
+    ok: true,
+    redirectTo: `/register/subscription/checkout?plan=${plan}`,
+  };
+}
+
+// --------------------------------------------------------------------
+// Subscription — step 2: confirm the recurring-payment consent and
+// activate. GoPay is not wired up yet (no merchant contract/credentials),
+// so this still just activates the membership directly — but the consent
+// checkbox + disclosed parameters here are the real, permanent UI, ready
+// for the actual charge call once GoPay is connected.
+// --------------------------------------------------------------------
+export async function confirmSubscriptionPaymentAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
@@ -32,6 +55,13 @@ export async function chooseSubscriptionAction(
   const plan = String(formData.get("plan") ?? "") as SubscriptionPlan;
   if (plan !== "MONTHLY" && plan !== "YEARLY") {
     return { ok: false, message: "Vyberte balíček." };
+  }
+  if (formData.get("consent") !== "on") {
+    return {
+      ok: false,
+      message:
+        "Na pokračovanie potrebujeme váš súhlas so založením opakovanej platby.",
+    };
   }
 
   const now = new Date();

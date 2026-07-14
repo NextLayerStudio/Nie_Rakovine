@@ -1,9 +1,11 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import type { SubscriptionPlan } from "@prisma/client";
 import {
-  chooseSubscriptionAction,
+  selectSubscriptionPlanAction,
   type ActionState,
 } from "@/lib/actions/profile";
 import { FormError, SubmitButton } from "@/components/FormError";
@@ -12,6 +14,17 @@ import { cn } from "@/lib/utils";
 import { useFormRedirect } from "@/hooks/useFormRedirect";
 
 const INITIAL: ActionState = { ok: false };
+
+// GoPay vyžaduje viditeľné logá akceptovaných platobných metód priamo na
+// stránke s cenou/produktom — nielen na samotnej platobnej obrazovke.
+const PAYMENT_LOGOS = [
+  { src: "/images/platby/gopay.png", alt: "GoPay", w: 100, h: 35 },
+  { src: "/images/platby/visa.png", alt: "VISA", w: 67, h: 23 },
+  { src: "/images/platby/verified-by-visa.png", alt: "Verified by VISA", w: 67, h: 30 },
+  { src: "/images/platby/mastercard.png", alt: "Mastercard", w: 67, h: 43 },
+  { src: "/images/platby/mastercard-securecode.png", alt: "Mastercard SecureCode", w: 86, h: 40 },
+  { src: "/images/platby/maestro.png", alt: "Maestro", w: 67, h: 43 },
+];
 
 export function SubscriptionForm({
   currentPlan,
@@ -22,7 +35,7 @@ export function SubscriptionForm({
     currentPlan === "MONTHLY" || currentPlan === "YEARLY" ? currentPlan : null,
   );
   const [state, formAction] = useActionState(
-    chooseSubscriptionAction,
+    selectSubscriptionPlanAction,
     INITIAL,
   );
   useFormRedirect(state);
@@ -75,6 +88,32 @@ export function SubscriptionForm({
             </button>
           );
         })}
+
+        {/* Platobné metódy — vyžaduje GoPay na stránke s cenou/produktom */}
+        <div className="rounded-2xl border border-brand-purple/10 bg-white p-4">
+          <p className="mb-3 text-xs font-bold uppercase tracking-wide text-brand-purple/50">
+            Platba prebehne bezpečne cez
+          </p>
+          <div className="flex flex-wrap items-center gap-4">
+            {PAYMENT_LOGOS.map((logo) => (
+              <Image
+                key={logo.alt}
+                src={logo.src}
+                alt={logo.alt}
+                width={logo.w}
+                height={logo.h}
+                className="h-6 w-auto object-contain"
+              />
+            ))}
+          </div>
+          <p className="mt-3 text-xs leading-relaxed text-brand-purple/60">
+            Ceny sú konečné vrátane DPH, bez skrytých poplatkov. Prečítajte si{" "}
+            <Link href="/podmienky" target="_blank" className="font-semibold underline">
+              Obchodné podmienky
+            </Link>
+            .
+          </p>
+        </div>
       </div>
 
       <FormError message={state.message} />
