@@ -111,7 +111,7 @@ export default function CennikPage() {
       {/* Cenové karty */}
       <section className="pb-14">
         <div className="max-w-7xl mx-auto px-5 md:px-8">
-          <div className="grid grid-cols-2 gap-4 items-stretch lg:grid-cols-4 lg:gap-5">
+          <div className="grid grid-cols-1 gap-4 items-stretch sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
 
             {/* Free */}
             <div className="flex flex-col rounded-[1.8rem] border border-[#FDA4C7]/20 bg-[#FFF8FB] px-6 py-7">
