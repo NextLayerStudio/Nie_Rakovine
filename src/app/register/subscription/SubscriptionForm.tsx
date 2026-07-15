@@ -26,13 +26,17 @@ const PAYMENT_LOGOS = [
   { src: "/images/platby/maestro.png", alt: "Maestro", w: 67, h: 43 },
 ];
 
+type PlanId = (typeof SUBSCRIPTION_PLANS)[number]["id"];
+
 export function SubscriptionForm({
   currentPlan,
 }: {
   currentPlan: SubscriptionPlan;
 }) {
-  const [selected, setSelected] = useState<"YEARLY" | "MONTHLY" | null>(
-    currentPlan === "MONTHLY" || currentPlan === "YEARLY" ? currentPlan : null,
+  const [selected, setSelected] = useState<PlanId | null>(
+    SUBSCRIPTION_PLANS.some((p) => p.id === currentPlan)
+      ? (currentPlan as PlanId)
+      : null,
   );
   const [state, formAction] = useActionState(
     selectSubscriptionPlanAction,
@@ -45,49 +49,46 @@ export function SubscriptionForm({
       <input type="hidden" name="plan" value={selected ?? ""} />
 
       <div className="mt-3 flex flex-col gap-4 px-5 pb-4">
-        {SUBSCRIPTION_PLANS.map((plan) => {
-          const active = selected === plan.id;
-          const isPrimary = plan.accent === "primary";
-          return (
-            <button
-              type="button"
-              key={plan.id}
-              onClick={() => setSelected(plan.id)}
-              className={cn(
-                "w-full rounded-[28px] border-2 p-5 text-white shadow-soft transition",
-                isPrimary
-                  ? "border-brand-purple/30 bg-brand-purple"
-                  : "border-brand-pink/30 bg-brand-pink",
-                active &&
-                  (isPrimary
-                    ? "ring-4 ring-brand-purple/25"
-                    : "ring-4 ring-brand-pink/30"),
-              )}
-            >
-              <h2 className="text-left text-2xl font-extrabold leading-tight tracking-tight">
-                {plan.name}
-              </h2>
-              <p className="mt-2 text-left text-sm leading-relaxed text-white/95">
-                {plan.description}
-              </p>
-              <p className="mt-4 text-left text-lg font-extrabold leading-none">
-                {plan.price}
-              </p>
-              <p className="mt-2 text-left text-sm text-white/90">
-                Zrušte kedykoľvek
-              </p>
-
-              <span
-                className={cn(
-                  "mt-4 flex w-full items-center justify-center rounded-pill bg-white py-3 text-sm font-bold",
-                  isPrimary ? "text-brand-purple" : "text-brand-pink",
-                )}
-              >
-                {active ? "Zvolené" : "Vybrať balíček"}
-              </span>
-            </button>
-          );
-        })}
+        <ul className="flex flex-col divide-y divide-brand-purple/10 overflow-hidden rounded-2xl border border-brand-purple/10 bg-white">
+          {SUBSCRIPTION_PLANS.map((plan) => {
+            const active = selected === plan.id;
+            return (
+              <li key={plan.id}>
+                <label className="flex cursor-pointer items-center gap-3 px-4 py-4">
+                  <input
+                    type="radio"
+                    name="plan-visual"
+                    value={plan.id}
+                    checked={active}
+                    onChange={() => setSelected(plan.id)}
+                    className="sr-only"
+                  />
+                  <span
+                    className={cn(
+                      "grid h-5 w-5 shrink-0 place-items-center rounded-full border-2 transition",
+                      active ? "border-brand-pink" : "border-brand-purple/25",
+                    )}
+                  >
+                    {active && (
+                      <span className="h-2.5 w-2.5 rounded-full bg-brand-pink" />
+                    )}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-base font-semibold text-brand-purple">
+                      {plan.name}
+                    </span>
+                    <span className="block text-xs leading-snug text-brand-purple/55">
+                      {plan.description}
+                    </span>
+                  </span>
+                  <span className="shrink-0 text-sm font-bold text-brand-purple">
+                    {plan.price}
+                  </span>
+                </label>
+              </li>
+            );
+          })}
+        </ul>
 
         {/* Platobné metódy — vyžaduje GoPay na stránke s cenou/produktom */}
         <div className="rounded-2xl border border-brand-purple/10 bg-white p-4">

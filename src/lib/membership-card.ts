@@ -44,7 +44,10 @@ export function membershipSubscriptionInfo(user: {
 }): MembershipSubscriptionInfo {
   const now = new Date();
   const hasPlan =
-    user.subscriptionPlan === "MONTHLY" || user.subscriptionPlan === "YEARLY";
+    user.subscriptionPlan === "FREE" ||
+    user.subscriptionPlan === "MONTHLY" ||
+    user.subscriptionPlan === "YEARLY" ||
+    user.subscriptionPlan === "SUPPORTER";
   const notExpired = !user.subscriptionEnd || user.subscriptionEnd > now;
   const active =
     user.subscriptionStatus === "ACTIVE" && hasPlan && notExpired;
@@ -61,18 +64,16 @@ export function membershipSubscriptionInfo(user: {
     };
   }
 
-  if (user.subscriptionPlan === "MONTHLY") {
-    return {
-      active: true,
-      label: "Mesačné predplatné · aktívne",
-      planLabel,
-      statusLabel,
-    };
-  }
+  const labels: Record<string, string> = {
+    FREE: "Free členstvo · aktívne",
+    MONTHLY: "Mesačné predplatné · aktívne",
+    YEARLY: "Ročné predplatné · aktívne",
+    SUPPORTER: "Podporujúce členstvo · aktívne",
+  };
 
   return {
     active: true,
-    label: "Ročné predplatné · aktívne",
+    label: labels[user.subscriptionPlan] ?? "Predplatné · aktívne",
     planLabel,
     statusLabel,
   };

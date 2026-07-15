@@ -42,8 +42,15 @@ enum CancerType {
 
 enum SubscriptionPlan {
   NONE
+  FREE
   MONTHLY
   YEARLY
+  SUPPORTER
+}
+
+enum DiscountCodeType {
+  PERCENT
+  FIXED
 }
 
 enum SubscriptionStatus {
@@ -139,6 +146,10 @@ model UserProfile {
   region         String?
   latitude       Float?
   longitude      Float?
+
+  // Whether this member is a cancer patient — null means not yet answered
+  // (legacy accounts, or accounts created before this step existed).
+  isPatient      Boolean?
 
   // Diagnosis info
   diagnosis      String?
@@ -653,4 +664,19 @@ model MoodEntry {
   createdAt DateTime @default(now())
 
   @@index([userId, createdAt(sort: Desc)])
+}
+
+// ---------------- Membership discount codes (checkout coupons) ----------------
+// Distinct from DiscountPartner/DiscountOffer above, which are cosmetic
+// partner-business discount cards shown in the app — this model powers
+// real price reductions during subscription checkout.
+model MembershipDiscountCode {
+  id        String           @id @default(cuid())
+  code      String           @unique
+  type      DiscountCodeType
+  amount    Int              // PERCENT: 1-100, FIXED: euros
+  active    Boolean          @default(true)
+  usedCount Int              @default(0)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 }

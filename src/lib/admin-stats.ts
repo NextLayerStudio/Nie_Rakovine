@@ -18,7 +18,7 @@ export type StatsPeriod = "all" | "7d" | "30d" | "90d";
 export type StatsFilters = {
   cancerType?: CancerType | null;
   region?: string | null;
-  plan?: "MONTHLY" | "YEARLY" | "NONE" | null;
+  plan?: "FREE" | "MONTHLY" | "YEARLY" | "SUPPORTER" | "NONE" | null;
   period?: StatsPeriod;
 };
 
@@ -207,13 +207,17 @@ export async function getRegistrationStats(
 
   // Subscription plans
   const planLabels: Record<string, string> = {
+    FREE: "Free",
     YEARLY: "Ročné",
     MONTHLY: "Mesačné",
+    SUPPORTER: "Podporujúce",
     NONE: "Žiadne",
   };
   const planCounts = new Map<string, number>([
+    ["Free", 0],
     ["Ročné", 0],
     ["Mesačné", 0],
+    ["Podporujúce", 0],
     ["Žiadne", 0],
   ]);
   for (const u of users) {

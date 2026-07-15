@@ -13,6 +13,7 @@ const NAV = [
   { href: "/admin/profiles", label: "Profily" },
   { href: "/admin/forums", label: "Fóra" },
   { href: "/admin/users", label: "Používatelia" },
+  { href: "/admin/discount-codes", label: "Zľavové kódy" },
 ];
 
 export default async function AdminLayout({

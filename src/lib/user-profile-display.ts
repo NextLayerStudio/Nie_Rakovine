@@ -19,10 +19,14 @@ export function splitProfileExpectations(expectations: string[]) {
 
 export function subscriptionPlanLabel(plan: string): string {
   switch (plan) {
+    case "FREE":
+      return "Free";
     case "MONTHLY":
       return "Mesačné";
     case "YEARLY":
       return "Ročné";
+    case "SUPPORTER":
+      return "Podporujúce";
     default:
       return "Žiadne";
   }

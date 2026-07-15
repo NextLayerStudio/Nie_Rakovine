@@ -5,14 +5,17 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   confirmSubscriptionPaymentAction,
+  previewDiscountCodeAction,
   type ActionState,
+  type DiscountPreviewState,
 } from "@/lib/actions/profile";
 import { FormError, SubmitButton } from "@/components/FormError";
-import { SUBSCRIPTION_PLANS } from "@/lib/constants";
+import { SUBSCRIPTION_PLANS, SUPPORTER_MIN_AMOUNT_EUR } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { useFormRedirect } from "@/hooks/useFormRedirect";
 
 const INITIAL: ActionState = { ok: false };
+const DISCOUNT_INITIAL: DiscountPreviewState = { ok: false };
 
 const PAYMENT_LOGOS = [
   { src: "/images/platby/gopay.png", alt: "GoPay", w: 100, h: 35 },
@@ -27,9 +30,14 @@ type Plan = (typeof SUBSCRIPTION_PLANS)[number];
 
 export function CheckoutForm({ plan }: { plan: Plan }) {
   const [consent, setConsent] = useState(false);
+  const [amount, setAmount] = useState(plan.priceEuro);
   const [state, formAction] = useActionState(
     confirmSubscriptionPaymentAction,
     INITIAL,
+  );
+  const [discountState, discountAction] = useActionState(
+    previewDiscountCodeAction,
+    DISCOUNT_INITIAL,
   );
   useFormRedirect(state);
 
@@ -46,9 +54,9 @@ export function CheckoutForm({ plan }: { plan: Plan }) {
         <div
           className={cn(
             "w-full rounded-[24px] border-2 p-5 text-white shadow-soft",
-            plan.accent === "primary"
-              ? "border-brand-purple/30 bg-brand-purple"
-              : "border-brand-pink/30 bg-brand-pink",
+            plan.accent === "secondary"
+              ? "border-brand-pink/30 bg-brand-pink"
+              : "border-brand-purple/30 bg-brand-purple",
           )}
         >
           <p className="text-xs font-bold uppercase tracking-wide text-white/70">
@@ -57,11 +65,57 @@ export function CheckoutForm({ plan }: { plan: Plan }) {
           <h2 className="mt-1 text-xl font-extrabold leading-tight">
             {plan.name}
           </h2>
-          <p className="mt-3 text-2xl font-black leading-none">{plan.price}</p>
-          <p className="mt-2 text-sm text-white/85">
-            Opakovaná platba, {frekvencia}. Zrušte kedykoľvek v nastaveniach účtu.
-          </p>
+
+          {plan.customAmount ? (
+            <>
+              <p className="mt-3 text-2xl font-black leading-none">{amount} €</p>
+              <p className="mt-2 text-sm text-white/85">
+                Jednorazová platba. Získate prístup na 1 rok, rovnako ako pri
+                ročnom členstve.
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="mt-3 flex items-baseline gap-2 text-2xl font-black leading-none">
+                {discountState.ok && discountState.finalPriceEuro !== undefined
+                  ? `${discountState.finalPriceEuro} €`
+                  : plan.price}
+                {discountState.ok && discountState.finalPriceEuro !== undefined && (
+                  <span className="text-sm font-semibold text-white/60 line-through">
+                    {plan.price}
+                  </span>
+                )}
+              </p>
+              <p className="mt-2 text-sm text-white/85">
+                Opakovaná platba, {frekvencia}. Zrušte kedykoľvek v nastaveniach účtu.
+              </p>
+            </>
+          )}
         </div>
+
+        {plan.customAmount && (
+          <div className="rounded-2xl border border-brand-purple/10 bg-white p-4">
+            <label
+              className="mb-2 block text-xs font-bold uppercase tracking-wide text-brand-purple/50"
+              htmlFor="amount"
+            >
+              Suma podpory (min. {SUPPORTER_MIN_AMOUNT_EUR} €)
+            </label>
+            <div className="flex items-center gap-2">
+              <input
+                id="amount"
+                name="amount"
+                type="number"
+                min={SUPPORTER_MIN_AMOUNT_EUR}
+                step={1}
+                value={amount}
+                onChange={(e) => setAmount(Number(e.target.value) || 0)}
+                className="input-light flex-1 text-base"
+              />
+              <span className="text-lg font-bold text-brand-purple">€</span>
+            </div>
+          </div>
+        )}
 
         {/* Platobné metódy */}
         <div className="rounded-2xl border border-brand-purple/10 bg-white p-4">
@@ -82,27 +136,72 @@ export function CheckoutForm({ plan }: { plan: Plan }) {
           </div>
         </div>
 
-        {/* Parametre opakovanej platby — oddelené od obchodných podmienok */}
-        <div className="rounded-2xl border border-brand-purple/10 bg-white p-4 text-sm text-brand-purple/80">
-          <p className="mb-2 text-xs font-bold uppercase tracking-wide text-brand-purple/50">
-            Parametre opakovanej platby
-          </p>
-          <dl className="flex flex-col gap-1.5">
-            <Row label="Dôvod platby" value="Členský poplatok ONKO KLUB" />
-            <Row label="Suma" value={`${plan.price} (fixná)`} />
-            <Row label="Frekvencia strhávania" value={frekvencia} />
-            <Row label="Dátum strhávania" value={perioda} />
-            <Row
-              label="Zmena alebo zrušenie"
-              value="Kedykoľvek v nastaveniach účtu, alebo e-mailom na office@nierakovine.sk"
-            />
-          </dl>
-          <p className="mt-3 text-xs leading-relaxed text-brand-purple/60">
+        {!plan.customAmount && (
+          <>
+            {/* Zľavový kód */}
+            <div className="rounded-2xl border border-brand-purple/10 bg-white p-4">
+              <p className="mb-3 text-xs font-bold uppercase tracking-wide text-brand-purple/50">
+                Zľavový kód (voliteľné)
+              </p>
+              <div className="flex items-center gap-2">
+                <input
+                  name="discountCode"
+                  placeholder="napr. PARTNER2026"
+                  className="input-light flex-1 text-sm uppercase"
+                />
+                <button
+                  type="submit"
+                  formAction={discountAction}
+                  className="shrink-0 rounded-pill bg-brand-purple/10 px-4 py-2.5 text-xs font-bold text-brand-purple transition hover:bg-brand-purple/15"
+                >
+                  Uplatniť
+                </button>
+              </div>
+              {discountState.message && (
+                <p
+                  className={cn(
+                    "mt-2 text-xs",
+                    discountState.ok ? "text-emerald-600" : "text-red-500",
+                  )}
+                >
+                  {discountState.ok
+                    ? `Kód uplatnený: ${discountState.discountLabel}`
+                    : discountState.message}
+                </p>
+              )}
+            </div>
+
+            {/* Parametre opakovanej platby — oddelené od obchodných podmienok */}
+            <div className="rounded-2xl border border-brand-purple/10 bg-white p-4 text-sm text-brand-purple/80">
+              <p className="mb-2 text-xs font-bold uppercase tracking-wide text-brand-purple/50">
+                Parametre opakovanej platby
+              </p>
+              <dl className="flex flex-col gap-1.5">
+                <Row label="Dôvod platby" value="Členský poplatok ONKO KLUB" />
+                <Row label="Suma" value={`${plan.price} (fixná)`} />
+                <Row label="Frekvencia strhávania" value={frekvencia} />
+                <Row label="Dátum strhávania" value={perioda} />
+                <Row
+                  label="Zmena alebo zrušenie"
+                  value="Kedykoľvek v nastaveniach účtu, alebo e-mailom na office@nierakovine.sk"
+                />
+              </dl>
+              <p className="mt-3 text-xs leading-relaxed text-brand-purple/60">
+                Údaje vašej platobnej karty spracúva výhradne platobná brána GoPay
+                podľa bezpečnostného štandardu PCI DSS Level 1. NIE RAKOVINE, o. z.
+                k nim nemá prístup a neukladá ich.
+              </p>
+            </div>
+          </>
+        )}
+
+        {plan.customAmount && (
+          <p className="rounded-2xl border border-brand-purple/10 bg-white p-4 text-xs leading-relaxed text-brand-purple/60">
             Údaje vašej platobnej karty spracúva výhradne platobná brána GoPay
             podľa bezpečnostného štandardu PCI DSS Level 1. NIE RAKOVINE, o. z.
             k nim nemá prístup a neukladá ich.
           </p>
-        </div>
+        )}
 
         <label className="flex cursor-pointer items-start gap-3 px-1">
           <input
@@ -123,9 +222,18 @@ export function CheckoutForm({ plan }: { plan: Plan }) {
             {consent && <CheckIcon />}
           </span>
           <span className="text-xs leading-snug text-brand-purple/80">
-            Súhlasím so založením a uvedenými parametrami opakovanej platby a
-            s uložením platobných údajov na strane platobnej brány GoPay. Prečítal/a
-            som si{" "}
+            {plan.customAmount ? (
+              <>
+                Súhlasím so zaplatením uvedenej sumy a s uložením platobných
+                údajov na strane platobnej brány GoPay.
+              </>
+            ) : (
+              <>
+                Súhlasím so založením a uvedenými parametrami opakovanej platby a
+                s uložením platobných údajov na strane platobnej brány GoPay.
+              </>
+            )}{" "}
+            Prečítal/a som si{" "}
             <Link href="/podmienky" target="_blank" className="font-semibold underline">
               Obchodné podmienky
             </Link>
@@ -142,7 +250,7 @@ export function CheckoutForm({ plan }: { plan: Plan }) {
           className="mx-auto flex w-full max-w-[280px] items-center justify-center gap-2 rounded-pill bg-brand-pink px-6 py-3 text-sm font-semibold text-white shadow-soft transition hover:brightness-105 disabled:opacity-40"
           pendingLabel="Spracúvam platbu…"
         >
-          Zaplatiť cez GoPay
+          {plan.customAmount ? "Podporiť cez GoPay" : "Zaplatiť cez GoPay"}
         </SubmitButton>
       </div>
     </form>

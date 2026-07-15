@@ -83,14 +83,18 @@ export const HEAR_ABOUT_US_OPTIONS = [
   "iné",
 ];
 
+export const SUPPORTER_MIN_AMOUNT_EUR = 50;
+
 export const SUBSCRIPTION_PLANS = [
   {
-    id: "YEARLY" as const,
-    name: "Ročné predplatné",
-    description:
-      "Zaplatíte raz ročne. Predplatné môžete kedykoľvek zrušiť.",
-    price: "50€ / rok",
-    accent: "secondary" as const,
+    id: "FREE" as const,
+    name: "Free členstvo",
+    description: "Základný prístup do ONKO KLUBU, úplne zadarmo.",
+    price: "0 €",
+    priceEuro: 0,
+    recurring: false,
+    customAmount: false,
+    accent: "neutral" as const,
   },
   {
     id: "MONTHLY" as const,
@@ -98,6 +102,31 @@ export const SUBSCRIPTION_PLANS = [
     description:
       "Zaplatíte raz mesačne. Predplatné môžete kedykoľvek zrušiť.",
     price: "5€ / mesiac",
+    priceEuro: 5,
+    recurring: true,
+    customAmount: false,
     accent: "primary" as const,
+  },
+  {
+    id: "YEARLY" as const,
+    name: "Ročné predplatné",
+    description:
+      "Zaplatíte raz ročne. Predplatné môžete kedykoľvek zrušiť.",
+    price: "50€ / rok",
+    priceEuro: 50,
+    recurring: true,
+    customAmount: false,
+    accent: "secondary" as const,
+  },
+  {
+    id: "SUPPORTER" as const,
+    name: "Podporujúce členstvo",
+    description:
+      "Nie ste pacient, ale chcete podporiť komunitu. Jednorazová platba, prístup na rok.",
+    price: `od ${SUPPORTER_MIN_AMOUNT_EUR} €`,
+    priceEuro: SUPPORTER_MIN_AMOUNT_EUR,
+    recurring: false,
+    customAmount: true,
+    accent: "supporter" as const,
   },
 ];

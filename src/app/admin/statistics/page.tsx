@@ -34,7 +34,11 @@ export default async function AdminStatisticsPage({
       ? (sp.cancerType as CancerType)
       : null;
   const plan =
-    sp.plan === "MONTHLY" || sp.plan === "YEARLY" || sp.plan === "NONE"
+    sp.plan === "FREE" ||
+    sp.plan === "MONTHLY" ||
+    sp.plan === "YEARLY" ||
+    sp.plan === "SUPPORTER" ||
+    sp.plan === "NONE"
       ? sp.plan
       : null;
   const period: StatsPeriod = (["7d", "30d", "90d"] as const).includes(
@@ -116,8 +120,10 @@ export default async function AdminStatisticsPage({
         <Filter label="Predplatné">
           <select name="plan" defaultValue={plan ?? ""} className="stats-select">
             <option value="">Všetky</option>
+            <option value="FREE">Free</option>
             <option value="YEARLY">Ročné</option>
             <option value="MONTHLY">Mesačné</option>
+            <option value="SUPPORTER">Podporujúce</option>
             <option value="NONE">Žiadne</option>
           </select>
         </Filter>

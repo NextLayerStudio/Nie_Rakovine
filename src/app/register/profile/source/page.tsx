@@ -14,7 +14,7 @@ export default async function SourceStep() {
         <TopBar
           backHref="/register/profile/expectations"
           title="Registračný formulár"
-          step={{ current: 5, total: 5 }}
+          step={{ current: 6, total: 6 }}
           className="[&_h1]:text-lg [&_h1]:font-bold"
         />
 

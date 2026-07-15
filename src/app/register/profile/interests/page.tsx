@@ -14,7 +14,7 @@ export default async function InterestsStep() {
         <TopBar
           backHref="/register/profile/diagnosis"
           title="Registračný formulár"
-          step={{ current: 3, total: 5 }}
+          step={{ current: 4, total: 6 }}
           className="[&_h1]:text-lg [&_h1]:font-bold"
         />
 

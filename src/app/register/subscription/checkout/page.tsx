@@ -15,7 +15,11 @@ export default async function SubscriptionCheckoutPage({
   await requireUser();
   const { plan } = await searchParams;
 
-  const selected = SUBSCRIPTION_PLANS.find((p) => p.id === plan);
+  // FREE has no payment step — selectSubscriptionPlanAction activates it
+  // directly and never sends anyone here.
+  const selected = SUBSCRIPTION_PLANS.find(
+    (p) => p.id === plan && p.id !== "FREE",
+  );
   if (!selected) {
     redirect("/register/subscription");
   }

@@ -14,7 +14,7 @@ export default async function ExpectationsStep() {
         <TopBar
           backHref="/register/profile/interests"
           title="Registračný formulár"
-          step={{ current: 4, total: 5 }}
+          step={{ current: 5, total: 6 }}
           className="[&_h1]:text-lg [&_h1]:font-bold"
         />
 
