@@ -33,7 +33,7 @@ const PARTNERS: { name: string; logo: string }[] = [
   { name: "Nadácia SPP", logo: "/images/partneri/nadacia-spp.jpg" },
   { name: "Raj Zdravia", logo: "/images/partneri/raj-zdravia.png" },
   { name: "Meditesty", logo: "/images/partneri/meditesty-tmave-pozadie.png" },
-  { name: "Národný onkologický ústav", logo: "/images/partneri/narodny-onkologicky-ustav.jpg" },
+  { name: "Dulcia.sk", logo: "/images/partneri/dulcia.png" },
   { name: "Hyundai", logo: "/images/partneri/hyundai.jpg" },
   { name: "Všeobecná zdravotná poisťovňa", logo: "/images/partneri/vszp.jpeg" },
   { name: "Visibility", logo: "/images/partneri/visibility.png" },
