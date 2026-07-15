@@ -93,7 +93,7 @@ export default function CennikPage() {
 
           {/* Platobné karty a 3D-Secure — GoPay vyžaduje viditeľné logá na prvej
               stránke s cenami. */}
-          <div className="flex flex-wrap items-center gap-5 mt-6 bg-white rounded-2xl p-4 border border-[#FDA4C7]/15 md:max-w-2xl">
+          <div className="flex flex-wrap items-center justify-between gap-4 mt-6 md:max-w-2xl">
             {PAYMENT_LOGOS.map((logo) => (
               <Image
                 key={logo.alt}

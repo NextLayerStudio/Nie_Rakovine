@@ -93,7 +93,7 @@ export function CennikSection() {
           })}
         </div>
 
-        <div className="flex flex-wrap items-center gap-5 mt-3 bg-white rounded-2xl p-4 border border-[#FDA4C7]/15">
+        <div className="flex flex-wrap items-center justify-between gap-4 mt-3">
           {PAYMENT_LOGOS.map((logo) => (
             <Image
               key={logo.alt}

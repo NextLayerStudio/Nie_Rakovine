@@ -140,11 +140,11 @@ export function CheckoutForm({
         )}
 
         {/* Platobné metódy */}
-        <div className="rounded-2xl border border-brand-purple/10 bg-white p-4">
+        <div className="px-1">
           <p className="mb-3 text-xs font-bold uppercase tracking-wide text-brand-purple/50">
             Platba prebehne cez
           </p>
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
             {PAYMENT_LOGOS.map((logo) => (
               <Image
                 key={logo.alt}
