@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Minus } from "lucide-react";
+import { Plus, Minus, ChevronDown } from "lucide-react";
 
 const OTAZKY = [
   {
@@ -41,6 +41,7 @@ const OTAZKY = [
 
 export function FAQSection() {
   const [open, setOpen] = useState<number | null>(null);
+  const [listOpen, setListOpen] = useState(false);
 
   return (
     <section className="pb-20"><div className="max-w-6xl mx-auto px-5 md:px-8">
@@ -54,11 +55,33 @@ export function FAQSection() {
         <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
           FAQ
         </p>
-        <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1]">
+        <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-5">
           Máte otázky?
         </h2>
+        <button
+          type="button"
+          onClick={() => setListOpen((v) => !v)}
+          className="flex items-center gap-2 rounded-full bg-[#FDA4C7]/15 px-5 py-2.5 text-sm font-black text-[#FDA4C7]"
+        >
+          {listOpen ? "Skryť časté otázky" : "Zobraziť časté otázky"}
+          <ChevronDown
+            size={16}
+            className="transition-transform duration-200"
+            style={{ transform: listOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+          />
+        </button>
       </motion.div>
 
+      <AnimatePresence initial={false}>
+        {listOpen && (
+          <motion.div
+            key="faq-list"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.35, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
       <div className="flex flex-col divide-y divide-[#FDA4C7]/15">
         {OTAZKY.map((item, i) => (
           <motion.div
@@ -103,6 +126,9 @@ export function FAQSection() {
           </motion.div>
         ))}
       </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       </div>
     </section>
   );
