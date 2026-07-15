@@ -20,7 +20,7 @@ export function SupporterCard({ className }: { className?: string }) {
     <div
       className={
         className ??
-        "flex flex-col rounded-[1.8rem] border border-[#E8B463]/30 bg-[#FFF7E8] px-6 py-7"
+        "flex flex-col rounded-[1.8rem] border border-[#FDA4C7]/25 bg-[#FFE3ED] px-6 py-7"
       }
     >
       <p className="mb-1 text-xs font-bold uppercase tracking-wider text-[#6F2380]/50">
@@ -36,7 +36,7 @@ export function SupporterCard({ className }: { className?: string }) {
           type="button"
           onClick={() => setAmount((a) => clamp(a - STEP))}
           aria-label="Znížiť sumu"
-          className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#E8B463]/20 text-lg font-black text-[#B9812F] transition hover:bg-[#E8B463]/30"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#FDA4C7]/20 text-lg font-black text-[#FDA4C7] transition hover:bg-[#FDA4C7]/30"
         >
           −
         </button>
@@ -53,7 +53,7 @@ export function SupporterCard({ className }: { className?: string }) {
               setAmount((a) => clamp(a));
               setEditing(false);
             }}
-            className="w-24 border-b-2 border-[#E8B463] bg-transparent text-center text-[2.2rem] font-black leading-none text-[#6F2380] outline-none"
+            className="w-24 border-b-2 border-[#FDA4C7] bg-transparent text-center text-[2.2rem] font-black leading-none text-[#6F2380] outline-none"
           />
         ) : (
           <button
@@ -70,7 +70,7 @@ export function SupporterCard({ className }: { className?: string }) {
           type="button"
           onClick={() => setAmount((a) => clamp(a + STEP))}
           aria-label="Zvýšiť sumu"
-          className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#E8B463]/20 text-lg font-black text-[#B9812F] transition hover:bg-[#E8B463]/30"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#FDA4C7]/20 text-lg font-black text-[#FDA4C7] transition hover:bg-[#FDA4C7]/30"
         >
           +
         </button>
@@ -83,7 +83,7 @@ export function SupporterCard({ className }: { className?: string }) {
         step={STEP}
         value={Math.min(amount, MAX_SLIDER)}
         onChange={(e) => setAmount(clamp(Number(e.target.value)))}
-        className="mb-2 w-full accent-[#E8B463]"
+        className="mb-2 w-full accent-[#FDA4C7]"
         aria-label="Suma podpory"
       />
       <p className="mb-6 text-center text-[11px] text-[#6F2380]/40">
@@ -92,7 +92,7 @@ export function SupporterCard({ className }: { className?: string }) {
 
       <Link
         href={`/welcome?plan=supporter&amount=${amount}`}
-        className="mt-auto block w-full rounded-full bg-[#E8B463] py-3.5 text-center text-sm font-black text-white transition-transform active:scale-[0.98]"
+        className="mt-auto block w-full rounded-full bg-[#FDA4C7] py-3.5 text-center text-sm font-black text-white transition-transform active:scale-[0.98]"
       >
         Darovať {amount} €
       </Link>

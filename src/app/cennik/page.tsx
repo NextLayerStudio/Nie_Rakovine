@@ -114,7 +114,7 @@ export default function CennikPage() {
           <div className="grid grid-cols-2 gap-4 items-stretch lg:grid-cols-4 lg:gap-5">
 
             {/* Free */}
-            <div className="flex flex-col rounded-[1.8rem] border border-[#6F2380]/15 bg-[#F5F0FA] px-6 py-7">
+            <div className="flex flex-col rounded-[1.8rem] border border-[#FDA4C7]/20 bg-[#FFF8FB] px-6 py-7">
               <p className="text-[#6F2380]/50 text-xs font-bold uppercase tracking-wider mb-1">Free členstvo</p>
               <div className="flex items-end gap-2 mb-1">
                 <span className="text-[#6F2380] font-black text-[2.4rem] leading-none">0 €</span>
@@ -122,14 +122,14 @@ export default function CennikPage() {
               <p className="text-[#6F2380]/40 text-sm mb-6">Základný prístup, úplne zadarmo</p>
               <Link
                 href="/register?plan=free"
-                className="mt-auto block w-full rounded-full border-2 border-[#6F2380] text-[#6F2380] font-black text-sm py-3.5 text-center"
+                className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center"
               >
                 Registrovať zadarmo
               </Link>
             </div>
 
             {/* Mesačné */}
-            <div className="flex flex-col rounded-[1.8rem] bg-[#FFF4F8] border border-[#FDA4C7]/25 px-6 py-7">
+            <div className="flex flex-col rounded-[1.8rem] bg-[#FFEDF4] border border-[#FDA4C7]/25 px-6 py-7">
               <p className="text-[#6F2380]/50 text-xs font-bold uppercase tracking-wider mb-1">Mesačné členstvo</p>
               <div className="flex items-end gap-2 mb-1">
                 <span className="text-[#6F2380] font-black text-[2.4rem] leading-none">5 €</span>
@@ -146,11 +146,11 @@ export default function CennikPage() {
                   </div>
                 ))}
               </div>
-              <Link href="/register?plan=monthly" className="mt-auto block w-full rounded-full border-2 border-[#FDA4C7] text-[#FDA4C7] font-black text-sm py-3.5 text-center">
+              <Link href="/register?plan=monthly" className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center">
                 Začať mesačne — 5 €
               </Link>
               <div className="mt-5">
-                <ExpandableText maxHeight={48} fadeColor="#FFFFFF">
+                <ExpandableText maxHeight={48} fadeColor="#FFEDF4">
                   <p className="text-[#6F2380]/40 text-[11px] leading-relaxed">
                     {REINVESTICIA_TEXT}
                   </p>
@@ -159,27 +159,26 @@ export default function CennikPage() {
             </div>
 
             {/* Ročné — odporúčané */}
-            <div className="flex flex-col rounded-[1.8rem] bg-[#6F2380] px-6 py-7 relative overflow-hidden">
-              <div className="absolute -top-10 -right-10 w-36 h-36 rounded-full bg-white/5" />
+            <div className="flex flex-col rounded-[1.8rem] bg-[#FFD9E8] border border-[#FDA4C7]/30 px-6 py-7 relative overflow-hidden">
               <div className="flex items-center gap-2 mb-5">
-                <div className="flex items-center gap-1.5 bg-[#FDA4C7] rounded-full px-3 py-1">
-                  <Star size={11} className="text-white fill-white" />
-                  <span className="text-white text-[11px] font-black">Najobľúbenejšie</span>
+                <div className="flex items-center gap-1.5 bg-white rounded-full px-3 py-1">
+                  <Star size={11} className="text-[#FDA4C7] fill-[#FDA4C7]" />
+                  <span className="text-[#FDA4C7] text-[11px] font-black">Najobľúbenejšie</span>
                 </div>
               </div>
-              <p className="text-white/55 text-xs font-bold uppercase tracking-wider mb-1">Ročné členstvo</p>
+              <p className="text-[#6F2380]/50 text-xs font-bold uppercase tracking-wider mb-1">Ročné členstvo</p>
               <div className="flex items-end gap-2 mb-1">
-                <span className="text-white font-black text-[2.4rem] leading-none">50 €</span>
-                <span className="text-white/50 text-sm mb-1">/ rok</span>
+                <span className="text-[#6F2380] font-black text-[2.4rem] leading-none">50 €</span>
+                <span className="text-[#6F2380]/40 text-sm mb-1">/ rok</span>
               </div>
-              <p className="text-[#FDA4C7] text-sm font-bold mb-6">Ušetríš 10 € oproti mesačnému plánu</p>
+              <p className="text-[#6F2380] text-sm font-bold mb-6">Ušetríš 10 € oproti mesačnému plánu</p>
               <div className="flex flex-col gap-2.5 mb-7">
                 {[...BENEFITY, "Jednorazová platba bez nutnosti aktualizácie počas roka"].map((b) => (
                   <div key={b} className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded-full bg-[#FDA4C7] flex items-center justify-center shrink-0">
-                      <Check size={11} className="text-white" strokeWidth={3} />
+                    <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0">
+                      <Check size={11} className="text-[#FDA4C7]" strokeWidth={3} />
                     </div>
-                    <span className="text-white/80 text-[13px]">{b}</span>
+                    <span className="text-[#6F2380]/70 text-[13px]">{b}</span>
                   </div>
                 ))}
               </div>
@@ -187,8 +186,8 @@ export default function CennikPage() {
                 Začať ročne — 50 €
               </Link>
               <div className="mt-5">
-                <ExpandableText maxHeight={48} fadeColor="#6F2380">
-                  <p className="text-white/45 text-[11px] leading-relaxed">
+                <ExpandableText maxHeight={48} fadeColor="#FFD9E8">
+                  <p className="text-[#6F2380]/50 text-[11px] leading-relaxed">
                     {REINVESTICIA_TEXT}
                   </p>
                 </ExpandableText>
