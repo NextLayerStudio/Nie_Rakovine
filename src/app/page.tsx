@@ -4,10 +4,8 @@ import { NieSiVTomSamSection } from "@/components/landing/NieSiVTomSamSection";
 import { FeatureSection } from "@/components/landing/FeatureSection";
 import { VideokniznicaSection } from "@/components/landing/VideokniznicaSection";
 import { EventsSection } from "@/components/landing/EventsSection";
-import { OnkorumkySection } from "@/components/landing/OnkorumkySection";
 import { LektoriSection } from "@/components/landing/LektoriSection";
 import { OKkartaSection } from "@/components/landing/OKkartaSection";
-import { SocialnyKompassSection } from "@/components/landing/SocialnyKompassSection";
 import { CennikSection } from "@/components/landing/CennikSection";
 import { TestimonialsSection } from "@/components/landing/TestimonialsSection";
 import { FAQSection } from "@/components/landing/FAQSection";
@@ -23,10 +21,8 @@ export default function LandingPage() {
       <FeatureSection />
       <VideokniznicaSection />
       <EventsSection />
-      <OnkorumkySection />
       <LektoriSection />
       <OKkartaSection />
-      <SocialnyKompassSection />
       <CennikSection />
       <TestimonialsSection />
       <FAQSection />
