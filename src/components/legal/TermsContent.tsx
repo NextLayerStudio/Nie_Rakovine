@@ -45,9 +45,24 @@ export function TermsContent({ className }: { className?: string }) {
         Aktuálne ceny členstva sú uvedené v cenníku na platforme, vždy
         v eurách (EUR) a ako konečná cena vrátane DPH, bez akýchkoľvek
         skrytých poplatkov. Platba prebieha online, bezpečne, cez platobnú
-        bránu GoPay platobnou kartou. Mesačné členstvo sa automaticky
-        obnovuje raz mesačne, ročné členstvo raz ročne — vždy vo výške
-        aktuálnej ceny platnej v čase obnovenia.
+        bránu GoPay platobnou kartou.
+      </p>
+      <p className="mb-4">
+        Platforma ponúka štyri formy členstva: <strong>Free</strong> členstvo
+        je bezplatné a nevyžaduje žiadnu platbu; <strong>Mesačné</strong> a{" "}
+        <strong>Ročné</strong> členstvo sú opakované platby — mesačné sa
+        automaticky obnovuje raz mesačne, ročné raz ročne, vždy vo výške
+        aktuálnej ceny platnej v čase obnovenia; <strong>Podporujúce</strong>{" "}
+        členstvo je jednorazová dobrovoľná platba vo výške, ktorú si používateľ
+        sám zvolí (minimálne 50 €) — nejde o opakovanú platbu, po jej úhrade
+        získate prístup na 1 rok, rovnako ako pri Ročnom členstve, a je určené
+        predovšetkým pre osoby, ktoré nie sú onkologickými pacientmi, ale
+        chcú komunitu finančne podporiť.
+      </p>
+      <p className="mb-4">
+        Pri platbe je možné uplatniť zľavový kód poskytnutý Prevádzkovateľom
+        (napríklad partnerom alebo spolupracovníkom), ktorý zníži cenu
+        o percento alebo o pevnú sumu podľa podmienok konkrétneho kódu.
       </p>
 
       <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
@@ -62,7 +77,8 @@ export function TermsContent({ className }: { className?: string }) {
         14-dňovej lehoty na odstúpenie od zmluvy. V súlade s § 7 ods. 6
         písm. l) zákona č. 102/2014 Z. z. o ochrane spotrebiteľa pri predaji
         na diaľku tým strácate právo na odstúpenie od zmluvy vo vzťahu
-        k už poskytnutému obsahu.
+        k už poskytnutému obsahu. Rovnaké pravidlo platí aj pri jednorazovej
+        platbe v rámci Podporujúceho členstva.
       </p>
       <p className="mb-4">
         Napriek tomu môžete členstvo <strong>kedykoľvek zrušiť</strong> priamo
@@ -111,9 +127,12 @@ export function TermsContent({ className }: { className?: string }) {
       </h3>
       <p className="mb-4">
         Členstvo na platforme OnkoKlub je určené pre onkologických pacientov,
-        ich rodinných príslušníkov a osoby blízke tejto téme. Prevádzkovateľ
-        si vyhradzuje právo odmietnuť registráciu alebo zrušiť členstvo
-        v prípade porušenia týchto Podmienok.
+        ich rodinných príslušníkov a osoby blízke tejto téme. Podporujúce
+        členstvo je určené aj osobám bez osobnej či rodinnej skúsenosti
+        s onkologickým ochorením, ktoré chcú platformu a jej poslanie finančne
+        podporiť — majú rovnaký prístup k platforme ako Ročné členstvo.
+        Prevádzkovateľ si vyhradzuje právo odmietnuť registráciu alebo zrušiť
+        členstvo v prípade porušenia týchto Podmienok.
       </p>
 
       <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">

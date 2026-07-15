@@ -63,6 +63,11 @@ export function CheckoutForm({
   const frekvencia = plan.id === "MONTHLY" ? "raz mesačne" : "raz ročne";
   const perioda =
     plan.id === "MONTHLY" ? "každý mesiac odo dňa platby" : "každý rok odo dňa platby";
+  const discountApplied =
+    discountState.ok && discountState.finalPriceEuro !== undefined;
+  const finalPriceLabel = discountApplied
+    ? `${discountState.finalPriceEuro} €`
+    : plan.price;
 
   return (
     <form action={formAction} className="flex min-h-0 flex-1 flex-col">
@@ -96,10 +101,8 @@ export function CheckoutForm({
           ) : (
             <>
               <p className="mt-3 flex items-baseline gap-2 text-2xl font-black leading-none">
-                {discountState.ok && discountState.finalPriceEuro !== undefined
-                  ? `${discountState.finalPriceEuro} €`
-                  : plan.price}
-                {discountState.ok && discountState.finalPriceEuro !== undefined && (
+                {finalPriceLabel}
+                {discountApplied && (
                   <span className="text-sm font-semibold text-white/60 line-through">
                     {plan.price}
                   </span>
@@ -197,7 +200,10 @@ export function CheckoutForm({
               </p>
               <dl className="flex flex-col gap-1.5">
                 <Row label="Dôvod platby" value="Členský poplatok ONKO KLUB" />
-                <Row label="Suma" value={`${plan.price} (fixná)`} />
+                <Row
+                  label="Suma"
+                  value={`${finalPriceLabel} (fixná)${discountApplied ? " — so zľavovým kódom" : ""}`}
+                />
                 <Row label="Frekvencia strhávania" value={frekvencia} />
                 <Row label="Dátum strhávania" value={perioda} />
                 <Row

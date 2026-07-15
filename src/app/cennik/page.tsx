@@ -31,7 +31,7 @@ const REINVESTICIA_TEXT =
 const FAQ = [
   {
     q: "Ako prebieha platba za členstvo?",
-    a: "Platba prebieha online cez platobnú bránu GoPay. V rámci mesačného členstva sa suma automaticky obnovuje každý mesiac, v prípade ročného členstva ide o jednorazovú platbu raz ročne. Platbu je možné kedykoľvek zrušiť v nastaveniach vášho účtu. Ak uprednostňujete úhradu formou trvalého príkazu, kontaktujte nás, prosím, na office@nierakovine.sk.",
+    a: "Free členstvo je úplne zadarmo. Platba za Mesačné a Ročné členstvo prebieha online cez platobnú bránu GoPay a automaticky sa obnovuje (mesačne, resp. ročne). Podporujúce členstvo je jednorazová platba vo vami zvolenej výške (min. 50 €), ktorá sa neobnovuje. Platbu je možné kedykoľvek zrušiť v nastaveniach vášho účtu. Ak uprednostňujete úhradu formou trvalého príkazu, kontaktujte nás, prosím, na office@nierakovine.sk.",
   },
   {
     q: "Je možné členstvo kedykoľvek zrušiť?",
