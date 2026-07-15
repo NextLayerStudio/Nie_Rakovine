@@ -6,6 +6,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Check, Star, ShieldCheck, RefreshCw, CreditCard, ChevronDown } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
+import { SupporterCard } from "@/components/landing/SupporterCard";
 
 const PAYMENT_LOGOS = [
   { src: "/images/platby/gopay.png", alt: "GoPay", w: 100, h: 35 },
@@ -34,42 +35,6 @@ const CENNIK_INFO = [
 
 const REINVESTICIA_TEXT =
   "Všetky finančné prostriedky získané prostredníctvom ONKO KLUBU vraciame späť do systému pomoci. Vďaka nim dokážeme zabezpečovať fungovanie pacientskych poradní NIE RAKOVINE, poskytovať bezplatné poradenstvo a rozvíjať pomoc, ktorú pacienti s rakovinou na Slovensku potrebujú.";
-
-const PLANS = [
-  {
-    id: "free",
-    name: "Free členstvo",
-    blurb: "Základný prístup do ONKO KLUBU, zadarmo.",
-    price: "0 €",
-    cta: "Registrovať zadarmo",
-    href: "/register?plan=free",
-  },
-  {
-    id: "monthly",
-    name: "Mesačné členstvo",
-    blurb: "Platíš každý mesiac, zrušíš kedykoľvek.",
-    price: "5 € / mes.",
-    cta: "Začať mesačne",
-    href: "/register?plan=monthly",
-  },
-  {
-    id: "yearly",
-    name: "Ročné členstvo",
-    blurb: "Jednorazová platba raz ročne, ušetríš 10 €.",
-    price: "50 € / rok",
-    cta: "Začať ročne",
-    href: "/register?plan=annual",
-    badge: "Najobľúbenejšie",
-  },
-  {
-    id: "supporter",
-    name: "Podporujúce členstvo",
-    blurb: "Nie ste pacient? Podporte komunitu jednorazovo, min. 50 €.",
-    price: "od 50 €",
-    cta: "Podporiť",
-    href: "/register?plan=supporter",
-  },
-];
 
 const PLATBA_FAQ = [
   {
@@ -142,70 +107,137 @@ export function CennikSection() {
         </div>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-        className="flex flex-col divide-y divide-[#6F2380]/8 overflow-hidden rounded-[1.8rem] border border-[#FDA4C7]/20 bg-white md:mx-auto md:max-w-2xl"
-      >
-        {PLANS.map((plan) => (
-          <div
-            key={plan.id}
-            className="flex flex-col gap-3 px-6 py-5 sm:flex-row sm:items-center sm:justify-between"
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:mx-auto md:max-w-4xl">
+        {/* Free */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col rounded-[1.8rem] border border-[#FDA4C7]/20 bg-white px-6 py-7"
+        >
+          <p className="text-[#6F2380]/50 text-xs font-bold uppercase tracking-wider mb-1">Free členstvo</p>
+          <div className="flex items-end gap-2 mb-1">
+            <span className="text-[#6F2380] font-black text-[3rem] leading-none">0 €</span>
+          </div>
+          <p className="text-[#6F2380]/40 text-sm mb-6">Základný prístup, úplne zadarmo</p>
+          <Link
+            href="/register?plan=free"
+            className="mt-auto block w-full rounded-full border-2 border-[#FDA4C7] text-[#FDA4C7] font-black text-base py-4 text-center active:scale-[0.98] transition-transform"
           >
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <p className="text-base font-black text-[#6F2380]">{plan.name}</p>
-                {plan.badge && (
-                  <span className="flex items-center gap-1 rounded-full bg-[#FDA4C7]/15 px-2.5 py-0.5 text-[10px] font-black text-[#FDA4C7]">
-                    <Star size={9} className="fill-current" />
-                    {plan.badge}
-                  </span>
-                )}
+            Registrovať zadarmo
+          </Link>
+        </motion.div>
+
+        {/* Mesačné */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          viewport={{ once: true }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.05 }}
+          className="flex flex-col rounded-[1.8rem] bg-white border border-[#FDA4C7]/20 px-6 py-7"
+        >
+          <p className="text-[#6F2380]/50 text-xs font-bold uppercase tracking-wider mb-1">Mesačné členstvo</p>
+          <div className="flex items-end gap-2 mb-1">
+            <span className="text-[#6F2380] font-black text-[3rem] leading-none">5 €</span>
+            <span className="text-[#6F2380]/40 text-sm mb-2">/ mesiac</span>
+          </div>
+          <p className="text-[#6F2380]/40 text-sm mb-6">Platíš každý mesiac · zrušíš kedykoľvek</p>
+
+          <div className="flex flex-col gap-2.5 mb-7">
+            {BENEFITY.map((b) => (
+              <div key={b} className="flex items-center gap-3">
+                <div className="w-5 h-5 rounded-full bg-[#FDA4C7]/20 flex items-center justify-center shrink-0">
+                  <Check size={11} className="text-[#FDA4C7]" strokeWidth={3} />
+                </div>
+                <span className="text-[#6F2380]/65 text-[13px]">{b}</span>
               </div>
-              <p className="mt-0.5 text-xs text-[#6F2380]/50">{plan.blurb}</p>
-            </div>
-            <div className="flex shrink-0 items-center gap-3">
-              <span className="text-lg font-black text-[#6F2380]">{plan.price}</span>
-              <Link
-                href={plan.href}
-                className="whitespace-nowrap rounded-full bg-[#FDA4C7] px-5 py-2.5 text-xs font-black text-white active:scale-[0.98] transition-transform"
-              >
-                {plan.cta}
-              </Link>
+            ))}
+          </div>
+
+          <Link
+            href="/register?plan=monthly"
+            className="mt-auto block w-full rounded-full border-2 border-[#FDA4C7] text-[#FDA4C7] font-black text-base py-4 text-center active:scale-[0.98] transition-transform"
+          >
+            Začať mesačne — 5 €
+          </Link>
+
+          <div className="mt-5">
+            <ExpandableText maxHeight={48} fadeColor="#FFFFFF">
+              <p className="text-[#6F2380]/40 text-[11px] leading-relaxed">
+                {REINVESTICIA_TEXT}
+              </p>
+            </ExpandableText>
+          </div>
+        </motion.div>
+
+        {/* Ročné — highlighted */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="flex flex-col rounded-[1.8rem] bg-[#6F2380] px-6 py-7 relative overflow-hidden"
+        >
+          {/* dekorácia */}
+          <div className="absolute -top-10 -right-10 w-36 h-36 rounded-full bg-white/5" />
+
+          <div className="flex items-center gap-2 mb-5">
+            <div className="flex items-center gap-1.5 bg-[#FDA4C7] rounded-full px-3 py-1">
+              <Star size={11} className="text-white fill-white" />
+              <span className="text-white text-[11px] font-black">Najobľúbenejšie</span>
             </div>
           </div>
-        ))}
-      </motion.div>
 
-      <div className="mt-10 md:mx-auto md:max-w-2xl">
-        <h3 className="mb-4 text-lg font-black text-[#6F2380]">
-          Čo získate s platenými formami členstva
-        </h3>
-        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-          {BENEFITY.map((b) => (
-            <div key={b} className="flex items-center gap-3">
-              <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#FDA4C7]/15">
-                <Check size={11} className="text-[#FDA4C7]" strokeWidth={3} />
+          <p className="text-white/55 text-xs font-bold uppercase tracking-wider mb-1">Ročné členstvo</p>
+          <div className="flex items-end gap-2 mb-1">
+            <span className="text-white font-black text-[3rem] leading-none">50 €</span>
+            <span className="text-white/50 text-sm mb-2">/ rok</span>
+          </div>
+          <p className="text-[#FDA4C7] text-sm font-bold mb-6">Ušetríš 10 € oproti mesačnému plánu</p>
+
+          <div className="flex flex-col gap-2.5 mb-7">
+            {BENEFITY.map((b) => (
+              <div key={b} className="flex items-center gap-3">
+                <div className="w-5 h-5 rounded-full bg-[#FDA4C7] flex items-center justify-center shrink-0">
+                  <Check size={11} className="text-white" strokeWidth={3} />
+                </div>
+                <span className="text-white/80 text-[13px]">{b}</span>
               </div>
-              <span className="text-[13px] text-[#6F2380]/70">{b}</span>
+            ))}
+            <div className="flex items-center gap-3 mt-1">
+              <div className="w-5 h-5 rounded-full bg-[#FDA4C7] flex items-center justify-center shrink-0">
+                <Check size={11} className="text-white" strokeWidth={3} />
+              </div>
+              <span className="text-white/80 text-[13px]">Jednorazová platba bez nutnosti aktualizácie počas roka</span>
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
 
-      <div className="mt-8 md:mx-auto md:max-w-2xl">
-        <div className="rounded-2xl border border-[#FDA4C7]/15 bg-white p-5">
-          <p className="mb-2 text-[13px] font-black text-[#6F2380]">
-            Prečo je členstvo spoplatnené?
-          </p>
-          <ExpandableText maxHeight={60} fadeColor="#FFFFFF">
-            <p className="text-[12px] leading-relaxed text-[#6F2380]/55">
-              {REINVESTICIA_TEXT}
-            </p>
-          </ExpandableText>
-        </div>
+          <Link
+            href="/register?plan=annual"
+            className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-base py-4 text-center active:scale-[0.98] transition-transform"
+          >
+            Začať ročne — 50 €
+          </Link>
+
+          <div className="mt-5">
+            <ExpandableText maxHeight={48} fadeColor="#6F2380">
+              <p className="text-white/45 text-[11px] leading-relaxed">
+                {REINVESTICIA_TEXT}
+              </p>
+            </ExpandableText>
+          </div>
+        </motion.div>
+
+        {/* Podporujúce — vlastná suma */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+        >
+          <SupporterCard />
+        </motion.div>
       </div>
 
       <div className="mt-14 md:max-w-2xl md:mx-auto">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { SubscriptionPlan } from "@prisma/client";
@@ -12,6 +12,7 @@ import { FormError, SubmitButton } from "@/components/FormError";
 import { SUBSCRIPTION_PLANS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { useFormRedirect } from "@/hooks/useFormRedirect";
+import { PRESELECTED_PLAN_KEY } from "@/lib/preselected-plan";
 
 const INITIAL: ActionState = { ok: false };
 
@@ -43,6 +44,18 @@ export function SubscriptionForm({
     INITIAL,
   );
   useFormRedirect(state);
+
+  // If nothing is chosen yet, honour a plan picked earlier on a public
+  // marketing page (e.g. the Supporter amount slider on /cennik).
+  useEffect(() => {
+    if (selected) return;
+    const stored = sessionStorage.getItem(PRESELECTED_PLAN_KEY);
+    if (stored && SUBSCRIPTION_PLANS.some((p) => p.id === stored)) {
+      setSelected(stored as PlanId);
+    }
+    sessionStorage.removeItem(PRESELECTED_PLAN_KEY);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <form action={formAction} className="flex min-h-0 flex-1 flex-col">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -13,6 +13,7 @@ import { FormError, SubmitButton } from "@/components/FormError";
 import { SUBSCRIPTION_PLANS, SUPPORTER_MIN_AMOUNT_EUR } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { useFormRedirect } from "@/hooks/useFormRedirect";
+import { PRESELECTED_AMOUNT_KEY } from "@/lib/preselected-plan";
 
 const INITIAL: ActionState = { ok: false };
 const DISCOUNT_INITIAL: DiscountPreviewState = { ok: false };
@@ -40,6 +41,17 @@ export function CheckoutForm({ plan }: { plan: Plan }) {
     DISCOUNT_INITIAL,
   );
   useFormRedirect(state);
+
+  // Honour a Supporter amount chosen earlier via the slider on /cennik.
+  useEffect(() => {
+    if (!plan.customAmount) return;
+    const stored = Number(sessionStorage.getItem(PRESELECTED_AMOUNT_KEY));
+    if (Number.isFinite(stored) && stored >= SUPPORTER_MIN_AMOUNT_EUR) {
+      setAmount(Math.round(stored));
+    }
+    sessionStorage.removeItem(PRESELECTED_AMOUNT_KEY);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const frekvencia = plan.id === "MONTHLY" ? "raz mesačne" : "raz ročne";
   const perioda =

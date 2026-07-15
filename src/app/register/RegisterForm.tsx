@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useActionState } from "react";
 import { registerAction, type ActionState } from "@/lib/actions/auth";
 import { FormError, SubmitButton } from "@/components/FormError";
 import { TermsModal } from "@/components/TermsModal";
 import { cn } from "@/lib/utils";
 import { useFormRedirect } from "@/hooks/useFormRedirect";
+import {
+  PRESELECTED_AMOUNT_KEY,
+  PRESELECTED_PLAN_KEY,
+  normalizePlanParam,
+} from "@/lib/preselected-plan";
 
 const INITIAL: ActionState = { ok: false };
 
@@ -15,6 +20,19 @@ export function RegisterForm() {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   useFormRedirect(state);
+
+  // Remember a plan (and Supporter amount) chosen on a public marketing
+  // page so /register/subscription can pre-select it after signup.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const plan = normalizePlanParam(params.get("plan"));
+    if (!plan) return;
+    sessionStorage.setItem(PRESELECTED_PLAN_KEY, plan);
+    const amount = params.get("amount");
+    if (plan === "SUPPORTER" && amount) {
+      sessionStorage.setItem(PRESELECTED_AMOUNT_KEY, amount);
+    }
+  }, []);
 
   return (
     <>
