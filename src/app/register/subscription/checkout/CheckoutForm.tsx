@@ -29,9 +29,15 @@ const PAYMENT_LOGOS = [
 
 type Plan = (typeof SUBSCRIPTION_PLANS)[number];
 
-export function CheckoutForm({ plan }: { plan: Plan }) {
+export function CheckoutForm({
+  plan,
+  initialAmount,
+}: {
+  plan: Plan;
+  initialAmount?: number;
+}) {
   const [consent, setConsent] = useState(false);
-  const [amount, setAmount] = useState(plan.priceEuro);
+  const [amount, setAmount] = useState(initialAmount ?? plan.priceEuro);
   const [state, formAction] = useActionState(
     confirmSubscriptionPaymentAction,
     INITIAL,
@@ -42,9 +48,10 @@ export function CheckoutForm({ plan }: { plan: Plan }) {
   );
   useFormRedirect(state);
 
-  // Honour a Supporter amount chosen earlier via the slider on /cennik.
+  // Honour a Supporter amount chosen earlier via the slider on /cennik
+  // (register flow only — the login flow already gets it via ?amount=).
   useEffect(() => {
-    if (!plan.customAmount) return;
+    if (!plan.customAmount || initialAmount !== undefined) return;
     const stored = Number(sessionStorage.getItem(PRESELECTED_AMOUNT_KEY));
     if (Number.isFinite(stored) && stored >= SUPPORTER_MIN_AMOUNT_EUR) {
       setAmount(Math.round(stored));

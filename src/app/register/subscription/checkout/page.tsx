@@ -10,10 +10,10 @@ export const dynamic = "force-dynamic";
 export default async function SubscriptionCheckoutPage({
   searchParams,
 }: {
-  searchParams: Promise<{ plan?: string }>;
+  searchParams: Promise<{ plan?: string; amount?: string }>;
 }) {
   await requireUser();
-  const { plan } = await searchParams;
+  const { plan, amount } = await searchParams;
 
   // FREE has no payment step — selectSubscriptionPlanAction activates it
   // directly and never sends anyone here.
@@ -23,6 +23,12 @@ export default async function SubscriptionCheckoutPage({
   if (!selected) {
     redirect("/register/subscription");
   }
+
+  // Carries a Supporter amount picked on a public marketing page (e.g. the
+  // /cennik slider) straight through, whether the visitor just registered
+  // or logged into an existing account via /welcome.
+  const parsedAmount = amount ? Number(amount) : NaN;
+  const initialAmount = Number.isFinite(parsedAmount) ? parsedAmount : undefined;
 
   return (
     <PhoneShell>
@@ -38,7 +44,7 @@ export default async function SubscriptionCheckoutPage({
           </p>
         </header>
 
-        <CheckoutForm plan={selected} />
+        <CheckoutForm plan={selected} initialAmount={initialAmount} />
       </div>
     </PhoneShell>
   );
