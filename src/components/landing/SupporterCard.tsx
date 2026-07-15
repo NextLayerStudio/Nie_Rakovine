@@ -20,7 +20,7 @@ export function SupporterCard({ className }: { className?: string }) {
     <div
       className={
         className ??
-        "flex flex-col rounded-[1.8rem] border border-[#FDA4C7]/20 bg-white px-6 py-7"
+        "flex flex-col rounded-[1.8rem] border border-[#FDA4C7]/20 bg-white px-5 py-6"
       }
     >
       <p className="mb-1 text-xs font-bold uppercase tracking-wider text-[#6F2380]/50">
@@ -31,12 +31,12 @@ export function SupporterCard({ className }: { className?: string }) {
         dá prístup na celý rok, rovnako ako pri ročnom členstve.
       </p>
 
-      <div className="mb-4 flex items-center justify-center gap-4">
+      <div className="mb-4 flex items-center justify-center gap-2">
         <button
           type="button"
           onClick={() => setAmount((a) => clamp(a - STEP))}
           aria-label="Znížiť sumu"
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#FDA4C7]/15 text-lg font-black text-[#FDA4C7] transition hover:bg-[#FDA4C7]/25"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#FDA4C7]/15 text-lg font-black text-[#FDA4C7] transition hover:bg-[#FDA4C7]/25"
         >
           −
         </button>
@@ -53,13 +53,13 @@ export function SupporterCard({ className }: { className?: string }) {
               setAmount((a) => clamp(a));
               setEditing(false);
             }}
-            className="w-28 border-b-2 border-[#FDA4C7] bg-transparent text-center text-[2.2rem] font-black leading-none text-[#6F2380] outline-none"
+            className="w-24 border-b-2 border-[#FDA4C7] bg-transparent text-center text-[2rem] font-black leading-none text-[#6F2380] outline-none"
           />
         ) : (
           <button
             type="button"
             onClick={() => setEditing(true)}
-            className="text-[2.2rem] font-black leading-none text-[#6F2380]"
+            className="text-[2rem] font-black leading-none text-[#6F2380]"
             title="Kliknutím zadajte vlastnú sumu"
           >
             {amount} €
@@ -70,7 +70,7 @@ export function SupporterCard({ className }: { className?: string }) {
           type="button"
           onClick={() => setAmount((a) => clamp(a + STEP))}
           aria-label="Zvýšiť sumu"
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#FDA4C7]/15 text-lg font-black text-[#FDA4C7] transition hover:bg-[#FDA4C7]/25"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#FDA4C7]/15 text-lg font-black text-[#FDA4C7] transition hover:bg-[#FDA4C7]/25"
         >
           +
         </button>
@@ -92,7 +92,7 @@ export function SupporterCard({ className }: { className?: string }) {
 
       <Link
         href={`/register?plan=supporter&amount=${amount}`}
-        className="mt-auto block w-full rounded-full bg-[#FDA4C7] py-4 text-center text-base font-black text-white transition-transform active:scale-[0.98]"
+        className="mt-auto block w-full rounded-full bg-[#FDA4C7] py-3.5 text-center text-sm font-black text-white transition-transform active:scale-[0.98]"
       >
         Darovať {amount} €
       </Link>

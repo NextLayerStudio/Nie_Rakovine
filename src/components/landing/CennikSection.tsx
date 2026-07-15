@@ -107,23 +107,23 @@ export function CennikSection() {
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:mx-auto md:max-w-4xl">
+      <div className="grid grid-cols-2 gap-3 items-stretch lg:grid-cols-4 lg:gap-4">
         {/* Free */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="flex flex-col rounded-[1.8rem] border border-[#FDA4C7]/20 bg-white px-6 py-7"
+          className="flex flex-col rounded-[1.8rem] border border-[#FDA4C7]/20 bg-white px-5 py-6"
         >
           <p className="text-[#6F2380]/50 text-xs font-bold uppercase tracking-wider mb-1">Free členstvo</p>
           <div className="flex items-end gap-2 mb-1">
-            <span className="text-[#6F2380] font-black text-[3rem] leading-none">0 €</span>
+            <span className="text-[#6F2380] font-black text-[2.2rem] leading-none">0 €</span>
           </div>
           <p className="text-[#6F2380]/40 text-sm mb-6">Základný prístup, úplne zadarmo</p>
           <Link
             href="/register?plan=free"
-            className="mt-auto block w-full rounded-full border-2 border-[#FDA4C7] text-[#FDA4C7] font-black text-base py-4 text-center active:scale-[0.98] transition-transform"
+            className="mt-auto block w-full rounded-full border-2 border-[#FDA4C7] text-[#FDA4C7] font-black text-sm py-3.5 text-center active:scale-[0.98] transition-transform"
           >
             Registrovať zadarmo
           </Link>
@@ -135,14 +135,14 @@ export function CennikSection() {
           viewport={{ once: true }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.05 }}
-          className="flex flex-col rounded-[1.8rem] bg-white border border-[#FDA4C7]/20 px-6 py-7"
+          className="flex flex-col rounded-[1.8rem] bg-white border border-[#FDA4C7]/20 px-5 py-6"
         >
           <p className="text-[#6F2380]/50 text-xs font-bold uppercase tracking-wider mb-1">Mesačné členstvo</p>
           <div className="flex items-end gap-2 mb-1">
-            <span className="text-[#6F2380] font-black text-[3rem] leading-none">5 €</span>
-            <span className="text-[#6F2380]/40 text-sm mb-2">/ mesiac</span>
+            <span className="text-[#6F2380] font-black text-[2.2rem] leading-none">5 €</span>
+            <span className="text-[#6F2380]/40 text-sm mb-1">/ mes.</span>
           </div>
-          <p className="text-[#6F2380]/40 text-sm mb-6">Platíš každý mesiac · zrušíš kedykoľvek</p>
+          <p className="text-[#6F2380]/40 text-sm mb-6">Platíš mesačne · zrušíš kedykoľvek</p>
 
           <div className="flex flex-col gap-2.5 mb-7">
             {BENEFITY.map((b) => (
@@ -157,7 +157,7 @@ export function CennikSection() {
 
           <Link
             href="/register?plan=monthly"
-            className="mt-auto block w-full rounded-full border-2 border-[#FDA4C7] text-[#FDA4C7] font-black text-base py-4 text-center active:scale-[0.98] transition-transform"
+            className="mt-auto block w-full rounded-full border-2 border-[#FDA4C7] text-[#FDA4C7] font-black text-sm py-3.5 text-center active:scale-[0.98] transition-transform"
           >
             Začať mesačne — 5 €
           </Link>
@@ -177,7 +177,7 @@ export function CennikSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex flex-col rounded-[1.8rem] bg-[#6F2380] px-6 py-7 relative overflow-hidden"
+          className="flex flex-col rounded-[1.8rem] bg-[#6F2380] px-5 py-6 relative overflow-hidden"
         >
           {/* dekorácia */}
           <div className="absolute -top-10 -right-10 w-36 h-36 rounded-full bg-white/5" />
@@ -191,8 +191,8 @@ export function CennikSection() {
 
           <p className="text-white/55 text-xs font-bold uppercase tracking-wider mb-1">Ročné členstvo</p>
           <div className="flex items-end gap-2 mb-1">
-            <span className="text-white font-black text-[3rem] leading-none">50 €</span>
-            <span className="text-white/50 text-sm mb-2">/ rok</span>
+            <span className="text-white font-black text-[2.2rem] leading-none">50 €</span>
+            <span className="text-white/50 text-sm mb-1">/ rok</span>
           </div>
           <p className="text-[#FDA4C7] text-sm font-bold mb-6">Ušetríš 10 € oproti mesačnému plánu</p>
 
@@ -215,7 +215,7 @@ export function CennikSection() {
 
           <Link
             href="/register?plan=annual"
-            className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-base py-4 text-center active:scale-[0.98] transition-transform"
+            className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center active:scale-[0.98] transition-transform"
           >
             Začať ročne — 50 €
           </Link>
