@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const LEKTORI = [
@@ -50,13 +49,7 @@ const LEKTORI = [
 export function LektoriSection() {
   return (
     <section className="pb-20"><div className="max-w-6xl mx-auto px-5 md:px-8">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="mb-10"
-      >
+      <div className="mb-10">
         <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
           Naši lektori
         </p>
@@ -70,16 +63,12 @@ export function LektoriSection() {
             skúsenosťami.
           </p>
         </ExpandableText>
-      </motion.div>
+      </div>
 
       <div className="no-scrollbar flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2 -mx-5 px-5 md:-mx-8 md:px-8">
-        {LEKTORI.map((l, i) => (
-          <motion.div
+        {LEKTORI.map((l) => (
+          <div
             key={l.meno}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-30px" }}
-            transition={{ duration: 0.5, delay: i * 0.1 }}
             className="w-[220px] md:w-[280px] shrink-0 snap-start"
           >
             <div className="relative w-full h-56 md:h-64 rounded-3xl shrink-0 overflow-hidden">
@@ -107,7 +96,7 @@ export function LektoriSection() {
                 </ExpandableText>
               )}
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
 
