@@ -86,27 +86,27 @@ export function NieSiVTomSamSection() {
               <motion.div
                 animate={{ y: [0,-8,0], rotate: [-8,-7,-8] }}
                 transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-0 left-0 w-[84%] rounded-[1.6rem] overflow-hidden"
+                className="absolute top-0 left-0 w-[84%]"
                 style={{ aspectRatio: "4/3", transformOrigin: "top left" }}
               >
                 <Image
-                  src="/images/niesivtomsam-1.jpg"
+                  src="/images/niesivtomsam-1.png"
                   alt="Komunita OnkoKlub"
                   fill
-                  className="object-cover"
+                  className="object-contain"
                 />
               </motion.div>
               <motion.div
-                animate={{ y: [0,8,0], rotate: [6,7,6] }}
+                animate={{ y: [0,8,0], rotate: [10,11,10] }}
                 transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute bottom-0 right-[8%] md:right-[-12%] w-[84%] rounded-[1.6rem] overflow-hidden"
+                className="absolute -bottom-14 right-[8%] md:right-[-12%] w-[84%]"
                 style={{ aspectRatio: "4/3", transformOrigin: "bottom right" }}
               >
                 <Image
-                  src="/images/niesivtomsam-2.jpg"
+                  src="/images/niesivtomsam-2.png"
                   alt="Komunita OnkoKlub"
                   fill
-                  className="object-cover"
+                  className="object-contain"
                 />
               </motion.div>
             </div>

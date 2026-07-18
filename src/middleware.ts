@@ -25,8 +25,25 @@ function isPublicRoute(pathname: string): boolean {
   return PUBLIC_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }
 
+function isStaffGateDisabled(req: NextRequest): boolean {
+  if (process.env.STAFF_GATE_DISABLED === "true") return true;
+  if (process.env.NODE_ENV !== "production") return true;
+
+  const hostname = req.nextUrl.hostname;
+  return hostname === "localhost" || hostname === "127.0.0.1";
+}
+
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  const staffGateDisabled = isStaffGateDisabled(req);
+
+  if (staffGateDisabled && pathname.startsWith(ACCESS_GATE_PATH)) {
+    const next = req.nextUrl.searchParams.get("next");
+    const url = req.nextUrl.clone();
+    url.pathname = next?.startsWith("/") ? next : "/";
+    url.search = "";
+    return NextResponse.redirect(url);
+  }
 
   if (isPublicRoute(pathname)) {
     return NextResponse.next();
@@ -34,7 +51,9 @@ export async function middleware(req: NextRequest) {
 
   const bypassSecret = process.env.STAFF_BYPASS_TOKEN?.trim();
   const hasStaffBypass =
-    !!bypassSecret && req.cookies.get(STAFF_BYPASS_COOKIE)?.value === bypassSecret;
+    staffGateDisabled ||
+    (!!bypassSecret &&
+      req.cookies.get(STAFF_BYPASS_COOKIE)?.value === bypassSecret);
 
   if (!hasStaffBypass) {
     const url = req.nextUrl.clone();

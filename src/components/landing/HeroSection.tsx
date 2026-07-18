@@ -67,7 +67,7 @@ export function HeroSection() {
               transition={{ duration: 0.8, delay: 0.4, ease }}
               className="mt-10 md:mt-0 flex justify-center"
             >
-              <div className="relative w-full max-w-[340px] md:max-w-none" style={{ aspectRatio: "3/4" }}>
+              <div className="relative mx-auto w-full max-w-[320px] md:max-w-[400px] lg:max-w-[440px]" style={{ aspectRatio: "3/4" }}>
                 {/* Pozadie — fialový štvorec, otočený */}
                 <motion.div
                   animate={{ y: [0,-8,0] }}
@@ -80,13 +80,13 @@ export function HeroSection() {
                   animate={{ y: [0,-8,0] }}
                   transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                   className="absolute rounded-[2rem] overflow-hidden"
-                  style={{ inset: "5%", rotate: "-4deg" }}
+                  style={{ inset: "2.5%", rotate: "-4deg" }}
                 >
                   <Image
-                    src="/images/hero-komunita.jpg"
+                    src="/images/hero-komunita.png"
                     alt="OnkoKlub komunita"
                     fill
-                    className="object-cover"
+                    className="object-contain object-bottom bg-white"
                     priority
                   />
                 </motion.div>
