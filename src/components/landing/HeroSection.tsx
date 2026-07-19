@@ -67,29 +67,17 @@ export function HeroSection() {
               transition={{ duration: 0.8, delay: 0.4, ease }}
               className="mt-10 md:mt-0 flex justify-center"
             >
-              <div className="relative mx-auto w-full max-w-[320px] md:max-w-[400px] lg:max-w-[440px]" style={{ aspectRatio: "3/4" }}>
-                {/* Pozadie — fialový štvorec, otočený */}
-                <motion.div
-                  animate={{ y: [0,-8,0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute inset-0 rounded-[2rem] bg-[#6F2380]/25"
-                  style={{ rotate: "-4deg" }}
+              <div
+                className="relative mx-auto w-full max-w-[380px] overflow-hidden rounded-[2rem] md:max-w-[480px] lg:max-w-[540px]"
+                style={{ aspectRatio: "1024 / 656" }}
+              >
+                <Image
+                  src="/images/hero-komunita.png"
+                  alt="OnkoKlub komunita"
+                  fill
+                  className="object-cover"
+                  priority
                 />
-                {/* Video — o niečo menšie, na vrchu */}
-                <motion.div
-                  animate={{ y: [0,-8,0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute rounded-[2rem] overflow-hidden"
-                  style={{ inset: "2.5%", rotate: "-4deg" }}
-                >
-                  <Image
-                    src="/images/hero-komunita.png"
-                    alt="OnkoKlub komunita"
-                    fill
-                    className="object-contain object-bottom bg-white"
-                    priority
-                  />
-                </motion.div>
               </div>
             </motion.div>
           </div>
