@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.11, delayChildren: 0.05 } } };
@@ -26,24 +25,19 @@ export function HeroSection() {
           <div className="relative z-10 md:grid md:grid-cols-2 md:gap-16 md:items-center">
             {/* Text */}
             <motion.div variants={stagger} initial="hidden" animate="show">
-              <motion.p variants={fadeUp} className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
-                Uzavretá platforma · NIE RAKOVINE, o. z.
-              </motion.p>
               <motion.h1 variants={fadeUp} className="text-[2.6rem] md:text-[3.4rem] lg:text-[4rem] font-black text-[#6F2380] leading-[1.1] mb-4">
                 Vieme, čím si prechádzate
               </motion.h1>
               <motion.div variants={fadeUp} className="mb-8 max-w-sm md:max-w-none">
-                <ExpandableText maxHeight={108} fadeColor="#FFF3F9">
-                  <p className="text-[#6F2380]/70 text-base md:text-lg leading-relaxed">
-                    Vitajte v ONKO KLUBE – bezpečnom priestore pre pacientov s onkologickým
-                    ochorením a ich blízkych. Overený obsah, odborné videá, diskusné fóra,
-                    podcasty, praktické rady, workshopy aj výhody pre členov. ONKO KLUB stojí
-                    na tíme desiatok odborníkov, lektorov a pacientskych poradcov s osobnou
-                    skúsenosťou s rakovinou. Jeho skutočnú hodnotu však tvoria samotní členovia
-                    – ľudia, ktorí si prechádzajú podobnou cestou a rozumejú aj tichým obavám,
-                    ktoré si v ťažkých chvíľach nechávame iba pre seba.
-                  </p>
-                </ExpandableText>
+                <p className="text-[#6F2380]/70 text-base md:text-lg leading-relaxed">
+                  Vitajte v ONKO KLUBE – bezpečnom priestore pre pacientov s onkologickým
+                  ochorením a ich blízkych. Overený obsah, odborné videá, diskusné fóra,
+                  podcasty, praktické rady, workshopy aj výhody pre členov. ONKO KLUB stojí
+                  na tíme desiatok odborníkov, lektorov a pacientskych poradcov s osobnou
+                  skúsenosťou s rakovinou. Jeho skutočnú hodnotu však tvoria samotní členovia
+                  – ľudia, ktorí si prechádzajú podobnou cestou a rozumejú aj tichým obavám,
+                  ktoré si v ťažkých chvíľach nechávame iba pre seba.
+                </p>
               </motion.div>
               <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start gap-3 mb-4">
                 <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black px-8 py-4">
@@ -53,11 +47,6 @@ export function HeroSection() {
                   Čo získam?
                 </Link>
               </motion.div>
-              <motion.p variants={fadeUp} className="text-[#6F2380]/40 text-[13px]">
-                Členstvo od 5 € mesačne.
-                <br />
-                Vyskúšajte si prvý mesiac bez záväzkov – členstvo môžete kedykoľvek ukončiť.
-              </motion.p>
             </motion.div>
 
             {/* Foto — na mobile pod textom, na desktop vpravo */}
