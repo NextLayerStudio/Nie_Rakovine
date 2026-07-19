@@ -74,13 +74,16 @@ export default async function PodujatiaPage({
               </span>
             </div>
 
-            <CategoryFilterBar category={category} />
+            <CategoryFilterBar
+              category={category}
+              className="mt-4 hidden flex-wrap gap-2 lg:flex"
+            />
           </div>
         </section>
 
         <section className="pb-20">
           <div className="mx-auto max-w-6xl px-5 md:px-8">
-            <PublicEventsExplorer events={publicEvents} />
+            <PublicEventsExplorer events={publicEvents} category={category} />
           </div>
         </section>
 

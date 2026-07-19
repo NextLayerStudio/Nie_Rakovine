@@ -4,19 +4,24 @@ import { createContext, useContext, useState, type ReactNode } from "react";
 
 type EventsFilterContextValue = {
   filtersOpen: boolean;
-  toggleFilters: () => void;
+  openFilters: () => void;
+  closeFilters: () => void;
 };
 
 const EventsFilterContext = createContext<EventsFilterContextValue | null>(null);
 
-// Shares the mobile filter-panel open/closed state between the header
-// toggle button and the category/poloha/kalendár filters rendered further
+// Shares the mobile filter-drawer open/closed state between the header
+// toggle button and the category/poloha/kalendár drawer rendered further
 // down the /podujatia page.
 export function EventsFilterProvider({ children }: { children: ReactNode }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
   return (
     <EventsFilterContext.Provider
-      value={{ filtersOpen, toggleFilters: () => setFiltersOpen((v) => !v) }}
+      value={{
+        filtersOpen,
+        openFilters: () => setFiltersOpen(true),
+        closeFilters: () => setFiltersOpen(false),
+      }}
     >
       {children}
     </EventsFilterContext.Provider>

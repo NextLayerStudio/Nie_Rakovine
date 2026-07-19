@@ -1,18 +1,20 @@
-"use client";
-
 import Link from "next/link";
 import type { EventCategory } from "@prisma/client";
 import { EVENT_CATEGORY_FILTER_OPTIONS } from "@/lib/event-category";
-import { useEventsFilter } from "./EventsFilterContext";
 
 function buildHref(category: string) {
   return category ? `/podujatia?category=${category}` : "/podujatia";
 }
 
-export function CategoryFilterBar({ category }: { category: EventCategory | "" }) {
-  const { filtersOpen } = useEventsFilter();
+export function CategoryFilterBar({
+  category,
+  className = "flex flex-wrap gap-2",
+}: {
+  category: EventCategory | "";
+  className?: string;
+}) {
   return (
-    <div className={`mt-4 flex-wrap gap-2 lg:flex ${filtersOpen ? "flex" : "hidden"}`}>
+    <div className={className}>
       {EVENT_CATEGORY_FILTER_OPTIONS.map((c) => {
         const active = c.value === category;
         return (
