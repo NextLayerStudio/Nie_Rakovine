@@ -1,17 +1,15 @@
-import Link from "next/link";
 import type { EventCategory } from "@prisma/client";
 import { PublicEventsHeader } from "@/components/landing/PublicEventsHeader";
 import { PublicEventsFooter } from "@/components/landing/PublicEventsFooter";
 import { PublicEventsExplorer } from "@/components/landing/PublicEventsExplorer";
+import { EventsFilterProvider } from "@/components/landing/EventsFilterContext";
+import { EventsFilterToggle } from "@/components/landing/EventsFilterToggle";
+import { CategoryFilterBar } from "@/components/landing/CategoryFilterBar";
 import type { PublicEvent } from "@/components/landing/EventCard";
 import { prisma } from "@/lib/prisma";
 import { EVENT_CATEGORY_FILTER_OPTIONS } from "@/lib/event-category";
 
 export const dynamic = "force-dynamic";
-
-function buildHref(category: string) {
-  return category ? `/podujatia?category=${category}` : "/podujatia";
-}
 
 export default async function PodujatiaPage({
   searchParams,
@@ -61,48 +59,33 @@ export default async function PodujatiaPage({
   }));
 
   return (
-    <main className="min-h-screen bg-[#FFF3F9] font-sans">
-      <PublicEventsHeader />
+    <EventsFilterProvider>
+      <main className="min-h-screen bg-[#FFF3F9] font-sans">
+        <PublicEventsHeader right={<EventsFilterToggle />} />
 
-      <section className="pt-24 pb-5">
-        <div className="mx-auto max-w-6xl px-5 md:px-8">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <h1 className="text-xl font-black text-[#6F2380] md:text-2xl">
-              Podujatia ONKO KLUBU
-            </h1>
-            <span className="text-xs font-semibold text-[#6F2380]/50">
-              {publicEvents.length} {publicEvents.length === 1 ? "podujatie" : "podujatí"}
-            </span>
+        <section className="pt-24 pb-5">
+          <div className="mx-auto max-w-6xl px-5 md:px-8">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h1 className="text-xl font-black text-[#6F2380] md:text-2xl">
+                Podujatia ONKO KLUBU
+              </h1>
+              <span className="text-xs font-semibold text-[#6F2380]/50">
+                {publicEvents.length} {publicEvents.length === 1 ? "podujatie" : "podujatí"}
+              </span>
+            </div>
+
+            <CategoryFilterBar category={category} />
           </div>
+        </section>
 
-          <div className="mt-4 flex flex-wrap gap-2">
-            {EVENT_CATEGORY_FILTER_OPTIONS.map((c) => {
-              const active = c.value === category;
-              return (
-                <Link
-                  key={c.value || "all"}
-                  href={buildHref(c.value)}
-                  className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
-                    active
-                      ? "bg-[#6F2380] text-white"
-                      : "bg-white text-[#6F2380]/70 ring-1 ring-[#6F2380]/15 hover:ring-[#FDA4C7]/50"
-                  }`}
-                >
-                  {c.label}
-                </Link>
-              );
-            })}
+        <section className="pb-20">
+          <div className="mx-auto max-w-6xl px-5 md:px-8">
+            <PublicEventsExplorer events={publicEvents} />
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="pb-20">
-        <div className="mx-auto max-w-6xl px-5 md:px-8">
-          <PublicEventsExplorer events={publicEvents} />
-        </div>
-      </section>
-
-      <PublicEventsFooter />
-    </main>
+        <PublicEventsFooter />
+      </main>
+    </EventsFilterProvider>
   );
 }

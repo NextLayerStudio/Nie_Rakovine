@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import type { EventRegion } from "@prisma/client";
 import { EventCard, type PublicEvent } from "@/components/landing/EventCard";
 import { EVENT_REGION_FILTER_OPTIONS } from "@/lib/event-region";
+import { useEventsFilter } from "@/components/landing/EventsFilterContext";
 
 const WEEKDAYS = ["Po", "Ut", "St", "Št", "Pi", "So", "Ne"];
 const MONTHS = [
@@ -39,6 +40,7 @@ function startOfToday(): Date {
 }
 
 export function PublicEventsExplorer({ events }: { events: PublicEvent[] }) {
+  const { filtersOpen } = useEventsFilter();
   const now = new Date();
   const [viewMonth, setViewMonth] = useState(
     new Date(now.getFullYear(), now.getMonth(), 1),
@@ -83,7 +85,7 @@ export function PublicEventsExplorer({ events }: { events: PublicEvent[] }) {
 
   return (
     <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[320px_1fr]">
-      <div className="flex h-fit flex-col gap-5">
+      <div className={`h-fit flex-col gap-5 lg:flex ${filtersOpen ? "flex" : "hidden"}`}>
         {/* Region filter */}
         <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-[#6F2380]/10">
           <p className="text-sm font-black text-[#6F2380]">Poloha</p>
