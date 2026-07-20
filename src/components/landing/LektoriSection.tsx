@@ -31,17 +31,17 @@ const LEKTORI = [
   {
     img: "/images/lektori/jessica.jpg",
     imgPosition: "object-top",
-    meno: "Jessica",
-    titul: "",
-    bio: "",
+    meno: "Jessica Zatlkajová",
+    titul: "fyzioterapeutka",
+    bio: "Jessica prepája odborné vedenie s citlivým vnímaním potrieb každej pacientky. Pomáha ženám počas onkologickej liečby aj po jej ukončení. Venuje sa následkom liečby a operácií, ako sú jazvy, stuhnuté tkanivá, obmedzený rozsah ramena či lymfatický opuch. Pri práci zohľadňuje konkrétne ťažkosti, aktuálny zdravotný stav aj individuálne možnosti každej pacientky. Jej cieľom je, aby sa ženy pri pohybe cítili istejšie a postupne získavali späť pohyblivosť aj silu.",
     accent: "#6F2380",
   },
   {
     img: "/images/lektori/viktor-oliva.jpg",
     imgPosition: "object-top",
-    meno: "Viktor Oliva",
-    titul: "",
-    bio: "",
+    meno: "Mgr. Viktor Oliva, PhD.",
+    titul: "vedec, tréner a pedagóg pôsobiaci v NOÚ a na UK",
+    bio: "Obľúbený a rešpektovaný odborník, ktorý pacientom ukazuje, že pohyb nemusí byť o výkone, ale o postupnom návrate k sile a väčšej samostatnosti. Pri cvičení nevychádza z jednej univerzálnej zostavy. Náročnosť cvičenia aj dávkovanie zaťaženia prispôsobuje priebehu liečby, kondícii a tomu, ako sa človek práve cíti. Pomáha tak bezpečne rozvíjať svalovú silu a vytrvalosť potrebnú v každodennom živote. Aj krátky pravidelný pohyb môže byť krokom k aktívnejšiemu životu.",
     accent: "#FDA4C7",
   },
 ];
