@@ -47,17 +47,25 @@ export function HeroSection() {
 
               {/* Foto — len na mobile, tu medzi krátkym úvodom a CTA */}
               <motion.div variants={fadeUp} className="mb-6 flex justify-center md:hidden">
-                <div
-                  className="relative mx-auto w-full max-w-[380px] overflow-hidden rounded-[2rem]"
-                  style={{ aspectRatio: "1024 / 656" }}
-                >
-                  <Image
-                    src="/images/hero-komunita.png"
-                    alt="OnkoKlub komunita"
-                    fill
-                    className="object-cover"
-                    priority
+                <div className="relative mx-auto w-full max-w-[360px] p-3">
+                  {/* ružové pozadie (rovnaká farba ako v hero sekcii), mierne pootočené */}
+                  <div
+                    aria-hidden
+                    className="absolute inset-3 rounded-[2rem] bg-[#FDA4C7]"
+                    style={{ transform: "rotate(-4deg) translate(3%, 3%)" }}
                   />
+                  <div
+                    className="relative overflow-hidden rounded-[2rem] shadow-[0_14px_34px_-10px_rgba(111,35,128,0.35)]"
+                    style={{ aspectRatio: "1024 / 656", transform: "rotate(3deg)" }}
+                  >
+                    <Image
+                      src="/images/hero-komunita.png"
+                      alt="OnkoKlub komunita"
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
                 </div>
               </motion.div>
 
