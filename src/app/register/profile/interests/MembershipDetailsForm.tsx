@@ -1,9 +1,10 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
-  saveExpectationsAction,
+  saveMembershipDetailsAction,
   type ActionState,
 } from "@/lib/actions/profile";
 import { FormError, SubmitButton } from "@/components/FormError";
@@ -13,27 +14,29 @@ import { CookiesModal } from "@/components/CookiesModal";
 import { useFormRedirect } from "@/hooks/useFormRedirect";
 
 const INITIAL: ActionState = { ok: false };
-const DRAFT_KEY = "register-expectations-draft";
+const DRAFT_KEY = "register-membership-details-draft";
 
-type ExpectationsDraft = {
+type Draft = {
+  interests: string[];
   expectations: string[];
   help: string[];
+  hearAboutUs: string[];
   consentMembership: boolean;
   consentNewsletter: boolean;
 };
 
-function readDraft(): ExpectationsDraft | null {
+function readDraft(): Draft | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = sessionStorage.getItem(DRAFT_KEY);
     if (!raw) return null;
-    return JSON.parse(raw) as ExpectationsDraft;
+    return JSON.parse(raw) as Draft;
   } catch {
     return null;
   }
 }
 
-function writeDraft(draft: ExpectationsDraft) {
+function writeDraft(draft: Draft) {
   sessionStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
 }
 
@@ -41,24 +44,37 @@ function clearDraft() {
   sessionStorage.removeItem(DRAFT_KEY);
 }
 
-export function ExpectationsForm({
+export function MembershipDetailsForm({
+  interestsOptions,
   expectationsOptions,
   helpOptions,
+  hearAboutUsOptions,
+  defaultInterests,
   defaultExpectations,
   defaultHelp,
+  defaultHearAboutUs,
   defaultConsentMembership,
   defaultConsentNewsletter,
 }: {
+  interestsOptions: string[];
   expectationsOptions: string[];
   helpOptions: string[];
+  hearAboutUsOptions: string[];
+  defaultInterests: string[];
   defaultExpectations: string[];
   defaultHelp: string[];
+  defaultHearAboutUs: string[];
   defaultConsentMembership: boolean;
   defaultConsentNewsletter: boolean;
 }) {
-  const [state, formAction] = useActionState(saveExpectationsAction, INITIAL);
+  const [state, formAction] = useActionState(
+    saveMembershipDetailsAction,
+    INITIAL,
+  );
+  const [interests, setInterests] = useState(defaultInterests);
   const [expectations, setExpectations] = useState(defaultExpectations);
   const [help, setHelp] = useState(defaultHelp);
+  const [hearAboutUs, setHearAboutUs] = useState(defaultHearAboutUs);
   const [consentMembership, setConsentMembership] = useState(
     defaultConsentMembership,
   );
@@ -72,8 +88,10 @@ export function ExpectationsForm({
   useEffect(() => {
     const draft = readDraft();
     if (draft) {
+      setInterests(draft.interests);
       setExpectations(draft.expectations);
       setHelp(draft.help);
+      setHearAboutUs(draft.hearAboutUs);
       setConsentMembership(draft.consentMembership);
       setConsentNewsletter(draft.consentNewsletter);
     }
@@ -83,15 +101,19 @@ export function ExpectationsForm({
   useEffect(() => {
     if (!hydrated) return;
     writeDraft({
+      interests,
       expectations,
       help,
+      hearAboutUs,
       consentMembership,
       consentNewsletter,
     });
   }, [
     hydrated,
+    interests,
     expectations,
     help,
+    hearAboutUs,
     consentMembership,
     consentNewsletter,
   ]);
@@ -99,30 +121,60 @@ export function ExpectationsForm({
   return (
     <form
       action={formAction}
-      className="mt-8 flex flex-col items-center gap-5 px-5 pb-6"
+      className="mt-6 flex flex-col items-center gap-6 px-5 pb-6"
       onSubmit={() => clearDraft()}
     >
-      <h2 className="text-center text-xl font-bold leading-snug text-brand-purple">
-        Čo očakávate od členstva v ONKO KLUBE?
-      </h2>
-      <CheckboxList
-        name="expectations"
-        options={expectationsOptions}
-        selected={expectations}
-        onSelectedChange={setExpectations}
-        variant="plain"
-      />
+      <div className="flex flex-col items-center gap-4">
+        <h2 className="text-center text-xl font-bold leading-snug text-brand-purple">
+          O čo máte záujem?
+        </h2>
+        <CheckboxList
+          name="interests"
+          options={interestsOptions}
+          selected={interests}
+          onSelectedChange={setInterests}
+          variant="plain"
+        />
+      </div>
 
-      <h3 className="text-center text-xl font-bold leading-snug text-brand-purple">
-        Čo by vám v tejto chvíli najviac pomohlo?
-      </h3>
-      <CheckboxList
-        name="help"
-        options={helpOptions}
-        selected={help}
-        onSelectedChange={setHelp}
-        variant="plain"
-      />
+      <div className="flex w-full flex-col items-center gap-4 border-t border-brand-purple/10 pt-6">
+        <h2 className="text-center text-xl font-bold leading-snug text-brand-purple">
+          Čo očakávate od členstva v ONKO KLUBE?
+        </h2>
+        <CheckboxList
+          name="expectations"
+          options={expectationsOptions}
+          selected={expectations}
+          onSelectedChange={setExpectations}
+          variant="plain"
+        />
+      </div>
+
+      <div className="flex w-full flex-col items-center gap-4 border-t border-brand-purple/10 pt-6">
+        <h3 className="text-center text-xl font-bold leading-snug text-brand-purple">
+          Čo by vám v tejto chvíli najviac pomohlo?
+        </h3>
+        <CheckboxList
+          name="help"
+          options={helpOptions}
+          selected={help}
+          onSelectedChange={setHelp}
+          variant="plain"
+        />
+      </div>
+
+      <div className="flex w-full flex-col items-center gap-4 border-t border-brand-purple/10 pt-6">
+        <h3 className="text-center text-xl font-bold leading-snug text-brand-purple">
+          Odkiaľ ste sa o nás dozvedeli?
+        </h3>
+        <CheckboxList
+          name="hearAboutUs"
+          options={hearAboutUsOptions}
+          selected={hearAboutUs}
+          onSelectedChange={setHearAboutUs}
+          variant="plain"
+        />
+      </div>
 
       <div className="w-full space-y-1 border-t border-brand-purple/10 pt-4 [&_label_span:last-child]:text-base">
         <ConsentCheckbox
@@ -131,7 +183,15 @@ export function ExpectationsForm({
           checked={consentMembership}
           onCheckedChange={setConsentMembership}
         >
-          súhlas so spracovaním osobných údajov – členstvo
+          súhlas so spracovaním osobných údajov v súlade so{" "}
+          <Link
+            href="/ochrana-sukromia"
+            target="_blank"
+            className="font-semibold underline underline-offset-2"
+          >
+            Zásadami ochrany osobných údajov
+          </Link>{" "}
+          (členstvo)
         </ConsentCheckbox>
         <ConsentCheckbox
           name="consentNewsletter"
@@ -147,7 +207,7 @@ export function ExpectationsForm({
             className="underline underline-offset-2"
             onClick={() => setShowCookies(true)}
           >
-            Zásady cookies
+            Zásady používania súborov cookies
           </button>
         </p>
       </div>
@@ -156,37 +216,18 @@ export function ExpectationsForm({
 
       <FormError message={state.message} />
 
-      <div className="flex w-full justify-center pt-6">
+      <div className="flex w-full justify-center pt-2">
         <SubmitButton
           className="btn-secondary !grid w-[94%] grid-cols-[1fr_auto_1fr] items-center !px-4 !py-3.5 text-base font-medium"
           pendingLabel="Ukladám…"
         >
           <>
             <span aria-hidden />
-            <span>Ďalej</span>
-            <Chevron className="justify-self-end" />
+            <span>Hotovo</span>
+            <span aria-hidden />
           </>
         </SubmitButton>
       </div>
     </form>
-  );
-}
-
-function Chevron({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className={cn("h-4 w-4 shrink-0", className)}
-      fill="none"
-      aria-hidden
-    >
-      <path
-        d="M9 6l6 6-6 6"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }

@@ -411,10 +411,28 @@ export function SettingsForms({
           </span>
           <span className="min-w-0 flex-1">
             <span className="block text-sm font-semibold text-brand-purple">
-              Obchodné podmienky
+              Podmienky používania
             </span>
             <span className="text-xs text-brand-purple/60">
               Pravidlá členstva a používania platformy
+            </span>
+          </span>
+          <ChevronRight />
+        </Link>
+
+        <Link
+          href="/menu/nastavenia/obchodne-podmienky"
+          className="flex items-center gap-3 rounded-2xl px-1 py-2 transition hover:bg-brand-purple/5"
+        >
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand-purple/10 text-brand-purple">
+            <DocIcon />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-sm font-semibold text-brand-purple">
+              Obchodné podmienky
+            </span>
+            <span className="text-xs text-brand-purple/60">
+              Cena, platba a odstúpenie od zmluvy
             </span>
           </span>
           <ChevronRight />
@@ -429,10 +447,46 @@ export function SettingsForms({
           </span>
           <span className="min-w-0 flex-1">
             <span className="block text-sm font-semibold text-brand-purple">
-              Ochrana súkromia
+              Zásady ochrany osobných údajov
             </span>
             <span className="text-xs text-brand-purple/60">
               Ako spracúvame vaše osobné údaje
+            </span>
+          </span>
+          <ChevronRight />
+        </Link>
+
+        <Link
+          href="/menu/nastavenia/pravidla-komunity"
+          className="flex items-center gap-3 rounded-2xl px-1 py-2 transition hover:bg-brand-purple/5"
+        >
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand-purple/10 text-brand-purple">
+            <DocIcon />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-sm font-semibold text-brand-purple">
+              Pravidlá komunity
+            </span>
+            <span className="text-xs text-brand-purple/60">
+              Zdravotné informácie, správanie, sankcie
+            </span>
+          </span>
+          <ChevronRight />
+        </Link>
+
+        <Link
+          href="/menu/nastavenia/pravne-vyhlasenie"
+          className="flex items-center gap-3 rounded-2xl px-1 py-2 transition hover:bg-brand-purple/5"
+        >
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand-purple/10 text-brand-purple">
+            <DocIcon />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-sm font-semibold text-brand-purple">
+              Právne vyhlásenie o zodpovednosti
+            </span>
+            <span className="text-xs text-brand-purple/60">
+              Obsah appky nenahrádza lekársku starostlivosť
             </span>
           </span>
           <ChevronRight />
@@ -447,7 +501,7 @@ export function SettingsForms({
           </span>
           <span className="min-w-0 flex-1">
             <span className="block text-sm font-semibold text-brand-purple">
-              Zásady cookies
+              Zásady používania súborov cookies
             </span>
             <span className="text-xs text-brand-purple/60">
               Ako používame cookies v aplikácii

@@ -147,18 +147,41 @@ export async function confirmSubscriptionPaymentAction(
 }
 
 // --------------------------------------------------------------------
-// Profile - step 1: location
+// Profile - step 1: about you (location + patient status + diagnosis).
+// Diagnosis fields are only present in the submitted form (and therefore
+// only saved) when the member answered "yes" to being a patient - the
+// combined screen reveals them inline instead of a separate step.
 // --------------------------------------------------------------------
-export async function saveLocationAction(
+export async function saveAboutYouAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
   const user = await requireUser();
+
+  const isPatient = String(formData.get("isPatient") ?? "");
+  if (isPatient !== "yes" && isPatient !== "no") {
+    return { ok: false, message: "Vyberte, či ste pacient s diagnózou." };
+  }
+
   const region = String(formData.get("region") ?? "").trim() || null;
   const city = String(formData.get("city") ?? "").trim() || null;
   const lat = formData.get("latitude");
   const lng = formData.get("longitude");
 
+  const diagnosisFields =
+    isPatient === "yes"
+      ? {
+          diagnosis: String(formData.get("diagnosis") ?? "").trim() || null,
+          diagnosisPhase:
+            String(formData.get("phase") ?? "").trim() || null,
+          diagnosisYear: (() => {
+            const yearStr = String(formData.get("year") ?? "").trim();
+            return yearStr ? Number(yearStr) : null;
+          })(),
+          cancerTypes: parseCancerTypes(formData.getAll("cancerTypes")),
+        }
+      : {};
+
   await prisma.userProfile.upsert({
     where: { userId: user.id },
     create: {
@@ -167,75 +190,16 @@ export async function saveLocationAction(
       city,
       latitude: lat ? Number(lat) : null,
       longitude: lng ? Number(lng) : null,
+      isPatient: isPatient === "yes",
+      ...diagnosisFields,
     },
     update: {
       region,
       city,
       latitude: lat ? Number(lat) : null,
       longitude: lng ? Number(lng) : null,
-    },
-  });
-
-  return { ok: true, redirectTo: "/register/profile/patient-status" };
-}
-
-// --------------------------------------------------------------------
-// Profile - step 2: patient status (am I a patient, or not?)
-// --------------------------------------------------------------------
-export async function savePatientStatusAction(
-  _prev: ActionState,
-  formData: FormData,
-): Promise<ActionState> {
-  const user = await requireUser();
-  const isPatient = String(formData.get("isPatient") ?? "");
-  if (isPatient !== "yes" && isPatient !== "no") {
-    return { ok: false, message: "Vyberte jednu z možností." };
-  }
-
-  await prisma.userProfile.upsert({
-    where: { userId: user.id },
-    create: { userId: user.id, isPatient: isPatient === "yes" },
-    update: { isPatient: isPatient === "yes" },
-  });
-
-  return {
-    ok: true,
-    redirectTo:
-      isPatient === "yes"
-        ? "/register/profile/diagnosis"
-        : "/register/profile/interests",
-  };
-}
-
-// --------------------------------------------------------------------
-// Profile - step 3: diagnosis (only reached if the member is a patient)
-// --------------------------------------------------------------------
-export async function saveDiagnosisAction(
-  _prev: ActionState,
-  formData: FormData,
-): Promise<ActionState> {
-  const user = await requireUser();
-  const diagnosis =
-    String(formData.get("diagnosis") ?? "").trim() || null;
-  const phase = String(formData.get("phase") ?? "").trim() || null;
-  const yearStr = String(formData.get("year") ?? "").trim();
-  const year = yearStr ? Number(yearStr) : null;
-  const cancerTypes = parseCancerTypes(formData.getAll("cancerTypes"));
-
-  await prisma.userProfile.upsert({
-    where: { userId: user.id },
-    create: {
-      userId: user.id,
-      diagnosis,
-      diagnosisPhase: phase,
-      diagnosisYear: year,
-      cancerTypes,
-    },
-    update: {
-      diagnosis,
-      diagnosisPhase: phase,
-      diagnosisYear: year,
-      cancerTypes,
+      isPatient: isPatient === "yes",
+      ...diagnosisFields,
     },
   });
 
@@ -243,34 +207,18 @@ export async function saveDiagnosisAction(
 }
 
 // --------------------------------------------------------------------
-// Profile - step 4: interests
+// Profile - step 2: interests + expectations + help + how they heard
+// about the club + membership/newsletter consent.
 // --------------------------------------------------------------------
-export async function saveInterestsAction(
+export async function saveMembershipDetailsAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
   const user = await requireUser();
   const interests = getStringArray(formData, "interests");
-
-  await prisma.userProfile.upsert({
-    where: { userId: user.id },
-    create: { userId: user.id, interests },
-    update: { interests },
-  });
-
-  return { ok: true, redirectTo: "/register/profile/expectations" };
-}
-
-// --------------------------------------------------------------------
-// Profile - step 5: expectations + help
-// --------------------------------------------------------------------
-export async function saveExpectationsAction(
-  _prev: ActionState,
-  formData: FormData,
-): Promise<ActionState> {
-  const user = await requireUser();
   const expectations = getStringArray(formData, "expectations");
   const help = getStringArray(formData, "help");
+  const hearAboutUs = getStringArray(formData, "hearAboutUs");
   const consentMembership = formData.get("consentMembership") === "on";
   const consentNewsletter = formData.get("consentNewsletter") === "on";
 
@@ -287,38 +235,18 @@ export async function saveExpectationsAction(
     where: { userId: user.id },
     create: {
       userId: user.id,
+      interests,
       expectations: [...expectations, ...help.map((h) => `pomoc: ${h}`)],
+      hearAboutUs,
       consentMembership,
       consentNewsletter,
     },
     update: {
+      interests,
       expectations: [...expectations, ...help.map((h) => `pomoc: ${h}`)],
+      hearAboutUs,
       consentMembership,
       consentNewsletter,
-    },
-  });
-
-  return { ok: true, redirectTo: "/register/profile/source" };
-}
-
-// --------------------------------------------------------------------
-// Profile - step 6: hear about us
-// --------------------------------------------------------------------
-export async function saveSourceAction(
-  _prev: ActionState,
-  formData: FormData,
-): Promise<ActionState> {
-  const user = await requireUser();
-  const hearAboutUs = getStringArray(formData, "hearAboutUs");
-
-  await prisma.userProfile.upsert({
-    where: { userId: user.id },
-    create: {
-      userId: user.id,
-      hearAboutUs,
-    },
-    update: {
-      hearAboutUs,
     },
   });
 

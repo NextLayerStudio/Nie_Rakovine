@@ -160,7 +160,7 @@ export function RegisterForm() {
             <span className="text-sm leading-snug text-brand-purple">
               Súhlasím s{" "}
               <span className="font-semibold underline underline-offset-2">
-                obchodnými podmienkami a podmienkami používania
+                Podmienkami používania
               </span>
             </span>
           </button>

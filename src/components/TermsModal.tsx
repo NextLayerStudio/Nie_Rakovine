@@ -50,7 +50,7 @@ export function TermsModal({
           id="terms-modal-title"
           className="text-base font-bold text-brand-purple"
         >
-          Obchodné podmienky a podmienky používania
+          Podmienky používania
         </h2>
         <button
           type="button"

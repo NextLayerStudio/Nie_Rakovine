@@ -39,7 +39,7 @@ export function CookiesModal({ onClose }: { onClose: () => void }) {
             id="cookies-modal-title"
             className="text-base font-bold text-brand-purple"
           >
-            Zásady cookies
+            Zásady používania súborov cookies
           </h2>
           <button
             type="button"
