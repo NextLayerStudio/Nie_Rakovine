@@ -259,7 +259,7 @@ export function CheckoutForm({
               </>
             )}{" "}
             Prečítal/a som si{" "}
-            <Link href="/podmienky" target="_blank" className="font-semibold underline">
+            <Link href="/obchodne-podmienky" target="_blank" className="font-semibold underline">
               Obchodné podmienky
             </Link>
             .

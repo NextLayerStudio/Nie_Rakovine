@@ -122,7 +122,7 @@ export function SubscriptionForm({
           </div>
           <p className="mt-3 text-xs leading-relaxed text-brand-purple/60">
             Ceny sú konečné vrátane DPH, bez skrytých poplatkov. Prečítajte si{" "}
-            <Link href="/podmienky" target="_blank" className="font-semibold underline">
+            <Link href="/obchodne-podmienky" target="_blank" className="font-semibold underline">
               Obchodné podmienky
             </Link>
             .
