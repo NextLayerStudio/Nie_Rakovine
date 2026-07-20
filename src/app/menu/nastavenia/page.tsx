@@ -28,7 +28,10 @@ export default async function SettingsPage() {
 
   return (
     <PhoneShell>
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto pb-28">
+      <div
+        className="flex min-h-0 flex-1 flex-col overflow-y-auto"
+        style={{ paddingBottom: "calc(7rem + env(safe-area-inset-bottom))" }}
+      >
         <TopBar backHref="/menu" title="Nastavenia" />
 
         <section className="px-5 pt-1 pb-4">
