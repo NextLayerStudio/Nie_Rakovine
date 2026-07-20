@@ -34,7 +34,7 @@ const LEKTORI = [
     meno: "Jessica Zatlkajová",
     titul: "fyzioterapeutka",
     bio: "Jessica prepája odborné vedenie s citlivým vnímaním potrieb každej pacientky. Pomáha ženám počas onkologickej liečby aj po jej ukončení. Venuje sa následkom liečby a operácií, ako sú jazvy, stuhnuté tkanivá, obmedzený rozsah ramena či lymfatický opuch. Pri práci zohľadňuje konkrétne ťažkosti, aktuálny zdravotný stav aj individuálne možnosti každej pacientky. Jej cieľom je, aby sa ženy pri pohybe cítili istejšie a postupne získavali späť pohyblivosť aj silu.",
-    accent: "#6F2380",
+    accent: "#FDA4C7",
   },
   {
     img: "/images/lektori/viktor-oliva.jpg",
