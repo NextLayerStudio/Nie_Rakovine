@@ -15,7 +15,7 @@ const verticalSizeClass = {
   md: "w-[min(60vw,180px)]",
   lg: "w-[min(72vw,240px)]",
   xl: "w-[min(82vw,280px)]",
-  "2xl": "w-[min(92vw,420px)]",
+  "2xl": "w-[min(calc(100vw-4rem),560px)]",
 } as const;
 
 const horizontal2SizeClass = {
