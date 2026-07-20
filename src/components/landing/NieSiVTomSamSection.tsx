@@ -6,6 +6,21 @@ import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
+function ProstriedkyBox({ fadeColor }: { fadeColor: string }) {
+  return (
+    <ExpandableText maxHeight={80} fadeColor={fadeColor}>
+      <p className="text-[#6F2380]/70 text-sm leading-relaxed">
+        Prostriedky získané prostredníctvom ONKO KLUBU smerujú späť do systému
+        pomoci pre onkologických pacientov. Zabezpečujú fungovanie pacientskych
+        poradní NIE RAKOVINE, bezplatné poradenstvo a rozvoj praktickej podpory
+        pre ľudí s onkologickým ochorením na Slovensku. Prispievajú tiež k
+        vzdelávaniu pacientov a ich blízkych, šíreniu overených informácií a
+        zlepšovaniu dostupnosti pomoci v náročných životných situáciách.
+      </p>
+    </ExpandableText>
+  );
+}
+
 export function NieSiVTomSamSection() {
   return (
     <section className="pb-16">
@@ -37,35 +52,27 @@ export function NieSiVTomSamSection() {
               </p>
             </ExpandableText>
 
+            {/* Na desktope pokračuje Prostriedky box hneď tu, pod textom */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.28, ease }}
-              className="mt-6 rounded-2xl bg-[#FDA4C7]/10 p-5"
+              className="mt-6 hidden rounded-2xl bg-[#FDA4C7]/10 p-5 md:block"
             >
-              <ExpandableText maxHeight={80} fadeColor="#FCE9F0">
-                <p className="text-[#6F2380]/70 text-sm leading-relaxed">
-                  Prostriedky získané prostredníctvom ONKO KLUBU smerujú späť do systému
-                  pomoci pre onkologických pacientov. Zabezpečujú fungovanie pacientskych
-                  poradní NIE RAKOVINE, bezplatné poradenstvo a rozvoj praktickej podpory
-                  pre ľudí s onkologickým ochorením na Slovensku. Prispievajú tiež k
-                  vzdelávaniu pacientov a ich blízkych, šíreniu overených informácií a
-                  zlepšovaniu dostupnosti pomoci v náročných životných situáciách.
-                </p>
-              </ExpandableText>
+              <ProstriedkyBox fadeColor="#FCE9F0" />
             </motion.div>
           </motion.div>
 
-          {/* Karty — na mobile nad textom, na desktop vpravo */}
+          {/* Karty — len na desktope, prekrývajúce sa vpravo */}
           <motion.div
             initial={{ opacity: 0, scale: 0.92 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.7, ease }}
-            className="order-first md:order-last"
+            className="order-first hidden md:order-last md:block"
           >
-            <div className="relative mt-14 mb-10 md:mt-0 md:mb-0" style={{ height: "420px" }}>
+            <div className="relative" style={{ height: "420px" }}>
               <motion.div
                 animate={{ y: [0,-8,0], rotate: [-8,-7,-8] }}
                 transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
@@ -82,7 +89,7 @@ export function NieSiVTomSamSection() {
               <motion.div
                 animate={{ y: [0,8,0], rotate: [10,11,10] }}
                 transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute -bottom-14 right-[8%] md:right-[-12%] w-[84%]"
+                className="absolute -bottom-14 right-[-12%] w-[84%]"
                 style={{ aspectRatio: "4/3", transformOrigin: "bottom right" }}
               >
                 <Image
@@ -93,6 +100,51 @@ export function NieSiVTomSamSection() {
                 />
               </motion.div>
             </div>
+          </motion.div>
+        </div>
+
+        {/* Na mobile: obrázok 1 -> Prostriedky box (Zobraziť viac) -> obrázok 2 */}
+        <div className="md:hidden">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.6, ease }}
+            className="relative mt-10 mb-6 mx-auto w-[84%]"
+            style={{ aspectRatio: "4/3" }}
+          >
+            <Image
+              src="/images/niesivtomsam-1.png"
+              alt="Komunita OnkoKlub"
+              fill
+              className="object-contain"
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, ease }}
+            className="mb-6 rounded-2xl bg-[#FDA4C7]/10 p-5"
+          >
+            <ProstriedkyBox fadeColor="#FCE9F0" />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.6, delay: 0.1, ease }}
+            className="relative mb-2 mx-auto w-[84%]"
+            style={{ aspectRatio: "4/3" }}
+          >
+            <Image
+              src="/images/niesivtomsam-2.png"
+              alt="Komunita OnkoKlub"
+              fill
+              className="object-contain"
+            />
           </motion.div>
         </div>
       </div>
