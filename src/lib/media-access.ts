@@ -36,6 +36,7 @@ export async function canAccessMediaAsset(
   const [
     avatarInUse,
     publishedPost,
+    publishedPostBody,
     publishedGallery,
     publishedEvent,
     publishedClubProfile,
@@ -57,6 +58,12 @@ export async function canAccessMediaAsset(
         published: true,
         OR: [{ coverUrl: path }, { videoUrl: path }, { audioUrl: path }],
       },
+      select: { id: true },
+    }),
+    // Images inserted inline into the article body via the Tiptap editor
+    // (ImageFigure node) - not tracked as a cover/gallery/video field.
+    prisma.post.findFirst({
+      where: { published: true, body: { contains: path } },
       select: { id: true },
     }),
     prisma.postImage.findFirst({
@@ -118,7 +125,9 @@ export async function canAccessMediaAsset(
   ]);
 
   if (avatarInUse) return true;
-  if (publishedPost || publishedGallery || publishedEvent) return true;
+  if (publishedPost || publishedPostBody || publishedGallery || publishedEvent) {
+    return true;
+  }
   if (publishedClubProfile || publishedDiscountPartner || publishedDiscountOffer) {
     return true;
   }
