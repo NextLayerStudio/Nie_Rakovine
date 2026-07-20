@@ -165,12 +165,6 @@ export function FeedEventItem({
                   : liveCount}
               </span>
             </div>
-
-            {description && (
-              <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-brand-purple/70">
-                {description}
-              </p>
-            )}
           </button>
 
           {/* Like / comment lišta */}
