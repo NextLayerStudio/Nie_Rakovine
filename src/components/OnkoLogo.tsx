@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-// vertical.png — 142×161 — hlavné logo (loading, welcome, register done)
+// vertical.png — 3901×4457 — hlavné logo (loading, welcome, register done)
 const VERTICAL_SRC = "/logo/onkoklub-vertical.png";
 // horizontal2.png — 1031×488 — stredné logo (login footer)
 const HORIZONTAL2_SRC = "/logo/onkoklub-horizontal2.png";
@@ -50,8 +50,8 @@ export function OnkoLogo({
     <Image
       src={VERTICAL_SRC}
       alt="ONKO KLUB"
-      width={142}
-      height={161}
+      width={3901}
+      height={4457}
       priority={priority}
       className={cn("h-auto object-contain", verticalSizeClass[size], className)}
     />
