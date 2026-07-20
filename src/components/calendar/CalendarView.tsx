@@ -313,12 +313,12 @@ export function CalendarView({
               >
                 {cell.getDate()}
                 {flags && !isSelected && (
-                  <span className="absolute bottom-1 flex items-center gap-0.5">
+                  <span className="absolute bottom-0.5 flex items-center gap-1">
                     {flags.registered && (
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                      <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
                     )}
                     {flags.event && (
-                      <span className="h-1 w-1 rounded-full bg-brand-pink" />
+                      <span className="h-2 w-2 rounded-full bg-brand-pink" />
                     )}
                   </span>
                 )}
@@ -328,12 +328,12 @@ export function CalendarView({
         </div>
 
         <div className="mt-3 flex items-center justify-center gap-4 text-[10px] text-brand-purple/60">
-          <span className="flex items-center gap-1">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+          <span className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
             Som prihlásený/á
           </span>
-          <span className="flex items-center gap-1">
-            <span className="h-1 w-1 rounded-full bg-brand-pink" />
+          <span className="flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-brand-pink" />
             Aktivita
           </span>
         </div>

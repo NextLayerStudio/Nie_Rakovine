@@ -200,7 +200,7 @@ export function PublicEventsExplorer({
                   >
                     {cell.getDate()}
                     {hasEvent && !isSelected && (
-                      <span className="absolute bottom-1 h-2 w-2 rounded-full bg-[#FDA4C7] shadow-[0_0_0_1px_rgba(255,255,255,0.9)]" />
+                      <span className="absolute bottom-0.5 h-3 w-3 rounded-full bg-[#FDA4C7] shadow-[0_0_0_1.5px_rgba(255,255,255,0.9)]" />
                     )}
                   </button>
                 );

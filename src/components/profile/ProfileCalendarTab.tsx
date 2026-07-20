@@ -184,7 +184,7 @@ export function ProfileCalendarTab({
                 </span>
                 {hasEvent && (
                   <span
-                    className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500"
+                    className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-emerald-500"
                     aria-hidden
                   />
                 )}
