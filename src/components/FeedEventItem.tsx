@@ -9,6 +9,23 @@ import { EventCommentDrawer } from "@/components/EventCommentDrawer";
 import { toggleEventLikeAction } from "@/lib/actions/event-likes";
 import { EVENT_TIME_ZONE } from "@/lib/timezone";
 
+/** First ~2 sentences of a description, capped at maxLen chars either way. */
+function eventExcerpt(text: string, maxLen = 160): string {
+  const trimmedText = text.trim();
+  const sentenceMatches = trimmedText.match(/[^.!?]+[.!?]+(\s+|$)/g);
+  let excerpt = sentenceMatches
+    ? sentenceMatches.slice(0, 2).join("").trim()
+    : trimmedText;
+  let truncated = excerpt.length < trimmedText.length;
+
+  if (excerpt.length > maxLen) {
+    excerpt = excerpt.slice(0, maxLen).replace(/\s+\S*$/, "");
+    truncated = true;
+  }
+
+  return truncated ? `${excerpt}…` : excerpt;
+}
+
 export function FeedEventItem({
   id,
   title,
@@ -165,6 +182,12 @@ export function FeedEventItem({
                   : liveCount}
               </span>
             </div>
+
+            {description && (
+              <p className="mt-2 text-sm leading-relaxed text-brand-purple/70">
+                {eventExcerpt(description)}
+              </p>
+            )}
           </button>
 
           {/* Like / comment lišta */}
