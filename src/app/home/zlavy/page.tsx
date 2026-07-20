@@ -118,12 +118,10 @@ function CategoryPill({
   return (
     <Link
       href={href}
-      className="relative flex min-h-[52px] items-center justify-center rounded-2xl border border-brand-purple/12 bg-white px-4 py-3 text-sm font-semibold text-brand-purple shadow-card transition hover:border-brand-purple/25"
+      className="flex min-h-[52px] items-center gap-2.5 rounded-2xl border border-brand-purple/12 bg-white px-4 py-3 text-sm font-semibold text-brand-purple shadow-card transition hover:border-brand-purple/25"
     >
-      <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2">
-        <DiscountCategoryIcon kind={iconKind} />
-      </span>
-      <span className="text-center">
+      <DiscountCategoryIcon kind={iconKind} />
+      <span className="min-w-0 flex-1 text-center">
         {label}
         {typeof count === "number" && count > 0 && (
           <span className="ml-1 text-brand-purple/45">({count})</span>

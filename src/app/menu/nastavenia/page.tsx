@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { BottomNav } from "@/components/BottomNav";
 import { PhoneShell } from "@/components/PhoneShell";
 import { TopBar } from "@/components/TopBar";
 import { requireUser } from "@/lib/auth";
@@ -28,10 +27,7 @@ export default async function SettingsPage() {
 
   return (
     <PhoneShell>
-      <div
-        className="flex min-h-0 flex-1 flex-col overflow-y-auto"
-        style={{ paddingBottom: "calc(7rem + env(safe-area-inset-bottom))" }}
-      >
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         <TopBar backHref="/menu" title="Nastavenia" />
 
         <section className="px-5 pt-1 pb-4">
@@ -99,8 +95,9 @@ export default async function SettingsPage() {
             subtitle="Dokumenty a zásady"
           />
         </nav>
+
+        <div aria-hidden className="h-10 shrink-0" />
       </div>
-      <BottomNav />
     </PhoneShell>
   );
 }
