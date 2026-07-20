@@ -6,6 +6,37 @@ import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
+/** Fotka na štvorci, s tmavšou ružovou "kartičkou" vykúkajúcou spod nej pod iným uhlom. */
+function TiltedPhotoSquare({
+  src,
+  imageRotate,
+  cardRotate,
+  cardOffset,
+  className,
+}: {
+  src: string;
+  imageRotate: number;
+  cardRotate: number;
+  cardOffset: string;
+  className?: string;
+}) {
+  return (
+    <div className={`relative mx-auto w-[68%] ${className ?? ""}`} style={{ aspectRatio: "1 / 1" }}>
+      <div
+        aria-hidden
+        className="absolute inset-0 rounded-[1.75rem] bg-[#CA6A8A]"
+        style={{ transform: `rotate(${cardRotate}deg) translate(${cardOffset})` }}
+      />
+      <div
+        className="absolute inset-0 overflow-hidden rounded-[1.75rem] shadow-[0_10px_30px_-8px_rgba(111,35,128,0.35)]"
+        style={{ transform: `rotate(${imageRotate}deg)` }}
+      >
+        <Image src={src} alt="Komunita OnkoKlub" fill className="object-cover" />
+      </div>
+    </div>
+  );
+}
+
 function ProstriedkyBox({ fadeColor }: { fadeColor: string }) {
   return (
     <ExpandableText maxHeight={80} fadeColor={fadeColor}>
@@ -110,14 +141,13 @@ export function NieSiVTomSamSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.6, ease }}
-            className="relative mt-10 mb-6 mx-auto w-[84%]"
-            style={{ aspectRatio: "4/3" }}
+            className="mt-12 mb-8"
           >
-            <Image
+            <TiltedPhotoSquare
               src="/images/niesivtomsam-1.png"
-              alt="Komunita OnkoKlub"
-              fill
-              className="object-contain"
+              imageRotate={-5}
+              cardRotate={7}
+              cardOffset="6%, 5%"
             />
           </motion.div>
 
@@ -126,7 +156,7 @@ export function NieSiVTomSamSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease }}
-            className="mb-6 rounded-2xl bg-[#FDA4C7]/10 p-5"
+            className="mb-8 rounded-2xl bg-[#FDA4C7]/10 p-5"
           >
             <ProstriedkyBox fadeColor="#FCE9F0" />
           </motion.div>
@@ -136,14 +166,13 @@ export function NieSiVTomSamSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.6, delay: 0.1, ease }}
-            className="relative mb-2 mx-auto w-[84%]"
-            style={{ aspectRatio: "4/3" }}
+            className="mb-4"
           >
-            <Image
+            <TiltedPhotoSquare
               src="/images/niesivtomsam-2.png"
-              alt="Komunita OnkoKlub"
-              fill
-              className="object-contain"
+              imageRotate={6}
+              cardRotate={-8}
+              cardOffset="-6%, 5%"
             />
           </motion.div>
         </div>
