@@ -33,7 +33,7 @@ export function AccountForm({
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   return (
-    <div className="px-5 py-4">
+    <div className="px-5 pt-4 pb-12">
       <form action={accountAction} className="space-y-4">
         <Field label="E-mail">
           <p className="text-sm text-brand-purple/70">{email}</p>

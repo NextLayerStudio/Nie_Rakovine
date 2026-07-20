@@ -47,6 +47,8 @@ export default function LegalSettingsPage() {
             subtitle="Ako používame cookies v aplikácii"
           />
         </nav>
+
+        <div aria-hidden className="h-10 shrink-0" />
       </div>
     </PhoneShell>
   );

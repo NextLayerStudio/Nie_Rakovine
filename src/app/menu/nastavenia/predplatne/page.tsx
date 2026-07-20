@@ -18,7 +18,7 @@ export default async function SubscriptionSettingsPage() {
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         <TopBar backHref="/menu/nastavenia" title="Predplatné" />
 
-        <div className="flex items-center justify-between px-5 py-4">
+        <div className="flex items-center justify-between px-5 pt-4 pb-12">
           <div>
             <p className="text-sm font-semibold text-brand-purple">
               {subscription.label}

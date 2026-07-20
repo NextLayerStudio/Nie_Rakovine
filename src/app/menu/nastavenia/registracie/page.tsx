@@ -14,7 +14,7 @@ export default async function RegistrationHistorySettingsPage() {
     <PhoneShell>
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         <TopBar backHref="/menu/nastavenia" title="História registrácií" />
-        <div className="px-5 py-4">
+        <div className="px-5 pt-4 pb-12">
           <RegistrationHistoryList registrations={registrationHistory} />
         </div>
       </div>

@@ -35,7 +35,7 @@ export function NotificationsForm({
   const [radius, setRadius] = useState(notifyRadiusKm);
 
   return (
-    <form action={prefsAction} className="px-5 py-4">
+    <form action={prefsAction} className="px-5 pt-4 pb-12">
       <div>
         <p className="mb-2 text-xs font-bold uppercase tracking-wide text-brand-purple/45">
           V aplikácii

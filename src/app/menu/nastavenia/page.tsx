@@ -28,7 +28,7 @@ export default async function SettingsPage() {
 
   return (
     <PhoneShell>
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto pb-28">
         <TopBar backHref="/menu" title="Nastavenia" />
 
         <section className="px-5 pt-1 pb-4">
@@ -96,8 +96,6 @@ export default async function SettingsPage() {
             subtitle="Dokumenty a zásady"
           />
         </nav>
-
-        <div aria-hidden className="h-6 shrink-0" />
       </div>
       <BottomNav />
     </PhoneShell>
