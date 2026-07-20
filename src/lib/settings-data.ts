@@ -14,6 +14,26 @@ export type RegistrationHistoryItem = {
   published: boolean;
 };
 
+export function subscriptionPlanInfo(
+  plan: string,
+  status: string,
+): { label: string; active: boolean } {
+  const active = status === "ACTIVE";
+  if (!active) return { label: "Neaktívne predplatné", active: false };
+  switch (plan) {
+    case "FREE":
+      return { label: "Free členstvo", active: true };
+    case "MONTHLY":
+      return { label: "Mesačné predplatné", active: true };
+    case "YEARLY":
+      return { label: "Ročné predplatné", active: true };
+    case "SUPPORTER":
+      return { label: "Podporujúce členstvo", active: true };
+    default:
+      return { label: "Bez predplatného", active: false };
+  }
+}
+
 export async function loadRegistrationHistory(
   userId: string,
 ): Promise<RegistrationHistoryItem[]> {

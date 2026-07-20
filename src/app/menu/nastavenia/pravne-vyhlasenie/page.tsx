@@ -6,7 +6,7 @@ export default function NastaveniaPravneVyhlaseniePage() {
   return (
     <PhoneShell>
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
-        <TopBar backHref="/menu/nastavenia" title="Právne vyhlásenie" />
+        <TopBar backHref="/menu/nastavenia/pravne" title="Právne vyhlásenie" />
 
         <article className="px-6 py-4 pb-8">
           <LiabilityDisclaimerContent className="card space-y-4 p-5 text-sm leading-relaxed text-brand-purple/85" />

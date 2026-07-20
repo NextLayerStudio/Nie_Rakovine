@@ -4,34 +4,34 @@ import { PhoneShell } from "@/components/PhoneShell";
 import { TopBar } from "@/components/TopBar";
 import { requireUser } from "@/lib/auth";
 import { profileAvatarStyle } from "@/lib/avatar-style";
-import { loadRegistrationHistory } from "@/lib/settings-data";
-import { SettingsForms } from "./SettingsForms";
+import { loadRegistrationHistory, subscriptionPlanInfo } from "@/lib/settings-data";
+import { BellIcon, CalendarIcon, CardIcon, DocIcon, UserIcon } from "./icons";
+import { MenuRow } from "./settings-ui";
 
 export const dynamic = "force-dynamic";
 
 export default async function SettingsPage() {
   const user = await requireUser();
-  const subscription = planInfo(user.subscriptionPlan, user.subscriptionStatus);
+  const subscription = subscriptionPlanInfo(
+    user.subscriptionPlan,
+    user.subscriptionStatus,
+  );
   const avatarUrl = user.profile?.avatarUrl ?? null;
   const registrationHistory = await loadRegistrationHistory(user.id);
 
-  // Accounts created before the first/last name split only have fullName —
-  // best-effort split it so the settings form isn't blank for them.
-  const [fallbackFirstName, ...fallbackLastNameParts] = user.fullName
-    .trim()
-    .split(/\s+/);
-  const firstName = user.firstName ?? fallbackFirstName ?? "";
-  const lastName = user.lastName ?? fallbackLastNameParts.join(" ");
+  const enabledCount = [
+    user.profile?.notifyNewPosts ?? true,
+    user.profile?.notifyForumApproved ?? true,
+    user.profile?.notifyForumReactions ?? true,
+    user.profile?.notifyEventsNearby ?? true,
+  ].filter(Boolean).length;
 
   return (
     <PhoneShell>
-      <div
-        data-settings-scroll
-        className="flex min-h-0 flex-1 flex-col overflow-y-auto scroll-pt-20 scroll-pb-24"
-      >
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         <TopBar backHref="/menu" title="Nastavenia" />
 
-        <section className="px-5 pt-1 pb-2">
+        <section className="px-5 pt-1 pb-4">
           <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-brand-purple to-brand-pink p-5 text-white shadow-soft">
             <div className="flex items-center gap-4">
               <div
@@ -60,23 +60,44 @@ export default async function SettingsPage() {
           </div>
         </section>
 
-        <section className="px-5 pb-32">
-          <SettingsForms
-            firstName={firstName}
-            lastName={lastName}
-            email={user.email}
-            consentNewsletter={user.profile?.consentNewsletter ?? false}
-            notifyRadiusKm={user.profile?.notifyRadiusKm ?? 50}
-            notificationPrefs={{
-              notifyNewPosts: user.profile?.notifyNewPosts ?? true,
-              notifyForumApproved: user.profile?.notifyForumApproved ?? true,
-              notifyForumReactions: user.profile?.notifyForumReactions ?? true,
-              notifyEventsNearby: user.profile?.notifyEventsNearby ?? true,
-            }}
-            subscriptionActive={subscription.active}
-            registrationHistory={registrationHistory}
+        <nav aria-label="Nastavenia účtu">
+          <MenuRow
+            href="/menu/nastavenia/ucet"
+            icon={<UserIcon />}
+            title="Účet"
+            subtitle="Meno, e-mail, heslo"
           />
-        </section>
+          <MenuRow
+            href="/menu/nastavenia/notifikacie"
+            icon={<BellIcon />}
+            title="Notifikácie"
+            subtitle={`${enabledCount} z 4 typov oznámení je zapnutých`}
+          />
+          <MenuRow
+            href="/menu/nastavenia/predplatne"
+            icon={<CardIcon />}
+            title="Predplatné"
+            subtitle={subscription.label}
+          />
+          <MenuRow
+            href="/menu/nastavenia/registracie"
+            icon={<CalendarIcon />}
+            title="História registrácií"
+            subtitle={
+              registrationHistory.length > 0
+                ? `${registrationHistory.length} ${registrationHistory.length === 1 ? "registrácia" : registrationHistory.length < 5 ? "registrácie" : "registrácií"} na podujatia`
+                : "Zatiaľ bez registrácií"
+            }
+          />
+          <MenuRow
+            href="/menu/nastavenia/pravne"
+            icon={<DocIcon />}
+            title="Právne informácie"
+            subtitle="Dokumenty a zásady"
+          />
+        </nav>
+
+        <div aria-hidden className="h-6 shrink-0" />
       </div>
       <BottomNav />
     </PhoneShell>
@@ -90,21 +111,4 @@ function initials(name: string): string {
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase() ?? "")
     .join("");
-}
-
-function planInfo(plan: string, status: string) {
-  const active = status === "ACTIVE";
-  if (!active) return { label: "Neaktívne predplatné", active: false };
-  switch (plan) {
-    case "FREE":
-      return { label: "Free členstvo", active: true };
-    case "MONTHLY":
-      return { label: "Mesačné predplatné", active: true };
-    case "YEARLY":
-      return { label: "Ročné predplatné", active: true };
-    case "SUPPORTER":
-      return { label: "Podporujúce členstvo", active: true };
-    default:
-      return { label: "Bez predplatného", active: false };
-  }
 }
