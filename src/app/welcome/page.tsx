@@ -38,7 +38,7 @@ export default async function WelcomePage({
           <OnkoLogo
             size="2xl"
             priority
-            className="welcome-logo max-h-[68vh]"
+            className="welcome-logo max-h-[34vh]"
           />
         </div>
 
