@@ -2,7 +2,7 @@ export function PrivacyContent({ className }: { className?: string }) {
   return (
     <div className={className}>
       <h3 className="mb-3 text-sm font-bold text-brand-purple">
-        1. Prevádzkovateľ
+        1. Prevádzkovateľ a kontakt
       </h3>
       <p className="mb-4">
         Prevádzkovateľom osobných údajov je <strong>NIE RAKOVINE, o. z.</strong>,
@@ -18,31 +18,112 @@ export function PrivacyContent({ className }: { className?: string }) {
         </a>
         .
       </p>
-
-      <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-        2. Aké údaje spracúvame
-      </h3>
-      <p className="mb-2">V súvislosti s prevádzkou platformy ONKO KLUB spracúvame najmä:</p>
-      <ul className="mb-4 list-disc space-y-1.5 pl-5">
-        <li>registračné a kontaktné údaje (meno, e-mail, dátum narodenia),</li>
-        <li>profilové údaje, ktoré nám dobrovoľne poskytnete (napr. mesto, diagnóza, typ ochorenia, záujmy),</li>
-        <li>údaje o členstve a platbách (typ predplatného, stav platby — samotné platobné údaje spracúva platobná brána GoPay, my ich nevidíme ani neukladáme),</li>
-        <li>obsah, ktorý vytvoríte v rámci platformy (príspevky vo fórach, komentáre),</li>
-        <li>technické údaje potrebné na prevádzku a bezpečnosť účtu (napr. identifikátor zariadenia pri prihlásení).</li>
-      </ul>
-
-      <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-        3. Účel a právny základ spracovania
-      </h3>
       <p className="mb-4">
-        Údaje spracúvame na účely poskytovania členstva a obsahu platformy
-        (plnenie zmluvy), na základe vášho súhlasu (napr. newsletter,
-        personalizácia obsahu podľa diagnózy) a na základe oprávneného záujmu
-        Prevádzkovateľa (bezpečnosť účtu, prevencia zneužitia platformy).
+        Prevádzkovateľ nemá povinnosť menovať Zodpovednú osobu (DPO) a v
+        súčasnosti žiadnu nemenoval. Všetky otázky, žiadosti a podnety
+        týkajúce sa ochrany osobných údajov vybavuje priamo Prevádzkovateľ na
+        vyššie uvedenom e-maile.
       </p>
 
       <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-        4. Kde sú vaše údaje uložené
+        2. Kategórie spracúvaných údajov
+      </h3>
+      <p className="mb-2">
+        <strong>Bežné osobné údaje:</strong> meno a priezvisko, e-mailová
+        adresa, telefónne číslo, dátum narodenia, profilová fotografia a
+        ďalšie údaje, ktoré dobrovoľne uvedie vo svojom profile (napr. mesto,
+        záujmy, dôvod registrácie). Pri prihlásení a zabezpečení účtu
+        spracúvame aj IP adresu, avšak len prechodne — na ochranu proti
+        zneužitiu (napr. obmedzenie počtu pokusov o prihlásenie) — a
+        neuchovávame ju trvalo v databáze.
+      </p>
+      <p className="mb-2">
+        <strong>Osobitná kategória údajov (citlivé zdravotné údaje):</strong>{" "}
+        ak sa rozhodnete o sebe vyplniť alebo zverejniť informácie o svojom
+        zdravotnom stave — napríklad, či ste onkologický pacient, typ, rok a
+        štádium diagnózy, priebeh liečby, denné hodnotenie nálady, alebo
+        akékoľvek podobné informácie, ktoré uvediete vo svojom profile, v
+        príspevkoch, komentároch alebo diskusiách. Tieto údaje nám
+        poskytujete výlučne dobrovoľne a na základe vášho výslovného súhlasu.
+      </p>
+      <p>
+        Denné záznamy o nálade sú súkromné a viditeľné len vám; Prevádzkovateľ
+        k nim môže mať prístup výhradne v anonymizovanej/súhrnnej forme (napr.
+        na štatistické účely), nikdy nie k obsahu jednotlivého záznamu
+        konkrétneho člena.
+      </p>
+
+      <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
+        3. Účely a právne základy spracovania
+      </h3>
+      <ul className="mb-4 list-disc space-y-2 pl-5">
+        <li>
+          <strong>Poskytovanie služieb platformy</strong> (vytvorenie a
+          správa účtu, členstvo, fóra, videoknižnica, OK karta) — právny
+          základ: <strong>plnenie zmluvy</strong> (Podmienky používania).
+        </li>
+        <li>
+          <strong>Spracúvanie údajov o zdravotnom stave</strong> (diagnóza,
+          štádium, priebeh liečby, nálada) — právny základ:{" "}
+          <strong>váš výslovný súhlas</strong> v zmysle čl. 9 ods. 2 písm. a)
+          GDPR. Súhlas môžete kedykoľvek odvolať; odvolanie súhlasu nemá
+          vplyv na zákonnosť spracúvania vykonaného pred jeho odvolaním.
+        </li>
+        <li>
+          <strong>Organizácia podujatí a aktivít</strong> (registrácia
+          účasti, komunikácia o podujatí) — právny základ:{" "}
+          <strong>plnenie zmluvy</strong>, resp.{" "}
+          <strong>oprávnený záujem</strong> Prevádzkovateľa na organizácii
+          komunitných aktivít.
+        </li>
+        <li>
+          <strong>Zasielanie noviniek a marketingová komunikácia</strong> —
+          právny základ: <strong>váš súhlas</strong> (checkbox „newsletter“ v
+          nastaveniach účtu), ktorý môžete kedykoľvek odvolať, resp.{" "}
+          <strong>oprávnený záujem</strong> pri transakčných e-mailoch
+          nevyhnutných na prevádzku účtu (napr. potvrdenie registrácie,
+          upozornenie na prihlásenie z nového zariadenia).
+        </li>
+      </ul>
+
+      <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
+        4. Doba uchovávania údajov
+      </h3>
+      <p className="mb-4">
+        Vaše údaje uchovávame po celú dobu existencie vášho účtu na
+        platforme. Ak svoj účet zrušíte (alebo o zrušenie požiadate), vaše
+        osobné údaje sa okamžite vymažú z produkčnej databázy platformy.
+        V technických zálohách infrastruktúry môžu z bezpečnostných dôvodov
+        zostať uložené najviac ešte 30 dní od zrušenia účtu, po uplynutí
+        ktorých sa automaticky prepíšu/vymažú aj z nich.
+      </p>
+      <p>
+        Ak vám bola poskytnutá platená služba (napr. Ročné alebo Podporujúce
+        členstvo), údaje potrebné na splnenie účtovných a daňových povinností
+        Prevádzkovateľa môžeme uchovávať aj po zrušení účtu, a to po dobu
+        vyžadovanú platnými právnymi predpismi.
+      </p>
+
+      <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
+        5. Príjemcovia údajov (tretie strany)
+      </h3>
+      <p className="mb-2">
+        Vaše osobné údaje nezverejňujeme ani nepredávame tretím stranám.
+        Prístup k nim majú výhradne poverení zamestnanci/spolupracovníci
+        Prevádzkovateľa a nasledujúci technickí sprostredkovatelia, vždy len
+        v rozsahu nevyhnutnom na plnenie ich úlohy a na základe zmluvy o
+        spracúvaní osobných údajov:
+      </p>
+      <ul className="mb-4 list-disc space-y-1.5 pl-5">
+        <li><strong>Vercel Inc.</strong> — hosting platformy, úložisko videí a základná analytika návštevnosti,</li>
+        <li><strong>Neon (Neon, Inc.)</strong> — hosting databázy (servery v EÚ, región Frankfurt),</li>
+        <li><strong>Resend</strong> — odosielanie transakčných a marketingových e-mailov,</li>
+        <li><strong>Upstash</strong> — technické zabezpečenie a ochrana pred zneužitím (rate limiting),</li>
+        <li><strong>GoPay</strong> — platobná brána spracúvajúca platby za členstvo (Prevádzkovateľ platobné údaje ako číslo karty nevidí ani neukladá).</li>
+      </ul>
+
+      <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
+        6. Kde sú vaše údaje uložené
       </h3>
       <p className="mb-4">
         Dáta sú uložené na serveroch v rámci Európskej únie (región Frankfurt)
@@ -51,19 +132,7 @@ export function PrivacyContent({ className }: { className?: string }) {
       </p>
 
       <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-        5. Komu údaje sprístupňujeme
-      </h3>
-      <p className="mb-4">
-        Vaše osobné údaje nezverejňujeme ani nepredávame tretím stranám.
-        Prístup k nim majú výhradne poverení zamestnanci/spolupracovníci
-        Prevádzkovateľa a technickí sprostredkovatelia potrební na chod
-        platformy (napr. hosting, platobná brána GoPay, e-mailová služba) —
-        vždy len v rozsahu nevyhnutnom na plnenie ich úlohy a na základe
-        zmluvy o spracúvaní osobných údajov.
-      </p>
-
-      <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-        6. Vaše práva
+        7. Vaše práva
       </h3>
       <p className="mb-2">V súlade s GDPR máte právo najmä na:</p>
       <ul className="mb-4 list-disc space-y-1.5 pl-5">
@@ -73,7 +142,7 @@ export function PrivacyContent({ className }: { className?: string }) {
         <li>obmedzenie spracovania,</li>
         <li>prenosnosť údajov,</li>
         <li>namietať proti spracovaniu založenom na oprávnenom záujme,</li>
-        <li>kedykoľvek odvolať udelený súhlas so spracovaním.</li>
+        <li>kedykoľvek odvolať udelený súhlas so spracovaním (napr. so spracovaním zdravotných údajov alebo so zasielaním newslettera), bez toho, aby to malo vplyv na zákonnosť spracúvania pred jeho odvolaním.</li>
       </ul>
       <p className="mb-4">
         Žiadosti o výkon týchto práv zasielajte na{" "}
@@ -86,21 +155,24 @@ export function PrivacyContent({ className }: { className?: string }) {
       </p>
 
       <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-        7. Doba uchovávania
+        8. Automatizované rozhodovanie a profilovanie
       </h3>
       <p className="mb-4">
-        Údaje uchovávame po dobu trvania vášho členstva a následne po dobu
-        vyžadovanú platnými právnymi predpismi (napr. účtovnými a daňovými).
-        Po zániku členstva a uplynutí týchto lehôt vaše údaje vymažeme alebo
-        anonymizujeme.
+        Platforma prispôsobuje zobrazovaný obsah (napr. poradie článkov,
+        videí a podujatí vo vašom prehľade) podľa typu ochorenia, ktorý ste
+        si sami uviedli vo svojom profile — ide o jednoduché zoradenie
+        relevantnejšieho obsahu vyššie, nie o skrytie akéhokoľvek obsahu ani
+        o analýzu vášho správania. Platforma nevykonáva automatizované
+        rozhodovanie s právnymi účinkami ani iné profilovanie v zmysle čl. 22
+        GDPR, ktoré by významne ovplyvňovalo vaše práva alebo povinnosti.
       </p>
 
       <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">
-        8. Cookies
+        9. Cookies
       </h3>
       <p>
-        Informácie o tom, ako platforma používa cookies, nájdete v
-        samostatnej sekcii Cookies dostupnej priamo v aplikácii ONKO KLUB.
+        Informácie o tom, ako platforma používa cookies, nájdete na stránke{" "}
+        <span className="font-semibold">Zásady používania súborov cookies</span>.
       </p>
     </div>
   );

@@ -79,9 +79,11 @@ export function Footer() {
             <p className="mt-1">© 2026 NIE RAKOVINE, o. z. · Vytvorené v spolupráci s NextLayer Studio</p>
           </div>
           <div className="flex gap-4 flex-wrap">
-            <Link href="/ochrana-sukromia" className="underline hover:text-white/60 transition-colors">Ochrana súkromia</Link>
-            <Link href="/podmienky" className="underline hover:text-white/60 transition-colors">Podmienky</Link>
-            <Link href="/cookies" className="underline hover:text-white/60 transition-colors">Cookies</Link>
+            <Link href="/podmienky" className="underline hover:text-white/60 transition-colors">Podmienky používania</Link>
+            <Link href="/ochrana-sukromia" className="underline hover:text-white/60 transition-colors">Zásady ochrany osobných údajov</Link>
+            <Link href="/pravidla-komunity" className="underline hover:text-white/60 transition-colors">Pravidlá komunity</Link>
+            <Link href="/pravne-vyhlasenie" className="underline hover:text-white/60 transition-colors">Právne vyhlásenie o zodpovednosti</Link>
+            <Link href="/cookies" className="underline hover:text-white/60 transition-colors">Zásady používania súborov cookies</Link>
             <Link href="/kontakt" className="underline hover:text-white/60 transition-colors">Kontakt</Link>
           </div>
         </div>
