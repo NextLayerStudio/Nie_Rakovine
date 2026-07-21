@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/landing/Navbar";
+import { CookieConsentBanner } from "@/components/landing/CookieConsentBanner";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { NieSiVTomSamSection } from "@/components/landing/NieSiVTomSamSection";
 import { FeatureSection } from "@/components/landing/FeatureSection";
@@ -28,6 +29,7 @@ export default function LandingPage() {
       <FAQSection />
       <FinalCTA />
       <Footer />
+      <CookieConsentBanner />
     </main>
   );
 }
