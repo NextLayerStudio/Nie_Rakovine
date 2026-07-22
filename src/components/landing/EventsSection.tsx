@@ -147,14 +147,14 @@ export function EventsSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.65 }}
-        className="rounded-[2rem] bg-[#6F2380] px-6 py-8"
+        className="rounded-3xl bg-[#6F2380] px-5 py-6"
       >
-        <h3 className="text-[1.5rem] font-black text-white leading-snug mb-3">
+        <h3 className="text-xl font-black text-white leading-snug mb-2">
           Nezmeškajte podujatia vo vašom okolí
         </h3>
-        <p className="text-white/65 text-sm leading-relaxed mb-8">
-          Vyberte svoj región a zanechajte nám kontakt. Keď pripravíme workshop
-          vo vašom okolí, dáme vám o ňom vedieť.
+        <p className="text-white/65 text-sm leading-relaxed mb-5">
+          Vyberte región a zanechajte kontakt — dáme vám vedieť o podujatiach
+          vo vašom okolí.
         </p>
 
         <AnimatePresence mode="wait">
@@ -177,95 +177,63 @@ export function EventsSection() {
             <motion.form
               key="form"
               onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}
-              className="flex flex-col gap-5"
+              className="flex flex-col gap-3.5"
             >
               {/* Výber oblasti */}
-              <div>
-                <p className="text-white/55 text-xs font-bold uppercase tracking-wider mb-3">
-                  Kde sa nachádzaš?
-                </p>
-                <div className="grid grid-cols-3 gap-2">
-                  {REGIONS.map((region) => {
-                    const active = selectedRegion === region.id;
-                    return (
-                      <button
-                        key={region.id}
-                        type="button"
-                        onClick={() => setSelectedRegion(region.id)}
-                        className="flex flex-col items-center py-4 px-2 rounded-2xl border-2 transition-all duration-200 gap-1"
-                        style={{
-                          borderColor: active ? "#FDA4C7" : "rgba(255,255,255,0.12)",
-                          backgroundColor: active ? "#FDA4C7" : "rgba(255,255,255,0.07)",
-                        }}
+              <div className="grid grid-cols-3 gap-2">
+                {REGIONS.map((region) => {
+                  const active = selectedRegion === region.id;
+                  return (
+                    <button
+                      key={region.id}
+                      type="button"
+                      onClick={() => setSelectedRegion(region.id)}
+                      className="flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-full border transition-colors duration-200"
+                      style={{
+                        borderColor: active ? "#FDA4C7" : "rgba(255,255,255,0.15)",
+                        backgroundColor: active ? "#FDA4C7" : "rgba(255,255,255,0.07)",
+                      }}
+                    >
+                      <MapPin
+                        size={13}
+                        className="shrink-0"
+                        style={{ color: active ? "white" : "rgba(255,255,255,0.5)" }}
+                        strokeWidth={2.5}
+                      />
+                      <span
+                        className="text-xs font-bold leading-tight"
+                        style={{ color: active ? "white" : "rgba(255,255,255,0.8)" }}
                       >
-                        <MapPin
-                          size={16}
-                          className="shrink-0"
-                          style={{ color: active ? "white" : "rgba(255,255,255,0.5)" }}
-                          strokeWidth={2.5}
-                        />
-                        <span
-                          className="text-sm font-black"
-                          style={{ color: active ? "white" : "rgba(255,255,255,0.8)" }}
-                        >
-                          {region.name}
-                        </span>
-                        {region.cities.slice(0, 2).map((city) => (
-                          <span
-                            key={city}
-                            className="text-[10px] leading-tight"
-                            style={{ color: active ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.35)" }}
-                          >
-                            {city}
-                          </span>
-                        ))}
-                      </button>
-                    );
-                  })}
-                </div>
-                <div className="flex items-center mt-2.5 px-1">
-                  <div className="flex-1 h-px bg-white/10" />
-                  <span className="text-white/20 text-[10px] px-2">Slovensko</span>
-                  <div className="flex-1 h-px bg-white/10" />
-                </div>
+                        {region.name.replace(" Slovensko", "")}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
 
-              {/* Meno */}
-              <div>
-                <label className="text-white/55 text-xs font-bold uppercase tracking-wider block mb-2">
-                  Meno
-                </label>
-                <input
-                  type="text"
-                  placeholder="Tvoje meno"
-                  required
-                  className="w-full rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 px-4 py-3.5 text-sm outline-none focus:border-[#FDA4C7] transition-colors"
-                />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="text-white/55 text-xs font-bold uppercase tracking-wider block mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  placeholder="tvoj@email.sk"
-                  required
-                  className="w-full rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 px-4 py-3.5 text-sm outline-none focus:border-[#FDA4C7] transition-colors"
-                />
-              </div>
+              {/* Meno + Email */}
+              <input
+                type="text"
+                placeholder="Tvoje meno"
+                required
+                className="w-full rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 px-4 py-3 text-sm outline-none focus:border-[#FDA4C7] transition-colors"
+              />
+              <input
+                type="email"
+                placeholder="tvoj@email.sk"
+                required
+                className="w-full rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 px-4 py-3 text-sm outline-none focus:border-[#FDA4C7] transition-colors"
+              />
 
               <button
                 type="submit"
-                className="w-full rounded-full bg-[#FDA4C7] text-white font-black text-base py-4 mt-1 active:scale-[0.98] transition-transform"
+                className="w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 mt-1 active:scale-[0.98] transition-transform"
               >
-                Chcem vedieť o podujatiach v mojom okolí
+                Chcem vedieť o podujatiach v okolí
               </button>
 
-              <p className="text-white/25 text-[11px] text-center leading-relaxed">
-                Vaše údaje budeme používať výhradne na informovanie o podujatiach
-                ONKO KLUBU. Odber môžete kedykoľvek zrušiť.
+              <p className="text-white/25 text-[10px] text-center leading-relaxed">
+                Odber môžete kedykoľvek zrušiť.
               </p>
             </motion.form>
           )}

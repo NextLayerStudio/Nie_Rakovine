@@ -39,7 +39,7 @@ export function HeroSection() {
             </motion.h1>
 
             <motion.div variants={fadeUp} className="mb-6 md:mb-8 max-w-sm md:max-w-lg">
-              <p className="text-white/90 text-base md:text-lg leading-relaxed [text-shadow:0_1px_8px_rgba(0,0,0,0.35)]">
+              <p className="text-white text-lg md:text-xl font-bold leading-relaxed [text-shadow:0_1px_10px_rgba(0,0,0,0.45)]">
                 Vitajte v ONKO KLUBE – bezpečnom priestore pre pacientov s onkologickým
                 ochorením a ich blízkych.
               </p>
