@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -10,36 +9,37 @@ const fadeUp = { hidden: { opacity: 0, y: 28 }, show: { opacity: 1, y: 0, transi
 
 export function HeroSection() {
   return (
-    <>
-      {/* MOBILE: video na celú šírku ako pozadie nadpisu/úvodu/CTA — video končí presne
-          tam, kde končí posledné tlačidlo (kontajner nemá pevnú výšku, video ju len vyplní). */}
-      <section className="pt-20 pb-10 md:hidden">
-        <div className="relative overflow-hidden">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            poster="/images/hero-komunita.png"
-            className="absolute inset-0 h-full w-full object-cover"
-          >
-            <source src="/videos/onko-klub-intro.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/10 to-black/50" />
+    <section className="pt-20 md:pt-24 pb-10 md:pb-16">
+      {/* Video na celú šírku ako pozadie nadpisu/úvodu/CTA - kontajner nemá pevnú
+          výšku, video ju len vyplní, takže končí presne tam, kde končí posledné
+          tlačidlo. Platí na mobile aj na desktope. */}
+      <div className="relative overflow-hidden">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster="/images/hero-komunita.png"
+          className="absolute inset-0 h-full w-full object-cover"
+        >
+          <source src="/videos/onko-klub-intro.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/10 to-black/50" />
 
-          <motion.div
-            variants={stagger}
-            initial="hidden"
-            animate="show"
-            className="relative z-10 px-5 pt-10 pb-8"
-          >
-            <motion.h1 variants={fadeUp} className="text-[2.6rem] font-black text-white leading-[1.1] mb-4 [text-shadow:0_2px_12px_rgba(0,0,0,0.35)]">
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          animate="show"
+          className="relative z-10 max-w-6xl mx-auto px-5 md:px-8 pt-10 pb-8 md:pt-24 md:pb-16"
+        >
+          <div className="max-w-xl">
+            <motion.h1 variants={fadeUp} className="text-[2.6rem] md:text-[3.4rem] lg:text-[4rem] font-black text-white leading-[1.1] mb-4 [text-shadow:0_2px_12px_rgba(0,0,0,0.35)]">
               Vieme, čím si prechádzate
             </motion.h1>
 
-            <motion.div variants={fadeUp} className="mb-6 max-w-sm">
-              <p className="text-white/90 text-base leading-relaxed [text-shadow:0_1px_8px_rgba(0,0,0,0.35)]">
+            <motion.div variants={fadeUp} className="mb-6 md:mb-8 max-w-sm md:max-w-lg">
+              <p className="text-white/90 text-base md:text-lg leading-relaxed [text-shadow:0_1px_8px_rgba(0,0,0,0.35)]">
                 Vitajte v ONKO KLUBE – bezpečnom priestore pre pacientov s onkologickým
                 ochorením a ich blízkych.
               </p>
@@ -53,85 +53,21 @@ export function HeroSection() {
                 Čo získam?
               </Link>
             </motion.div>
-          </motion.div>
-        </div>
-
-        {/* Zvyšok textu — pod videom, na normálnom pozadí stránky */}
-        <div className="max-w-6xl mx-auto px-5 mt-6">
-          <p className="text-[#6F2380]/70 text-base leading-relaxed max-w-sm">
-            Overený obsah, odborné videá, diskusné fóra, podcasty, praktické
-            rady, workshopy aj výhody pre členov. ONKO KLUB stojí na tíme desiatok
-            odborníkov, lektorov a pacientskych poradcov s osobnou skúsenosťou s
-            rakovinou. Jeho skutočnú hodnotu však tvoria samotní členovia – ľudia,
-            ktorí si prechádzajú podobnou cestou a rozumejú aj tichým obavám,
-            ktoré si v ťažkých chvíľach nechávame iba pre seba.
-          </p>
-        </div>
-      </section>
-
-      {/* DESKTOP: pôvodné 2-stĺpcové rozloženie, nezmenené */}
-      <section className="hidden md:block pt-32 pb-24 relative overflow-hidden">
-        <div className="max-w-6xl mx-auto px-5 md:px-8">
-          {/* Blobs */}
-          <motion.div aria-hidden animate={{ x: [0,18,0], y: [0,-14,0] }} transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-            className="pointer-events-none absolute -top-24 -right-24 w-96 h-96 rounded-full blur-3xl"
-            style={{ backgroundColor: "#FDA4C7", opacity: 0.18 }} />
-          <motion.div aria-hidden animate={{ x: [0,-12,0], y: [0,16,0] }} transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            className="pointer-events-none absolute top-32 -left-20 w-72 h-72 rounded-full blur-3xl"
-            style={{ backgroundColor: "#6F2380", opacity: 0.08 }} />
-
-          <div className="relative z-10 md:grid md:grid-cols-2 md:gap-16 md:items-center">
-            {/* Text */}
-            <motion.div variants={stagger} initial="hidden" animate="show">
-              <motion.h1 variants={fadeUp} className="text-[3.4rem] lg:text-[4rem] font-black text-[#6F2380] leading-[1.1] mb-4">
-                Vieme, čím si prechádzate
-              </motion.h1>
-
-              <motion.div variants={fadeUp} className="mb-8">
-                <p className="text-[#6F2380]/70 text-lg leading-relaxed">
-                  Vitajte v ONKO KLUBE – bezpečnom priestore pre pacientov s onkologickým
-                  ochorením a ich blízkych. Overený obsah, odborné videá, diskusné fóra,
-                  podcasty, praktické rady, workshopy aj výhody pre členov. ONKO KLUB stojí
-                  na tíme desiatok odborníkov, lektorov a pacientskych poradcov s osobnou
-                  skúsenosťou s rakovinou. Jeho skutočnú hodnotu však tvoria samotní členovia
-                  – ľudia, ktorí si prechádzajú podobnou cestou a rozumejú aj tichým obavám,
-                  ktoré si v ťažkých chvíľach nechávame iba pre seba.
-                </p>
-              </motion.div>
-
-              <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start gap-3 mb-4">
-                <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black px-8 py-4">
-                  Chcem sa pripojiť
-                </Link>
-                <Link href="/co-ziskas" className="inline-block rounded-full border-2 border-[#FDA4C7] text-[#FDA4C7] text-base font-black px-8 py-4">
-                  Čo získam?
-                </Link>
-              </motion.div>
-            </motion.div>
-
-            {/* Foto */}
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4, ease }}
-              className="flex justify-center"
-            >
-              <div
-                className="relative mx-auto w-full max-w-[480px] overflow-hidden rounded-[2rem] lg:max-w-[540px]"
-                style={{ aspectRatio: "1024 / 656" }}
-              >
-                <Image
-                  src="/images/hero-komunita.png"
-                  alt="OnkoKlub komunita"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </motion.div>
           </div>
-        </div>
-      </section>
-    </>
+        </motion.div>
+      </div>
+
+      {/* Zvyšok textu — pod videom, na normálnom pozadí stránky */}
+      <div className="max-w-6xl mx-auto px-5 md:px-8 mt-6">
+        <p className="text-[#6F2380]/70 text-base md:text-lg leading-relaxed max-w-sm md:max-w-2xl">
+          Overený obsah, odborné videá, diskusné fóra, podcasty, praktické
+          rady, workshopy aj výhody pre členov. ONKO KLUB stojí na tíme desiatok
+          odborníkov, lektorov a pacientskych poradcov s osobnou skúsenosťou s
+          rakovinou. Jeho skutočnú hodnotu však tvoria samotní členovia – ľudia,
+          ktorí si prechádzajú podobnou cestou a rozumejú aj tichým obavám,
+          ktoré si v ťažkých chvíľach nechávame iba pre seba.
+        </p>
+      </div>
+    </section>
   );
 }
