@@ -21,7 +21,7 @@ const BENEFITY = [
   "Pohodlné rezervácie na podujatia a workshopy",
   "Prístup do všetkých diskusných fór",
   "Exkluzívne zľavy u partnerských značiek",
-  "Digitálna OKkarta s QR kódom",
+  "Digitálna OK karta s QR kódom",
   "Sociálny kompas",
 ];
 

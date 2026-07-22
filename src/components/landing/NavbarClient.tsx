@@ -40,6 +40,9 @@ export function NavbarClient({ isLoggedIn }: { isLoggedIn: boolean }) {
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#FFF3F9]/90 backdrop-blur-md border-b border-[#FDA4C7]/10">
         <div className="max-w-6xl mx-auto px-5 md:px-8 flex items-center justify-between py-3.5">
+          {/* Vyváži šírku hamburgeru vpravo, aby logo bolo na mobile presne v strede */}
+          <span aria-hidden className="w-11 md:hidden" />
+
           <Link href={homeHref} className="flex shrink-0 items-center gap-2.5">
             <Image src="/images/logo-horizontal.png" alt="OnkoKlub" width={140} height={48} className="h-9 w-auto" priority />
             <span aria-hidden className="h-6 w-px bg-[#6F2380]/15" />
@@ -91,21 +94,24 @@ export function NavbarClient({ isLoggedIn }: { isLoggedIn: boolean }) {
           </nav>
 
           <div className="flex items-center gap-2">
-            {isLoggedIn ? (
-              <Link
-                href="/home"
-                className="rounded-full bg-[#FDA4C7] text-white text-sm font-black px-5 py-2.5 leading-none md:px-6 md:py-3"
-              >
-                Do aplikácie
-              </Link>
-            ) : (
-              <Link
-                href="/login"
-                className="rounded-full bg-[#FDA4C7] text-white text-sm font-black px-5 py-2.5 leading-none md:px-6 md:py-3"
-              >
-                Prihlásiť sa
-              </Link>
-            )}
+            {/* Tlačidlo Prihlásiť sa / Do aplikácie — len na desktope, na mobile je len hamburger */}
+            <span className="hidden md:inline-flex">
+              {isLoggedIn ? (
+                <Link
+                  href="/home"
+                  className="rounded-full bg-[#FDA4C7] text-white text-sm font-black px-6 py-3 leading-none"
+                >
+                  Do aplikácie
+                </Link>
+              ) : (
+                <Link
+                  href="/login"
+                  className="rounded-full bg-[#FDA4C7] text-white text-sm font-black px-6 py-3 leading-none"
+                >
+                  Prihlásiť sa
+                </Link>
+              )}
+            </span>
             {/* Hamburger — len na mobile */}
             <button
               onClick={() => setOpen(true)}

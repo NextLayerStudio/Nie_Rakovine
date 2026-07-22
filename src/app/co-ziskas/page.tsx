@@ -62,10 +62,10 @@ const FEATURES = [
     icon: QrCode,
     accent: "#6F2380",
     slug: "sponzori",
-    title: "OKkarta",
+    title: "OK karta",
     headline: "Jeden QR kód – desiatky výhod",
-    desc: "Digitálna členská OKkarta s unikátnym QR kódom slúži ako váš členský preukaz. Umožňuje uplatniť zľavy u partnerských značiek a zároveň slúži ako vstupenka na podujatia a workshopy. Vždy dostupná vo vašom mobile, bez potreby tlačenej verzie.",
-    detailItems: ["OKkarta sa vytvorí ihneď po dokončení registrácie", "Každý člen má vlastný identifikátor", "Vstupenka na podujatia a workshopy", "Prehľadný preukaz člena vždy v mobile", "Uplatnenie zliav"],
+    desc: "Digitálna členská OK karta s unikátnym QR kódom slúži ako váš členský preukaz. Umožňuje uplatniť zľavy u partnerských značiek a zároveň slúži ako vstupenka na podujatia a workshopy. Vždy dostupná vo vašom mobile, bez potreby tlačenej verzie.",
+    detailItems: ["OK karta sa vytvorí ihneď po dokončení registrácie", "Každý člen má vlastný identifikátor", "Vstupenka na podujatia a workshopy", "Prehľadný preukaz člena vždy v mobile", "Uplatnenie zliav"],
     imgs: ["[IMG-24] Mockup OKkarty na telefóne"],
   },
   {

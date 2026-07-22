@@ -16,7 +16,7 @@ const KATEGORIE = [
 ];
 
 const HOW_STEPS = [
-  { icon: BadgeCheck, title: "Aktivujte svoje členstvo",      desc: "Po registrácii a aktivácii členstva sa vám automaticky vytvorí digitálna OKkarta s unikátnym QR kódom a členským ID." },
+  { icon: BadgeCheck, title: "Aktivujte svoje členstvo",      desc: "Po registrácii a aktivácii členstva sa vám automaticky vytvorí digitálna OK karta s unikátnym QR kódom a členským ID." },
   { icon: QrCode,     title: "Vyberte si partnerskú ponuku",  desc: "V sekcii Zľavy a benefity nájdete prehľad aktuálnych ponúk a zvýhodnení od partnerských značiek, ktoré si môžete jednoducho filtrovať podľa jednotlivých kategórií." },
   { icon: ScanLine,   title: "Uplatnite si zľavu",            desc: "Pri nákupe v predajni alebo v e-shope sa preukážete svojou OKkartou alebo uvediete členské ID. Zľava alebo benefit sa vám uplatní podľa podmienok konkrétneho partnera." },
 ];
@@ -84,23 +84,23 @@ export default function SponzoriPage() {
         </div>
       </section>
 
-      {/* OKkarta vizuál + benefity */}
+      {/* OK karta vizuál + benefity */}
       <section className="pb-14">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="md:grid md:grid-cols-2 md:gap-14 md:items-center">
             {/* Karta vizuál */}
             <div>
-              <h2 className="text-xl font-black text-[#6F2380] mb-5">Tvoja OKkarta</h2>
+              <h2 className="text-xl font-black text-[#6F2380] mb-5">Tvoja OK karta</h2>
               <div className="w-full md:max-w-xs aspect-[9/16] max-h-[360px] rounded-[2rem] bg-[#FDA4C7]/20 flex flex-col items-center justify-center gap-3 mb-6">
                 <QrCode size={40} className="text-[#FDA4C7]/40" />
-                <p className="text-[#FDA4C7]/50 text-xs font-semibold">[IMG-24] OKkarta na telefóne</p>
+                <p className="text-[#FDA4C7]/50 text-xs font-semibold">[IMG-24] OK karta na telefóne</p>
               </div>
             </div>
             {/* Benefity */}
             <div>
               <div className="flex flex-col gap-2">
                 {[
-                  "OKkarta sa vytvorí ihneď po dokončení registrácie",
+                  "OK karta sa vytvorí ihneď po dokončení registrácie",
                   "Každý člen má vlastný identifikátor",
                   "Vstupenka na podujatia a workshopy",
                   "Prehľadný preukaz člena vždy v mobile",

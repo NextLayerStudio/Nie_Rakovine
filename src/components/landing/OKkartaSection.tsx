@@ -10,12 +10,12 @@ const HOW_STEPS = [
   {
     icon: BadgeCheck,
     title: "Registrácia",
-    desc: "Po vytvorení účtu sa automaticky sprístupní vaša digitálna OKkarta s unikátnym QR kódom a identifikačným číslom.",
+    desc: "Po vytvorení účtu sa automaticky sprístupní vaša digitálna OK karta s unikátnym QR kódom a identifikačným číslom.",
   },
   {
     icon: QrCode,
     title: "Vždy dostupná v mobile",
-    desc: "OKkarta je uložená vo vašom profile a máte k nej prístup kedykoľvek, online aj offline. Nie je potrebná fyzická karta.",
+    desc: "OK karta je uložená vo vašom profile a máte k nej prístup kedykoľvek, online aj offline. Nie je potrebná fyzická karta.",
   },
   {
     icon: ScanLine,
@@ -25,13 +25,13 @@ const HOW_STEPS = [
   {
     icon: Tag,
     title: "Vstup na podujatia",
-    desc: "OKkarta slúži aj ako vstup na workshopy a podujatia. Registrácia prebieha jednoducho naskenovaním kódu bez potreby papierovej evidencie.",
+    desc: "OK karta slúži aj ako vstup na workshopy a podujatia. Registrácia prebieha jednoducho naskenovaním kódu bez potreby papierovej evidencie.",
   },
 ];
 
 const PARTNERS: { name: string; logo: string }[] = [
   { name: "Nadácia SPP", logo: "/images/partneri/nadacia-spp.jpg" },
-  { name: "Raj Zdravia", logo: "/images/partneri/raj-zdravia.png" },
+  { name: "RAJ zdravia", logo: "/images/partneri/raj-zdravia.png" },
   { name: "Meditesty", logo: "/images/partneri/meditesty-tmave-pozadie.png" },
   { name: "Dulcia.sk", logo: "/images/partneri/dulcia.png" },
   { name: "Hyundai", logo: "/images/partneri/hyundai.jpg" },
@@ -55,7 +55,7 @@ export function OKkartaSection() {
           Zľavy a benefity
         </p>
         <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
-          Vaša OKkarta.
+          Vaša OK karta.
           <br />
           Výhody, ktoré máte vždy pri sebe.
         </h2>
@@ -95,7 +95,7 @@ export function OKkartaSection() {
                 <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-0.5">
                   OnkoKlub
                 </p>
-                <p className="text-white font-black text-xl leading-none">OKkarta</p>
+                <p className="text-white font-black text-xl leading-none">OK karta</p>
               </div>
               <div className="bg-white/15 rounded-xl p-2.5">
                 <QrCode size={28} className="text-white" strokeWidth={1.5} />
@@ -118,7 +118,7 @@ export function OKkartaSection() {
 
       {/* Ako to funguje — cestička */}
       <div className="mb-14">
-        <h3 className="text-xl font-black text-[#6F2380] mb-8">Ako OKkarta funguje</h3>
+        <h3 className="text-xl font-black text-[#6F2380] mb-8">Ako OK karta funguje</h3>
         <div className="relative pl-5">
           <motion.div
             initial={{ scaleY: 0 }}
@@ -214,7 +214,7 @@ export function OKkartaSection() {
         <div className="mb-7">
           <ExpandableText maxHeight={60} fadeColor="#6F2380" align="center">
             <p className="text-white/65 text-sm leading-relaxed">
-              Vaša OKkarta bude dostupná okamžite po prvom prihlásení. Bez
+              Vaša OK karta bude dostupná okamžite po prvom prihlásení. Bez
               poplatkov a bez zbytočnej administratívy.
             </p>
           </ExpandableText>
