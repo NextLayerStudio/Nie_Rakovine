@@ -65,8 +65,9 @@ export function ForumAdminForm({
         <legend>Vzhľad</legend>
         <AdminImageField
           name="imageUrl"
+          uploadName="imageFile"
           label="Profilová fotka fóra"
-          hint="Zobrazí sa v zozname fór v aplikácii. Ak prázdne, použije sa farba nižšie."
+          hint="Nahrajte z počítača alebo vložte odkaz. Zobrazí sa v zozname fór v aplikácii. Ak prázdne, použije sa farba nižšie."
           defaultValue={forum?.imageUrl ?? ""}
           shape="circle"
         />

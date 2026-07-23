@@ -6,6 +6,7 @@ import {
   createForumThreadAction,
   type ActionState,
 } from "@/lib/actions/admin-forums";
+import { AdminImageField } from "@/components/AdminImageField";
 import { FormError, SubmitButton } from "@/components/FormError";
 
 const INITIAL: ActionState = { ok: false };
@@ -39,10 +40,13 @@ export function ForumThreadForm({ forumId }: { forumId: string }) {
         placeholder="Text príspevku"
         className="admin-input"
       />
-      <input
+      <AdminImageField
         name="coverUrl"
-        placeholder="Cover URL (voliteľné)"
-        className="admin-input"
+        uploadName="coverFile"
+        label="Titulná fotka príspevku (voliteľné)"
+        hint="Nahrajte z počítača alebo vložte odkaz."
+        shape="rounded"
+        previewAspect="video"
       />
       <FormError message={state.message} />
       {state.ok && state.message && (

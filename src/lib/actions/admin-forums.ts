@@ -5,6 +5,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
 import { parseCancerTypes } from "@/lib/cancer-type";
+import { resolveImageField } from "@/lib/uploads";
 import {
   notifyForumCommentApproved,
   notifyForumThreadApproved,
@@ -17,16 +18,31 @@ export async function createForumAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const title = String(formData.get("title") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim() || null;
-  const imageUrl = String(formData.get("imageUrl") ?? "").trim() || null;
   const accentColor =
     String(formData.get("accentColor") ?? "").trim() || "#6F2380";
   const published = formData.get("published") === "on";
   const cancerTypes = parseCancerTypes(formData.getAll("cancerTypes"));
 
   if (!title) return { ok: false, message: "Zadajte názov fóra." };
+
+  let imageUrl: string | null;
+  try {
+    imageUrl = await resolveImageField(
+      formData,
+      "imageFile",
+      "imageUrl",
+      "forums",
+      admin.id,
+    );
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Nepodarilo sa nahrať obrázok.",
+    };
+  }
 
   await prisma.forum.create({
     data: {
@@ -49,17 +65,32 @@ export async function updateForumAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const id = String(formData.get("id") ?? "");
   const title = String(formData.get("title") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim() || null;
-  const imageUrl = String(formData.get("imageUrl") ?? "").trim() || null;
   const accentColor =
     String(formData.get("accentColor") ?? "").trim() || "#6F2380";
   const published = formData.get("published") === "on";
   const cancerTypes = parseCancerTypes(formData.getAll("cancerTypes"));
 
   if (!id || !title) return { ok: false, message: "Chýba názov." };
+
+  let imageUrl: string | null;
+  try {
+    imageUrl = await resolveImageField(
+      formData,
+      "imageFile",
+      "imageUrl",
+      "forums",
+      admin.id,
+    );
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Nepodarilo sa nahrať obrázok.",
+    };
+  }
 
   await prisma.forum.update({
     where: { id },
@@ -193,10 +224,25 @@ export async function createForumThreadAction(
   const forumId = String(formData.get("forumId") ?? "");
   const body = String(formData.get("body") ?? "").trim();
   const title = String(formData.get("title") ?? "").trim() || null;
-  const coverUrl = String(formData.get("coverUrl") ?? "").trim() || null;
 
   if (!forumId || !body) {
     return { ok: false, message: "Napíšte text príspevku." };
+  }
+
+  let coverUrl: string | null;
+  try {
+    coverUrl = await resolveImageField(
+      formData,
+      "coverFile",
+      "coverUrl",
+      "forums",
+      admin.id,
+    );
+  } catch (err) {
+    return {
+      ok: false,
+      message: err instanceof Error ? err.message : "Nepodarilo sa nahrať obrázok.",
+    };
   }
 
   await prisma.forumThread.create({
