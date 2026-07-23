@@ -16,9 +16,9 @@ const KATEGORIE = [
 ];
 
 const HOW_STEPS = [
-  { icon: BadgeCheck, title: "Aktivujte svoje členstvo",      desc: "Po registrácii a aktivácii členstva sa vám automaticky vytvorí digitálna OK karta s unikátnym QR kódom a členským ID." },
+  { icon: BadgeCheck, title: "Aktivujte svoje členstvo",      desc: "Po registrácii a aktivácii členstva sa vám automaticky vytvorí digitálna OK Karta s unikátnym QR kódom a členským ID." },
   { icon: QrCode,     title: "Vyberte si partnerskú ponuku",  desc: "V sekcii Zľavy a benefity nájdete prehľad aktuálnych ponúk a zvýhodnení od partnerských značiek, ktoré si môžete jednoducho filtrovať podľa jednotlivých kategórií." },
-  { icon: ScanLine,   title: "Uplatnite si zľavu",            desc: "Pri nákupe v predajni alebo v e-shope sa preukážete svojou OK kartou alebo uvediete členské ID. Zľava alebo benefit sa vám uplatní podľa podmienok konkrétneho partnera." },
+  { icon: ScanLine,   title: "Uplatnite si zľavu",            desc: "Pri nákupe v predajni alebo v e-shope sa preukážete svojou OK Kartou alebo uvediete členské ID. Zľava alebo benefit sa vám uplatní podľa podmienok konkrétneho partnera." },
 ];
 
 export default function SponzoriPage() {
@@ -39,7 +39,7 @@ export default function SponzoriPage() {
                 <ExpandableText maxHeight={72} fadeColor="#FFF3F9">
                   <p className="text-[#6F2380]/70 text-base leading-relaxed">
                     Ako člen/ka ONKO KLUBU máte vďaka našim partnerom možnosť
-                    využiť špeciálne zľavy. Stačí sa preukázať OK kartou a zľava
+                    využiť špeciálne zľavy. Stačí sa preukázať OK Kartou a zľava
                     sa vám automaticky uplatní.
                   </p>
                 </ExpandableText>
@@ -84,23 +84,23 @@ export default function SponzoriPage() {
         </div>
       </section>
 
-      {/* OK karta vizuál + benefity */}
+      {/* OK Karta vizuál + benefity */}
       <section className="pb-14">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="md:grid md:grid-cols-2 md:gap-14 md:items-center">
             {/* Karta vizuál */}
             <div>
-              <h2 className="text-xl font-black text-[#6F2380] mb-5">Tvoja OK karta</h2>
+              <h2 className="text-xl font-black text-[#6F2380] mb-5">Tvoja OK Karta</h2>
               <div className="w-full md:max-w-xs aspect-[9/16] max-h-[360px] rounded-[2rem] bg-[#FDA4C7]/20 flex flex-col items-center justify-center gap-3 mb-6">
                 <QrCode size={40} className="text-[#FDA4C7]/40" />
-                <p className="text-[#FDA4C7]/50 text-xs font-semibold">[IMG-24] OK karta na telefóne</p>
+                <p className="text-[#FDA4C7]/50 text-xs font-semibold">[IMG-24] OK Karta na telefóne</p>
               </div>
             </div>
             {/* Benefity */}
             <div>
               <div className="flex flex-col gap-2">
                 {[
-                  "OK karta sa vytvorí ihneď po dokončení registrácie",
+                  "OK Karta sa vytvorí ihneď po dokončení registrácie",
                   "Každý člen má vlastný identifikátor",
                   "Vstupenka na podujatia a workshopy",
                   "Prehľadný preukaz člena vždy v mobile",
@@ -198,14 +198,14 @@ export default function SponzoriPage() {
       <section className="pb-16">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="rounded-[2rem] bg-[#6F2380] px-6 py-10 md:py-14 text-center">
-            <h2 className="text-[2rem] md:text-[2.4rem] font-black text-white leading-tight mb-3">Získajte svoju OK kartu</h2>
+            <h2 className="text-[2rem] md:text-[2.4rem] font-black text-white leading-tight mb-3">Získajte svoju OK Kartu</h2>
             <p className="text-white/65 text-sm leading-relaxed mb-7 md:max-w-sm md:mx-auto">
               Po registrácii a aktivácii členstva získate okamžitý prístup k
-              digitálnej OK karte s unikátnym QR kódom. Nájdete ju vo svojom
+              digitálnej OK Karte s unikátnym QR kódom. Nájdete ju vo svojom
               profile, pripravenú na okamžité používanie.
             </p>
             <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-10 py-4">
-              Chcem svoju OK kartu
+              Chcem svoju OK Kartu
             </Link>
           </div>
         </div>

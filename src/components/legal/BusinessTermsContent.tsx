@@ -47,7 +47,7 @@ export function BusinessTermsContent({ className }: { className?: string }) {
       </p>
       <ul className="mb-4 list-disc space-y-1.5 pl-5">
         <li><strong>Free</strong> — bezplatný prístup k základnému obsahu platformy, bez platby.</li>
-        <li><strong>Mesačné</strong> — plný prístup k platforme (videoknižnica, prednášky a podcasty, fóra, kalendár podujatí, OK karta), opakovaná platba raz mesačne.</li>
+        <li><strong>Mesačné</strong> — plný prístup k platforme (videoknižnica, prednášky a podcasty, fóra, kalendár podujatí, OK Karta), opakovaná platba raz mesačne.</li>
         <li><strong>Ročné</strong> — rovnaký rozsah prístupu ako Mesačné, opakovaná platba raz ročne.</li>
         <li><strong>Podporujúce</strong> — jednorazová dobrovoľná platba (minimálne 50 €), prístup na 1 rok v rozsahu Ročného členstva; určené najmä osobám, ktoré chcú komunitu finančne podporiť.</li>
       </ul>

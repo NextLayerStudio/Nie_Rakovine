@@ -59,7 +59,7 @@ export function PrivacyContent({ className }: { className?: string }) {
       <ul className="mb-4 list-disc space-y-2 pl-5">
         <li>
           <strong>Poskytovanie služieb platformy</strong> (vytvorenie a
-          správa účtu, členstvo, fóra, videoknižnica, OK karta) — právny
+          správa účtu, členstvo, fóra, videoknižnica, OK Karta) — právny
           základ: <strong>plnenie zmluvy</strong> (Podmienky používania).
         </li>
         <li>

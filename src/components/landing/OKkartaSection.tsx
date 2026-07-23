@@ -11,12 +11,12 @@ const HOW_STEPS = [
   {
     icon: BadgeCheck,
     title: "Registrácia",
-    desc: "Po vytvorení účtu sa automaticky sprístupní vaša digitálna OK karta s unikátnym QR kódom a identifikačným číslom.",
+    desc: "Po vytvorení účtu sa automaticky sprístupní vaša digitálna OK Karta s unikátnym QR kódom a identifikačným číslom.",
   },
   {
     icon: QrCode,
     title: "Vždy dostupná v mobile",
-    desc: "OK karta je uložená vo vašom profile a máte k nej prístup kedykoľvek, online aj offline. Nie je potrebná fyzická karta.",
+    desc: "OK Karta je uložená vo vašom profile a máte k nej prístup kedykoľvek, online aj offline. Nie je potrebná fyzická karta.",
   },
   {
     icon: ScanLine,
@@ -26,7 +26,7 @@ const HOW_STEPS = [
   {
     icon: Tag,
     title: "Vstup na podujatia",
-    desc: "OK karta slúži aj ako vstup na workshopy a podujatia. Registrácia prebieha jednoducho naskenovaním kódu bez potreby papierovej evidencie.",
+    desc: "OK Karta slúži aj ako vstup na workshopy a podujatia. Registrácia prebieha jednoducho naskenovaním kódu bez potreby papierovej evidencie.",
   },
 ];
 
@@ -56,20 +56,20 @@ export function OKkartaSection() {
           Zľavy a benefity
         </p>
         <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
-          Vaša OK karta.
+          Vaša OK Karta.
           <br />
           Výhody, ktoré máte vždy pri sebe.
         </h2>
         <ExpandableText maxHeight={80} fadeColor="#FFF3F9">
           <p className="text-[#6F2380]/65 text-base leading-relaxed">
-            Ako člen/ka ONKO KLUBU získavate digitálnu OK kartu s QR kódom, vďaka
+            Ako člen/ka ONKO KLUBU získavate digitálnu OK Kartu s QR kódom, vďaka
             ktorej môžete využívať zvýhodnené ponuky a benefity u vybraných
             partnerov po celom Slovensku.
           </p>
         </ExpandableText>
       </motion.div>
 
-      {/* Vizuál karty — presne rovnaký dizajn ako reálna OK karta v aplikácii */}
+      {/* Vizuál karty — presne rovnaký dizajn ako reálna OK Karta v aplikácii */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -141,7 +141,7 @@ export function OKkartaSection() {
 
       {/* Ako to funguje — cestička */}
       <div className="mb-14">
-        <h3 className="text-xl font-black text-[#6F2380] mb-8">Ako OK karta funguje</h3>
+        <h3 className="text-xl font-black text-[#6F2380] mb-8">Ako OK Karta funguje</h3>
         <div className="relative pl-5">
           <motion.div
             initial={{ scaleY: 0 }}
@@ -232,12 +232,12 @@ export function OKkartaSection() {
         className="rounded-[2rem] bg-[#6F2380] px-6 py-8 text-center"
       >
         <h3 className="text-[1.5rem] font-black text-white leading-snug mb-3">
-          Získajte svoju OK kartu
+          Získajte svoju OK Kartu
         </h3>
         <div className="mb-7">
           <ExpandableText maxHeight={60} fadeColor="#6F2380" align="center">
             <p className="text-white/65 text-sm leading-relaxed">
-              Vaša OK karta bude dostupná okamžite po prvom prihlásení. Bez
+              Vaša OK Karta bude dostupná okamžite po prvom prihlásení. Bez
               poplatkov a bez zbytočnej administratívy.
             </p>
           </ExpandableText>
@@ -246,7 +246,7 @@ export function OKkartaSection() {
           href="/register"
           className="block w-full rounded-full bg-[#FDA4C7] text-white font-black text-base py-4 active:scale-[0.98] transition-transform"
         >
-          Aktivovať OK kartu
+          Aktivovať OK Kartu
         </Link>
       </motion.div>
       </div>

@@ -46,7 +46,7 @@ export function TermsContent({ className }: { className?: string }) {
         <li>diskusné fóra a profily členov, kde môžete zdieľať príspevky, komentáre a fotografie a komunikovať s ostatnými členmi komunity,</li>
         <li>videoknižnicu, odborné prednášky, podcasty a články,</li>
         <li>kalendár podujatí a aktivít s možnosťou online registrácie účasti (vrátane fyzických podujatí),</li>
-        <li>digitálnu OK kartu so zľavami u partnerov platformy,</li>
+        <li>digitálnu OK Kartu so zľavami u partnerov platformy,</li>
         <li>ďalšie funkcie súvisiace s podporou onkologických pacientov a ich blízkych (napr. Sociálny kompas, sledovanie nálady).</li>
       </ul>
       <p className="mb-4">
