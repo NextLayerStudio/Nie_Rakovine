@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { QrCode, ScanLine, Tag, BadgeCheck } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const HOW_STEPS = [
@@ -61,54 +62,76 @@ export function OKkartaSection() {
         </h2>
         <ExpandableText maxHeight={80} fadeColor="#FFF3F9">
           <p className="text-[#6F2380]/65 text-base leading-relaxed">
-            Ako člen/ka ONKO KLUBU získavate digitálnu OKkartu s QR kódom, vďaka
+            Ako člen/ka ONKO KLUBU získavate digitálnu OK kartu s QR kódom, vďaka
             ktorej môžete využívať zvýhodnené ponuky a benefity u vybraných
             partnerov po celom Slovensku.
           </p>
         </ExpandableText>
       </motion.div>
 
-      {/* Vizuál karty */}
+      {/* Vizuál karty — presne rovnaký dizajn ako reálna OK karta v aplikácii */}
       <motion.div
-        initial={{ opacity: 0, y: 20, rotate: -2 }}
-        whileInView={{ opacity: 1, y: 0, rotate: -2 }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
         transition={{ duration: 0.6 }}
         className="mb-14 md:max-w-xs"
-        style={{ rotate: "-2deg" }}
       >
         <div
-          className="relative w-full rounded-[1.8rem] overflow-hidden"
+          className="relative w-full overflow-hidden rounded-[24px]"
           style={{
-            aspectRatio: "1.586",
-            background: "linear-gradient(135deg, #6F2380 0%, #9B3BAF 45%, #CA6A8A 100%)",
+            aspectRatio: "1.72",
+            background: "linear-gradient(135deg, #1a0430 0%, #5a1880 60%, #28074a 100%)",
+            boxShadow: "0 12px 40px rgba(90,24,128,0.5), 0 2px 8px rgba(0,0,0,0.35)",
           }}
         >
-          {/* dekoratívny kruh */}
-          <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-white/5" />
-          <div className="absolute -bottom-8 -left-8 w-36 h-36 rounded-full bg-white/5" />
+          {/* dekoratívne kruhy */}
+          <div className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full bg-[#FDA4C7]/20 blur-2xl" />
+          <div className="pointer-events-none absolute -bottom-10 left-0 h-32 w-32 rounded-full bg-white/5 blur-2xl" />
 
-          <div className="relative z-10 p-6 h-full flex flex-col justify-between">
-            {/* hlavička */}
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-0.5">
-                  OnkoKlub
-                </p>
-                <p className="text-white font-black text-xl leading-none">OK karta</p>
+          <div className="relative flex h-full flex-col px-5 pb-4 pt-4">
+            {/* hlavička s logami */}
+            <div className="flex items-center justify-between">
+              <Image
+                src="/logo/onkoklub-horizontal.png"
+                alt="ONKO KLUB"
+                width={1642}
+                height={538}
+                className="h-[18px] w-auto brightness-0 invert opacity-85"
+              />
+              <Image
+                src="/logo/nie-rakovine.png"
+                alt="NIE RAKOVINE, o.z."
+                width={1626}
+                height={851}
+                className="h-[14px] w-auto brightness-0 invert opacity-40"
+              />
+            </div>
+
+            {/* obsah */}
+            <div className="mt-3 flex flex-1 items-center gap-3">
+              <div className="flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#CA6A8A]/80 to-[#6F2380] text-xl font-bold text-white ring-2 ring-white/25">
+                TM
               </div>
-              <div className="bg-white/15 rounded-xl p-2.5">
-                <QrCode size={28} className="text-white" strokeWidth={1.5} />
+
+              <div className="min-w-0 flex-1">
+                <h4 className="truncate text-[17px] font-bold leading-tight text-white">
+                  Tvoje meno
+                </h4>
+                <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/15 px-2.5 py-[3px] text-[10px] font-semibold text-emerald-300 ring-1 ring-emerald-400/25">
+                  <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  Aktívny člen
+                </div>
+              </div>
+
+              <div className="shrink-0 overflow-hidden rounded-xl bg-white p-[5px] shadow-[0_2px_12px_rgba(0,0,0,0.3)]">
+                <QRCodeSVG value="OK-00000000" size={56} fgColor="#28074a" bgColor="#ffffff" level="M" />
               </div>
             </div>
 
-            {/* ID placeholder */}
-            <div>
-              <p className="text-white/35 text-[10px] font-bold uppercase tracking-widest mb-1">
-                Člen
-              </p>
-              <p className="text-white font-black text-lg tracking-wide">Tvoje meno</p>
-              <p className="text-white/45 text-xs mt-0.5 font-mono tracking-widest">
+            {/* pätička — číslo člena */}
+            <div className="mt-2 border-t border-white/10 pt-2">
+              <p className="font-mono text-[10px] tracking-widest text-white/35">
                 OK · 0000 · 0000
               </p>
             </div>
@@ -209,7 +232,7 @@ export function OKkartaSection() {
         className="rounded-[2rem] bg-[#6F2380] px-6 py-8 text-center"
       >
         <h3 className="text-[1.5rem] font-black text-white leading-snug mb-3">
-          Získajte svoju OKkartu
+          Získajte svoju OK kartu
         </h3>
         <div className="mb-7">
           <ExpandableText maxHeight={60} fadeColor="#6F2380" align="center">
@@ -223,7 +246,7 @@ export function OKkartaSection() {
           href="/register"
           className="block w-full rounded-full bg-[#FDA4C7] text-white font-black text-base py-4 active:scale-[0.98] transition-transform"
         >
-          Aktivovať OKkartu
+          Aktivovať OK kartu
         </Link>
       </motion.div>
       </div>

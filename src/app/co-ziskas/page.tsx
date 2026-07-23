@@ -54,7 +54,7 @@ const FEATURES = [
     slug: "sponzori",
     title: "Zľavy a benefity",
     headline: "Špeciálne zľavy len pre členov ONKO KLUBU",
-    desc: "Ako člen/ka ONKO KLUBU máte vďaka našim partnerom možnosť využiť špeciálne zľavy. Stačí sa preukázať OKkartou a zľava sa vám automaticky uplatní.",
+    desc: "Ako člen/ka ONKO KLUBU máte vďaka našim partnerom možnosť využiť špeciálne zľavy. Stačí sa preukázať OK kartou a zľava sa vám automaticky uplatní.",
     detailItems: ["Zdravie a starostlivosť o telo", "Výživa, doplnky a zdravý životný štýl", "Pohyb, rehabilitácia a fyzická aktivita", "Spánok a regenerácia", "Kozmetika a starostlivosť o pokožku", "Technológie pre zdravie", "Voľnočasové aktivity", "Duševná pohoda a relaxácia"],
     imgs: ["[IMG-30] Screenshot zliav", "[IMG-09] Partneri"],
   },
@@ -66,7 +66,7 @@ const FEATURES = [
     headline: "Jeden QR kód – desiatky výhod",
     desc: "Digitálna členská OK karta s unikátnym QR kódom slúži ako váš členský preukaz. Umožňuje uplatniť zľavy u partnerských značiek a zároveň slúži ako vstupenka na podujatia a workshopy. Vždy dostupná vo vašom mobile, bez potreby tlačenej verzie.",
     detailItems: ["OK karta sa vytvorí ihneď po dokončení registrácie", "Každý člen má vlastný identifikátor", "Vstupenka na podujatia a workshopy", "Prehľadný preukaz člena vždy v mobile", "Uplatnenie zliav"],
-    imgs: ["[IMG-24] Mockup OKkarty na telefóne"],
+    imgs: ["[IMG-24] Mockup OK karty na telefóne"],
   },
   {
     icon: BookOpen,
