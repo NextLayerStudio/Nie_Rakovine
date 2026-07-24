@@ -9,14 +9,14 @@ const ease = [0.22, 1, 0.36, 1] as const;
 export function CommunityPhotoSection() {
   return (
     <section className="pb-8 md:pb-12">
-      {/* Mobile: fotka mierne vytŕča za pravý okraj obrazovky, asymetricky pootočená */}
+      {/* Mobile: fotka na strede, mierne pootočená (roh "vytŕča" vďaka náklonu) */}
       <div className="md:hidden">
         <motion.div
-          initial={{ opacity: 0, x: 24 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.7, ease }}
-          className="relative -mr-5 ml-12"
+          className="relative mx-auto w-[85%]"
           style={{ transform: "rotate(-3deg)" }}
         >
           <div
