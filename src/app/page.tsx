@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/landing/Navbar";
 import { CookieConsentBanner } from "@/components/landing/CookieConsentBanner";
 import { HeroSection } from "@/components/landing/HeroSection";
+import { CommunityPhotoSection } from "@/components/landing/CommunityPhotoSection";
 import { NieSiVTomSamSection } from "@/components/landing/NieSiVTomSamSection";
 import { FeatureSection } from "@/components/landing/FeatureSection";
 import { VideokniznicaSection } from "@/components/landing/VideokniznicaSection";
@@ -18,6 +19,7 @@ export default function LandingPage() {
     <main className="min-h-screen bg-[#FFF3F9]">
       <Navbar />
       <HeroSection />
+      <CommunityPhotoSection />
       <NieSiVTomSamSection />
       <FeatureSection />
       <VideokniznicaSection />
