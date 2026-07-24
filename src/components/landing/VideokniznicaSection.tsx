@@ -7,10 +7,10 @@ import { Play, Clock, ChevronRight, X } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const VIDEOS = [
-  { src: "/videos/adriana.mp4",  title: "Jemná joga pri únave — 20 minút",                        lektor: "Adriana",                  dur: "20 min", accent: "#FDA4C7" },
-  { src: "/videos/petra.mp4",    title: "Mindfulness: ako zvládnuť úzkosť pri diagnóze",           lektor: "Petra Joga",               dur: "35 min", accent: "#6F2380" },
+  { src: "/videos/adriana.mp4",  title: "Príbeh pacientky",                                        lektor: "Adriana",                  dur: "20 min", accent: "#FDA4C7" },
+  { src: "/videos/petra.mp4",    title: "Jemná joga pri únave — 20 minút",                         lektor: "Petra Joga",               dur: "35 min", accent: "#6F2380" },
   { src: "/videos/30min.mp4",    title: "Dýchacie cvičenia pre lepší spánok",                      lektor: "Mindfulness kanál",         dur: "30 min", accent: "#FDA4C7" },
-  { src: "/videos/c0420.mp4",    title: "Čo jesť počas chemoterapie — rady nutričnej poradkyne",   lektor: "Výživa & nutričná poradňa", dur: "45 min", accent: "#6F2380" },
+  { src: "/videos/c0420.mp4",    title: "Mindfulness: ako zvládnuť úzkosť pri diagnóze",           lektor: "Výživa & nutričná poradňa", dur: "45 min", accent: "#6F2380" },
 ];
 
 export function VideokniznicaSection() {
