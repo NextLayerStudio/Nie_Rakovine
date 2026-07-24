@@ -67,9 +67,9 @@ export function ForumAdminForm({
           name="imageUrl"
           uploadName="imageFile"
           label="Profilová fotka fóra"
-          hint="Nahrajte z počítača alebo vložte odkaz. Zobrazí sa v zozname fór v aplikácii. Ak prázdne, použije sa farba nižšie."
+          hint="Nahrajte z počítača alebo vložte odkaz. Zobrazí sa v zozname fór v aplikácii (zaoblený štvorec). Ak prázdne, použije sa farba nižšie."
           defaultValue={forum?.imageUrl ?? ""}
-          shape="circle"
+          shape="square"
         />
 
         <label className="block">

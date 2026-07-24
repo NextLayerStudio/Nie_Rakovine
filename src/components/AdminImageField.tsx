@@ -53,7 +53,8 @@ export function AdminImageField({
   label: string;
   hint?: string;
   defaultValue?: string;
-  shape?: "circle" | "rounded";
+  /** "square" = same 1:1 crop as "circle" but with a rectangular (not round) crop mask and preview - for avatars displayed as rounded squares, not circles. */
+  shape?: "circle" | "rounded" | "square";
   previewAspect?: "square" | "video";
   /** When set with previewAspect="video", forces every upload through a mandatory 16:9 crop (no orientation choice). */
   mandatoryAspect?: boolean;
@@ -91,11 +92,13 @@ export function AdminImageField({
   const previewClass =
     shape === "circle"
       ? "h-20 w-20 rounded-full"
-      : previewAspect === "video"
-        ? cropAspect < 1
-          ? "h-40 w-24 rounded-xl"
-          : "h-24 w-40 rounded-xl"
-        : "h-20 w-32 rounded-xl";
+      : shape === "square"
+        ? "h-20 w-20 rounded-xl"
+        : previewAspect === "video"
+          ? cropAspect < 1
+            ? "h-40 w-24 rounded-xl"
+            : "h-24 w-40 rounded-xl"
+          : "h-20 w-32 rounded-xl";
 
   const previewSrc = filePreview || url.trim() || null;
   const previewStyle = previewSrc
