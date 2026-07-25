@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -13,8 +13,8 @@ const INITIAL: ActionState = { ok: false };
 
 /**
  * Guest registration form (meno, priezvisko, e-mail, telefón — no account
- * needed). Shared between the quick-registration modal on /podujatia and
- * the standalone event detail page.
+ * needed) for the standalone event detail page. Starts collapsed behind a
+ * single CTA button; clicking it reveals the actual fields.
  */
 export function EventGuestTicketForm({
   eventId,
@@ -26,6 +26,7 @@ export function EventGuestTicketForm({
   onSuccess?: () => void;
 }) {
   const router = useRouter();
+  const [started, setStarted] = useState(false);
   const [state, formAction] = useActionState(
     registerGuestForEventAction,
     INITIAL,
@@ -37,6 +38,18 @@ export function EventGuestTicketForm({
       onSuccess?.();
     }
   }, [state.ok, router, onSuccess]);
+
+  if (!started && !state.ok) {
+    return (
+      <button
+        type="button"
+        onClick={() => setStarted(true)}
+        className="w-full rounded-full bg-[#FDA4C7] py-3 text-sm font-black text-white transition hover:brightness-105"
+      >
+        Prihlásiť sa na podujatie
+      </button>
+    );
+  }
 
   return (
     <AnimatePresence mode="wait">

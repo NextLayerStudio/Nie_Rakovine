@@ -54,101 +54,100 @@ export default async function PodujatieDetailPage({
     <main className="min-h-screen bg-[#FFF3F9] font-sans">
       <PublicEventsHeader />
 
-      <section className="pt-24 pb-16">
-        <div className="mx-auto max-w-6xl px-5 md:px-8">
-          <Link
-            href="/podujatia"
-            className="mb-5 inline-flex items-center gap-1.5 text-sm font-bold text-[#6F2380]/70 hover:text-[#6F2380]"
-          >
-            <ArrowLeft size={16} />
-            Všetky podujatia
-          </Link>
+      <section className="pt-[60px] pb-16 md:pt-[68px]">
+        <div className="grid md:grid-cols-2">
+          <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#6F2380]/10 md:aspect-auto md:min-h-[560px]">
+            {event.coverUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={event.coverUrl}
+                alt={event.title}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="h-full w-full bg-gradient-to-br from-[#FDA4C7] to-[#6F2380]" />
+            )}
 
-          <div className="grid gap-8 md:grid-cols-2 md:gap-10">
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-[#6F2380]/10 shadow-card md:aspect-auto md:h-full">
-              {event.coverUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={event.coverUrl}
-                  alt={event.title}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="h-full w-full bg-gradient-to-br from-[#FDA4C7] to-[#6F2380]" />
-              )}
-              {event.category && (
-                <span
-                  className="absolute left-4 top-4 rounded-pill px-3 py-1.5 text-xs font-bold uppercase tracking-wide"
-                  style={{
-                    background: EVENT_CATEGORY_META[event.category].color,
-                    color: EVENT_CATEGORY_META[event.category].text,
-                  }}
-                >
-                  {EVENT_CATEGORY_META[event.category].label}
-                </span>
-              )}
+            <Link
+              href="/podujatia"
+              aria-label="Všetky podujatia"
+              className="absolute left-4 top-4 grid h-9 w-9 place-items-center rounded-full bg-black/40 text-white backdrop-blur-sm hover:bg-black/55"
+            >
+              <ArrowLeft size={18} />
+            </Link>
+
+            {event.category && (
+              <span
+                className="absolute right-4 top-4 rounded-pill px-3 py-1.5 text-xs font-bold uppercase tracking-wide"
+                style={{
+                  background: EVENT_CATEGORY_META[event.category].color,
+                  color: EVENT_CATEGORY_META[event.category].text,
+                }}
+              >
+                {EVENT_CATEGORY_META[event.category].label}
+              </span>
+            )}
+          </div>
+
+          <div className="flex flex-col px-5 py-8 md:px-12 md:py-14">
+            <h1 className="text-2xl font-black leading-tight text-[#6F2380] md:text-3xl">
+              {event.title}
+            </h1>
+
+            <div className="mt-4 space-y-1.5 text-sm text-[#6F2380]/70">
+              <p className="font-semibold">{date}</p>
+              {event.location && <p>{event.location}</p>}
+              {event.region && <p>{regionLabel(event.region)}</p>}
+              <p className="text-[#6F2380]/50">
+                {formatRegistrationCount(registrationCount, event.capacity)}
+              </p>
             </div>
 
-            <div className="flex flex-col">
-              <h1 className="text-2xl font-black leading-tight text-[#6F2380] md:text-3xl">
-                {event.title}
-              </h1>
+            {isMembersOnly && (
+              <p className="mt-4 inline-flex w-fit items-center gap-1.5 rounded-pill bg-[#6F2380]/8 px-3 py-1.5 text-xs font-bold text-[#6F2380]">
+                🔒 Podujatie určené najmä členom ONKO KLUBU
+              </p>
+            )}
 
-              <div className="mt-4 space-y-1.5 text-sm text-[#6F2380]/70">
-                <p className="font-semibold">{date}</p>
-                {event.location && <p>{event.location}</p>}
-                {event.region && <p>{regionLabel(event.region)}</p>}
-                <p className="text-[#6F2380]/50">
-                  {formatRegistrationCount(registrationCount, event.capacity)}
-                </p>
+            {event.description && (
+              <p className="mt-5 whitespace-pre-line text-sm leading-relaxed text-[#6F2380]/75">
+                {event.description}
+              </p>
+            )}
+
+            {user ? (
+              <div className="mt-6 rounded-2xl bg-brand-gradient p-5 text-white shadow-card">
+                {isFull ? (
+                  <p className="text-center text-sm font-bold text-white/80">
+                    Kapacita podujatia je naplnená.
+                  </p>
+                ) : myRegistration ? (
+                  <p className="text-center text-sm font-bold">
+                    Ste prihlásení na toto podujatie.
+                  </p>
+                ) : (
+                  <>
+                    <p className="mb-1 text-sm font-bold">Prihlásiť sa na podujatie</p>
+                    <EventRegistrationForm
+                      eventId={event.id}
+                      defaultName={nameParts[0] ?? ""}
+                      defaultSurname={nameParts.slice(1).join(" ")}
+                      stayOnPage
+                    />
+                  </>
+                )}
               </div>
-
-              {isMembersOnly && (
-                <p className="mt-4 inline-flex w-fit items-center gap-1.5 rounded-pill bg-[#6F2380]/8 px-3 py-1.5 text-xs font-bold text-[#6F2380]">
-                  🔒 Podujatie určené najmä členom ONKO KLUBU
-                </p>
-              )}
-
-              {event.description && (
-                <p className="mt-5 whitespace-pre-line text-sm leading-relaxed text-[#6F2380]/75">
-                  {event.description}
-                </p>
-              )}
-
-              {user ? (
-                <div className="mt-6 rounded-2xl bg-brand-gradient p-5 text-white shadow-card">
-                  {isFull ? (
-                    <p className="text-center text-sm font-bold text-white/80">
-                      Kapacita podujatia je naplnená.
-                    </p>
-                  ) : myRegistration ? (
-                    <p className="text-center text-sm font-bold">
-                      Ste prihlásení na toto podujatie.
-                    </p>
-                  ) : (
-                    <>
-                      <p className="mb-1 text-sm font-bold">Prihlásiť sa na podujatie</p>
-                      <EventRegistrationForm
-                        eventId={event.id}
-                        defaultName={nameParts[0] ?? ""}
-                        defaultSurname={nameParts.slice(1).join(" ")}
-                        stayOnPage
-                      />
-                    </>
-                  )}
-                </div>
-              ) : (
-                <div className="mt-6 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-[#6F2380]/10">
-                  {isFull ? (
-                    <p className="text-center text-sm font-bold text-[#6F2380]/60">
-                      Kapacita podujatia je naplnená.
-                    </p>
-                  ) : (
-                    <EventGuestTicketForm eventId={event.id} eventTitle={event.title} />
-                  )}
-                </div>
-              )}
-            </div>
+            ) : (
+              <div className="mt-6">
+                {isFull ? (
+                  <p className="rounded-2xl bg-white p-5 text-center text-sm font-bold text-[#6F2380]/60 shadow-sm ring-1 ring-[#6F2380]/10">
+                    Kapacita podujatia je naplnená.
+                  </p>
+                ) : (
+                  <EventGuestTicketForm eventId={event.id} eventTitle={event.title} />
+                )}
+              </div>
+            )}
           </div>
         </div>
       </section>
