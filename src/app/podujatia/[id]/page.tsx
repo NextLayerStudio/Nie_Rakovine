@@ -52,7 +52,17 @@ export default async function PodujatieDetailPage({
 
   return (
     <main className="min-h-screen bg-[#FFF3F9] font-sans">
-      <PublicEventsHeader />
+      <PublicEventsHeader
+        left={
+          <Link
+            href="/podujatia"
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-[#6F2380]/70 hover:text-[#6F2380]"
+          >
+            <ArrowLeft size={16} />
+            <span className="hidden sm:inline">Všetky podujatia</span>
+          </Link>
+        }
+      />
 
       <section className="pt-[60px] pb-16 md:pt-[68px]">
         <div className="grid md:grid-cols-2">
@@ -67,14 +77,6 @@ export default async function PodujatieDetailPage({
             ) : (
               <div className="h-full w-full bg-gradient-to-br from-[#FDA4C7] to-[#6F2380]" />
             )}
-
-            <Link
-              href="/podujatia"
-              className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-pill bg-black/40 px-3.5 py-2 text-xs font-bold text-white backdrop-blur-sm hover:bg-black/55"
-            >
-              <ArrowLeft size={16} />
-              Všetky podujatia
-            </Link>
 
             {event.category && (
               <span
