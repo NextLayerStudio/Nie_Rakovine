@@ -2,12 +2,14 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   registerGuestForEventAction,
   type ActionState,
 } from "@/lib/actions/event-tickets";
 import { FormError, SubmitButton } from "@/components/FormError";
+import { ConsentCheckbox } from "@/components/ConsentCheckbox";
 
 const INITIAL: ActionState = { ok: false };
 
@@ -115,6 +117,17 @@ export function EventGuestTicketForm({
               required
               className="w-full rounded-full border border-[#FDA4C7]/30 bg-white px-4 py-2.5 text-sm text-[#6F2380] placeholder-[#6F2380]/40 outline-none focus:border-[#FDA4C7]"
             />
+
+            <ConsentCheckbox name="consentPrivacy" required>
+              súhlas so spracovaním osobných údajov v súlade so{" "}
+              <Link
+                href="/ochrana-sukromia"
+                target="_blank"
+                className="font-semibold underline underline-offset-2"
+              >
+                Zásadami ochrany osobných údajov
+              </Link>
+            </ConsentCheckbox>
 
             <FormError message={state.message} />
 

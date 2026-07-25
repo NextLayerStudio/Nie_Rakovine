@@ -24,6 +24,7 @@ export async function registerGuestForEventAction(
   const lastName = String(formData.get("lastName") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
   const phone = String(formData.get("phone") ?? "").trim();
+  const consentPrivacy = formData.get("consentPrivacy") === "on";
 
   if (!eventId) return { ok: false, message: "Chýba podujatie." };
   if (!firstName || !lastName || !email || !phone) {
@@ -31,6 +32,9 @@ export async function registerGuestForEventAction(
   }
   if (!EMAIL_RE.test(email)) {
     return { ok: false, message: "Zadajte platný e-mail." };
+  }
+  if (!consentPrivacy) {
+    return { ok: false, message: "Pre registráciu potrebujeme súhlas so spracovaním osobných údajov." };
   }
 
   const rateLimit = await enforceAuthRateLimit({
@@ -75,7 +79,7 @@ export async function registerGuestForEventAction(
   let ticketId: string;
   try {
     const ticket = await prisma.eventTicket.create({
-      data: { eventId, firstName, lastName, email, phone },
+      data: { eventId, firstName, lastName, email, phone, consentPrivacy },
       select: { id: true },
     });
     ticketId = ticket.id;

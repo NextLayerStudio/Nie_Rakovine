@@ -65,8 +65,8 @@ export default async function PodujatieDetailPage({
       />
 
       <section className="pt-[60px] pb-16 md:pt-[68px]">
-        <div className="grid md:grid-cols-2">
-          <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#6F2380]/10 md:aspect-auto md:min-h-[560px]">
+        <div className="mx-auto grid max-w-[1400px] md:grid-cols-2">
+          <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#6F2380]/10">
             {event.coverUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
