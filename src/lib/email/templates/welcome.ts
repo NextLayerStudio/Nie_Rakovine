@@ -109,26 +109,26 @@ export function renderWelcomeEmail(fullName: string): string {
 <body class="ok-bg" style="margin:0;padding:0;background:${BRAND.white};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
   <div style="display:none;max-height:0;overflow:hidden;opacity:0;mso-hide:all;">${escapeHtml(previewText)}&#847;&zwnj;&nbsp;</div>
 
-  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" class="ok-bg" style="background:${BRAND.white};padding:36px 16px;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" class="ok-bg" style="background:${BRAND.white};padding:32px 0;">
     <tr>
       <td align="center">
 
-        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:520px;">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;">
 
           <tr>
-            <td style="padding:0 24px 26px;text-align:center;">
+            <td style="padding:0 18px 24px;text-align:center;">
               ${renderEmailLogos(appUrl, "header")}
               <div class="ok-text" style="font-size:24px;font-weight:800;color:${BRAND.text};line-height:1.3;letter-spacing:-0.01em;margin:0 0 8px;">
                 Ahoj, ${escapeHtml(name)}!
               </div>
-              <div class="ok-muted" style="font-size:15px;font-weight:500;color:${BRAND.textMuted};line-height:1.6;max-width:380px;margin:0 auto;">
+              <div class="ok-muted" style="font-size:15px;font-weight:500;color:${BRAND.textMuted};line-height:1.6;">
                 Vitajte v ONKO KLUBE – bezpečnom priestore pre ľudí, ktorých život zasiahlo onkologické ochorenie.
               </div>
             </td>
           </tr>
 
           <tr>
-            <td style="padding:0 28px 8px;">
+            <td style="padding:0 18px 8px;">
               ${membershipPillarsRow()}
 
               <p class="ok-text" style="margin:0 0 22px;font-size:15px;line-height:1.75;color:${BRAND.text};">
@@ -142,7 +142,7 @@ export function renderWelcomeEmail(fullName: string): string {
           </tr>
 
           <tr>
-            <td style="padding:8px 28px 8px;text-align:center;">
+            <td style="padding:8px 18px 8px;text-align:center;">
               <table role="presentation" cellspacing="0" cellpadding="0" align="center" style="margin:0 auto 14px;">
                 <tr>
                   <td style="border-radius:999px;background:${BRAND.pink};">
@@ -160,7 +160,7 @@ export function renderWelcomeEmail(fullName: string): string {
           </tr>
 
           <tr>
-            <td class="ok-border" style="padding:24px 28px 8px;border-top:1px solid rgba(111,35,128,0.1);text-align:center;">
+            <td class="ok-border" style="padding:20px 18px 8px;border-top:1px solid rgba(111,35,128,0.1);text-align:center;">
               ${renderEmailLogos(appUrl, "footer")}
               <p class="ok-muted" style="margin:16px 0 14px;font-size:12px;line-height:1.6;color:${BRAND.textMuted};">
                 Ak ste sa neregistrovali vy, ignorujte tento e-mail alebo nás kontaktujte.

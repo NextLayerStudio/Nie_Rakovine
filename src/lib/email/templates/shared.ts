@@ -144,7 +144,7 @@ export function renderEmailShell({
 
   const ctaBlock = cta
     ? `<tr>
-        <td style="padding:8px 28px 8px;text-align:center;">
+        <td style="padding:8px 18px 8px;text-align:center;">
           <table role="presentation" cellspacing="0" cellpadding="0" align="center" style="margin:0 auto ${secondaryLink ? "14px" : "0"};">
             <tr>
               <td style="border-radius:999px;background:${ctaBg};">
@@ -174,25 +174,25 @@ export function renderEmailShell({
 </head>
 <body class="ok-bg" style="margin:0;padding:0;background:${BRAND.white};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
   <div style="display:none;max-height:0;overflow:hidden;opacity:0;mso-hide:all;">${escapeHtml(previewText)}&#847;&zwnj;&nbsp;</div>
-  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" class="ok-bg" style="background:${BRAND.white};padding:36px 16px;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" class="ok-bg" style="background:${BRAND.white};padding:32px 0;">
     <tr>
       <td align="center">
-        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:520px;">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;">
           <tr>
-            <td style="padding:0 24px 26px;text-align:center;">
+            <td style="padding:0 18px 24px;text-align:center;">
               ${renderEmailLogos(appUrl, "header")}
               <div class="ok-text" style="font-size:22px;font-weight:800;color:${BRAND.text};line-height:1.3;letter-spacing:-0.01em;margin:0 0 6px;">${escapeHtml(heroTitle)}</div>
-              ${heroSubtitle ? `<div class="ok-muted" style="font-size:14px;font-weight:500;color:${BRAND.textMuted};line-height:1.5;max-width:360px;margin:0 auto;">${escapeHtml(heroSubtitle)}</div>` : ""}
+              ${heroSubtitle ? `<div class="ok-muted" style="font-size:14px;font-weight:500;color:${BRAND.textMuted};line-height:1.5;">${escapeHtml(heroSubtitle)}</div>` : ""}
             </td>
           </tr>
           <tr>
-            <td class="ok-text" style="padding:0 28px 8px;font-size:15px;line-height:1.7;color:${BRAND.text};">
+            <td class="ok-text" style="padding:0 18px 8px;font-size:15px;line-height:1.7;color:${BRAND.text};">
               ${bodyHtml}
             </td>
           </tr>
           ${ctaBlock}
           <tr>
-            <td class="ok-border" style="padding:24px 28px 8px;border-top:1px solid rgba(111,35,128,0.1);text-align:center;">
+            <td class="ok-border" style="padding:20px 18px 8px;border-top:1px solid rgba(111,35,128,0.1);text-align:center;">
               ${renderEmailLogos(appUrl, "footer")}
               ${footerNote ? `<p class="ok-muted" style="margin:16px 0 14px;font-size:12px;line-height:1.6;color:${BRAND.textMuted};">${escapeHtml(footerNote)}</p>` : `<div style="height:16px;"></div>`}
               <a href="${escapeAttr(appUrl)}" class="ok-muted" style="font-size:12px;font-weight:600;color:${BRAND.purple};text-decoration:none;">${escapeHtml(appUrl.replace(/^https?:\/\//, ""))}</a>
