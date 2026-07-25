@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { EventForm } from "../EventForm";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { DeleteConfirmButton } from "@/components/admin/DeleteConfirmButton";
+import { removeEventAttendeeAction } from "@/lib/actions/events";
 import { EVENT_TIME_ZONE } from "@/lib/timezone";
 
 export const dynamic = "force-dynamic";
@@ -131,6 +133,15 @@ export default async function EditEventPage({
                       Zobraziť lístok →
                     </a>
                   )}
+                  <div className="pt-1.5">
+                    <DeleteConfirmButton
+                      action={removeEventAttendeeAction}
+                      id={a.id}
+                      label="Odstrániť z podujatia"
+                      confirmText={`Naozaj odstrániť ${a.name} z tohto podujatia?`}
+                      extraFields={{ eventId: id, source: a.source }}
+                    />
+                  </div>
                 </div>
               </details>
             ))}

@@ -179,6 +179,22 @@ export async function deleteEventAction(formData: FormData): Promise<void> {
   );
 }
 
+export async function removeEventAttendeeAction(formData: FormData): Promise<void> {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const eventId = String(formData.get("eventId") ?? "");
+  const source = String(formData.get("source") ?? "");
+  if (!id || !eventId) return;
+
+  if (source === "member") {
+    await prisma.eventRegistration.delete({ where: { id } });
+  } else {
+    await prisma.eventTicket.delete({ where: { id } });
+  }
+
+  revalidatePath(`/admin/events/${eventId}`);
+}
+
 function revalidateEventPaths(profileId: string | null) {
   revalidatePath("/admin/profiles");
   if (profileId) revalidatePath(`/admin/profiles/${profileId}`);
