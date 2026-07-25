@@ -26,7 +26,7 @@ export default function KontaktPage() {
       <section className="pb-16 px-5">
         <div className="max-w-3xl mx-auto grid gap-4 sm:grid-cols-2">
           <a
-            href="mailto:office@nierakovine.sk"
+            href="mailto:office@onkoklub.sk"
             className="flex items-start gap-4 rounded-3xl bg-white p-6 border border-[#FDA4C7]/15 hover:border-[#FDA4C7]/40 transition-colors"
           >
             <div className="w-11 h-11 rounded-xl bg-[#FDA4C7]/15 flex items-center justify-center shrink-0">
@@ -34,12 +34,12 @@ export default function KontaktPage() {
             </div>
             <div>
               <p className="text-[#6F2380]/50 text-xs font-bold uppercase tracking-wider mb-1">E-mail</p>
-              <p className="text-[#6F2380] font-bold text-[15px]">office@nierakovine.sk</p>
+              <p className="text-[#6F2380] font-bold text-[15px]">office@onkoklub.sk</p>
             </div>
           </a>
 
           <a
-            href="tel:+421911843336"
+            href="tel:+421904701009"
             className="flex items-start gap-4 rounded-3xl bg-white p-6 border border-[#FDA4C7]/15 hover:border-[#FDA4C7]/40 transition-colors"
           >
             <div className="w-11 h-11 rounded-xl bg-[#6F2380]/15 flex items-center justify-center shrink-0">
@@ -47,7 +47,7 @@ export default function KontaktPage() {
             </div>
             <div>
               <p className="text-[#6F2380]/50 text-xs font-bold uppercase tracking-wider mb-1">Telefón</p>
-              <p className="text-[#6F2380] font-bold text-[15px]">+421 911 843 336</p>
+              <p className="text-[#6F2380] font-bold text-[15px]">+421 904 701 009</p>
             </div>
           </a>
 

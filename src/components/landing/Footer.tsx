@@ -54,11 +54,11 @@ export function Footer() {
           {/* Kontakt */}
           <div>
             <p className="text-white/30 text-[10px] font-bold uppercase tracking-widest mb-3">Kontakt</p>
-            <a href="mailto:office@nierakovine.sk" className="text-[#FDA4C7] text-sm font-semibold block mb-1">
-              office@nierakovine.sk
+            <a href="mailto:office@onkoklub.sk" className="text-[#FDA4C7] text-sm font-semibold block mb-1">
+              office@onkoklub.sk
             </a>
-            <a href="tel:+421911843336" className="text-white/65 text-sm block mb-1">
-              +421 911 843 336
+            <a href="tel:+421904701009" className="text-white/65 text-sm block mb-1">
+              +421 904 701 009
             </a>
             <a href="https://nierakovine.sk" target="_blank" rel="noopener noreferrer" className="text-white/50 text-sm block mb-6">
               nierakovine.sk
