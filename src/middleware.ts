@@ -12,10 +12,22 @@ const ACCESS_GATE_PATH = "/access";
 const PROTECTED_PREFIXES = ["/home", "/menu", "/profile", "/admin"];
 
 // The rest of the app (landing page, login/register, admin, ...) isn't
-// finished yet. Only the events flow — and the password gate itself — is
-// public; everything else requires the staff bypass cookie, which is set
-// by entering STAFF_PASSWORD on /access (see lib/actions/staff-access.ts).
-const PUBLIC_ROUTE_PREFIXES = ["/podujatia", "/api/tickets", ACCESS_GATE_PATH];
+// finished yet. Only the events flow, its legal sub-pages, and the password
+// gate itself are public; everything else requires the staff bypass cookie,
+// which is set by entering STAFF_PASSWORD on /access (see
+// lib/actions/staff-access.ts).
+const PUBLIC_ROUTE_PREFIXES = [
+  "/podujatia",
+  "/api/tickets",
+  ACCESS_GATE_PATH,
+  "/podmienky",
+  "/obchodne-podmienky",
+  "/ochrana-sukromia",
+  "/pravidla-komunity",
+  "/pravne-vyhlasenie",
+  "/cookies",
+  "/kontakt",
+];
 
 function isProtected(pathname: string): boolean {
   return PROTECTED_PREFIXES.some((prefix) => pathname.startsWith(prefix));

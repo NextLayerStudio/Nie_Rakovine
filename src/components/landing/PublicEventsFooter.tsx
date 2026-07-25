@@ -1,8 +1,19 @@
 import Image from "next/image";
+import Link from "next/link";
+
+const LEGAL_LINKS = [
+  { label: "Podmienky používania", href: "/podmienky" },
+  { label: "Obchodné podmienky", href: "/obchodne-podmienky" },
+  { label: "Zásady ochrany osobných údajov", href: "/ochrana-sukromia" },
+  { label: "Pravidlá komunity", href: "/pravidla-komunity" },
+  { label: "Právne vyhlásenie o zodpovednosti", href: "/pravne-vyhlasenie" },
+  { label: "Zásady používania súborov cookies", href: "/cookies" },
+  { label: "Kontakt", href: "/kontakt" },
+];
 
 // Minimal footer for the public events flow (/podujatia). No links into the
-// rest of the app (login/register/pricing/...) — only contact info and the
-// legally required business details, as plain text.
+// rest of the app (login/register/pricing/...) — only contact info, the
+// legally required business details and the legal sub-pages.
 export function PublicEventsFooter() {
   return (
     <footer className="bg-[#6F2380]">
@@ -30,6 +41,18 @@ export function PublicEventsFooter() {
 
         <p className="text-white/30 text-[11px]">NIE RAKOVINE, o. z. · IČO: 50654896 · Cukrová 2272/14, Bratislava</p>
         <p className="text-white/30 text-[11px] mt-1">© 2026 NIE RAKOVINE, o. z. · Vytvorené v spolupráci s NextLayer Studio</p>
+
+        <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5">
+          {LEGAL_LINKS.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="text-white/30 text-[11px] underline transition-colors hover:text-white/60"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </div>
       </div>
     </footer>
   );

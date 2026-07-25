@@ -134,7 +134,6 @@ export default async function PodujatieDetailPage({
                       eventId={event.id}
                       defaultName={nameParts[0] ?? ""}
                       defaultSurname={nameParts.slice(1).join(" ")}
-                      stayOnPage
                       accentClassName="bg-[#FDA4C7]"
                     />
                   </>
