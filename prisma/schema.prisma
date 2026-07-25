@@ -543,6 +543,7 @@ model EventTicket {
   firstName String
   lastName  String
   email     String
+  phone     String?
   createdAt DateTime @default(now())
 
   @@unique([eventId, email])

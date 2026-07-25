@@ -23,10 +23,11 @@ export async function registerGuestForEventAction(
   const firstName = String(formData.get("firstName") ?? "").trim();
   const lastName = String(formData.get("lastName") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const phone = String(formData.get("phone") ?? "").trim();
 
   if (!eventId) return { ok: false, message: "Chýba podujatie." };
-  if (!firstName || !lastName || !email) {
-    return { ok: false, message: "Vyplňte meno, priezvisko a e-mail." };
+  if (!firstName || !lastName || !email || !phone) {
+    return { ok: false, message: "Vyplňte meno, priezvisko, e-mail a telefónne číslo." };
   }
   if (!EMAIL_RE.test(email)) {
     return { ok: false, message: "Zadajte platný e-mail." };
@@ -41,7 +42,7 @@ export async function registerGuestForEventAction(
   }
 
   const event = await prisma.event.findFirst({
-    where: { id: eventId, published: true, visibility: "PUBLIC" },
+    where: { id: eventId, published: true },
     select: {
       id: true,
       title: true,
@@ -54,7 +55,7 @@ export async function registerGuestForEventAction(
     },
   });
   if (!event) {
-    return { ok: false, message: "Toto podujatie nie je dostupné na verejnú registráciu." };
+    return { ok: false, message: "Podujatie neexistuje." };
   }
 
   const existingTicket = await prisma.eventTicket.findUnique({
@@ -74,7 +75,7 @@ export async function registerGuestForEventAction(
   let ticketId: string;
   try {
     const ticket = await prisma.eventTicket.create({
-      data: { eventId, firstName, lastName, email },
+      data: { eventId, firstName, lastName, email, phone },
       select: { id: true },
     });
     ticketId = ticket.id;
@@ -103,6 +104,7 @@ export async function registerGuestForEventAction(
   });
 
   revalidatePath("/podujatia");
+  revalidatePath(`/podujatia/${eventId}`);
   revalidatePath(`/admin/events/${eventId}`);
 
   return { ok: true, ticketId };

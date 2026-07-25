@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { Link2, Check } from "lucide-react";
 import type { Event } from "@prisma/client";
 import {
   createEventAction,
@@ -38,7 +39,12 @@ export function EventForm({
 
   return (
     <form action={formAction} className="space-y-6">
-      {event && <input type="hidden" name="id" value={event.id} />}
+      {event && (
+        <>
+          <input type="hidden" name="id" value={event.id} />
+          <CopyLinkButton eventId={event.id} />
+        </>
+      )}
       {(profileId || event?.profileId) && (
         <input
           type="hidden"
@@ -200,6 +206,26 @@ export function EventForm({
         </SubmitButton>
       </div>
     </form>
+  );
+}
+
+function CopyLinkButton({ eventId }: { eventId: string }) {
+  const [copied, setCopied] = useState(false);
+
+  return (
+    <button
+      type="button"
+      onClick={async () => {
+        const url = `${window.location.origin}/podujatia/${eventId}`;
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }}
+      className="inline-flex items-center gap-1.5 rounded-full border border-brand-purple/20 bg-brand-purple/5 px-3 py-1.5 text-xs font-semibold text-brand-purple hover:bg-brand-purple/10"
+    >
+      {copied ? <Check size={13} /> : <Link2 size={13} />}
+      {copied ? "Skopírované" : "Kopírovať link na podujatie"}
+    </button>
   );
 }
 

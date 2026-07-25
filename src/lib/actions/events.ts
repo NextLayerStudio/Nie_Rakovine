@@ -260,6 +260,7 @@ export async function registerForEventAction(
   }
 
   revalidatePath(`/home/events/${eventId}`);
+  revalidatePath(`/podujatia/${eventId}`);
   revalidatePath("/home");
   revalidatePath("/home/calendar");
   revalidatePath("/profile");
