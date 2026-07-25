@@ -36,9 +36,8 @@ export function emailLogoImg({
 
 /**
  * ONKO KLUB + NIE RAKOVINE side by side with a thin divider, matching the
- * navbar lockup on the website. Both logos are dark artwork on a transparent
- * background, so this lockup always sits on a small, fixed light chip — even
- * in dark mode — otherwise the wordmarks would disappear on a dark page.
+ * navbar lockup on the website. No background chip — sits directly on the
+ * page background.
  */
 export function renderEmailLogos(
   appUrl: string,
@@ -48,27 +47,20 @@ export function renderEmailLogos(
   const nie = emailAssetUrl(EMAIL_LOGO_PATHS.nieRakovineFull, appUrl);
   const logoWidth = size === "header" ? 108 : 88;
   const dividerHeight = size === "header" ? 34 : 28;
-  const padding = size === "header" ? "16px 22px" : "12px 18px";
 
   return `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 ${size === "header" ? 22 : 0}px;">
     <tr>
       <td align="center">
-        <table role="presentation" cellspacing="0" cellpadding="0" style="background:#FFF7FB;border-radius:14px;">
+        <table role="presentation" cellspacing="0" cellpadding="0">
           <tr>
-            <td style="padding:${padding};">
-              <table role="presentation" cellspacing="0" cellpadding="0">
-                <tr>
-                  <td style="vertical-align:middle;padding-right:14px;">
-                    ${emailLogoImg({ src: onko, alt: "ONKO KLUB", width: logoWidth })}
-                  </td>
-                  <td style="vertical-align:middle;padding:0;">
-                    <div style="width:1px;height:${dividerHeight}px;line-height:${dividerHeight}px;font-size:0;background:rgba(111,35,128,0.15);">&nbsp;</div>
-                  </td>
-                  <td style="vertical-align:middle;padding-left:14px;">
-                    ${emailLogoImg({ src: nie, alt: "NIE RAKOVINE, o. z.", width: logoWidth })}
-                  </td>
-                </tr>
-              </table>
+            <td style="vertical-align:middle;padding-right:14px;">
+              ${emailLogoImg({ src: onko, alt: "ONKO KLUB", width: logoWidth })}
+            </td>
+            <td style="vertical-align:middle;padding:0;">
+              <div style="width:1px;height:${dividerHeight}px;line-height:${dividerHeight}px;font-size:0;background:rgba(111,35,128,0.15);">&nbsp;</div>
+            </td>
+            <td style="vertical-align:middle;padding-left:14px;">
+              ${emailLogoImg({ src: nie, alt: "NIE RAKOVINE, o. z.", width: logoWidth })}
             </td>
           </tr>
         </table>
