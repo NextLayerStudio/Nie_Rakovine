@@ -19,6 +19,7 @@ export function renderEventTicketEmail(input: {
   const appUrl = getAppUrlFromEnv();
   const ticketUrl = `${appUrl}/podujatia/listok/${input.ticketId}`;
   const qrUrl = `${appUrl}/api/tickets/${input.ticketId}/qr`;
+  const cancelUrl = `${appUrl}/podujatia/listok/${input.ticketId}/odhlasit`;
 
   const dateLabel = formatSkDate(input.startsAt);
   const timeLabel = input.endsAt
@@ -57,6 +58,7 @@ export function renderEventTicketEmail(input: {
     heroSubtitle: "Ukáž QR kód na mieste konania podujatia.",
     bodyHtml,
     cta: { label: "Zobraziť lístok", href: ticketUrl, variant: "pink" },
+    secondaryLink: { label: "Nemôžem sa zúčastniť — odhlásiť sa", href: cancelUrl },
   });
 }
 

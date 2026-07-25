@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { PublicEventsHeader } from "@/components/landing/PublicEventsHeader";
 import { PublicEventsFooter } from "@/components/landing/PublicEventsFooter";
+import { CookieConsentBanner } from "@/components/landing/CookieConsentBanner";
 import { EventGuestTicketForm } from "@/components/landing/EventGuestTicketForm";
 import { EventRegistrationForm } from "@/app/home/events/[id]/EventRegistrationForm";
 import { EVENT_CATEGORY_META } from "@/lib/event-category";
@@ -155,6 +156,7 @@ export default async function PodujatieDetailPage({
       </section>
 
       <PublicEventsFooter />
+      <CookieConsentBanner />
     </main>
   );
 }

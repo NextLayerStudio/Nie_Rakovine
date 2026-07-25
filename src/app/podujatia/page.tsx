@@ -1,6 +1,7 @@
 import type { EventCategory } from "@prisma/client";
 import { PublicEventsHeader } from "@/components/landing/PublicEventsHeader";
 import { PublicEventsFooter } from "@/components/landing/PublicEventsFooter";
+import { CookieConsentBanner } from "@/components/landing/CookieConsentBanner";
 import { PublicEventsExplorer } from "@/components/landing/PublicEventsExplorer";
 import { EventsFilterProvider } from "@/components/landing/EventsFilterContext";
 import { EventsFilterToggle } from "@/components/landing/EventsFilterToggle";
@@ -88,6 +89,7 @@ export default async function PodujatiaPage({
         </section>
 
         <PublicEventsFooter />
+        <CookieConsentBanner />
       </main>
     </EventsFilterProvider>
   );

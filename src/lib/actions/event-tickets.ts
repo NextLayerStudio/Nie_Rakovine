@@ -113,3 +113,30 @@ export async function registerGuestForEventAction(
 
   return { ok: true, ticketId };
 }
+
+export type CancelTicketState = { ok: boolean; message?: string };
+
+/** Cancel a guest ticket — reached via the "Odhlásiť sa" link in the ticket e-mail. */
+export async function cancelEventTicketAction(
+  _prev: CancelTicketState,
+  formData: FormData,
+): Promise<CancelTicketState> {
+  const ticketId = String(formData.get("ticketId") ?? "");
+  if (!ticketId) return { ok: false, message: "Chýba lístok." };
+
+  const ticket = await prisma.eventTicket.findUnique({
+    where: { id: ticketId },
+    select: { eventId: true },
+  });
+  if (!ticket) {
+    return { ok: false, message: "Tento lístok už neexistuje — registrácia bola zrejme už zrušená." };
+  }
+
+  await prisma.eventTicket.delete({ where: { id: ticketId } });
+
+  revalidatePath("/podujatia");
+  revalidatePath(`/podujatia/${ticket.eventId}`);
+  revalidatePath(`/admin/events/${ticket.eventId}`);
+
+  return { ok: true };
+}

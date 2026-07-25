@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { PublicEventsHeader } from "@/components/landing/PublicEventsHeader";
 import { PublicEventsFooter } from "@/components/landing/PublicEventsFooter";
+import { CookieConsentBanner } from "@/components/landing/CookieConsentBanner";
 import { TicketQrCode } from "@/components/landing/TicketQrCode";
 import { prisma } from "@/lib/prisma";
 import { getAppUrlFromEnv } from "@/lib/email/brand";
@@ -103,6 +104,7 @@ export default async function TicketPage({
       </section>
 
       <PublicEventsFooter />
+      <CookieConsentBanner />
     </main>
   );
 }
