@@ -70,10 +70,10 @@ export default async function PodujatieDetailPage({
 
             <Link
               href="/podujatia"
-              aria-label="Všetky podujatia"
-              className="absolute left-4 top-4 grid h-9 w-9 place-items-center rounded-full bg-black/40 text-white backdrop-blur-sm hover:bg-black/55"
+              className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-pill bg-black/40 px-3.5 py-2 text-xs font-bold text-white backdrop-blur-sm hover:bg-black/55"
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft size={16} />
+              Všetky podujatia
             </Link>
 
             {event.category && (
@@ -133,6 +133,7 @@ export default async function PodujatieDetailPage({
                       defaultName={nameParts[0] ?? ""}
                       defaultSurname={nameParts.slice(1).join(" ")}
                       stayOnPage
+                      accentClassName="bg-[#FDA4C7]"
                     />
                   </>
                 )}

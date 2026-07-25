@@ -16,6 +16,7 @@ export function EventRegistrationForm({
   variant = "page",
   stayOnPage = false,
   onSuccess,
+  accentClassName = "bg-brand-purple",
 }: {
   eventId: string;
   defaultName: string;
@@ -23,6 +24,7 @@ export function EventRegistrationForm({
   variant?: "page" | "modal";
   stayOnPage?: boolean;
   onSuccess?: () => void;
+  accentClassName?: string;
 }) {
   const [state, formAction] = useActionState(
     registerForEventAction,
@@ -72,8 +74,8 @@ export function EventRegistrationForm({
       <SubmitButton
         className={
           compact
-            ? "rounded-pill bg-brand-purple py-2.5 text-sm font-semibold text-white"
-            : "mt-1 rounded-pill bg-brand-purple py-2 text-sm font-semibold text-white"
+            ? `rounded-pill ${accentClassName} py-2.5 text-sm font-semibold text-white`
+            : `mt-1 rounded-pill ${accentClassName} py-2 text-sm font-semibold text-white`
         }
         pendingLabel="Prihlasujem…"
       >

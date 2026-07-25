@@ -78,16 +78,16 @@ export function EventCard({ event }: { event: PublicEvent }) {
           </p>
         )}
 
-        <div className="mt-auto flex items-center justify-between gap-3 pt-3">
+        <div className="mt-auto flex flex-col gap-2.5 pt-3">
           <p className="text-xs font-semibold text-[#6F2380]/60">
             {formatRegistrationCount(event.registrationCount, event.capacity)}
           </p>
           {isFull ? (
-            <span className="rounded-full bg-[#6F2380]/10 px-4 py-2 text-center text-xs font-bold text-[#6F2380]/60">
+            <span className="rounded-full bg-[#6F2380]/10 py-3 text-center text-sm font-bold text-[#6F2380]/60">
               Obsadené
             </span>
           ) : (
-            <span className="rounded-full bg-[#FDA4C7] px-4 py-2 text-xs font-bold text-white">
+            <span className="rounded-full bg-[#FDA4C7] py-3 text-center text-sm font-black text-white">
               Zobraziť
             </span>
           )}
