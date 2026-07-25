@@ -19,14 +19,24 @@ export function PublicEventsHeader({
       <div className="max-w-6xl mx-auto px-5 md:px-8 flex items-center justify-between py-3.5">
         <div className="flex items-center gap-4">
           {left}
-          <Image
-            src="/images/logo-horizontal.png"
-            alt="OnkoKlub"
-            width={140}
-            height={48}
-            className="h-9 w-auto"
-            priority
-          />
+          <div className="flex shrink-0 items-center gap-2.5">
+            <Image
+              src="/images/logo-horizontal.png"
+              alt="OnkoKlub"
+              width={140}
+              height={48}
+              className="h-9 w-auto"
+              priority
+            />
+            <span aria-hidden className="h-6 w-px bg-[#6F2380]/15" />
+            <Image
+              src="/images/logo-nie-rakovine.png"
+              alt="NIE RAKOVINE, o. z."
+              width={120}
+              height={63}
+              className="h-6 w-auto"
+            />
+          </div>
         </div>
         {right}
       </div>
