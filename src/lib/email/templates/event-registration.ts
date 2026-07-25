@@ -40,7 +40,7 @@ export function renderEventRegistrationEmail(input: {
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
       ${emailDetailRows(details)}
     </table>
-    <p style="margin:8px 0 0;font-size:13px;line-height:1.6;color:#6F2380B3;text-align:center;">
+    <p class="ok-muted" style="margin:8px 0 0;font-size:13px;line-height:1.6;color:#6F2380B3;text-align:center;">
       V aplikácii nájdete podujatie v kalendári aj vo vašom profile.
     </p>`;
 

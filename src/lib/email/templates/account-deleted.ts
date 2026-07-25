@@ -8,7 +8,7 @@ export function renderAccountDeletedEmail(input: {
   const bodyHtml = `
     <p style="margin:0 0 18px;">Ahoj ${escapeHtml(name)},</p>
     <p style="margin:0 0 20px;">potvrdzujeme, že váš účet v Onko Klube bol natrvalo zrušený. Všetky vaše osobné údaje a nastavenia boli odstránené z našej aplikácie.</p>
-    <p style="margin:0;font-size:13px;line-height:1.6;color:#6F2380B3;">Ak ste o zrušenie účtu nežiadali vy, kontaktujte nás čo najskôr. Ak sa k nám v budúcnosti chcete vrátiť, môžete si kedykoľvek vytvoriť nový účet.</p>`;
+    <p class="ok-muted" style="margin:0;font-size:13px;line-height:1.6;color:#6F2380B3;">Ak ste o zrušenie účtu nežiadali vy, kontaktujte nás čo najskôr. Ak sa k nám v budúcnosti chcete vrátiť, môžete si kedykoľvek vytvoriť nový účet.</p>`;
 
   return renderEmailShell({
     previewText: "Váš účet v Onko Klube bol zrušený",

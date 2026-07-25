@@ -45,11 +45,11 @@ export function renderEventTicketEmail(input: {
       <tr>
         <td style="text-align:center;padding:20px;background:#FFF3F9;border-radius:16px;">
           <img src="${qrUrl}" alt="QR kód lístka" width="160" height="160" style="display:block;margin:0 auto 10px;border-radius:8px;" />
-          <div style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#6F2380B3;">Ukážte tento kód na podujatí</div>
+          <div class="ok-muted" style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#6F2380B3;">Ukážte tento kód na podujatí</div>
         </td>
       </tr>
     </table>
-    ${input.description ? `<p style="margin:16px 0 0;font-size:13px;line-height:1.6;color:#6F2380B3;">${input.description}</p>` : ""}`;
+    ${input.description ? `<p class="ok-muted" style="margin:16px 0 0;font-size:13px;line-height:1.6;color:#6F2380B3;">${input.description}</p>` : ""}`;
 
   return renderEmailShell({
     previewText: `Tvoj lístok na ${input.eventTitle}`,

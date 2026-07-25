@@ -10,7 +10,7 @@ export function renderPasswordResetEmail(input: {
   const bodyHtml = `
     <p style="margin:0 0 18px;">Ahoj ${escapeHtml(name)},</p>
     <p style="margin:0 0 20px;">dostali sme žiadosť o zmenu hesla k vášmu účtu Onko Klub. Kliknite na tlačidlo nižšie a nastavte si nové heslo.</p>
-    <p style="margin:0;font-size:13px;line-height:1.6;color:#6F2380B3;">Odkaz je platný ${input.ttlMinutes} minút a dá sa použiť iba raz. Ak ste o zmenu hesla nežiadali, tento e-mail ignorujte — vaše heslo ostáva nezmenené.</p>`;
+    <p class="ok-muted" style="margin:0;font-size:13px;line-height:1.6;color:#6F2380B3;">Odkaz je platný ${input.ttlMinutes} minút a dá sa použiť iba raz. Ak ste o zmenu hesla nežiadali, tento e-mail ignorujte — vaše heslo ostáva nezmenené.</p>`;
 
   return renderEmailShell({
     previewText: "Nastavte si nové heslo do Onko Klubu",
