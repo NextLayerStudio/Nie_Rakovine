@@ -118,7 +118,7 @@ export default async function PodujatieDetailPage({
             )}
 
             {user ? (
-              <div className="mt-6 rounded-2xl bg-brand-gradient p-5 text-white shadow-card">
+              <div className="mt-6 rounded-2xl bg-brand-pink p-5 text-white">
                 {isFull ? (
                   <p className="text-center text-sm font-bold text-white/80">
                     Kapacita podujatia je naplnená.
