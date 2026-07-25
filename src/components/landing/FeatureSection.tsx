@@ -21,7 +21,7 @@ const FEATURES = [
   },
   {
     id: "events" as const,
-    title: "Akcie na mieru po celom Slovensku",
+    title: "Podujatia na mieru po celom Slovensku",
     desc: "Workshopy, stretnutia a cvičenia jogy v Bratislave, Banskej Bystrici a Košiciach. Miesto si môžete jednoducho rezervovať jedným kliknutím priamo v aplikácii ONKO KLUB.",
     href: "/akcie",
   },
