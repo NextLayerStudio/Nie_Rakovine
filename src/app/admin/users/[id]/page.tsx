@@ -7,6 +7,7 @@ import {
   subscriptionStatusLabel,
 } from "@/lib/user-profile-display";
 import { combinedExpectationAnswers, normalizeHelpLabel } from "@/lib/constants";
+import { confirmBankTransferPaymentAction } from "@/lib/actions/admin-users";
 
 export const dynamic = "force-dynamic";
 
@@ -112,6 +113,33 @@ export default async function AdminUserDetailPage({
               user.subscriptionEnd ? formatDate(user.subscriptionEnd) : null
             }
           />
+          <Row
+            label="Spôsob platby"
+            value={
+              user.paymentMethod === "BANK_TRANSFER"
+                ? "Bankový prevod"
+                : user.paymentMethod === "CARD"
+                  ? "Platobná brána"
+                  : null
+            }
+          />
+          {user.paymentVariableSymbol && (
+            <Row label="Variabilný symbol" value={user.paymentVariableSymbol} />
+          )}
+          {user.paymentAmountEuro != null && (
+            <Row label="Suma na úhradu" value={`${user.paymentAmountEuro} €`} />
+          )}
+          {user.subscriptionStatus === "PENDING_PAYMENT" && (
+            <form action={confirmBankTransferPaymentAction} className="pt-3">
+              <input type="hidden" name="userId" value={user.id} />
+              <button
+                type="submit"
+                className="admin-btn-primary w-full"
+              >
+                Platba prijatá — aktivovať členstvo
+              </button>
+            </form>
+          )}
         </Section>
 
         <Section title="Lokalita (registrácia)">

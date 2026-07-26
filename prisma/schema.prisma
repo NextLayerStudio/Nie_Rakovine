@@ -58,6 +58,12 @@ enum SubscriptionStatus {
   ACTIVE
   CANCELLED
   PAST_DUE
+  PENDING_PAYMENT
+}
+
+enum PaymentMethod {
+  CARD
+  BANK_TRANSFER
 }
 
 model User {
@@ -82,6 +88,14 @@ model User {
   subscriptionStatus SubscriptionStatus @default(INACTIVE)
   subscriptionStart  DateTime?
   subscriptionEnd    DateTime?
+
+  // Bankový prevod — kým nemáme platobnú bránu (Nexi) pripojenú, členovia
+  // môžu zaplatiť aj prevodom; variabilný symbol slúži adminovi na spárovanie
+  // platby s výpisom z účtu.
+  paymentMethod          PaymentMethod?
+  paymentVariableSymbol  String?         @unique
+  paymentAmountEuro      Float?
+  paymentConfirmedAt     DateTime?
 
   // Relations
   eventRegistrations EventRegistration[]

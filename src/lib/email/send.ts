@@ -13,6 +13,7 @@ import {
 } from "@/lib/email/templates/event-ticket";
 import { renderNewDeviceLoginEmail } from "@/lib/email/templates/new-device-login";
 import { renderWelcomeEmail } from "@/lib/email/templates/welcome";
+import { renderPaymentConfirmedEmail } from "@/lib/email/templates/payment-confirmed";
 
 const DEVICE_COOKIE = "onko_device";
 const DEVICE_MAX_AGE = 60 * 60 * 24 * 365;
@@ -88,6 +89,19 @@ export function queueEventTicketEmail(input: {
     to: input.email,
     subject: renderEventTicketEmailSubject(input.eventTitle),
     html: renderEventTicketEmail(input),
+  });
+}
+
+export function queuePaymentConfirmedEmail(input: {
+  email: string;
+  fullName: string;
+  planLabel: string;
+  amountEuro: number;
+}): void {
+  sendTransactionalEmailAsync({
+    to: input.email,
+    subject: "Platba prijatá — členstvo ONKO KLUB je aktívne",
+    html: renderPaymentConfirmedEmail(input),
   });
 }
 

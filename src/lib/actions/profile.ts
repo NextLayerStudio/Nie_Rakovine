@@ -74,6 +74,21 @@ export async function selectSubscriptionPlanAction(
 // steps — supporters aren't patients, so location/diagnosis/interests/etc.
 // don't apply to them.
 // --------------------------------------------------------------------
+/** 10-digit numeric variable symbol for bank-transfer reconciliation. */
+async function generateUniqueVariableSymbol(): Promise<string> {
+  for (let i = 0; i < 5; i++) {
+    const candidate = String(
+      Math.floor(1_000_000_000 + Math.random() * 8_999_999_999),
+    );
+    const existing = await prisma.user.findUnique({
+      where: { paymentVariableSymbol: candidate },
+      select: { id: true },
+    });
+    if (!existing) return candidate;
+  }
+  throw new Error("Nepodarilo sa vygenerovať variabilný symbol.");
+}
+
 export async function confirmSubscriptionPaymentAction(
   _prev: ActionState,
   formData: FormData,
@@ -92,6 +107,8 @@ export async function confirmSubscriptionPaymentAction(
           : "Na pokračovanie potrebujeme váš súhlas so založením opakovanej platby.",
     };
   }
+  const paymentMethod =
+    formData.get("paymentMethod") === "BANK_TRANSFER" ? "BANK_TRANSFER" : "CARD";
 
   const now = new Date();
 
@@ -107,6 +124,26 @@ export async function confirmSubscriptionPaymentAction(
     const end = new Date(now);
     end.setFullYear(end.getFullYear() + 1);
 
+    if (paymentMethod === "BANK_TRANSFER") {
+      const variableSymbol = await generateUniqueVariableSymbol();
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          subscriptionPlan: "SUPPORTER" satisfies SubscriptionPlan,
+          subscriptionStatus: "PENDING_PAYMENT" satisfies SubscriptionStatus,
+          subscriptionStart: now,
+          subscriptionEnd: end,
+          paymentMethod: "BANK_TRANSFER",
+          paymentVariableSymbol: variableSymbol,
+          paymentAmountEuro: amount,
+        },
+      });
+      return {
+        ok: true,
+        redirectTo: `/register/subscription/checkout/prevod?next=${encodeURIComponent("/register/profile/done")}`,
+      };
+    }
+
     await prisma.user.update({
       where: { id: user.id },
       data: {
@@ -114,6 +151,7 @@ export async function confirmSubscriptionPaymentAction(
         subscriptionStatus: "ACTIVE" satisfies SubscriptionStatus,
         subscriptionStart: now,
         subscriptionEnd: end,
+        paymentMethod: "CARD",
       },
     });
 
@@ -121,17 +159,39 @@ export async function confirmSubscriptionPaymentAction(
   }
 
   const planInfo = SUBSCRIPTION_PLANS.find((p) => p.id === plan);
+  let finalAmount = planInfo?.priceEuro ?? 0;
   const discountCodeRaw = String(formData.get("discountCode") ?? "").trim();
   if (discountCodeRaw && planInfo) {
     const result = await redeemDiscountCode(discountCodeRaw, planInfo.priceEuro);
     if (!result.ok) {
       return { ok: false, message: result.message };
     }
+    finalAmount = result.finalPriceEuro;
   }
 
   const end = new Date(now);
   if (plan === "MONTHLY") end.setMonth(end.getMonth() + 1);
   if (plan === "YEARLY") end.setFullYear(end.getFullYear() + 1);
+
+  if (paymentMethod === "BANK_TRANSFER") {
+    const variableSymbol = await generateUniqueVariableSymbol();
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        subscriptionPlan: plan,
+        subscriptionStatus: "PENDING_PAYMENT" satisfies SubscriptionStatus,
+        subscriptionStart: now,
+        subscriptionEnd: end,
+        paymentMethod: "BANK_TRANSFER",
+        paymentVariableSymbol: variableSymbol,
+        paymentAmountEuro: finalAmount,
+      },
+    });
+    return {
+      ok: true,
+      redirectTo: `/register/subscription/checkout/prevod?next=${encodeURIComponent("/register/profile/location")}`,
+    };
+  }
 
   await prisma.user.update({
     where: { id: user.id },
@@ -140,6 +200,7 @@ export async function confirmSubscriptionPaymentAction(
       subscriptionStatus: "ACTIVE" satisfies SubscriptionStatus,
       subscriptionStart: now,
       subscriptionEnd: end,
+      paymentMethod: "CARD",
     },
   });
 

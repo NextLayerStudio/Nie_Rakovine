@@ -40,6 +40,8 @@ export function subscriptionStatusLabel(status: string): string {
       return "Zrušené";
     case "PAST_DUE":
       return "Po splatnosti";
+    case "PENDING_PAYMENT":
+      return "Čaká na platbu (prevod)";
     default:
       return "Neaktívne";
   }

@@ -103,12 +103,22 @@ export default async function AdminUsersPage({
                   >
                     {u.fullName}
                   </Link>
+                  {u.paymentVariableSymbol && (
+                    <span className="block text-xs font-normal text-brand-purple/50">
+                      VS: {u.paymentVariableSymbol}
+                    </span>
+                  )}
                 </td>
                 <td className="px-4 py-3 text-brand-purple/80">{u.email}</td>
                 <td className="px-4 py-3">
                   <span className="admin-badge bg-brand-purple/8 text-brand-purple/80">
                     {subscriptionPlanLabel(u.subscriptionPlan)}
                   </span>
+                  {u.subscriptionStatus === "PENDING_PAYMENT" && (
+                    <span className="admin-badge ml-1.5 bg-amber-100 text-amber-700">
+                      Čaká na platbu
+                    </span>
+                  )}
                 </td>
                 <td className="px-4 py-3 text-brand-purple/80">
                   {u.profile?.diagnosis ?? "—"}

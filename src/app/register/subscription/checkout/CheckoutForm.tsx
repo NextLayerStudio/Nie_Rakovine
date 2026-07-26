@@ -38,6 +38,9 @@ export function CheckoutForm({
 }) {
   const [consent, setConsent] = useState(false);
   const [amount, setAmount] = useState(initialAmount ?? plan.priceEuro);
+  const [paymentMethod, setPaymentMethod] = useState<"CARD" | "BANK_TRANSFER">(
+    "CARD",
+  );
   const [state, formAction] = useActionState(
     confirmSubscriptionPaymentAction,
     INITIAL,
@@ -72,6 +75,7 @@ export function CheckoutForm({
   return (
     <form action={formAction} className="flex min-h-0 flex-1 flex-col">
       <input type="hidden" name="plan" value={plan.id} />
+      <input type="hidden" name="paymentMethod" value={paymentMethod} />
 
       <div className="mt-4 flex flex-col gap-4 px-5 pb-4">
         {/* Zhrnutie objednávky */}
@@ -139,23 +143,60 @@ export function CheckoutForm({
           </div>
         )}
 
-        {/* Platobné metódy */}
+        {/* Spôsob platby */}
         <div className="px-1">
           <p className="mb-3 text-xs font-bold uppercase tracking-wide text-brand-purple/50">
-            Platba prebehne cez
+            Spôsob platby
           </p>
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            {PAYMENT_LOGOS.map((logo) => (
-              <Image
-                key={logo.alt}
-                src={logo.src}
-                alt={logo.alt}
-                width={logo.w}
-                height={logo.h}
-                className="h-6 w-auto object-contain"
-              />
-            ))}
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setPaymentMethod("CARD")}
+              className={cn(
+                "rounded-2xl border-2 p-3 text-left transition",
+                paymentMethod === "CARD"
+                  ? "border-brand-pink bg-brand-pink/5"
+                  : "border-brand-purple/10 bg-white",
+              )}
+            >
+              <p className="text-sm font-bold text-brand-purple">Platobná brána</p>
+              <p className="mt-0.5 text-xs text-brand-purple/50">Kartou online</p>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPaymentMethod("BANK_TRANSFER")}
+              className={cn(
+                "rounded-2xl border-2 p-3 text-left transition",
+                paymentMethod === "BANK_TRANSFER"
+                  ? "border-brand-pink bg-brand-pink/5"
+                  : "border-brand-purple/10 bg-white",
+              )}
+            >
+              <p className="text-sm font-bold text-brand-purple">Bankový prevod</p>
+              <p className="mt-0.5 text-xs text-brand-purple/50">QR kód alebo ručne</p>
+            </button>
           </div>
+
+          {paymentMethod === "CARD" ? (
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
+              {PAYMENT_LOGOS.map((logo) => (
+                <Image
+                  key={logo.alt}
+                  src={logo.src}
+                  alt={logo.alt}
+                  width={logo.w}
+                  height={logo.h}
+                  className="h-6 w-auto object-contain"
+                />
+              ))}
+            </div>
+          ) : (
+            <p className="mt-4 text-xs leading-relaxed text-brand-purple/60">
+              V ďalšom kroku vám zobrazíme QR kód aj platobné údaje na ručné
+              opísanie (IBAN, suma, variabilný symbol). Členstvo aktivujeme,
+              keď platbu prijmeme na účet.
+            </p>
+          )}
         </div>
 
         {!plan.customAmount && (
@@ -212,9 +253,18 @@ export function CheckoutForm({
                 />
               </dl>
               <p className="mt-3 text-xs leading-relaxed text-brand-purple/60">
-                Údaje vašej platobnej karty spracúva výhradne platobná brána GoPay
-                podľa bezpečnostného štandardu PCI DSS Level 1. NIE RAKOVINE, o. z.
-                k nim nemá prístup a neukladá ich.
+                {paymentMethod === "CARD" ? (
+                  <>
+                    Údaje vašej platobnej karty spracúva výhradne platobná brána
+                    GoPay podľa bezpečnostného štandardu PCI DSS Level 1. NIE
+                    RAKOVINE, o. z. k nim nemá prístup a neukladá ich.
+                  </>
+                ) : (
+                  <>
+                    Platba prebehne bankovým prevodom na účet ONKO KLUB.
+                    Členstvo aktivujeme po prijatí platby na účet.
+                  </>
+                )}
               </p>
             </div>
           </>
@@ -222,9 +272,18 @@ export function CheckoutForm({
 
         {plan.customAmount && (
           <p className="rounded-2xl border border-brand-purple/10 bg-white p-4 text-xs leading-relaxed text-brand-purple/60">
-            Údaje vašej platobnej karty spracúva výhradne platobná brána GoPay
-            podľa bezpečnostného štandardu PCI DSS Level 1. NIE RAKOVINE, o. z.
-            k nim nemá prístup a neukladá ich.
+            {paymentMethod === "CARD" ? (
+              <>
+                Údaje vašej platobnej karty spracúva výhradne platobná brána
+                GoPay podľa bezpečnostného štandardu PCI DSS Level 1. NIE
+                RAKOVINE, o. z. k nim nemá prístup a neukladá ich.
+              </>
+            ) : (
+              <>
+                Platba prebehne bankovým prevodom na účet ONKO KLUB
+                Členstvo aktivujeme po prijatí platby na účet.
+              </>
+            )}
           </p>
         )}
 
@@ -247,7 +306,12 @@ export function CheckoutForm({
             {consent && <CheckIcon />}
           </span>
           <span className="text-xs leading-snug text-brand-purple/80">
-            {plan.customAmount ? (
+            {paymentMethod === "BANK_TRANSFER" ? (
+              <>
+                Súhlasím so zaplatením uvedenej sumy bankovým prevodom na účet
+                ONKO KLUB.
+              </>
+            ) : plan.customAmount ? (
               <>
                 Súhlasím so zaplatením uvedenej sumy a s uložením platobných
                 údajov na strane platobnej brány GoPay.
@@ -275,7 +339,11 @@ export function CheckoutForm({
           className="mx-auto flex w-full max-w-[280px] items-center justify-center gap-2 rounded-pill bg-brand-pink px-6 py-3 text-sm font-semibold text-white shadow-soft transition hover:brightness-105 disabled:opacity-40"
           pendingLabel="Spracúvam platbu…"
         >
-          {plan.customAmount ? "Podporiť cez GoPay" : "Zaplatiť cez GoPay"}
+          {paymentMethod === "BANK_TRANSFER"
+            ? "Pokračovať na platobné údaje"
+            : plan.customAmount
+              ? "Podporiť cez GoPay"
+              : "Zaplatiť cez GoPay"}
         </SubmitButton>
       </div>
     </form>
