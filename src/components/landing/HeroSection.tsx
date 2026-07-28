@@ -59,9 +59,12 @@ export function HeroSection() {
 
       {/* Zvyšok textu — pod videom, na normálnom pozadí stránky */}
       <div className="max-w-6xl mx-auto px-5 md:px-8 mt-6">
-        <p className="text-[#6F2380]/70 text-base md:text-lg leading-relaxed max-w-sm md:max-w-2xl">
+        <p className="text-[#6F2380] text-lg md:text-2xl font-black leading-snug max-w-sm md:max-w-2xl mb-3">
           Overený obsah, odborné videá, diskusné fóra, podcasty, praktické
-          rady, workshopy aj výhody pre členov. ONKO KLUB stojí na tíme desiatok
+          rady, workshopy aj výhody pre členov.
+        </p>
+        <p className="text-[#6F2380]/70 text-base md:text-lg leading-relaxed max-w-sm md:max-w-2xl">
+          ONKO KLUB stojí na tíme desiatok
           odborníkov, lektorov a pacientskych poradcov s osobnou skúsenosťou s
           rakovinou. Jeho skutočnú hodnotu však tvoria samotní členovia – ľudia,
           ktorí si prechádzajú podobnou cestou a rozumejú aj tichým obavám,

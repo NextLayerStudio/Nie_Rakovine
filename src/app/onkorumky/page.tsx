@@ -31,9 +31,9 @@ const CATEGORIES = [
 ];
 
 const SAMPLE_POSTS = [
-  { forum: "Psychická podpora",        time: "pred 2 hodinami", replies: 8,  text: "Mám pocit, že všetci okolo mňa hovoria, aby som bola pozitívna — a ja neviem, ako to mám robiť. Je to v poriadku?", anon: true },
-  { forum: "Nežiaduce účinky liečby",  time: "pred 5 hodinami", replies: 12, text: "Po druhej chémii mi vypadli vlasy. Neviete, kde zohnať dobrú parochňu, ktorú čiastočne hradí poisťovňa?",       anon: false },
-  { forum: "Rakovina prsníka",         time: "včera",           replies: 24, text: "Práve som sa dozvedela výsledky. Neviem čo ďalej. Môžem sa tu niekoho opýtať na skúsenosti s liečbou v UN Bratislava?", anon: true },
+  { forum: "Psychická podpora",        time: "pred 2 hodinami", replies: 8,  text: "Okolie mi často hovorí, aby som zostala silná a pozitívna. Vnútorne to však prežívam úplne inak a niekedy je pre mňa náročné vôbec fungovať. Ako im mám vysvetliť, že frázy o sile mi v tejto situácii vôbec nepomáhajú?", anon: true },
+  { forum: "Nežiaduce účinky liečby",  time: "pred 5 hodinami", replies: 12, text: "Po druhej dávke liečby mi začali výrazne vypadávať vlasy a nečakala som, že ma to tak veľmi zasiahne. Máte, prosím, tipy, kde zohnať prirodzene vyzerajúcu parochňu a či je možné aspoň časť preplatiť cez poisťovňu?", anon: false },
+  { forum: "Rakovina prsníka",         time: "včera",           replies: 24, text: "Lekár mi spomenul možnosť genetického testovania. Má niekto skúsenosť s tým, ako prebieha a ako môže ovplyvniť liečbu?", anon: true },
 ];
 
 export default function OnkorumkyPage() {
@@ -101,8 +101,7 @@ export default function OnkorumkyPage() {
 
       {/* Ukážkové príspevky */}
       <section className="px-5 pb-16">
-        <h2 className="text-xl font-black text-[#6F2380] mb-2">Aktuálne z diskusií</h2>
-        <p className="text-[#6F2380]/45 text-xs mb-6">Po prihlásení získate prístup k plným zneniam príspevkov a rozhovorov.</p>
+        <h2 className="text-xl font-black text-[#6F2380] mb-6">Aktuálne z diskusií</h2>
         <div className="flex flex-col gap-3">
           {SAMPLE_POSTS.map((post, i) => (
             <div key={i} className="bg-white rounded-2xl p-5 border border-[#FDA4C7]/15">

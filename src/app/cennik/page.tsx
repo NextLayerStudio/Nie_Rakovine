@@ -111,6 +111,8 @@ export default function CennikPage() {
       {/* Cenové karty */}
       <section className="pb-14">
         <div className="max-w-7xl mx-auto px-5 md:px-8">
+          <h3 className="text-xl font-black text-[#6F2380] mb-5">Čo vás čaká po registrácii</h3>
+
           <div className="grid grid-cols-1 gap-4 items-stretch sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
 
             {/* Free */}
@@ -147,7 +149,7 @@ export default function CennikPage() {
                 ))}
               </div>
               <Link href="/register?plan=monthly" className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center">
-                Začať mesačne — 5 €
+                Zvoliť mesačné členstvo
               </Link>
               <div className="mt-5">
                 <ExpandableText maxHeight={48} fadeColor="#FFEDF4">
@@ -183,7 +185,7 @@ export default function CennikPage() {
                 ))}
               </div>
               <Link href="/register?plan=annual" className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center">
-                Začať ročne — 50 €
+                Zvoliť ročné členstvo
               </Link>
               <div className="mt-5">
                 <ExpandableText maxHeight={48} fadeColor="#FFD9E8">

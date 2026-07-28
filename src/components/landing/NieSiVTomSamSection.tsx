@@ -13,9 +13,7 @@ function ProstriedkyBox({ fadeColor }: { fadeColor: string }) {
         Prostriedky získané prostredníctvom ONKO KLUBU smerujú späť do systému
         pomoci pre onkologických pacientov. Zabezpečujú fungovanie pacientskych
         poradní NIE RAKOVINE, bezplatné poradenstvo a rozvoj praktickej podpory
-        pre ľudí s onkologickým ochorením na Slovensku. Prispievajú tiež k
-        vzdelávaniu pacientov a ich blízkych, šíreniu overených informácií a
-        zlepšovaniu dostupnosti pomoci v náročných životných situáciách.
+        pre ľudí s onkologickým ochorením na Slovensku.
       </p>
     </ExpandableText>
   );

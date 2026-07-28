@@ -10,7 +10,7 @@ const FEATURES = [
   {
     id: "library" as const,
     title: "ONKO knižnica",
-    desc: "Desiatky videí od overených odborníkov na tému pohyb, výživa, psychika a iné. Sledujte kedykoľvek, kdekoľvek a vo vlastnom tempe.",
+    desc: "Videá, články a recepty od overených odborníkov, zoradené podľa toho, čo práve riešite.",
     href: "/kontent-kniznica",
   },
   {
@@ -181,7 +181,7 @@ export function FeatureSection() {
       <div className="max-w-6xl mx-auto px-5 md:px-8">
       {/* Nadpis + podnadpis */}
       <motion.h2
-        className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4 text-center"
+        className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-14 text-center"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -189,17 +189,6 @@ export function FeatureSection() {
       >
         Všetko, čo potrebujete, nájdete na jednom mieste
       </motion.h2>
-      <motion.p
-        className="text-[#6F2380]/65 text-base leading-relaxed mb-14 text-center max-w-xs mx-auto"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-      >
-        ONKO KLUB vznikol, aby bol oporou v momentoch, kedy potrebujete viac
-        než len informácie – keď hľadáte pochopenie, istotu a pocit, že v tom
-        nie ste sami. Pozrite sa, čo všetko na vás čaká!
-      </motion.p>
 
       {/* 4 položky */}
       <div className="flex flex-col gap-16 md:grid md:grid-cols-2 md:gap-x-12 md:gap-y-20">

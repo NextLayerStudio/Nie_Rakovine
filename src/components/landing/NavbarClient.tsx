@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 const ABOUT_LINKS = [
-  { label: "Čo získaš",            href: "/co-ziskas" },
+  { label: "Čo získate",           href: "/co-ziskas" },
   { label: "Prednášky & Podcasty", href: "/prednasky-podcasty" },
   { label: "Kalendár aktivít",     href: "/akcie" },
   { label: "Sponzori & Zľavy",     href: "/sponzori" },

@@ -22,9 +22,9 @@ const TOPICS = [
 ];
 
 const PILLARS = [
-  { icon: Mic,        accent: "#FDA4C7", title: "Odborné prednášky",            desc: "Pravidelné online aj prezenčné stretnutia s lekármi, psychológmi, fyzioterapeutmi a ďalšími odborníkmi. Získajte overené informácie a možnosť klásť otázky priamo špecialistom." },
-  { icon: Headphones, accent: "#6F2380", title: "Podcasty s odborníkmi",        desc: "Rozhovory s odborníkmi, ktorí sa venujú onkologickým pacientom v každodennej praxi. Počúvať ich môžete kedykoľvek a bez ďalších poplatkov." },
-  { icon: BookOpen,   accent: "#FDA4C7", title: "Archív prednášok a podcastov", desc: "Prednášky a podcasty sú pre členov ONKO KLUBU dostupné v ONKO knižnici bez časového obmedzenia a ďalších poplatkov." },
+  { icon: Mic,        accent: "#FDA4C7", title: "Odborné prednášky",            desc: "Pravidelné online aj prezenčné stretnutia s lekármi, psychológmi, fyzioterapeutmi a ďalšími odborníkmi, na ktorých môžete priamo klásť otázky." },
+  { icon: Headphones, accent: "#6F2380", title: "Podcasty s odborníkmi",        desc: "Rozhovory s odborníkmi, ktorí sa dlhodobo venujú starostlivosti o onkologických pacientov. Počúvať ich môžete kedykoľvek a bez ďalších poplatkov." },
+  { icon: BookOpen,   accent: "#FDA4C7", title: "Archív prednášok a podcastov", desc: "Prednášky a podcasty sú pre členov ONKO KLUBU dostupné v ONKO knižnici bez časového obmedzenia." },
 ];
 
 const UKAZKY = [

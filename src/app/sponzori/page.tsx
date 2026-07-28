@@ -36,11 +36,16 @@ export default function SponzoriPage() {
                 Špeciálne zľavy len pre členov ONKO KLUBU
               </h1>
               <div className="mb-8">
-                <ExpandableText maxHeight={72} fadeColor="#FFF3F9">
+                <ExpandableText maxHeight={120} fadeColor="#FFF3F9">
                   <p className="text-[#6F2380]/70 text-base leading-relaxed">
-                    Ako člen/ka ONKO KLUBU máte vďaka našim partnerom možnosť
-                    využiť špeciálne zľavy. Stačí sa preukázať OK Kartou a zľava
-                    sa vám automaticky uplatní.
+                    Vďaka našim partnerom získate prístup k zvýhodneným ponukám
+                    a exkluzívnym benefitom. Stačí sa preukázať OK kartou a
+                    zľava sa vám automaticky uplatní.
+                  </p>
+                  <p className="text-[#6F2380]/50 text-sm leading-relaxed mt-3">
+                    Sme vďační, že po našom boku stoja spoločnosti a ľudia,
+                    ktorí sa rozhodli investovať do lepšej budúcnosti
+                    onkologických pacientov.
                   </p>
                 </ExpandableText>
               </div>
@@ -172,11 +177,7 @@ export default function SponzoriPage() {
       {/* Kategórie partnerov */}
       <section className="pb-14">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
-          <h2 className="text-xl font-black text-[#6F2380] mb-2">Kategórie partnerov</h2>
-          <p className="text-[#6F2380]/50 text-sm mb-8">
-            Zatiaľ ešte nevieme, ktoré značky sa k nám pridajú — tu je prehľad
-            kategórií, v ktorých partnerov hľadáme.
-          </p>
+          <h2 className="text-xl font-black text-[#6F2380] mb-8">Kategórie partnerov</h2>
           <div className="flex flex-wrap gap-2">
             {KATEGORIE.map((kat, i) => (
               <span
