@@ -72,9 +72,11 @@ export function CennikSection() {
           Cenník
         </p>
         <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-3">
-          Zvoľte si spôsob členstva, ktorý vám najviac vyhovuje.
+          Každý nový člen robí ONKO KLUB silnejším
         </h2>
-        <p className="text-[#6F2380]/55 text-base mb-6">Bez viazanosti – členstvo môžete kedykoľvek zrušiť.</p>
+        <p className="text-[#6F2380]/55 text-base mb-6">
+          Ďakujeme, že sa stávate súčasťou komunity, ktorá nie je len miestom podpory, ale aj silným hlasom pacientov s rakovinou. Spoločne spájame naše skúsenosti a príbehy, aby sme dokázali prinášať reálne zmeny v prospech ľudí s onkologickým ochorením.
+        </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {CENNIK_INFO.map((info) => {
