@@ -4,6 +4,7 @@ import { useRef, useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import type { Area } from "react-easy-crop";
 import { IMAGE_FILE_INPUT_ACCEPT } from "@/lib/image-upload-limits";
+import { compressImageFile } from "@/lib/client-image-compress";
 
 async function getCroppedFile(imageSrc: string, pixelCrop: Area, fileName: string): Promise<File> {
   return new Promise((resolve, reject) => {
@@ -109,23 +110,35 @@ export function AdminImageField({
     setCroppedAreaPixels(pixels);
   }, []);
 
-  function onFileChange(file: File | undefined) {
+  async function onFileChange(file: File | undefined) {
     if (!file) { setFilePreview(null); setFileName(null); setLocalFileSrc(null); return; }
-    const objectUrl = URL.createObjectURL(file);
+
+    // Always compress+downscale on selection, before anything else touches the
+    // file — this guarantees the real <input> never holds a raw, oversized
+    // phone photo, even if the person cancels the crop tool below.
+    const compressed = await compressImageFile(file);
+    if (fileRef.current) {
+      const dt = new DataTransfer();
+      dt.items.add(compressed);
+      fileRef.current.files = dt.files;
+    }
+
+    const objectUrl = URL.createObjectURL(compressed);
     setNaturalAspect(null);
     const probe = new Image();
     probe.onload = () => setNaturalAspect(probe.naturalWidth / probe.naturalHeight);
     probe.src = objectUrl;
 
     setLocalFileSrc(objectUrl);
-    setCropOrigName(file.name);
+    setCropOrigName(compressed.name);
 
     if (previewAspect === "video" && !mandatoryAspect) {
       // Cover photos behave exactly like gallery uploads by default — no forced
-      // crop. The file already sits in the real <input>, so nothing else to do
-      // besides updating the preview; cropping is available on demand below.
+      // crop. The (already compressed) file sits in the real <input>, so
+      // nothing else to do besides updating the preview; cropping is
+      // available on demand below.
       setFilePreview(objectUrl);
-      setFileName(file.name);
+      setFileName(compressed.name);
       return;
     }
 

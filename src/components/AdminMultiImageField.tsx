@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { IMAGE_FILE_INPUT_ACCEPT } from "@/lib/image-upload-limits";
+import { compressImageFile } from "@/lib/client-image-compress";
 
 type ExistingImage = { id: string; url: string };
 type PendingImage = { key: string; file: File; src: string };
@@ -27,9 +28,14 @@ export function AdminMultiImageField({
     fileRef.current.files = dt.files;
   }, [pending]);
 
-  function onFilesChange(files: FileList | null) {
+  async function onFilesChange(files: FileList | null) {
     if (!files) return;
-    const next = Array.from(files).map((file) => ({
+    // Compress on selection so a batch of raw phone photos can never add up
+    // to more than the Vercel Server Action body limit (~4.5 MB total).
+    const compressed = await Promise.all(
+      Array.from(files).map((file) => compressImageFile(file)),
+    );
+    const next = compressed.map((file) => ({
       key: `${file.name}-${file.lastModified}-${Math.random().toString(36).slice(2)}`,
       file,
       src: URL.createObjectURL(file),
