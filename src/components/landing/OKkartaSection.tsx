@@ -187,9 +187,10 @@ export function OKkartaSection() {
         <div className="mb-7">
           <ExpandableText maxHeight={64} fadeColor="#FFF3F9">
             <p className="text-[#6F2380]/50 text-sm leading-relaxed">
-              Sieť organizácií a značiek, ktoré podporujú onkologických pacientov
-              a ich blízkych. Zvýhodnené ponuky a benefity sú dostupné výhradne
-              pre členov ONKO KLUBU.
+              ONKO KLUB rastie vďaka partnerom, ktorých dôvera a ochota pomáhať
+              prinášajú konkrétnu podporu ľuďom s onkologickým ochorením. Sme
+              vďační, že spoločne môžeme byť oporou tam, kde je to najviac
+              potrebné.
             </p>
           </ExpandableText>
         </div>
