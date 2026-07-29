@@ -14,11 +14,11 @@ export function CommunityPhotoSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
         transition={{ duration: 0.6, ease }}
-        className="flex items-center justify-center gap-2 px-5 text-center text-[2rem] md:text-[2.6rem] font-black leading-[1.1] text-[#6F2380] mb-8 md:mb-10"
+        className="flex items-center justify-center px-5 text-center text-[2rem] md:text-[2.6rem] font-black leading-[1.1] text-[#6F2380] mb-8 md:mb-10"
       >
-        Komunita je naše
+        <span className="relative z-10">Komunita je naše</span>
         <span
-          className="relative inline-block h-[0.85em] w-[0.85em] shrink-0"
+          className="relative z-0 -ml-5 inline-block h-[1.6em] w-[1.6em] shrink-0 md:-ml-7 md:h-[1.8em] md:w-[1.8em]"
           style={{ transform: "rotate(-14deg)" }}
         >
           <Image src="/images/srdce-komunita.png" alt="srdce" fill className="object-contain" />
