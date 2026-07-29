@@ -36,7 +36,7 @@ const PARTNERS: { name: string; logo: string }[] = [
   { name: "Meditesty", logo: "/images/partneri/meditesty-tmave-pozadie.png" },
   { name: "Dulcia.sk", logo: "/images/partneri/dulcia.png" },
   { name: "Hyundai", logo: "/images/partneri/hyundai.jpg" },
-  { name: "Všeobecná zdravotná poisťovňa", logo: "/images/partneri/vszp.jpeg" },
+  { name: "Kittler", logo: "/images/partneri/kittler.png" },
   { name: "Visibility", logo: "/images/partneri/visibility.png" },
   { name: "Bratislava - Staré Mesto", logo: "/images/partneri/bratislava-stare-mesto.png" },
 ];
