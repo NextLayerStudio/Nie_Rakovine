@@ -18,11 +18,12 @@ export function CommunityPhotoSection() {
       >
         <span className="relative z-10">Komunita je naše</span>
         <span
-          className="relative z-0 -ml-5 inline-block h-[1.6em] w-[1.6em] shrink-0 md:-ml-7 md:h-[1.8em] md:w-[1.8em]"
+          className="relative z-0 -ml-5 mr-1 inline-block h-[2em] w-[2em] shrink-0 md:-ml-7 md:mr-2 md:h-[2.4em] md:w-[2.4em]"
           style={{ transform: "rotate(-14deg)" }}
         >
           <Image src="/images/srdce-komunita.png" alt="srdce" fill className="object-contain" />
         </span>
+        <span className="relative z-10">srdce</span>
       </motion.h2>
 
       {/* Mobile: fotka na strede, mierne pootočená (roh "vytŕča" vďaka náklonu) */}
