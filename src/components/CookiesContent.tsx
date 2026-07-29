@@ -59,11 +59,6 @@ export function CookiesContent({ className }: { className?: string }) {
               <td className="py-2 pr-3">Funkčné — rozpoznanie známeho zariadenia, upozornenie na prihlásenie z nového zariadenia</td>
               <td className="py-2">12 mesiacov</td>
             </tr>
-            <tr className="border-b border-brand-purple/10">
-              <td className="py-2 pr-3 font-semibold">onko_staff_access</td>
-              <td className="py-2 pr-3">Nevyhnutné — prístupová brána počas neverejnej fázy platformy</td>
-              <td className="py-2">30 dní</td>
-            </tr>
             <tr>
               <td className="py-2 pr-3 font-semibold">Vercel Web Analytics</td>
               <td className="py-2 pr-3">Analytické — anonymizovaná návštevnosť; nepoužíva cookies</td>

@@ -6,75 +6,15 @@ import { jwtVerify } from "jose";
 // (see lib/auth.ts requireAdmin / requireUser).
 
 const COOKIE_NAME = "onko_session";
-const STAFF_BYPASS_COOKIE = "onko_staff_access";
-const ACCESS_GATE_PATH = "/access";
 
 const PROTECTED_PREFIXES = ["/home", "/menu", "/profile", "/admin"];
-
-// The rest of the app (landing page, login/register, admin, ...) isn't
-// finished yet. Only the events flow, its legal sub-pages, and the password
-// gate itself are public; everything else requires the staff bypass cookie,
-// which is set by entering STAFF_PASSWORD on /access (see
-// lib/actions/staff-access.ts).
-const PUBLIC_ROUTE_PREFIXES = [
-  "/podujatia",
-  "/api/tickets",
-  ACCESS_GATE_PATH,
-  "/podmienky",
-  "/obchodne-podmienky",
-  "/ochrana-sukromia",
-  "/pravidla-komunity",
-  "/pravne-vyhlasenie",
-  "/cookies",
-  "/kontakt",
-];
 
 function isProtected(pathname: string): boolean {
   return PROTECTED_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }
 
-function isPublicRoute(pathname: string): boolean {
-  return PUBLIC_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix));
-}
-
-function isStaffGateDisabled(req: NextRequest): boolean {
-  if (process.env.STAFF_GATE_DISABLED === "true") return true;
-  if (process.env.NODE_ENV !== "production") return true;
-
-  const hostname = req.nextUrl.hostname;
-  return hostname === "localhost" || hostname === "127.0.0.1";
-}
-
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const staffGateDisabled = isStaffGateDisabled(req);
-
-  if (staffGateDisabled && pathname.startsWith(ACCESS_GATE_PATH)) {
-    const next = req.nextUrl.searchParams.get("next");
-    const url = req.nextUrl.clone();
-    url.pathname = next?.startsWith("/") ? next : "/";
-    url.search = "";
-    return NextResponse.redirect(url);
-  }
-
-  if (isPublicRoute(pathname)) {
-    return NextResponse.next();
-  }
-
-  const bypassSecret = process.env.STAFF_BYPASS_TOKEN?.trim();
-  const hasStaffBypass =
-    staffGateDisabled ||
-    (!!bypassSecret &&
-      req.cookies.get(STAFF_BYPASS_COOKIE)?.value === bypassSecret);
-
-  if (!hasStaffBypass) {
-    const url = req.nextUrl.clone();
-    const next = pathname + url.search;
-    url.pathname = ACCESS_GATE_PATH;
-    url.search = next && next !== "/" ? `?next=${encodeURIComponent(next)}` : "";
-    return NextResponse.redirect(url);
-  }
-
   const token = req.cookies.get(COOKIE_NAME)?.value;
 
   // Authenticated users hitting the root go straight to the app (unless ?preview=1)
