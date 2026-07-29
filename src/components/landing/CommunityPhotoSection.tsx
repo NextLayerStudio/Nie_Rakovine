@@ -9,6 +9,22 @@ const ease = [0.22, 1, 0.36, 1] as const;
 export function CommunityPhotoSection() {
   return (
     <section className="pb-8 md:pb-12">
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.6, ease }}
+        className="flex items-center justify-center gap-2 px-5 text-center text-[2rem] md:text-[2.6rem] font-black leading-[1.1] text-[#6F2380] mb-8 md:mb-10"
+      >
+        Komunita je naše
+        <span
+          className="relative inline-block h-[0.85em] w-[0.85em] shrink-0"
+          style={{ transform: "rotate(-14deg)" }}
+        >
+          <Image src="/images/srdce-komunita.png" alt="srdce" fill className="object-contain" />
+        </span>
+      </motion.h2>
+
       {/* Mobile: fotka na strede, mierne pootočená (roh "vytŕča" vďaka náklonu) */}
       <div className="md:hidden">
         <motion.div
