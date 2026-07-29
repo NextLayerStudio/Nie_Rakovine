@@ -20,7 +20,6 @@ export function HeroSection() {
           loop
           playsInline
           preload="auto"
-          poster="/images/hero-komunita.png"
           className="absolute inset-0 h-full w-full object-cover"
         >
           <source src="/videos/onko-klub-intro.mp4" type="video/mp4" />
