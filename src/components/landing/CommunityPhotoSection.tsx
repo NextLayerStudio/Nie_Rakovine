@@ -14,17 +14,25 @@ export function CommunityPhotoSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
         transition={{ duration: 0.6, ease }}
-        className="flex items-center justify-center px-5 text-center text-[2rem] md:text-[2.6rem] font-black leading-[1.1] text-[#6F2380] mb-8 md:mb-10"
+        className="px-5 text-center text-[2rem] md:text-[2.6rem] font-black leading-[1.1] text-[#6F2380] mb-5"
       >
-        <span className="relative z-10">Komunita je naše</span>
+        Komunita je naše srdce
+      </motion.h2>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.6, delay: 0.1, ease }}
+        className="flex justify-center mb-8 md:mb-10"
+      >
         <span
-          className="relative z-0 -ml-5 mr-1 inline-block h-[2em] w-[2em] shrink-0 md:-ml-7 md:mr-2 md:h-[2.4em] md:w-[2.4em]"
+          className="relative inline-block h-28 w-28 md:h-40 md:w-40"
           style={{ transform: "rotate(-14deg)" }}
         >
           <Image src="/images/srdce-komunita.png" alt="srdce" fill className="object-contain" />
         </span>
-        <span className="relative z-10">srdce</span>
-      </motion.h2>
+      </motion.div>
 
       {/* Mobile: fotka na strede, mierne pootočená (roh "vytŕča" vďaka náklonu) */}
       <div className="md:hidden">
