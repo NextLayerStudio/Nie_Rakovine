@@ -18,7 +18,7 @@ export const EVENT_CATEGORY_META: Record<EventCategory, CategoryMeta> = {
   FYZICKE: { label: "Pohyb", color: "#F0A9D0", text: "#7a2357" },
   MENTALNE: { label: "Psychická podpora", color: "#E3A7E0", text: "#5f235f" },
   EXTERNE: { label: "Komunita", color: "#A7DCE3", text: "#1f4f57" },
-  INTERNE: { label: "Podujatia", color: "#E3C9A7", text: "#6b4a1f" },
+  INTERNE: { label: "ÁNO ZDRAVIU", color: "#E3C9A7", text: "#6b4a1f" },
 };
 
 export function categoryLabel(category: EventCategory | null | undefined): string {
