@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
 
-type FeatureImg = { label: string; src?: string; fit?: "cover" | "contain"; position?: string; width?: number; height?: number };
+type FeatureImg = { label: string; src?: string; fit?: "cover" | "contain"; position?: string; width?: number; height?: number; rotate?: number };
 
 const FEATURES: {
   icon: typeof Play;
@@ -22,6 +22,8 @@ const FEATURES: {
   secondaryAspect?: string;
   mainAspect?: string;
   mainNative?: boolean;
+  skipMain?: boolean;
+  secondaryGap?: string;
 }[] = [
   {
     icon: Play,
@@ -72,10 +74,11 @@ const FEATURES: {
     headline: "Podeľte sa o to, čím prechádzate",
     desc: "Zdieľajte svoje skúsenosti, otázky, obavy či každodenné výzvy s ľuďmi, ktorí vedia, čo prežívate. Môžete prispievať pod vlastným menom alebo anonymne.",
     detailItems: ["Tematické diskusné fóra", "Diskusie rozdelené podľa oblastí záujmu a potrieb", "Možnosť prispievať anonymne alebo pod vlastným menom", "Moderované a bezpečné prostredie", "Ukážka obsahu dostupná aj bez registrácie"],
+    skipMain: true,
+    secondaryGap: "gap-6",
     imgs: [
-      { label: "Fóra", src: "/images/co-ziskas-forum-wide.jpg" },
-      { label: "Diskusné fóra", src: "/images/co-ziskas-forum-1.jpg" },
-      { label: "Diskusné fóra", src: "/images/co-ziskas-forum-2.jpg" },
+      { label: "Diskusné fóra", src: "/images/co-ziskas-forum-1.jpg", rotate: -90 },
+      { label: "Diskusné fóra", src: "/images/co-ziskas-forum-2.jpg", rotate: -90 },
     ],
   },
   {
@@ -182,7 +185,34 @@ export default function CoZiskasPage() {
 
                   {/* Screenshoty */}
                   <div className="flex flex-col gap-3 mb-6">
-                    {f.imgs.length === 1 ? (
+                    {f.skipMain ? (
+                      <div className={`grid grid-cols-2 ${f.secondaryGap ?? "gap-3"}`}>
+                        {f.imgs.map((img, i) => (
+                          <div
+                            key={img.label + i}
+                            className={`relative w-full ${f.secondaryAspect ?? "aspect-square"} overflow-hidden rounded-2xl flex items-center justify-center p-2`}
+                            style={{ backgroundColor: (isEven ? "#6F2380" : "#FDA4C7") + "12" }}
+                          >
+                            {img.src ? (
+                              <Image
+                                src={img.src}
+                                alt={img.label}
+                                fill
+                                className={img.fit === "contain" ? "object-contain p-4" : "object-cover"}
+                                style={{
+                                  ...(img.position ? { objectPosition: img.position } : {}),
+                                  ...(img.rotate ? { transform: `rotate(${img.rotate}deg)` } : {}),
+                                }}
+                              />
+                            ) : (
+                              <p className="text-[10px] font-semibold text-center leading-tight" style={{ color: (isEven ? "#6F2380" : "#FDA4C7") + "60" }}>
+                                {img.label}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ) : f.imgs.length === 1 ? (
                       f.mainNative && f.imgs[0].src ? (
                         <Image
                           src={f.imgs[0].src}
