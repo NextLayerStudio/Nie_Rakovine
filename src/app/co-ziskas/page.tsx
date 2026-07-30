@@ -32,8 +32,8 @@ const FEATURES: {
     secondaryAspect: "aspect-video",
     imgs: [
       { label: "Joga video thumbnail", src: "/images/co-ziskas-video-wide.jpg" },
-      { label: "Mindfulness video", src: "/images/co-ziskas-video-1.jpg", fit: "contain" },
-      { label: "Screenshot knižnice", src: "/images/co-ziskas-video-2.jpg", fit: "contain" },
+      { label: "Mindfulness video", src: "/images/co-ziskas-video-1.jpg" },
+      { label: "Screenshot knižnice", src: "/images/co-ziskas-video-2.jpg" },
     ],
   },
   {
