@@ -27,8 +27,7 @@ export function CommunityPhotoSection() {
         className="flex justify-center mb-8 md:mb-10"
       >
         <span
-          className="relative inline-block h-28 w-28 md:h-40 md:w-40"
-          style={{ transform: "rotate(-14deg)" }}
+          className="relative inline-block h-28 w-28 -translate-y-4 translate-x-6 rotate-[-14deg] md:h-40 md:w-40 md:translate-x-0 md:translate-y-0"
         >
           <Image src="/images/srdce-komunita.png" alt="srdce" fill className="object-contain" />
         </span>
