@@ -9,31 +9,32 @@ const ease = [0.22, 1, 0.36, 1] as const;
 export function CommunityPhotoSection() {
   return (
     <section className="pb-8 md:pb-12">
-      <div className="px-5 md:px-0">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.6, ease }}
-          className="text-center text-[2rem] md:text-[2.6rem] font-black leading-[1.1] text-[#6F2380] mb-5"
-        >
-          Komunita je naše{" "}
-          <span className="inline-block -translate-x-20 md:translate-x-0">srdce</span>
-        </motion.h2>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.6, delay: 0.1, ease }}
-          className="flex justify-center mb-8 md:mb-10"
-        >
-          <span
-            className="relative inline-block h-28 w-28 -translate-y-12 translate-x-16 rotate-[-14deg] md:h-40 md:w-40 md:translate-x-0 md:translate-y-0"
+      <div className="flex justify-center px-5 md:block md:px-0">
+        <div className="inline-block text-left md:block md:text-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.6, ease }}
+            className="text-[2rem] md:text-[2.6rem] font-black leading-[1.1] text-[#6F2380] mb-5"
           >
-            <Image src="/images/srdce-komunita.png" alt="srdce" fill className="object-contain" />
-          </span>
-        </motion.div>
+            Komunita je naše srdce
+          </motion.h2>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.6, delay: 0.1, ease }}
+            className="flex justify-start md:justify-center mb-8 md:mb-10"
+          >
+            <span
+              className="relative inline-block h-28 w-28 -translate-y-12 translate-x-16 rotate-[-14deg] md:h-40 md:w-40 md:translate-x-0 md:translate-y-0"
+            >
+              <Image src="/images/srdce-komunita.png" alt="srdce" fill className="object-contain" />
+            </span>
+          </motion.div>
+        </div>
       </div>
 
       {/* Mobile: fotka na strede, mierne pootočená (roh "vytŕča" vďaka náklonu) */}
