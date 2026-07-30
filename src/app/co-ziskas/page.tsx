@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
 
-type FeatureImg = { label: string; src?: string; fit?: "cover" | "contain"; position?: string };
+type FeatureImg = { label: string; src?: string; fit?: "cover" | "contain"; position?: string; width?: number; height?: number };
 
 const FEATURES: {
   icon: typeof Play;
@@ -21,6 +21,7 @@ const FEATURES: {
   imgs: FeatureImg[];
   secondaryAspect?: string;
   mainAspect?: string;
+  mainNative?: boolean;
 }[] = [
   {
     icon: Play,
@@ -58,9 +59,9 @@ const FEATURES: {
     headline: "Nezmeškajte podujatie vo vašom okolí",
     desc: "Workshopy, skupinové stretnutia a odborné podujatia sú dostupné vo viacerých regiónoch Slovenska. Ako člen/ka ONKO KLUBU máte možnosť prihlásiť sa na vybrané aktivity jednoducho priamo v aplikácii ONKO KLUB.",
     detailItems: ["Jemná joga pre onkologických pacientov", "Mindfulness – skupinové workshopy", "Odborné stretnutia s lekármi a špecialistami", "Podporné skupinové stretnutia", "SMS pripomienka 24 hodín vopred"],
-    mainAspect: "aspect-[4/3]",
+    mainNative: true,
     imgs: [
-      { label: "Kalendár aktivít", src: "/images/co-ziskas-calendar-wide.jpg", fit: "contain" },
+      { label: "Kalendár aktivít", src: "/images/co-ziskas-calendar-wide.jpg", width: 1170, height: 600 },
     ],
   },
   {
@@ -182,6 +183,15 @@ export default function CoZiskasPage() {
                   {/* Screenshoty */}
                   <div className="flex flex-col gap-3 mb-6">
                     {f.imgs.length === 1 ? (
+                      f.mainNative && f.imgs[0].src ? (
+                        <Image
+                          src={f.imgs[0].src}
+                          alt={f.imgs[0].label}
+                          width={f.imgs[0].width}
+                          height={f.imgs[0].height}
+                          className="w-full h-auto rounded-2xl"
+                        />
+                      ) : (
                       <div
                         className={`relative w-full ${f.mainAspect ?? "aspect-video"} overflow-hidden rounded-2xl flex items-center justify-center`}
                         style={{ backgroundColor: (isEven ? "#FDA4C7" : "#6F2380") + "18" }}
@@ -199,6 +209,7 @@ export default function CoZiskasPage() {
                           </p>
                         )}
                       </div>
+                      )
                     ) : (
                       <>
                         <div
