@@ -61,7 +61,7 @@ const FEATURES: {
     detailItems: ["Jemná joga pre onkologických pacientov", "Mindfulness – skupinové workshopy", "Odborné stretnutia s lekármi a špecialistami", "Podporné skupinové stretnutia", "SMS pripomienka 24 hodín vopred"],
     mainNative: true,
     imgs: [
-      { label: "Kalendár aktivít", src: "/images/co-ziskas-calendar-wide.jpg", width: 1170, height: 600 },
+      { label: "Kalendár aktivít", src: "/images/co-ziskas-calendar-app.png", width: 1170, height: 2532 },
     ],
   },
   {
