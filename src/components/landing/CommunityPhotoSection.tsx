@@ -16,7 +16,7 @@ export function CommunityPhotoSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.6, ease }}
-            className="text-[2rem] md:text-[2.6rem] font-black leading-[1.1] text-[#6F2380] mb-5"
+            className="text-[2.4rem] md:text-[2.6rem] font-black leading-[1.1] text-[#6F2380] mb-5"
           >
             Komunita je naše srdce
           </motion.h2>
