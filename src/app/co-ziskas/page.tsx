@@ -77,8 +77,8 @@ const FEATURES: {
     skipMain: true,
     secondaryGap: "gap-6",
     imgs: [
-      { label: "Diskusné fóra", src: "/images/co-ziskas-forum-1.jpg", rotate: -90 },
-      { label: "Diskusné fóra", src: "/images/co-ziskas-forum-2.jpg", rotate: -90 },
+      { label: "Diskusné fóra", src: "/images/co-ziskas-forum-1.jpg", rotate: -90, fit: "contain" },
+      { label: "Diskusné fóra", src: "/images/co-ziskas-forum-2.jpg", rotate: -90, fit: "contain" },
     ],
   },
   {
