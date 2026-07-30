@@ -105,7 +105,7 @@ const FEATURES: {
     detailItems: ["OK Karta sa vytvorí ihneď po dokončení registrácie", "Každý člen má vlastný identifikátor", "Vstupenka na podujatia a workshopy", "Prehľadný preukaz člena vždy v mobile", "Uplatnenie zliav"],
     mainAspect: "aspect-[935/1400]",
     imgs: [
-      { label: "OK Karta", src: "/images/co-ziskas-okkarta-wide.jpg", rotate: -90 },
+      { label: "OK Karta", src: "/images/co-ziskas-okkarta-wide.jpg", rotate: -90, fit: "contain" },
       { label: "OK Karta", src: "/images/co-ziskas-okkarta-1.jpg", rotate: -90 },
       { label: "OK Karta", src: "/images/co-ziskas-okkarta-2.jpg", rotate: -90 },
     ],
@@ -252,7 +252,7 @@ export default function CoZiskasPage() {
                               src={f.imgs[0].src}
                               alt={f.imgs[0].label}
                               fill
-                              className="object-cover"
+                              className={f.imgs[0].fit === "contain" ? "object-contain p-4" : "object-cover"}
                               style={{
                                 ...(f.imgs[0].position ? { objectPosition: f.imgs[0].position } : {}),
                                 ...(f.imgs[0].rotate ? { transform: `rotate(${f.imgs[0].rotate}deg)` } : {}),
