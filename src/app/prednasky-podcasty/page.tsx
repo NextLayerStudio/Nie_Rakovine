@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { Mic, Headphones, BookOpen, Circle, Play } from "lucide-react";
+import { Mic, Headphones, BookOpen, Circle } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const TOPICS = [
@@ -59,26 +59,24 @@ export default function PrenasakyPodcastyPage() {
                 Chcem prístup k prednáškam
               </Link>
             </div>
-            {/* Screenshot — viditeľný len na desktop */}
+            {/* Video — viditeľné len na desktop */}
             <div className="hidden md:block">
-              <div className="w-full aspect-video rounded-[2rem] bg-[#6F2380]/20 flex flex-col items-center justify-center gap-2">
-                <div className="w-12 h-12 rounded-full bg-[#FDA4C7]/40 flex items-center justify-center">
-                  <Play size={20} className="text-[#FDA4C7] ml-0.5" fill="currentColor" />
-                </div>
-                <p className="text-[#6F2380]/30 text-xs font-semibold">[IMG-27] Screenshot prednášky v platforme</p>
+              <div className="relative w-full aspect-video overflow-hidden rounded-[2rem]">
+                <video autoPlay muted loop playsInline className="absolute inset-0 h-full w-full object-cover">
+                  <source src="/videos/mirka.mp4" type="video/mp4" />
+                </video>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Screenshot — len mobile */}
+      {/* Video — len mobile */}
       <section className="px-5 pb-14 md:hidden">
-        <div className="w-full aspect-video rounded-[2rem] bg-[#6F2380]/20 flex flex-col items-center justify-center gap-2">
-          <div className="w-12 h-12 rounded-full bg-[#FDA4C7]/40 flex items-center justify-center">
-            <Play size={20} className="text-[#FDA4C7] ml-0.5" fill="currentColor" />
-          </div>
-          <p className="text-[#6F2380]/30 text-xs font-semibold">[IMG-27] Screenshot prednášky v platforme</p>
+        <div className="relative w-full aspect-video overflow-hidden rounded-[2rem]">
+          <video autoPlay muted loop playsInline className="absolute inset-0 h-full w-full object-cover">
+            <source src="/videos/mirka.mp4" type="video/mp4" />
+          </video>
         </div>
       </section>
 
@@ -109,6 +107,11 @@ export default function PrenasakyPodcastyPage() {
       {/* Témy */}
       <section className="pb-16">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
+          <div className="relative w-full aspect-video overflow-hidden rounded-[2rem] mb-6">
+            <video autoPlay muted loop playsInline className="absolute inset-0 h-full w-full object-cover">
+              <source src="/videos/ano-zdraviu-intro.mp4" type="video/mp4" />
+            </video>
+          </div>
           <h2 className="text-xl font-black text-[#6F2380] mb-6">Témy prednášok a podcastov</h2>
           <div className="flex flex-col gap-3 md:grid md:grid-cols-2">
             {TOPICS.map((topic) => (
