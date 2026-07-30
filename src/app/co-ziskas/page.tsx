@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
 
-type FeatureImg = { label: string; src?: string; fit?: "cover" | "contain" };
+type FeatureImg = { label: string; src?: string; fit?: "cover" | "contain"; position?: string };
 
 const FEATURES: {
   icon: typeof Play;
@@ -45,8 +45,8 @@ const FEATURES: {
     desc: "Za každým podcastom a prednáškou stojí konkrétny odborník či lektor s overenými skúsenosťami. Všetky epizódy sú pre členov ONKO KLUBU dostupné bezplatne.",
     detailItems: ["Odborné prednášky online", "Podcasty s odborníkmi na tému pohyb, výživa, genetika, liečba a iné", "Archív pre členov", "Upozornenia na nové epizódy"],
     imgs: [
-      { label: "Odborníci a lektori", src: "/images/lektori/viktor-oliva.jpg" },
-      { label: "Odborníci a lektori", src: "/images/lektori/malejcikova.jpg" },
+      { label: "Odborníci a lektori", src: "/images/lektori/viktor-oliva.jpg", position: "center 15%" },
+      { label: "Odborníci a lektori", src: "/images/lektori/malejcikova.jpg", position: "center 15%" },
     ],
   },
   {
@@ -200,7 +200,13 @@ export default function CoZiskasPage() {
                           style={{ backgroundColor: f.accent + "18" }}
                         >
                           {f.imgs[0].src ? (
-                            <Image src={f.imgs[0].src} alt={f.imgs[0].label} fill className="object-cover" />
+                            <Image
+                              src={f.imgs[0].src}
+                              alt={f.imgs[0].label}
+                              fill
+                              className="object-cover"
+                              style={f.imgs[0].position ? { objectPosition: f.imgs[0].position } : undefined}
+                            />
                           ) : (
                             <p className="text-xs font-semibold px-4 text-center" style={{ color: f.accent + "70" }}>{f.imgs[0].label}</p>
                           )}
@@ -218,6 +224,7 @@ export default function CoZiskasPage() {
                                   alt={img.label}
                                   fill
                                   className={img.fit === "contain" ? "object-contain p-4" : "object-cover"}
+                                  style={img.position ? { objectPosition: img.position } : undefined}
                                 />
                               ) : (
                                 <p className="text-[10px] font-semibold text-center leading-tight" style={{ color: (isEven ? "#6F2380" : "#FDA4C7") + "60" }}>
