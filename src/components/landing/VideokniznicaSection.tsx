@@ -61,6 +61,14 @@ export function VideokniznicaSection() {
                     loop
                     playsInline
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    onLoadedMetadata={(e) => {
+                      const el = e.currentTarget;
+                      if (el.duration) {
+                        // Each card starts at a different point in its clip so
+                        // they don't all show the same intro frame at once.
+                        el.currentTime = (el.duration * ((i + 1) / (VIDEOS.length + 1)));
+                      }
+                    }}
                   >
                     <source src={v.src} type="video/mp4" />
                   </video>
