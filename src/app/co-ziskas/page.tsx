@@ -58,7 +58,7 @@ const FEATURES: {
     headline: "Nezmeškajte podujatie vo vašom okolí",
     desc: "Workshopy, skupinové stretnutia a odborné podujatia sú dostupné vo viacerých regiónoch Slovenska. Ako člen/ka ONKO KLUBU máte možnosť prihlásiť sa na vybrané aktivity jednoducho priamo v aplikácii ONKO KLUB.",
     detailItems: ["Jemná joga pre onkologických pacientov", "Mindfulness – skupinové workshopy", "Odborné stretnutia s lekármi a špecialistami", "Podporné skupinové stretnutia", "SMS pripomienka 24 hodín vopred"],
-    mainAspect: "aspect-[1170/600]",
+    mainAspect: "aspect-[4/3]",
     imgs: [
       { label: "Kalendár aktivít", src: "/images/co-ziskas-calendar-wide.jpg" },
     ],
