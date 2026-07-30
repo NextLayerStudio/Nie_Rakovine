@@ -10,7 +10,7 @@ export function CommunityPhotoSection() {
   return (
     <section className="pb-8 md:pb-12">
       <div className="flex justify-center px-5 md:block md:px-0">
-        <div className="inline-block text-left md:block md:text-center">
+        <div className="inline-block translate-x-8 text-left md:block md:translate-x-0 md:text-center">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
