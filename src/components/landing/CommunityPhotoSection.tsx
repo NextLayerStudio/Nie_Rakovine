@@ -44,7 +44,7 @@ export function CommunityPhotoSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.7, ease }}
-          className="relative mx-auto -mt-6 w-[85%]"
+          className="relative mx-auto -mt-14 w-[85%]"
           style={{ transform: "rotate(-3deg)" }}
         >
           <div
