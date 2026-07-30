@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
 
-type FeatureImg = { label: string; src?: string; fit?: "cover" | "contain"; position?: string; width?: number; height?: number; rotate?: number };
+type FeatureImg = { label: string; src?: string; fit?: "cover" | "contain"; position?: string; width?: number; height?: number; rotate?: number; video?: boolean };
 
 const FEATURES: {
   icon: typeof Play;
@@ -24,6 +24,7 @@ const FEATURES: {
   mainNative?: boolean;
   skipMain?: boolean;
   secondaryGap?: string;
+  introVideo?: string;
 }[] = [
   {
     icon: Play,
@@ -48,8 +49,9 @@ const FEATURES: {
     headline: "Odborníci a lektori, ktorým môžete dôverovať",
     desc: "Za každým podcastom a prednáškou stojí konkrétny odborník či lektor s overenými skúsenosťami. Všetky epizódy sú pre členov ONKO KLUBU dostupné bezplatne.",
     detailItems: ["Odborné prednášky online", "Podcasty s odborníkmi na tému pohyb, výživa, genetika, liečba a iné", "Archív pre členov", "Upozornenia na nové epizódy"],
+    introVideo: "/videos/ano-zdraviu-intro.mp4",
     imgs: [
-      { label: "Odborníci a lektori", src: "/images/lektori/viktor-oliva.jpg", position: "center 15%" },
+      { label: "MUDr. Miroslava Malejčíková", src: "/videos/mirka.mp4", video: true },
       { label: "Odborníci a lektori", src: "/images/lektori/malejcikova.jpg", position: "center 15%" },
     ],
   },
@@ -177,6 +179,19 @@ export default function CoZiskasPage() {
                     </div>
                     <p className="text-[#6F2380]/50 text-xs font-bold uppercase tracking-wider">{f.title}</p>
                   </div>
+                  {f.introVideo && (
+                    <div className="relative w-full aspect-video overflow-hidden rounded-2xl mb-4">
+                      <video
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="absolute inset-0 h-full w-full object-cover"
+                      >
+                        <source src={f.introVideo} type="video/mp4" />
+                      </video>
+                    </div>
+                  )}
                   <h2 className="text-[1.8rem] font-black text-[#6F2380] leading-[1.15] mb-3">{f.headline}</h2>
                   <div className="mb-6">
                     <ExpandableText maxHeight={80} fadeColor="#FFF3F9">
@@ -248,7 +263,18 @@ export default function CoZiskasPage() {
                           style={{ backgroundColor: f.accent + "18" }}
                         >
                           {f.imgs[0].src ? (
-                            (f.imgs[0].rotate === 90 || f.imgs[0].rotate === -90) && f.imgs[0].width && f.imgs[0].height ? (
+                            f.imgs[0].video ? (
+                              <video
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                className="absolute inset-0 h-full w-full object-cover"
+                                style={f.imgs[0].position ? { objectPosition: f.imgs[0].position } : undefined}
+                              >
+                                <source src={f.imgs[0].src} type="video/mp4" />
+                              </video>
+                            ) : (f.imgs[0].rotate === 90 || f.imgs[0].rotate === -90) && f.imgs[0].width && f.imgs[0].height ? (
                               <Image
                                 src={f.imgs[0].src}
                                 alt={f.imgs[0].label}
