@@ -20,7 +20,6 @@ const FEATURES: {
   detailItems: string[];
   imgs: FeatureImg[];
   secondaryAspect?: string;
-  stackImages?: boolean;
 }[] = [
   {
     icon: Play,
@@ -31,11 +30,10 @@ const FEATURES: {
     desc: "Joga, mindfulness, jemné pohybové a dychové cvičenia, odborné diskusie o liečbe, výžive aj psychike. ONKO KLUB prináša exkluzívnu ONKO knižnicu vytvorenú špeciálne pre onkologických pacientov a ich blízkych. Sledujte kedykoľvek, kdekoľvek a vo vlastnom tempe.",
     detailItems: ["Jemná joga pre onkologických pacientov", "Mindfulness a meditácia", "Výživa počas chemoterapie", "Psychologická podpora", "Fyzioterapia a rehabilitácia"],
     secondaryAspect: "aspect-video",
-    stackImages: true,
     imgs: [
       { label: "Joga video thumbnail", src: "/images/co-ziskas-video-wide.jpg" },
-      { label: "Mindfulness video", src: "/images/co-ziskas-video-1.jpg" },
-      { label: "Screenshot knižnice", src: "/images/co-ziskas-video-2.jpg" },
+      { label: "Mindfulness video", src: "/images/co-ziskas-video-1.jpg", fit: "contain" },
+      { label: "Screenshot knižnice", src: "/images/co-ziskas-video-2.jpg", fit: "contain" },
     ],
   },
   {
@@ -207,7 +205,7 @@ export default function CoZiskasPage() {
                             <p className="text-xs font-semibold px-4 text-center" style={{ color: f.accent + "70" }}>{f.imgs[0].label}</p>
                           )}
                         </div>
-                        <div className={f.stackImages ? "flex flex-col gap-3" : "grid grid-cols-2 gap-3"}>
+                        <div className="grid grid-cols-2 gap-3">
                           {f.imgs.slice(1).map((img, i) => (
                             <div
                               key={img.label + i}
