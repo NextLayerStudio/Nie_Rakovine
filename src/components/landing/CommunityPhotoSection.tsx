@@ -14,7 +14,7 @@ export function CommunityPhotoSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
         transition={{ duration: 0.6, ease }}
-        className="px-5 text-center text-[2rem] md:text-[2.6rem] font-black leading-[1.1] text-[#6F2380] mb-5"
+        className="px-5 text-left md:text-center text-[2rem] md:text-[2.6rem] font-black leading-[1.1] text-[#6F2380] mb-5"
       >
         Komunita je naše srdce
       </motion.h2>
@@ -24,10 +24,10 @@ export function CommunityPhotoSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
         transition={{ duration: 0.6, delay: 0.1, ease }}
-        className="flex justify-center mb-8 md:mb-10"
+        className="flex justify-start px-5 md:justify-center md:px-0 mb-8 md:mb-10"
       >
         <span
-          className="relative inline-block h-28 w-28 -translate-y-4 translate-x-6 rotate-[-14deg] md:h-40 md:w-40 md:translate-x-0 md:translate-y-0"
+          className="relative inline-block h-28 w-28 -translate-y-12 translate-x-16 rotate-[-14deg] md:h-40 md:w-40 md:translate-x-0 md:translate-y-0"
         >
           <Image src="/images/srdce-komunita.png" alt="srdce" fill className="object-contain" />
         </span>
