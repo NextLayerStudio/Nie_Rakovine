@@ -17,7 +17,8 @@ export function CommunityPhotoSection() {
           transition={{ duration: 0.6, ease }}
           className="text-center text-[2rem] md:text-[2.6rem] font-black leading-[1.1] text-[#6F2380] mb-5"
         >
-          Komunita je naše srdce
+          Komunita je naše{" "}
+          <span className="inline-block -translate-x-28 md:translate-x-0">srdce</span>
         </motion.h2>
 
         <motion.div
