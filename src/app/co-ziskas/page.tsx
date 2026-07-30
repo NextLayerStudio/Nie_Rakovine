@@ -20,6 +20,7 @@ const FEATURES: {
   detailItems: string[];
   imgs: FeatureImg[];
   secondaryAspect?: string;
+  stackImages?: boolean;
 }[] = [
   {
     icon: Play,
@@ -30,6 +31,7 @@ const FEATURES: {
     desc: "Joga, mindfulness, jemné pohybové a dychové cvičenia, odborné diskusie o liečbe, výžive aj psychike. ONKO KLUB prináša exkluzívnu ONKO knižnicu vytvorenú špeciálne pre onkologických pacientov a ich blízkych. Sledujte kedykoľvek, kdekoľvek a vo vlastnom tempe.",
     detailItems: ["Jemná joga pre onkologických pacientov", "Mindfulness a meditácia", "Výživa počas chemoterapie", "Psychologická podpora", "Fyzioterapia a rehabilitácia"],
     secondaryAspect: "aspect-video",
+    stackImages: true,
     imgs: [
       { label: "Joga video thumbnail", src: "/images/co-ziskas-video-wide.jpg" },
       { label: "Mindfulness video", src: "/images/co-ziskas-video-1.jpg" },
@@ -205,11 +207,11 @@ export default function CoZiskasPage() {
                             <p className="text-xs font-semibold px-4 text-center" style={{ color: f.accent + "70" }}>{f.imgs[0].label}</p>
                           )}
                         </div>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className={f.stackImages ? "flex flex-col gap-3" : "grid grid-cols-2 gap-3"}>
                           {f.imgs.slice(1).map((img, i) => (
                             <div
                               key={img.label + i}
-                              className={`relative ${f.secondaryAspect ?? "aspect-square"} overflow-hidden rounded-2xl flex items-center justify-center p-2`}
+                              className={`relative w-full ${f.secondaryAspect ?? "aspect-square"} overflow-hidden rounded-2xl flex items-center justify-center p-2`}
                               style={{ backgroundColor: (isEven ? "#6F2380" : "#FDA4C7") + "12" }}
                             >
                               {img.src ? (
