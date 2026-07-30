@@ -109,18 +109,26 @@ export default function CoZiskasPage() {
     <main className="min-h-screen bg-[#FFF3F9] font-sans">
       <Navbar />
 
-      {/* Hero */}
-      <section className="pt-24 pb-12 md:pb-20">
-        <div className="max-w-6xl mx-auto px-5 md:px-8">
-          <div className="md:grid md:grid-cols-2 md:gap-16 md:items-center">
-            <div>
-              <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">Čo získate</p>
-              <h1 className="text-[2.4rem] md:text-[3.2rem] font-black text-[#6F2380] leading-[1.1] mb-5">
+      {/* Hero — screenshot appky ako pozadie */}
+      <section className="pb-12 md:pb-20">
+        <div className="relative overflow-hidden">
+          <Image
+            src="/images/co-ziskas-dashboard.jpg"
+            alt="ONKO KLUB v aplikácii"
+            fill
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/40 to-black/60" />
+
+          <div className="relative z-10 max-w-6xl mx-auto px-5 md:px-8 pt-24 pb-14 md:pt-32 md:pb-20">
+            <div className="max-w-xl">
+              <p className="text-white/80 text-sm font-bold uppercase tracking-widest mb-3">Čo získate</p>
+              <h1 className="text-[2.4rem] md:text-[3.2rem] font-black text-white leading-[1.1] mb-5 [text-shadow:0_2px_12px_rgba(0,0,0,0.35)]">
                 Všetko podstatné na jednom mieste
               </h1>
               <div className="mb-8">
-                <ExpandableText maxHeight={72} fadeColor="#FFF3F9">
-                  <p className="text-[#6F2380]/70 text-base leading-relaxed">
+                <ExpandableText maxHeight={72} fadeColor="rgba(20,10,25,0.85)">
+                  <p className="text-white/85 text-base leading-relaxed [text-shadow:0_1px_10px_rgba(0,0,0,0.45)]">
                     ONKO KLUB spája informácie a praktickú pomoc pre onkologických
                     pacientov a ich blízkych. Pozrite sa, čo všetko máte k dispozícii.
                   </p>
@@ -129,42 +137,19 @@ export default function CoZiskasPage() {
               <div className="md:flex md:gap-3">
                 <Link
                   href="/register"
-                  className="block w-full md:w-auto md:inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black py-4 md:px-8 text-center mb-3 md:mb-0"
+                  className="block w-full md:w-auto md:inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black py-4 md:px-8 text-center mb-3 md:mb-0 shadow-lg"
                 >
                   Vytvoriť účet
                 </Link>
                 <Link
                   href="/cennik"
-                  className="block w-full md:w-auto md:inline-block rounded-full border-2 border-[#FDA4C7] text-[#FDA4C7] text-base font-black py-4 md:px-8 text-center"
+                  className="block w-full md:w-auto md:inline-block rounded-full border-2 border-[#FDA4C7] bg-white/90 text-[#FDA4C7] text-base font-black py-4 md:px-8 text-center shadow-lg"
                 >
                   Formy členstva
                 </Link>
               </div>
             </div>
-            {/* Dashboard screenshot */}
-            <div className="hidden md:block">
-              <div className="relative mx-auto w-full max-w-xs aspect-[937/1400] overflow-hidden rounded-[1.8rem]">
-                <Image
-                  src="/images/co-ziskas-dashboard.jpg"
-                  alt="ONKO KLUB v aplikácii"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
           </div>
-        </div>
-      </section>
-
-      {/* Veľký screenshot — len mobile */}
-      <section className="px-5 pb-14 md:hidden">
-        <div className="relative mx-auto w-full max-w-xs aspect-[937/1400] overflow-hidden rounded-[1.8rem]">
-          <Image
-            src="/images/co-ziskas-dashboard.jpg"
-            alt="ONKO KLUB v aplikácii"
-            fill
-            className="object-cover"
-          />
         </div>
       </section>
 
