@@ -103,10 +103,11 @@ const FEATURES: {
     headline: "Jeden QR kód – desiatky výhod",
     desc: "Digitálna členská OK Karta s unikátnym QR kódom slúži ako váš členský preukaz. Umožňuje uplatniť zľavy u partnerských značiek a zároveň slúži ako vstupenka na podujatia a workshopy. Vždy dostupná vo vašom mobile, bez potreby tlačenej verzie.",
     detailItems: ["OK Karta sa vytvorí ihneď po dokončení registrácie", "Každý člen má vlastný identifikátor", "Vstupenka na podujatia a workshopy", "Prehľadný preukaz člena vždy v mobile", "Uplatnenie zliav"],
+    mainAspect: "aspect-[935/1400]",
     imgs: [
-      { label: "OK Karta", src: "/images/co-ziskas-okkarta-wide.jpg" },
-      { label: "OK Karta", src: "/images/co-ziskas-okkarta-1.jpg" },
-      { label: "OK Karta", src: "/images/co-ziskas-okkarta-2.jpg" },
+      { label: "OK Karta", src: "/images/co-ziskas-okkarta-wide.jpg", rotate: -90 },
+      { label: "OK Karta", src: "/images/co-ziskas-okkarta-1.jpg", rotate: -90 },
+      { label: "OK Karta", src: "/images/co-ziskas-okkarta-2.jpg", rotate: -90 },
     ],
   },
 ];
@@ -243,7 +244,7 @@ export default function CoZiskasPage() {
                     ) : (
                       <>
                         <div
-                          className="relative w-full aspect-video overflow-hidden rounded-2xl flex items-center justify-center"
+                          className={`relative w-full ${f.mainAspect ?? "aspect-video"} overflow-hidden rounded-2xl flex items-center justify-center`}
                           style={{ backgroundColor: f.accent + "18" }}
                         >
                           {f.imgs[0].src ? (
@@ -252,7 +253,10 @@ export default function CoZiskasPage() {
                               alt={f.imgs[0].label}
                               fill
                               className="object-cover"
-                              style={f.imgs[0].position ? { objectPosition: f.imgs[0].position } : undefined}
+                              style={{
+                                ...(f.imgs[0].position ? { objectPosition: f.imgs[0].position } : {}),
+                                ...(f.imgs[0].rotate ? { transform: `rotate(${f.imgs[0].rotate}deg)` } : {}),
+                              }}
                             />
                           ) : (
                             <p className="text-xs font-semibold px-4 text-center" style={{ color: f.accent + "70" }}>{f.imgs[0].label}</p>
@@ -271,7 +275,10 @@ export default function CoZiskasPage() {
                                   alt={img.label}
                                   fill
                                   className={img.fit === "contain" ? "object-contain p-4" : "object-cover"}
-                                  style={img.position ? { objectPosition: img.position } : undefined}
+                                  style={{
+                                    ...(img.position ? { objectPosition: img.position } : {}),
+                                    ...(img.rotate ? { transform: `rotate(${img.rotate}deg)` } : {}),
+                                  }}
                                 />
                               ) : (
                                 <p className="text-[10px] font-semibold text-center leading-tight" style={{ color: (isEven ? "#6F2380" : "#FDA4C7") + "60" }}>
