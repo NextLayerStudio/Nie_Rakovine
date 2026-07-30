@@ -29,7 +29,7 @@ export function CommunityPhotoSection() {
             className="flex justify-start md:justify-center mb-8 md:mb-10"
           >
             <span
-              className="relative inline-block h-28 w-28 -translate-y-16 translate-x-24 rotate-[-14deg] md:h-40 md:w-40 md:translate-x-0 md:translate-y-0"
+              className="relative inline-block h-28 w-28 -translate-y-16 translate-x-28 rotate-[-14deg] md:h-40 md:w-40 md:translate-x-0 md:translate-y-0"
             >
               <Image src="/images/srdce-komunita.png" alt="srdce" fill className="object-contain" />
             </span>
