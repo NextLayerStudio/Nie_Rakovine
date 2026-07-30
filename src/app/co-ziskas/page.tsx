@@ -105,7 +105,7 @@ const FEATURES: {
     detailItems: ["OK Karta sa vytvorí ihneď po dokončení registrácie", "Každý člen má vlastný identifikátor", "Vstupenka na podujatia a workshopy", "Prehľadný preukaz člena vždy v mobile", "Uplatnenie zliav"],
     mainAspect: "aspect-[935/1400]",
     imgs: [
-      { label: "OK Karta", src: "/images/co-ziskas-okkarta-wide.jpg", rotate: -90, fit: "contain" },
+      { label: "OK Karta", src: "/images/co-ziskas-okkarta-wide.jpg", rotate: -90, width: 1400, height: 935 },
       { label: "OK Karta", src: "/images/co-ziskas-okkarta-1.jpg", rotate: -90 },
       { label: "OK Karta", src: "/images/co-ziskas-okkarta-2.jpg", rotate: -90 },
     ],
@@ -248,16 +248,32 @@ export default function CoZiskasPage() {
                           style={{ backgroundColor: f.accent + "18" }}
                         >
                           {f.imgs[0].src ? (
-                            <Image
-                              src={f.imgs[0].src}
-                              alt={f.imgs[0].label}
-                              fill
-                              className={f.imgs[0].fit === "contain" ? "object-contain p-4" : "object-cover"}
-                              style={{
-                                ...(f.imgs[0].position ? { objectPosition: f.imgs[0].position } : {}),
-                                ...(f.imgs[0].rotate ? { transform: `rotate(${f.imgs[0].rotate}deg)` } : {}),
-                              }}
-                            />
+                            (f.imgs[0].rotate === 90 || f.imgs[0].rotate === -90) && f.imgs[0].width && f.imgs[0].height ? (
+                              <Image
+                                src={f.imgs[0].src}
+                                alt={f.imgs[0].label}
+                                width={f.imgs[0].width}
+                                height={f.imgs[0].height}
+                                className="absolute top-1/2 left-1/2"
+                                style={{
+                                  width: `${(f.imgs[0].width / f.imgs[0].height) * 100}%`,
+                                  height: `${(f.imgs[0].height / f.imgs[0].width) * 100}%`,
+                                  maxWidth: "none",
+                                  transform: `translate(-50%, -50%) rotate(${f.imgs[0].rotate}deg)`,
+                                }}
+                              />
+                            ) : (
+                              <Image
+                                src={f.imgs[0].src}
+                                alt={f.imgs[0].label}
+                                fill
+                                className={f.imgs[0].fit === "contain" ? "object-contain p-4" : "object-cover"}
+                                style={{
+                                  ...(f.imgs[0].position ? { objectPosition: f.imgs[0].position } : {}),
+                                  ...(f.imgs[0].rotate ? { transform: `rotate(${f.imgs[0].rotate}deg)` } : {}),
+                                }}
+                              />
+                            )
                           ) : (
                             <p className="text-xs font-semibold px-4 text-center" style={{ color: f.accent + "70" }}>{f.imgs[0].label}</p>
                           )}
