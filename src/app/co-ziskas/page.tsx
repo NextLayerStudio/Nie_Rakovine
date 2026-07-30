@@ -19,6 +19,7 @@ const FEATURES: {
   desc: string;
   detailItems: string[];
   imgs: FeatureImg[];
+  secondaryAspect?: string;
 }[] = [
   {
     icon: Play,
@@ -28,6 +29,7 @@ const FEATURES: {
     headline: "Desiatky videí vždy poruke",
     desc: "Joga, mindfulness, jemné pohybové a dychové cvičenia, odborné diskusie o liečbe, výžive aj psychike. ONKO KLUB prináša exkluzívnu ONKO knižnicu vytvorenú špeciálne pre onkologických pacientov a ich blízkych. Sledujte kedykoľvek, kdekoľvek a vo vlastnom tempe.",
     detailItems: ["Jemná joga pre onkologických pacientov", "Mindfulness a meditácia", "Výživa počas chemoterapie", "Psychologická podpora", "Fyzioterapia a rehabilitácia"],
+    secondaryAspect: "aspect-video",
     imgs: [
       { label: "Joga video thumbnail", src: "/images/co-ziskas-video-wide.jpg" },
       { label: "Mindfulness video", src: "/images/co-ziskas-video-1.jpg" },
@@ -207,7 +209,7 @@ export default function CoZiskasPage() {
                           {f.imgs.slice(1).map((img, i) => (
                             <div
                               key={img.label + i}
-                              className="relative aspect-square overflow-hidden rounded-2xl flex items-center justify-center p-2"
+                              className={`relative ${f.secondaryAspect ?? "aspect-square"} overflow-hidden rounded-2xl flex items-center justify-center p-2`}
                               style={{ backgroundColor: (isEven ? "#6F2380" : "#FDA4C7") + "12" }}
                             >
                               {img.src ? (
