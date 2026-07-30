@@ -60,7 +60,7 @@ const FEATURES: {
     detailItems: ["Jemná joga pre onkologických pacientov", "Mindfulness – skupinové workshopy", "Odborné stretnutia s lekármi a špecialistami", "Podporné skupinové stretnutia", "SMS pripomienka 24 hodín vopred"],
     mainAspect: "aspect-[4/3]",
     imgs: [
-      { label: "Kalendár aktivít", src: "/images/co-ziskas-calendar-wide.jpg" },
+      { label: "Kalendár aktivít", src: "/images/co-ziskas-calendar-wide.jpg", fit: "contain" },
     ],
   },
   {
@@ -187,7 +187,12 @@ export default function CoZiskasPage() {
                         style={{ backgroundColor: (isEven ? "#FDA4C7" : "#6F2380") + "18" }}
                       >
                         {f.imgs[0].src ? (
-                          <Image src={f.imgs[0].src} alt={f.imgs[0].label} fill className="object-cover" />
+                          <Image
+                            src={f.imgs[0].src}
+                            alt={f.imgs[0].label}
+                            fill
+                            className={f.imgs[0].fit === "contain" ? "object-contain p-4" : "object-cover"}
+                          />
                         ) : (
                           <p className="text-xs font-semibold text-center px-4" style={{ color: (isEven ? "#FDA4C7" : "#6F2380") + "60" }}>
                             {f.imgs[0].label}
