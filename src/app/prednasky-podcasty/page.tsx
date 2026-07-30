@@ -124,26 +124,6 @@ export default function PrenasakyPodcastyPage() {
         </div>
       </section>
 
-      {/* Screenshot podcastu */}
-      <section className="pb-16">
-        <div className="max-w-6xl mx-auto px-5 md:px-8">
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            <div className="aspect-square rounded-2xl bg-[#6F2380]/15 flex items-center justify-center">
-              <p className="text-[#6F2380]/25 text-[10px] font-semibold text-center px-2">[IMG] Screenshot podcastu</p>
-            </div>
-            <div className="aspect-square rounded-2xl bg-[#FDA4C7]/15 flex items-center justify-center">
-              <p className="text-[#FDA4C7]/40 text-[10px] font-semibold text-center px-2">[IMG] Prednáška live</p>
-            </div>
-            <div className="hidden md:flex aspect-square rounded-2xl bg-[#6F2380]/10 items-center justify-center">
-              <p className="text-[#6F2380]/25 text-[10px] font-semibold text-center px-2">[IMG] Archív prednášok</p>
-            </div>
-            <div className="hidden md:flex aspect-square rounded-2xl bg-[#FDA4C7]/10 items-center justify-center">
-              <p className="text-[#FDA4C7]/30 text-[10px] font-semibold text-center px-2">[IMG] Podcast detail</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA */}
       <section className="pb-16">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
