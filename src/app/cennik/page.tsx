@@ -111,8 +111,6 @@ export default function CennikPage() {
       {/* Cenové karty */}
       <section className="pb-14">
         <div className="max-w-7xl mx-auto px-5 md:px-8">
-          <h3 className="text-xl font-black text-[#6F2380] mb-5">Čo vás čaká po registrácii</h3>
-
           <div className="grid grid-cols-1 gap-4 items-stretch sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
 
             {/* Free */}
@@ -198,27 +196,6 @@ export default function CennikPage() {
 
             {/* Podporujúce — vlastná suma */}
             <SupporterCard />
-          </div>
-        </div>
-      </section>
-
-      {/* Screenshot platformy po registrácii */}
-      <section className="pb-14">
-        <div className="max-w-6xl mx-auto px-5 md:px-8">
-          <h2 className="text-xl font-black text-[#6F2380] mb-5">Čo ťa čaká po registrácii</h2>
-          <div className="flex flex-col gap-3 md:grid md:grid-cols-3">
-            <div className="w-full aspect-video rounded-[2rem] bg-[#6F2380]/15 flex items-center justify-center md:col-span-3">
-              <p className="text-[#6F2380]/25 text-xs font-semibold">[IMG-25] Dashboard platformy</p>
-            </div>
-            <div className="aspect-square rounded-2xl bg-[#FDA4C7]/15 flex items-center justify-center">
-              <p className="text-[#FDA4C7]/50 text-[10px] font-semibold text-center px-2">[IMG-26] Videoknižnica</p>
-            </div>
-            <div className="aspect-square rounded-2xl bg-[#6F2380]/10 flex items-center justify-center">
-              <p className="text-[#6F2380]/30 text-[10px] font-semibold text-center px-2">[IMG-28] Onkorumky fórum</p>
-            </div>
-            <div className="aspect-square rounded-2xl bg-[#FDA4C7]/10 flex items-center justify-center">
-              <p className="text-[#FDA4C7]/40 text-[10px] font-semibold text-center px-2">[IMG-29] Kalendár eventov</p>
-            </div>
           </div>
         </div>
       </section>

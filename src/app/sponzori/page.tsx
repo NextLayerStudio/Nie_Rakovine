@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { QrCode, ScanLine, BadgeCheck, Tag, Check } from "lucide-react";
+import { QrCode, ScanLine, BadgeCheck, Check } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
+import { OkKartaCard } from "@/components/landing/OkKartaCard";
 
 const KATEGORIE = [
   "Zdravie a starostlivosť o telo",
@@ -96,9 +97,8 @@ export default function SponzoriPage() {
             {/* Karta vizuál */}
             <div>
               <h2 className="text-xl font-black text-[#6F2380] mb-5">Tvoja OK Karta</h2>
-              <div className="w-full md:max-w-xs aspect-[9/16] max-h-[360px] rounded-[2rem] bg-[#FDA4C7]/20 flex flex-col items-center justify-center gap-3 mb-6">
-                <QrCode size={40} className="text-[#FDA4C7]/40" />
-                <p className="text-[#FDA4C7]/50 text-xs font-semibold">[IMG-24] OK Karta na telefóne</p>
+              <div className="w-full md:max-w-xs mb-6">
+                <OkKartaCard />
               </div>
             </div>
             {/* Benefity */}
@@ -149,27 +149,6 @@ export default function SponzoriPage() {
                 </div>
               );
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* Screenshot zliav v appke */}
-      <section className="pb-14">
-        <div className="max-w-6xl mx-auto px-5 md:px-8">
-          <h2 className="text-xl font-black text-[#6F2380] mb-5">Zľavy v aplikácii</h2>
-          <div className="flex flex-col gap-3 md:grid md:grid-cols-3">
-            <div className="w-full aspect-video rounded-[2rem] bg-[#6F2380]/15 flex flex-col items-center justify-center gap-2 md:col-span-2">
-              <Tag size={32} className="text-[#6F2380]/25" />
-              <p className="text-[#6F2380]/25 text-xs font-semibold">[IMG-30] Screenshot sekcie zliav</p>
-            </div>
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-1">
-              <div className="aspect-square rounded-2xl bg-[#FDA4C7]/15 flex items-center justify-center">
-                <p className="text-[#FDA4C7]/50 text-[10px] font-semibold text-center px-2">[IMG] Detail zľavy</p>
-              </div>
-              <div className="aspect-square rounded-2xl bg-[#6F2380]/10 flex items-center justify-center">
-                <p className="text-[#6F2380]/30 text-[10px] font-semibold text-center px-2">[IMG] QR skenovanie</p>
-              </div>
-            </div>
           </div>
         </div>
       </section>

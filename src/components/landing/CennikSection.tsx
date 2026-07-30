@@ -109,8 +109,6 @@ export function CennikSection() {
         </div>
       </motion.div>
 
-      <h3 className="text-xl font-black text-[#6F2380] mb-5">Čo vás čaká po registrácii</h3>
-
       <div className="grid grid-cols-1 gap-4 items-stretch sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
         {/* Free */}
         <motion.div

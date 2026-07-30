@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { Mic, Headphones, BookOpen, Circle, Play, User } from "lucide-react";
+import { Mic, Headphones, BookOpen, Circle, Play } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const TOPICS = [
@@ -25,13 +25,6 @@ const PILLARS = [
   { icon: Mic,        accent: "#FDA4C7", title: "Odborné prednášky",            desc: "Pravidelné online aj prezenčné stretnutia s lekármi, psychológmi, fyzioterapeutmi a ďalšími odborníkmi, na ktorých môžete priamo klásť otázky." },
   { icon: Headphones, accent: "#6F2380", title: "Podcasty s odborníkmi",        desc: "Rozhovory s odborníkmi, ktorí sa dlhodobo venujú starostlivosti o onkologických pacientov. Počúvať ich môžete kedykoľvek a bez ďalších poplatkov." },
   { icon: BookOpen,   accent: "#FDA4C7", title: "Archív prednášok a podcastov", desc: "Prednášky a podcasty sú pre členov ONKO KLUBU dostupné v ONKO knižnici bez časového obmedzenia." },
-];
-
-const UKAZKY = [
-  { img: "[IMG-27]", title: "Výživa počas chemoterapie",       host: "Nutričná poradkyňa",   dur: "48 min", type: "Prednáška" },
-  { img: "[IMG-03]", title: "Ako zvládnuť úzkosť pri diagnóze", host: "Mirka Malejčíková",    dur: "35 min", type: "Podcast" },
-  { img: "[IMG-04]", title: "Fyzioterapia po operácii",         host: "Fyzioterapeut Ondrej", dur: "42 min", type: "Prednáška" },
-  { img: "[IMG-05]", title: "Právne minimum pre pacienta",      host: "JUDr. Marta Kováčová", dur: "55 min", type: "Prednáška" },
 ];
 
 export default function PrenasakyPodcastyPage() {
@@ -110,48 +103,6 @@ export default function PrenasakyPodcastyPage() {
               );
             })}
           </div>
-        </div>
-      </section>
-
-      {/* Ukážky z archívu */}
-      <section className="pb-16">
-        <div className="max-w-6xl mx-auto px-5 md:px-8">
-          <h2 className="text-xl font-black text-[#6F2380] mb-5">Ukážka z archívu</h2>
-          <div className="flex flex-col gap-4 md:grid md:grid-cols-2">
-            {UKAZKY.map((v, i) => (
-              <div key={v.title} className="bg-white rounded-2xl overflow-hidden border border-[#FDA4C7]/15">
-                <div
-                  className="w-full aspect-video flex items-center justify-center relative"
-                  style={{ backgroundColor: i % 2 === 0 ? "#FDA4C7" + "18" : "#6F2380" + "12" }}
-                >
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: i % 2 === 0 ? "#FDA4C7" : "#6F2380" }}
-                  >
-                    <Play size={16} className="text-white ml-0.5" fill="white" />
-                  </div>
-                  <div className="absolute top-2 left-2 bg-black/20 rounded-full px-2 py-0.5">
-                    <span className="text-white text-[10px] font-bold">{v.type}</span>
-                  </div>
-                  <div className="absolute bottom-2 right-2 bg-black/30 rounded-full px-2 py-0.5">
-                    <span className="text-white text-[10px]">{v.dur}</span>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <p className="font-black text-[#6F2380] text-[14px] mb-1">{v.title}</p>
-                  <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-full bg-[#FDA4C7]/20 flex items-center justify-center">
-                      <User size={10} className="text-[#FDA4C7]" />
-                    </div>
-                    <p className="text-[#6F2380]/45 text-[12px]">{v.host}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <p className="text-[#6F2380]/40 text-sm text-center mt-5">
-            A desiatky ďalších prednášok a podcastov čakajú v archíve.
-          </p>
         </div>
       </section>
 

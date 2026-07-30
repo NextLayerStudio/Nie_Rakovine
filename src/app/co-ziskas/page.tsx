@@ -1,13 +1,25 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import {
-  Play, Mic, MapPin, MessageSquare, Tag, QrCode, BookOpen,
+  Play, Mic, MapPin, MessageSquare, Tag, QrCode,
   Check, ChevronRight,
 } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
 
-const FEATURES = [
+type FeatureImg = { label: string; src?: string; fit?: "cover" | "contain" };
+
+const FEATURES: {
+  icon: typeof Play;
+  accent: string;
+  slug: string | null;
+  title: string;
+  headline: string;
+  desc: string;
+  detailItems: string[];
+  imgs: FeatureImg[];
+}[] = [
   {
     icon: Play,
     accent: "#FDA4C7",
@@ -16,7 +28,11 @@ const FEATURES = [
     headline: "Desiatky videí vždy poruke",
     desc: "Joga, mindfulness, jemné pohybové a dychové cvičenia, odborné diskusie o liečbe, výžive aj psychike. ONKO KLUB prináša exkluzívnu ONKO knižnicu vytvorenú špeciálne pre onkologických pacientov a ich blízkych. Sledujte kedykoľvek, kdekoľvek a vo vlastnom tempe.",
     detailItems: ["Jemná joga pre onkologických pacientov", "Mindfulness a meditácia", "Výživa počas chemoterapie", "Psychologická podpora", "Fyzioterapia a rehabilitácia"],
-    imgs: ["[IMG-02] Joga video thumbnail", "[IMG-03] Mindfulness video", "[IMG-26] Screenshot knižnice"],
+    imgs: [
+      { label: "Joga video thumbnail", src: "/images/co-ziskas-video-wide.jpg" },
+      { label: "Mindfulness video", src: "/images/co-ziskas-video-1.jpg" },
+      { label: "Screenshot knižnice", src: "/images/co-ziskas-video-2.jpg" },
+    ],
   },
   {
     icon: Mic,
@@ -26,7 +42,10 @@ const FEATURES = [
     headline: "Odborníci a lektori, ktorým môžete dôverovať",
     desc: "Za každým podcastom a prednáškou stojí konkrétny odborník či lektor s overenými skúsenosťami. Všetky epizódy sú pre členov ONKO KLUBU dostupné bezplatne.",
     detailItems: ["Odborné prednášky online", "Podcasty s odborníkmi na tému pohyb, výživa, genetika, liečba a iné", "Archív pre členov", "Upozornenia na nové epizódy"],
-    imgs: ["[IMG-27] Screenshot podcastu", "[IMG-03] Prednáška live"],
+    imgs: [
+      { label: "Odborníci a lektori", src: "/images/lektori/viktor-oliva.jpg" },
+      { label: "Odborníci a lektori", src: "/images/lektori/malejcikova.jpg" },
+    ],
   },
   {
     icon: MapPin,
@@ -36,7 +55,10 @@ const FEATURES = [
     headline: "Nezmeškajte podujatie vo vašom okolí",
     desc: "Workshopy, skupinové stretnutia a odborné podujatia sú dostupné vo viacerých regiónoch Slovenska. Ako člen/ka ONKO KLUBU máte možnosť prihlásiť sa na vybrané aktivity jednoducho priamo v aplikácii ONKO KLUB.",
     detailItems: ["Jemná joga pre onkologických pacientov", "Mindfulness – skupinové workshopy", "Odborné stretnutia s lekármi a špecialistami", "Podporné skupinové stretnutia", "SMS pripomienka 24 hodín vopred"],
-    imgs: ["[IMG-29] Kalendár eventov", "[IMG-04] Workshop foto"],
+    imgs: [
+      { label: "Kalendár aktivít", src: "/images/co-ziskas-calendar-wide.jpg" },
+      { label: "Workshop", src: "/images/co-ziskas-calendar-1.jpg" },
+    ],
   },
   {
     icon: MessageSquare,
@@ -46,7 +68,11 @@ const FEATURES = [
     headline: "Podeľte sa o to, čím prechádzate",
     desc: "Zdieľajte svoje skúsenosti, otázky, obavy či každodenné výzvy s ľuďmi, ktorí vedia, čo prežívate. Môžete prispievať pod vlastným menom alebo anonymne.",
     detailItems: ["Tematické diskusné fóra", "Diskusie rozdelené podľa oblastí záujmu a potrieb", "Možnosť prispievať anonymne alebo pod vlastným menom", "Moderované a bezpečné prostredie", "Ukážka obsahu dostupná aj bez registrácie"],
-    imgs: ["[IMG-28] Screenshot fóra", "[IMG-05] Detail vlákna"],
+    imgs: [
+      { label: "Fóra", src: "/images/co-ziskas-forum-wide.jpg" },
+      { label: "Diskusné fóra", src: "/images/co-ziskas-forum-1.jpg" },
+      { label: "Diskusné fóra", src: "/images/co-ziskas-forum-2.jpg" },
+    ],
   },
   {
     icon: Tag,
@@ -56,7 +82,11 @@ const FEATURES = [
     headline: "Špeciálne zľavy len pre členov ONKO KLUBU",
     desc: "Ako člen/ka ONKO KLUBU máte vďaka našim partnerom možnosť využiť špeciálne zľavy. Stačí sa preukázať OK Kartou a zľava sa vám automaticky uplatní.",
     detailItems: ["Zdravie a starostlivosť o telo", "Výživa, doplnky a zdravý životný štýl", "Pohyb, rehabilitácia a fyzická aktivita", "Spánok a regenerácia", "Kozmetika a starostlivosť o pokožku", "Technológie pre zdravie", "Voľnočasové aktivity", "Duševná pohoda a relaxácia"],
-    imgs: ["[IMG-30] Screenshot zliav", "[IMG-09] Partneri"],
+    imgs: [
+      { label: "Naši partneri", src: "/images/co-ziskas-discounts-wide.jpg" },
+      { label: "Nadácia SPP", src: "/images/partneri/nadacia-spp.jpg", fit: "contain" },
+      { label: "RAJ zdravia", src: "/images/partneri/raj-zdravia.png", fit: "contain" },
+    ],
   },
   {
     icon: QrCode,
@@ -66,17 +96,11 @@ const FEATURES = [
     headline: "Jeden QR kód – desiatky výhod",
     desc: "Digitálna členská OK Karta s unikátnym QR kódom slúži ako váš členský preukaz. Umožňuje uplatniť zľavy u partnerských značiek a zároveň slúži ako vstupenka na podujatia a workshopy. Vždy dostupná vo vašom mobile, bez potreby tlačenej verzie.",
     detailItems: ["OK Karta sa vytvorí ihneď po dokončení registrácie", "Každý člen má vlastný identifikátor", "Vstupenka na podujatia a workshopy", "Prehľadný preukaz člena vždy v mobile", "Uplatnenie zliav"],
-    imgs: ["[IMG-24] Mockup OK Karty na telefóne"],
-  },
-  {
-    icon: BookOpen,
-    accent: "#6F2380",
-    slug: null,
-    title: "Sociálny kompas",
-    headline: "Sme tu, aby sme vám pomohli",
-    desc: "Vieme, aké ťažké je prechádzať nielen fyzickými, ale aj psychickými výzvami počas onkologického ochorenia. Máte k dispozícii všetky informácie potrebné na zorientovanie sa v systéme sociálnej pomoci.",
-    detailItems: ["Práva pacienta", "Invalidný dôchodok", "PN a pracovná neschopnosť", "Príspevky a dávky", "Návrat do práce", "Sociálna pomoc"],
-    imgs: ["[IMG] Screenshot Sociálneho kompasu"],
+    imgs: [
+      { label: "OK Karta", src: "/images/co-ziskas-okkarta-wide.jpg" },
+      { label: "OK Karta", src: "/images/co-ziskas-okkarta-1.jpg" },
+      { label: "OK Karta", src: "/images/co-ziskas-okkarta-2.jpg" },
+    ],
   },
 ];
 
@@ -117,13 +141,15 @@ export default function CoZiskasPage() {
                 </Link>
               </div>
             </div>
-            {/* Dashboard placeholder */}
+            {/* Dashboard screenshot */}
             <div className="hidden md:block">
-              <div className="w-full aspect-video rounded-[1.8rem] bg-[#6F2380]/20 flex flex-col items-center justify-center gap-2">
-                <div className="w-10 h-10 rounded-xl bg-[#6F2380]/30 flex items-center justify-center">
-                  <Play size={20} className="text-[#6F2380]/50 ml-0.5" />
-                </div>
-                <p className="text-[#6F2380]/30 text-xs font-semibold">[IMG-25] Dashboard platformy</p>
+              <div className="relative mx-auto w-full max-w-xs aspect-[937/1400] overflow-hidden rounded-[1.8rem]">
+                <Image
+                  src="/images/co-ziskas-dashboard.jpg"
+                  alt="ONKO KLUB v aplikácii"
+                  fill
+                  className="object-cover"
+                />
               </div>
             </div>
           </div>
@@ -132,11 +158,13 @@ export default function CoZiskasPage() {
 
       {/* Veľký screenshot — len mobile */}
       <section className="px-5 pb-14 md:hidden">
-        <div className="w-full aspect-video rounded-[1.8rem] bg-[#6F2380]/20 flex flex-col items-center justify-center gap-2">
-          <div className="w-10 h-10 rounded-xl bg-[#6F2380]/30 flex items-center justify-center">
-            <Play size={20} className="text-[#6F2380]/50 ml-0.5" />
-          </div>
-          <p className="text-[#6F2380]/30 text-xs font-semibold">[IMG-25] Dashboard platformy</p>
+        <div className="relative mx-auto w-full max-w-xs aspect-[937/1400] overflow-hidden rounded-[1.8rem]">
+          <Image
+            src="/images/co-ziskas-dashboard.jpg"
+            alt="ONKO KLUB v aplikácii"
+            fill
+            className="object-cover"
+          />
         </div>
       </section>
 
@@ -165,35 +193,52 @@ export default function CoZiskasPage() {
                     </ExpandableText>
                   </div>
 
-                  {/* Screenshot placeholdery */}
+                  {/* Screenshoty */}
                   <div className="flex flex-col gap-3 mb-6">
                     {f.imgs.length === 1 ? (
                       <div
-                        className="w-full aspect-video rounded-2xl flex items-center justify-center"
+                        className="relative w-full aspect-video overflow-hidden rounded-2xl flex items-center justify-center"
                         style={{ backgroundColor: (isEven ? "#FDA4C7" : "#6F2380") + "18" }}
                       >
-                        <p className="text-xs font-semibold text-center px-4" style={{ color: (isEven ? "#FDA4C7" : "#6F2380") + "60" }}>
-                          {f.imgs[0]}
-                        </p>
+                        {f.imgs[0].src ? (
+                          <Image src={f.imgs[0].src} alt={f.imgs[0].label} fill className="object-cover" />
+                        ) : (
+                          <p className="text-xs font-semibold text-center px-4" style={{ color: (isEven ? "#FDA4C7" : "#6F2380") + "60" }}>
+                            {f.imgs[0].label}
+                          </p>
+                        )}
                       </div>
                     ) : (
                       <>
                         <div
-                          className="w-full aspect-video rounded-2xl flex items-center justify-center"
+                          className="relative w-full aspect-video overflow-hidden rounded-2xl flex items-center justify-center"
                           style={{ backgroundColor: f.accent + "18" }}
                         >
-                          <p className="text-xs font-semibold px-4 text-center" style={{ color: f.accent + "70" }}>{f.imgs[0]}</p>
+                          {f.imgs[0].src ? (
+                            <Image src={f.imgs[0].src} alt={f.imgs[0].label} fill className="object-cover" />
+                          ) : (
+                            <p className="text-xs font-semibold px-4 text-center" style={{ color: f.accent + "70" }}>{f.imgs[0].label}</p>
+                          )}
                         </div>
                         <div className="grid grid-cols-2 gap-3">
-                          {f.imgs.slice(1).map((img) => (
+                          {f.imgs.slice(1).map((img, i) => (
                             <div
-                              key={img}
-                              className="aspect-square rounded-2xl flex items-center justify-center p-2"
+                              key={img.label + i}
+                              className="relative aspect-square overflow-hidden rounded-2xl flex items-center justify-center p-2"
                               style={{ backgroundColor: (isEven ? "#6F2380" : "#FDA4C7") + "12" }}
                             >
-                              <p className="text-[10px] font-semibold text-center leading-tight" style={{ color: (isEven ? "#6F2380" : "#FDA4C7") + "60" }}>
-                                {img}
-                              </p>
+                              {img.src ? (
+                                <Image
+                                  src={img.src}
+                                  alt={img.label}
+                                  fill
+                                  className={img.fit === "contain" ? "object-contain p-4" : "object-cover"}
+                                />
+                              ) : (
+                                <p className="text-[10px] font-semibold text-center leading-tight" style={{ color: (isEven ? "#6F2380" : "#FDA4C7") + "60" }}>
+                                  {img.label}
+                                </p>
+                              )}
                             </div>
                           ))}
                         </div>
