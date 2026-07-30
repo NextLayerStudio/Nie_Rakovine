@@ -127,12 +127,10 @@ export default function CoZiskasPage() {
                 Všetko podstatné na jednom mieste
               </h1>
               <div className="mb-8">
-                <ExpandableText maxHeight={72} fadeColor="rgba(20,10,25,0.85)">
-                  <p className="text-white/85 text-base leading-relaxed [text-shadow:0_1px_10px_rgba(0,0,0,0.45)]">
-                    ONKO KLUB spája informácie a praktickú pomoc pre onkologických
-                    pacientov a ich blízkych. Pozrite sa, čo všetko máte k dispozícii.
-                  </p>
-                </ExpandableText>
+                <p className="text-white/85 text-base leading-relaxed [text-shadow:0_1px_10px_rgba(0,0,0,0.45)]">
+                  ONKO KLUB spája informácie a praktickú pomoc pre onkologických
+                  pacientov a ich blízkych. Pozrite sa, čo všetko máte k dispozícii.
+                </p>
               </div>
               <div className="md:flex md:gap-3">
                 <Link
