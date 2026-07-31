@@ -146,6 +146,35 @@ export async function confirmSubscriptionPaymentAction(
       };
     }
 
+    if (nexiConfigured()) {
+      const orderId = generateNexiOrderId("sup");
+      const appUrl = getAppUrlFromEnv();
+      const { hostedPage, securityToken } = await createHppOrder({
+        orderId,
+        amountEuroCents: Math.round(amount * 100),
+        description: "ONKO KLUB - podporujúce členstvo",
+        customerEmail: user.email,
+        resultUrl: `${appUrl}/register/subscription/checkout/nexi-result?orderId=${orderId}`,
+        cancelUrl: `${appUrl}/register/subscription/checkout`,
+        notificationUrl: `${appUrl}/api/nexi/notification`,
+        // One-off donation, no recurring contract — also lets Apple Pay show
+        // up here (Nexi doesn't support Apple Pay for recurring/MIT charges,
+        // so it's card-only on the Monthly/Yearly checkout above).
+        paymentServices: ["CARDS", "APPLEPAY"],
+      });
+
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          pendingNexiOrderId: orderId,
+          pendingNexiSecurityToken: securityToken,
+          pendingNexiPlan: "SUPPORTER" satisfies SubscriptionPlan,
+        },
+      });
+
+      return { ok: true, redirectTo: hostedPage };
+    }
+
     await prisma.user.update({
       where: { id: user.id },
       data: {
@@ -212,6 +241,9 @@ export async function confirmSubscriptionPaymentAction(
         contractType: "MIT_SCHEDULED",
         contractFrequency: plan === "MONTHLY" ? "30" : "365",
       },
+      // Card only — Nexi doesn't support Apple Pay/Google Pay for recurring
+      // (MIT) charges, and this first payment creates the renewal contract.
+      paymentServices: ["CARDS"],
     });
 
     await prisma.user.update({

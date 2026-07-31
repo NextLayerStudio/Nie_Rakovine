@@ -1,7 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { getOrderStatus, isNexiOrderFailed, isNexiOrderPaid } from "@/lib/nexi";
+import type { SubscriptionPlan } from "@prisma/client";
 
-export type FinalizeResult = { activated: boolean; pending: boolean };
+export type FinalizeResult = {
+  activated: boolean;
+  pending: boolean;
+  plan?: SubscriptionPlan;
+};
 
 /**
  * Called both when the customer returns from the Nexi Hosted Payment Page
@@ -29,6 +34,12 @@ export async function finalizeNexiSubscriptionOrder(
     const end = new Date(now);
     if (plan === "MONTHLY") end.setMonth(end.getMonth() + 1);
     if (plan === "YEARLY") end.setFullYear(end.getFullYear() + 1);
+    if (plan === "SUPPORTER") end.setFullYear(end.getFullYear() + 1);
+
+    // Only Monthly/Yearly ever get auto-renewed by the cron — Supporter is a
+    // one-off donation (possibly via Apple Pay, which Nexi doesn't support
+    // for recurring/MIT charges anyway), so it gets no recurring contract.
+    const isRecurring = plan === "MONTHLY" || plan === "YEARLY";
 
     await prisma.user.update({
       where: { id: user.id },
@@ -38,13 +49,13 @@ export async function finalizeNexiSubscriptionOrder(
         subscriptionStart: now,
         subscriptionEnd: end,
         paymentMethod: "CARD",
-        nexiContractId: orderId,
+        nexiContractId: isRecurring ? orderId : undefined,
         pendingNexiOrderId: null,
         pendingNexiSecurityToken: null,
         pendingNexiPlan: null,
       },
     });
-    return { activated: true, pending: false };
+    return { activated: true, pending: false, plan };
   }
 
   if (isNexiOrderFailed(status)) {

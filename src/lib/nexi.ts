@@ -68,6 +68,14 @@ export type NexiRecurrence =
     }
   | { action: "SUBSEQUENT_PAYMENT"; contractId: string };
 
+/**
+ * Restricts which payment methods the Hosted Payment Page shows, per Nexi's
+ * "PaymentService encoding" table. Comma-separated per typical Nexi API
+ * convention — not confirmed against a live Apple Pay-enabled terminal yet,
+ * verify once Apple Pay is actually activated in the back office.
+ */
+export type NexiPaymentService = "CARDS" | "APPLEPAY" | "GOOGLEPAY" | "PAYPAL";
+
 export type CreateHppOrderInput = {
   orderId: string;
   amountEuroCents: number;
@@ -77,6 +85,8 @@ export type CreateHppOrderInput = {
   cancelUrl: string;
   notificationUrl: string;
   recurrence?: NexiRecurrence;
+  /** Defaults to showing whatever is enabled on the terminal if omitted. */
+  paymentServices?: NexiPaymentService[];
 };
 
 export type CreateHppOrderResponse = {
@@ -106,6 +116,7 @@ export async function createHppOrder(
         resultUrl: input.resultUrl,
         cancelUrl: input.cancelUrl,
         notificationUrl: input.notificationUrl,
+        paymentService: input.paymentServices?.join(","),
       },
       recurrence: input.recurrence,
     }),
