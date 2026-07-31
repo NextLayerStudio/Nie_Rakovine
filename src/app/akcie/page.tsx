@@ -4,6 +4,10 @@ import { Footer } from "@/components/landing/Footer";
 import { Leaf, Brain, Stethoscope, Coffee, MapPin } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { EventCard, type PublicEvent } from "@/components/landing/EventCard";
+import { EventsFilterProvider } from "@/components/landing/EventsFilterContext";
+import { EventsFilterToggle } from "@/components/landing/EventsFilterToggle";
+import { CategoryFilterBar } from "@/components/landing/CategoryFilterBar";
+import { PublicEventsExplorer } from "@/components/landing/PublicEventsExplorer";
 
 export const dynamic = "force-dynamic";
 
@@ -56,7 +60,6 @@ export default async function AkciePage() {
   const events = await prisma.event.findMany({
     where: { published: true },
     orderBy: { startsAt: "asc" },
-    take: 3,
     select: {
       id: true,
       title: true,
@@ -73,7 +76,7 @@ export default async function AkciePage() {
     },
   });
 
-  const topEvents: PublicEvent[] = events.map((e) => ({
+  const allEvents: PublicEvent[] = events.map((e) => ({
     id: e.id,
     title: e.title,
     description: e.description,
@@ -88,12 +91,38 @@ export default async function AkciePage() {
     registrationCount: e._count.registrations + e._count.tickets,
   }));
 
+  const topEvents = allEvents.slice(0, 3);
+
   return (
     <main className="min-h-screen bg-[#FFF3F9] font-sans">
       <Navbar />
 
+      {/* Kalendár aktivít — všetky podujatia na Slovensku */}
+      <EventsFilterProvider>
+        <section className="pt-24 pb-4">
+          <div className="max-w-6xl mx-auto px-5 md:px-8">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-xl font-black text-[#6F2380] md:text-2xl">Kalendár aktivít</h2>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-[#6F2380]/50">
+                  {allEvents.length} {allEvents.length === 1 ? "podujatie" : "podujatí"}
+                </span>
+                <EventsFilterToggle />
+              </div>
+            </div>
+            <CategoryFilterBar category="" className="mt-4 hidden flex-wrap gap-2 lg:flex" />
+          </div>
+        </section>
+
+        <section className="pb-14">
+          <div className="max-w-6xl mx-auto px-5 md:px-8">
+            <PublicEventsExplorer events={allEvents} category="" />
+          </div>
+        </section>
+      </EventsFilterProvider>
+
       {/* Hero */}
-      <section className="pt-24 pb-12 md:pb-20">
+      <section className="pb-12 md:pb-20">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="md:max-w-2xl">
             <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">Podujatia po celom Slovensku</p>
