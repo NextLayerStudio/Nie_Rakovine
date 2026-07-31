@@ -15,18 +15,24 @@ const PAYMENT_LOGOS = [
   { src: "/images/platby/maestro.png", alt: "Maestro", w: 67, h: 43 },
 ];
 
-const BENEFITY = [
-  "Prístup ku všetkým videám a materiálom prispôsobeným potrebám onkologických pacientov",
-  "Bezplatné odborné prednášky a podcasty",
-  "Pohodlné rezervácie na podujatia a workshopy",
+// Toto majú všetci členovia — vrátane Free členstva.
+const COMMON_BENEFITY = [
+  "Oficiálne členstvo v pacientskej organizácii NIE RAKOVINE, o. z.",
   "Prístup do všetkých diskusných fór",
   "Exkluzívne zľavy u partnerských značiek",
   "Digitálna OK Karta s QR kódom",
   "Sociálny kompas",
 ];
 
-const REINVESTICIA_TEXT =
-  "Všetky finančné prostriedky získané prostredníctvom ONKO KLUBU vraciame späť do systému pomoci. Vďaka nim dokážeme zabezpečovať fungovanie pacientskych poradní NIE RAKOVINE, poskytovať bezplatné poradenstvo a rozvíjať pomoc, ktorú pacienti s rakovinou na Slovensku potrebujú.";
+// Toto majú navyše platiaci členovia (Mesačné, Ročné, Podporujúce).
+const PREMIUM_BENEFITY = [
+  "Prístup do ONKO knižnice — všetky videá a materiály pre onkologických pacientov",
+  "Bezplatné odborné prednášky a podcasty",
+  "Bezplatné prihlasovanie na podujatia a workshopy",
+];
+
+const MEMBERSHIP_INFO_TEXT =
+  "NIE RAKOVINE, o. z. je pacientska organizácia a podľa zákona musí mať oficiálnych členov — presne preto je Free členstvo úplne zadarmo. Členský príspevok pri Mesačnom, Ročnom a Podporujúcom členstve nie je platbou za konkrétnu službu, ale príspevkom na činnosť organizácie. Vďaka nemu vieme rozširovať pomoc onkologickým pacientom, prevádzkovať pacientske poradne a organizovať podujatia a cvičenia po celom Slovensku.";
 
 const FAQ = [
   {
@@ -56,7 +62,7 @@ export default function CennikPage() {
       <section className="pt-24 pb-10">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="md:max-w-xl">
-            <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">Cenník</p>
+            <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">Formy členstva</p>
             <h1 className="text-[2.4rem] md:text-[3rem] font-black text-[#6F2380] leading-[1.1] mb-5">
               Vyberte si spôsob členstva, ktorý vám vyhovuje
             </h1>
@@ -108,6 +114,16 @@ export default function CennikPage() {
         </div>
       </section>
 
+      {/* Vysvetlenie členského príspevku — dôležitý rámec pred cenami: nejde o platbu
+          za službu, ale o členský príspevok pacientskej organizácie. */}
+      <section className="pb-10">
+        <div className="max-w-6xl mx-auto px-5 md:px-8">
+          <div className="rounded-2xl bg-white border border-[#FDA4C7]/20 p-5 md:max-w-3xl">
+            <p className="text-[#6F2380]/70 text-[13px] leading-relaxed">{MEMBERSHIP_INFO_TEXT}</p>
+          </div>
+        </div>
+      </section>
+
       {/* Cenové karty */}
       <section className="pb-14">
         <div className="max-w-7xl mx-auto px-5 md:px-8">
@@ -119,7 +135,17 @@ export default function CennikPage() {
               <div className="flex items-end gap-2 mb-1">
                 <span className="text-[#6F2380] font-black text-[2.4rem] leading-none">0 €</span>
               </div>
-              <p className="text-[#6F2380]/40 text-sm mb-6">Základný prístup, úplne zadarmo</p>
+              <p className="text-[#6F2380]/40 text-sm mb-6">Staňte sa oficiálnym členom NIE RAKOVINE, o. z. — úplne zadarmo</p>
+              <div className="flex flex-col gap-2.5 mb-7">
+                {COMMON_BENEFITY.map((b) => (
+                  <div key={b} className="flex items-center gap-3">
+                    <div className="w-5 h-5 rounded-full bg-[#FDA4C7]/20 flex items-center justify-center shrink-0">
+                      <Check size={11} className="text-[#FDA4C7]" strokeWidth={3} />
+                    </div>
+                    <span className="text-[#6F2380]/65 text-[13px]">{b}</span>
+                  </div>
+                ))}
+              </div>
               <Link
                 href="/register?plan=free"
                 className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center"
@@ -135,9 +161,20 @@ export default function CennikPage() {
                 <span className="text-[#6F2380] font-black text-[2.4rem] leading-none">5 €</span>
                 <span className="text-[#6F2380]/40 text-sm mb-1">/ mes.</span>
               </div>
-              <p className="text-[#6F2380]/40 text-sm mb-6">Platíš mesačne · zrušíš kedykoľvek</p>
+              <p className="text-[#6F2380]/40 text-sm mb-6">Mesačný členský príspevok · zrušíš kedykoľvek</p>
+              <div className="flex flex-col gap-2.5 mb-3">
+                {COMMON_BENEFITY.map((b) => (
+                  <div key={b} className="flex items-center gap-3">
+                    <div className="w-5 h-5 rounded-full bg-[#FDA4C7]/20 flex items-center justify-center shrink-0">
+                      <Check size={11} className="text-[#FDA4C7]" strokeWidth={3} />
+                    </div>
+                    <span className="text-[#6F2380]/65 text-[13px]">{b}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[#6F2380]/50 text-[11px] font-bold uppercase tracking-wider mb-2.5 mt-2">Navyše ako platiaci člen</p>
               <div className="flex flex-col gap-2.5 mb-7">
-                {BENEFITY.map((b) => (
+                {PREMIUM_BENEFITY.map((b) => (
                   <div key={b} className="flex items-center gap-3">
                     <div className="w-5 h-5 rounded-full bg-[#FDA4C7]/20 flex items-center justify-center shrink-0">
                       <Check size={11} className="text-[#FDA4C7]" strokeWidth={3} />
@@ -149,13 +186,6 @@ export default function CennikPage() {
               <Link href="/register?plan=monthly" className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center">
                 Zvoliť mesačné členstvo
               </Link>
-              <div className="mt-5">
-                <ExpandableText maxHeight={48} fadeColor="#FFEDF4">
-                  <p className="text-[#6F2380]/40 text-[11px] leading-relaxed">
-                    {REINVESTICIA_TEXT}
-                  </p>
-                </ExpandableText>
-              </div>
             </div>
 
             {/* Ročné — odporúčané */}
@@ -172,8 +202,19 @@ export default function CennikPage() {
                 <span className="text-[#6F2380]/40 text-sm mb-1">/ rok</span>
               </div>
               <p className="text-[#6F2380] text-sm font-bold mb-6">Ušetríš 10 € oproti mesačnému plánu</p>
+              <div className="flex flex-col gap-2.5 mb-3">
+                {COMMON_BENEFITY.map((b) => (
+                  <div key={b} className="flex items-center gap-3">
+                    <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0">
+                      <Check size={11} className="text-[#FDA4C7]" strokeWidth={3} />
+                    </div>
+                    <span className="text-[#6F2380]/70 text-[13px]">{b}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[#6F2380]/60 text-[11px] font-bold uppercase tracking-wider mb-2.5 mt-2">Navyše ako platiaci člen</p>
               <div className="flex flex-col gap-2.5 mb-7">
-                {[...BENEFITY, "Jednorazová platba bez nutnosti aktualizácie počas roka"].map((b) => (
+                {[...PREMIUM_BENEFITY, "Jednorazová platba bez nutnosti aktualizácie počas roka"].map((b) => (
                   <div key={b} className="flex items-center gap-3">
                     <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0">
                       <Check size={11} className="text-[#FDA4C7]" strokeWidth={3} />
@@ -185,13 +226,6 @@ export default function CennikPage() {
               <Link href="/register?plan=annual" className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center">
                 Zvoliť ročné členstvo
               </Link>
-              <div className="mt-5">
-                <ExpandableText maxHeight={48} fadeColor="#FFD9E8">
-                  <p className="text-[#6F2380]/50 text-[11px] leading-relaxed">
-                    {REINVESTICIA_TEXT}
-                  </p>
-                </ExpandableText>
-              </div>
             </div>
 
             {/* Podporujúce — vlastná suma */}
