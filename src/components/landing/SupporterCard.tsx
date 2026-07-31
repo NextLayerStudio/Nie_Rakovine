@@ -27,7 +27,7 @@ export function SupporterCard({ className }: { className?: string }) {
         Podporujúce členstvo
       </p>
       <p className="mb-6 text-sm leading-relaxed text-[#6F2380]/55">
-        Nie ste pacient, ale chcete podporiť komunitu? Jednorazová platba vám
+        Chcete podporiť komunitu vyššou sumou? Jednorazová platba vám
         dá prístup na celý rok, rovnako ako pri ročnom členstve.
       </p>
 
