@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Leaf, Brain, Stethoscope, Coffee, MapPin } from "lucide-react";
@@ -10,15 +9,12 @@ export const dynamic = "force-dynamic";
 
 const CITIES = ["Bratislava", "Nitra", "Košice", "Poprad", "Ďalšie mestá pribudnú"];
 
-type EventImg = { src: string; label: string } | null;
-
 const EVENT_TYPES: {
   icon: typeof Leaf;
   accent: string;
   title: string;
   host: string;
   desc: string;
-  imgs: EventImg[];
 }[] = [
   {
     icon: Leaf,
@@ -26,7 +22,6 @@ const EVENT_TYPES: {
     title: "Onko-joga workshopy",
     host: "Petra Joga",
     desc: "Jemné cvičenie prispôsobené potrebám onkologických pacientov. V bezpečnom a podpornom prostredí, bez ohľadu na kondíciu či predchádzajúce skúsenosti.",
-    imgs: [{ src: "/images/aktivity/onko-joga-workshop.jpg", label: "Onko-joga workshop" }, null],
   },
   {
     icon: Brain,
@@ -34,7 +29,6 @@ const EVENT_TYPES: {
     title: "Mindfulness a meditácia",
     host: "Mirka Malejčíková / Zuzka Mindfulness",
     desc: "Skupinové stretnutia zamerané na zvládanie stresu, vedomé dýchanie, uvoľnenie a vnímanie vlastného tela.",
-    imgs: [null, null],
   },
   {
     icon: Stethoscope,
@@ -42,10 +36,6 @@ const EVENT_TYPES: {
     title: "Odborné podujatia",
     host: "Lekári, psychológovia, odborníci",
     desc: "Diskusie a prednášky s lekármi, psychológmi a ďalšími odborníkmi. Priestor na otázky, nové informácie a zdieľanie skúseností.",
-    imgs: [
-      { src: "/images/aktivity/odborne-stretnutie-1.jpg", label: "Odborné stretnutie" },
-      { src: "/images/aktivity/odborne-stretnutie-2.jpg", label: "Rozhovor s lekárom" },
-    ],
   },
   {
     icon: Coffee,
@@ -53,10 +43,6 @@ const EVENT_TYPES: {
     title: "Podporné stretnutia",
     host: "Komunita ONKO KLUBU",
     desc: "Neformálne stretnutia členov ONKO KLUBU – priestor na rozhovory, vzájomnú podporu a spájanie ľudí s podobnou životnou skúsenosťou.",
-    imgs: [
-      { src: "/images/aktivity/podporne-stretnutie-skupina.jpg", label: "Komunity meetup" },
-      { src: "/images/aktivity/podporne-stretnutie-objatie.jpg", label: "Stretnutie členov" },
-    ],
   },
 ];
 
@@ -165,7 +151,7 @@ export default async function AkciePage() {
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <h2 className="text-xl font-black text-[#6F2380] mb-8">Vyberte si z ponuky workshopov, prednášok a stretnutí</h2>
           <div className="flex flex-col gap-12 md:grid md:grid-cols-2 md:gap-10">
-            {EVENT_TYPES.map((e, i) => {
+            {EVENT_TYPES.map((e) => {
               const Icon = e.icon;
               return (
                 <div key={e.title}>
@@ -178,35 +164,7 @@ export default async function AkciePage() {
                       <p className="text-[11px] font-semibold" style={{ color: e.accent }}>{e.host}</p>
                     </div>
                   </div>
-                  <p className="text-[#6F2380]/65 text-[14px] leading-relaxed mb-4">{e.desc}</p>
-                  <div className="grid grid-cols-2 gap-3">
-                    {e.imgs.map((img, ii) =>
-                      img ? (
-                        <div
-                          key={img.src}
-                          className={`relative overflow-hidden rounded-2xl ${ii === 0 ? "aspect-video col-span-2" : "aspect-square"}`}
-                        >
-                          <Image
-                            src={img.src}
-                            alt={img.label}
-                            fill
-                            sizes="(min-width: 768px) 50vw, 100vw"
-                            className="object-cover"
-                          />
-                        </div>
-                      ) : (
-                        <div
-                          key={`placeholder-${ii}`}
-                          className={`rounded-2xl flex items-center justify-center p-3 ${ii === 0 ? "aspect-video col-span-2" : "aspect-square"}`}
-                          style={{ backgroundColor: (i % 2 === 0 ? "#FDA4C7" : "#6F2380") + (ii === 0 ? "18" : "10") }}
-                        >
-                          <p className="text-[10px] font-semibold text-center leading-tight" style={{ color: (i % 2 === 0 ? "#FDA4C7" : "#6F2380") + "60" }}>
-                            [IMG]
-                          </p>
-                        </div>
-                      ),
-                    )}
-                  </div>
+                  <p className="text-[#6F2380]/65 text-[14px] leading-relaxed">{e.desc}</p>
                 </div>
               );
             })}
