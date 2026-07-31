@@ -2,7 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { Leaf, Brain, Stethoscope, Coffee, MapPin, Calendar, Clock } from "lucide-react";
+import { Leaf, Brain, Stethoscope, Coffee, MapPin } from "lucide-react";
+import { prisma } from "@/lib/prisma";
+import { EventCard, type PublicEvent } from "@/components/landing/EventCard";
+
+export const dynamic = "force-dynamic";
 
 const CITIES = ["Bratislava", "Nitra", "Košice", "Poprad", "Ďalšie mestá pribudnú"];
 
@@ -62,7 +66,42 @@ const STEPS = [
   { title: "Stretnite ľudí, ktorí vám rozumejú", desc: "Podujatia sú určené členom ONKO KLUBU a mnohé z nich sú bezplatné alebo za zvýhodnených podmienok. Počet miest býva obmedzený, preto odporúčame prihlásiť sa vopred." },
 ];
 
-export default function AkciePage() {
+export default async function AkciePage() {
+  const events = await prisma.event.findMany({
+    where: { published: true },
+    orderBy: { startsAt: "asc" },
+    take: 3,
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      category: true,
+      coverUrl: true,
+      location: true,
+      region: true,
+      startsAt: true,
+      endsAt: true,
+      capacity: true,
+      visibility: true,
+      _count: { select: { registrations: true, tickets: true } },
+    },
+  });
+
+  const topEvents: PublicEvent[] = events.map((e) => ({
+    id: e.id,
+    title: e.title,
+    description: e.description,
+    category: e.category,
+    coverUrl: e.coverUrl,
+    location: e.location,
+    region: e.region,
+    startsAt: e.startsAt.toISOString(),
+    endsAt: e.endsAt ? e.endsAt.toISOString() : null,
+    capacity: e.capacity,
+    visibility: e.visibility,
+    registrationCount: e._count.registrations + e._count.tickets,
+  }));
+
   return (
     <main className="min-h-screen bg-[#FFF3F9] font-sans">
       <Navbar />
@@ -70,57 +109,41 @@ export default function AkciePage() {
       {/* Hero */}
       <section className="pt-24 pb-12 md:pb-20">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
-          <div className="md:grid md:grid-cols-2 md:gap-16 md:items-center">
-            <div>
-              <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">Podujatia po celom Slovensku</p>
-              <h1 className="text-[2.4rem] md:text-[3.2rem] font-black text-[#6F2380] leading-[1.1] mb-5">
-                Príďte načerpať podporu a nové skúsenosti
-              </h1>
-              <p className="text-[#6F2380]/70 text-base leading-relaxed mb-8">
-                Workshopy, skupinové stretnutia a odborné podujatia sú dostupné vo viacerých
-                regiónoch Slovenska. Ako člen/ka ONKO KLUBU máte možnosť prihlásiť sa na
-                vybrané aktivity jednoducho priamo v aplikácii ONKO KLUB.
-              </p>
-              <div className="md:flex md:gap-3">
-                <Link
-                  href="/register"
-                  className="block w-full md:w-auto md:inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black py-4 md:px-10 text-center mb-3 md:mb-0"
-                >
-                  Chcem vedieť o podujatiach v mojom okolí
-                </Link>
-              </div>
-            </div>
-            {/* Kalendár placeholder — desktop only */}
-            <div className="hidden md:block">
-              <div className="w-full aspect-video rounded-[2rem] bg-[#6F2380]/15 flex flex-col items-center justify-center gap-2">
-                <Calendar size={36} className="text-[#6F2380]/25" />
-                <p className="text-[#6F2380]/25 text-xs font-semibold">[IMG-29] Screenshot kalendára eventov</p>
-              </div>
+          <div className="md:max-w-2xl">
+            <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">Podujatia po celom Slovensku</p>
+            <h1 className="text-[2.4rem] md:text-[3.2rem] font-black text-[#6F2380] leading-[1.1] mb-5">
+              Príďte načerpať podporu a nové skúsenosti
+            </h1>
+            <p className="text-[#6F2380]/70 text-base leading-relaxed mb-8">
+              Workshopy, skupinové stretnutia a odborné podujatia sú dostupné vo viacerých
+              regiónoch Slovenska. Ako člen/ka ONKO KLUBU máte možnosť prihlásiť sa na
+              vybrané aktivity jednoducho priamo v aplikácii ONKO KLUB.
+            </p>
+            <div className="md:flex md:gap-3">
+              <Link
+                href="/podujatia"
+                className="block w-full md:w-auto md:inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black py-4 md:px-10 text-center mb-3 md:mb-0"
+              >
+                Chcem vedieť o podujatiach v mojom okolí
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Kalendár — mobile */}
-      <section className="pb-12 md:hidden">
-        <div className="px-5">
-          <h2 className="text-xl font-black text-[#6F2380] mb-5">Kalendár eventov</h2>
-          <div className="w-full aspect-video rounded-[2rem] bg-[#6F2380]/15 flex flex-col items-center justify-center gap-2 mb-4">
-            <Calendar size={36} className="text-[#6F2380]/25" />
-            <p className="text-[#6F2380]/25 text-xs font-semibold">[IMG-29] Screenshot kalendára eventov</p>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="aspect-square rounded-2xl bg-[#FDA4C7]/15 flex flex-col items-center justify-center gap-2">
-              <Clock size={20} className="text-[#FDA4C7]/50" />
-              <p className="text-[#FDA4C7]/50 text-[10px] font-semibold text-center px-2">[IMG] Detail eventu</p>
-            </div>
-            <div className="aspect-square rounded-2xl bg-[#6F2380]/10 flex flex-col items-center justify-center gap-2">
-              <MapPin size={20} className="text-[#6F2380]/30" />
-              <p className="text-[#6F2380]/30 text-[10px] font-semibold text-center px-2">[IMG] Mapa mestá</p>
+      {/* Najbližšie podujatia — reálne dáta z kalendára */}
+      {topEvents.length > 0 && (
+        <section className="pb-14">
+          <div className="max-w-6xl mx-auto px-5 md:px-8">
+            <h2 className="text-xl font-black text-[#6F2380] mb-5">Najbližšie podujatia</h2>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+              {topEvents.map((event) => (
+                <EventCard key={event.id} event={event} />
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Mestá */}
       <section className="pb-12">
