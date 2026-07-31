@@ -48,6 +48,7 @@ export function MembershipDetailsForm({
   interestsOptions,
   expectationsOptions,
   helpOptions,
+  showHelpOptions,
   hearAboutUsOptions,
   defaultInterests,
   defaultExpectations,
@@ -59,6 +60,7 @@ export function MembershipDetailsForm({
   interestsOptions: string[];
   expectationsOptions: string[];
   helpOptions: string[];
+  showHelpOptions: boolean;
   hearAboutUsOptions: string[];
   defaultInterests: string[];
   defaultExpectations: string[];
@@ -150,18 +152,20 @@ export function MembershipDetailsForm({
         />
       </div>
 
-      <div className="flex w-full flex-col items-center gap-4 border-t border-brand-purple/10 pt-6">
-        <h3 className="text-center text-xl font-bold leading-snug text-brand-purple">
-          Čo by vám v tejto chvíli najviac pomohlo?
-        </h3>
-        <CheckboxList
-          name="help"
-          options={helpOptions}
-          selected={help}
-          onSelectedChange={setHelp}
-          variant="plain"
-        />
-      </div>
+      {showHelpOptions && (
+        <div className="flex w-full flex-col items-center gap-4 border-t border-brand-purple/10 pt-6">
+          <h3 className="text-center text-xl font-bold leading-snug text-brand-purple">
+            Čo by vám v tejto chvíli najviac pomohlo?
+          </h3>
+          <CheckboxList
+            name="help"
+            options={helpOptions}
+            selected={help}
+            onSelectedChange={setHelp}
+            variant="plain"
+          />
+        </div>
+      )}
 
       <div className="flex w-full flex-col items-center gap-4 border-t border-brand-purple/10 pt-6">
         <h3 className="text-center text-xl font-bold leading-snug text-brand-purple">

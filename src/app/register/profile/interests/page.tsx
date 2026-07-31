@@ -34,6 +34,7 @@ export default async function MembershipDetailsStep() {
           interestsOptions={INTEREST_OPTIONS}
           expectationsOptions={EXPECTATIONS_OPTIONS}
           helpOptions={HELP_OPTIONS}
+          showHelpOptions={user.profile?.isPatient !== false}
           hearAboutUsOptions={HEAR_ABOUT_US_OPTIONS}
           defaultInterests={user.profile?.interests ?? []}
           defaultExpectations={
