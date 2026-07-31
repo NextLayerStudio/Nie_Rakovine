@@ -3,7 +3,7 @@ import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Leaf, Brain, Stethoscope, Coffee, MapPin } from "lucide-react";
 import { prisma } from "@/lib/prisma";
-import { EventCard, type PublicEvent } from "@/components/landing/EventCard";
+import type { PublicEvent } from "@/components/landing/EventCard";
 import { EventsFilterProvider } from "@/components/landing/EventsFilterContext";
 import { EventsFilterToggle } from "@/components/landing/EventsFilterToggle";
 import { CategoryFilterBar } from "@/components/landing/CategoryFilterBar";
@@ -60,6 +60,7 @@ export default async function AkciePage() {
   const events = await prisma.event.findMany({
     where: { published: true },
     orderBy: { startsAt: "asc" },
+    take: 3,
     select: {
       id: true,
       title: true,
@@ -76,7 +77,7 @@ export default async function AkciePage() {
     },
   });
 
-  const allEvents: PublicEvent[] = events.map((e) => ({
+  const topEvents: PublicEvent[] = events.map((e) => ({
     id: e.id,
     title: e.title,
     description: e.description,
@@ -91,8 +92,6 @@ export default async function AkciePage() {
     registrationCount: e._count.registrations + e._count.tickets,
   }));
 
-  const topEvents = allEvents.slice(0, 3);
-
   return (
     <main className="min-h-screen bg-[#FFF3F9] font-sans">
       <Navbar />
@@ -103,12 +102,7 @@ export default async function AkciePage() {
           <div className="max-w-6xl mx-auto px-5 md:px-8">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h2 className="text-xl font-black text-[#6F2380] md:text-2xl">Kalendár aktivít</h2>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold text-[#6F2380]/50">
-                  {allEvents.length} {allEvents.length === 1 ? "podujatie" : "podujatí"}
-                </span>
-                <EventsFilterToggle />
-              </div>
+              <EventsFilterToggle />
             </div>
             <CategoryFilterBar category="" className="mt-4 hidden flex-wrap gap-2 lg:flex" />
           </div>
@@ -116,7 +110,7 @@ export default async function AkciePage() {
 
         <section className="pb-14">
           <div className="max-w-6xl mx-auto px-5 md:px-8">
-            <PublicEventsExplorer events={allEvents} category="" />
+            <PublicEventsExplorer events={topEvents} category="" />
           </div>
         </section>
       </EventsFilterProvider>
@@ -145,20 +139,6 @@ export default async function AkciePage() {
           </div>
         </div>
       </section>
-
-      {/* Najbližšie podujatia — reálne dáta z kalendára */}
-      {topEvents.length > 0 && (
-        <section className="pb-14">
-          <div className="max-w-6xl mx-auto px-5 md:px-8">
-            <h2 className="text-xl font-black text-[#6F2380] mb-5">Najbližšie podujatia</h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-              {topEvents.map((event) => (
-                <EventCard key={event.id} event={event} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Mestá */}
       <section className="pb-12">
