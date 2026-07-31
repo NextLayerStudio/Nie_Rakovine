@@ -12,7 +12,13 @@ export function useFormRedirect(state: {
 
   useEffect(() => {
     if (state.ok && state.redirectTo) {
-      router.replace(state.redirectTo);
+      // External redirects (e.g. the Nexi Hosted Payment Page) need a full
+      // navigation — the Next.js router only handles routes within the app.
+      if (/^https?:\/\//.test(state.redirectTo)) {
+        window.location.assign(state.redirectTo);
+      } else {
+        router.replace(state.redirectTo);
+      }
     }
   }, [state, router]);
 

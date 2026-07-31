@@ -6,6 +6,8 @@ import { requireUser } from "@/lib/auth";
 import { parseCancerTypes } from "@/lib/cancer-type";
 import { SUBSCRIPTION_PLANS, SUPPORTER_MIN_AMOUNT_EUR } from "@/lib/constants";
 import { redeemDiscountCode, validateDiscountCode } from "@/lib/discount-codes";
+import { createHppOrder, generateNexiOrderId, nexiConfigured } from "@/lib/nexi";
+import { getAppUrlFromEnv } from "@/lib/email/brand";
 import type {
   SubscriptionPlan,
   SubscriptionStatus,
@@ -191,6 +193,37 @@ export async function confirmSubscriptionPaymentAction(
       ok: true,
       redirectTo: `/register/subscription/checkout/prevod?next=${encodeURIComponent("/register/profile/location")}`,
     };
+  }
+
+  if (nexiConfigured()) {
+    const orderId = generateNexiOrderId("sub");
+    const appUrl = getAppUrlFromEnv();
+    const { hostedPage, securityToken } = await createHppOrder({
+      orderId,
+      amountEuroCents: Math.round(finalAmount * 100),
+      description: `ONKO KLUB - ${plan === "MONTHLY" ? "mesačné" : "ročné"} členstvo`,
+      customerEmail: user.email,
+      resultUrl: `${appUrl}/register/subscription/checkout/nexi-result?orderId=${orderId}`,
+      cancelUrl: `${appUrl}/register/subscription/checkout`,
+      notificationUrl: `${appUrl}/api/nexi/notification`,
+      recurrence: {
+        action: "CONTRACT_CREATION",
+        contractId: orderId,
+        contractType: "MIT_SCHEDULED",
+        contractFrequency: plan === "MONTHLY" ? "30" : "365",
+      },
+    });
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        pendingNexiOrderId: orderId,
+        pendingNexiSecurityToken: securityToken,
+        pendingNexiPlan: plan,
+      },
+    });
+
+    return { ok: true, redirectTo: hostedPage };
   }
 
   await prisma.user.update({

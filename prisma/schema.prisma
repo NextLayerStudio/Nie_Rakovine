@@ -97,6 +97,14 @@ model User {
   paymentAmountEuro      Float?
   paymentConfirmedAt     DateTime?
 
+  // Nexi XPay — rekurentný kontrakt (MIT) pre automatické obnovenie
+  // Mesačného/Ročného predplatného, a dočasný stav prebiehajúcej platby
+  // kým sa zákazník vráti z Hosted Payment Page (alebo príde notifikácia).
+  nexiContractId          String?           @unique
+  pendingNexiOrderId      String?           @unique
+  pendingNexiSecurityToken String?
+  pendingNexiPlan         SubscriptionPlan?
+
   // Relations
   eventRegistrations EventRegistration[]
   articleLikes       ArticleLike[]

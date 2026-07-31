@@ -32,9 +32,11 @@ type Plan = (typeof SUBSCRIPTION_PLANS)[number];
 export function CheckoutForm({
   plan,
   initialAmount,
+  initialError,
 }: {
   plan: Plan;
   initialAmount?: number;
+  initialError?: string;
 }) {
   const [consent, setConsent] = useState(false);
   const [amount, setAmount] = useState(initialAmount ?? plan.priceEuro);
@@ -331,7 +333,7 @@ export function CheckoutForm({
         </label>
       </div>
 
-      <FormError message={state.message} />
+      <FormError message={state.message || initialError} />
 
       <div className="sticky bottom-0 shrink-0 border-t border-brand-purple/5 bg-white px-6 py-5">
         <SubmitButton

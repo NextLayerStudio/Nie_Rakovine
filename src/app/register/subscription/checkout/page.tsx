@@ -7,13 +7,20 @@ import { CheckoutForm } from "./CheckoutForm";
 
 export const dynamic = "force-dynamic";
 
+const CHECKOUT_ERROR_MESSAGES: Record<string, string> = {
+  payment_failed: "Platbu sa nepodarilo dokončiť. Skúste to prosím znova.",
+  payment_pending: "Platba sa ešte spracúva. Skúste to prosím o chvíľu znova.",
+  missing_order: "Nastala chyba pri návrate z platobnej brány. Skúste to prosím znova.",
+};
+
 export default async function SubscriptionCheckoutPage({
   searchParams,
 }: {
-  searchParams: Promise<{ plan?: string; amount?: string }>;
+  searchParams: Promise<{ plan?: string; amount?: string; error?: string }>;
 }) {
   await requireUser();
-  const { plan, amount } = await searchParams;
+  const { plan, amount, error } = await searchParams;
+  const errorMessage = error ? CHECKOUT_ERROR_MESSAGES[error] : undefined;
 
   // FREE has no payment step — selectSubscriptionPlanAction activates it
   // directly and never sends anyone here.
@@ -44,7 +51,7 @@ export default async function SubscriptionCheckoutPage({
           </p>
         </header>
 
-        <CheckoutForm plan={selected} initialAmount={initialAmount} />
+        <CheckoutForm plan={selected} initialAmount={initialAmount} initialError={errorMessage} />
       </div>
     </PhoneShell>
   );
