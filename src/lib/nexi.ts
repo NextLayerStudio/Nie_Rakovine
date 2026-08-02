@@ -117,8 +117,13 @@ export async function createHppOrder(
         cancelUrl: input.cancelUrl,
         notificationUrl: input.notificationUrl,
         paymentService: input.paymentServices?.join(","),
+        // Per POST /orders/hpp's exact schema, recurrence is nested inside
+        // paymentSession — it is NOT a top-level sibling of order/paymentSession.
+        // (An earlier version got this wrong: Nexi silently ignored a
+        // top-level recurrence object instead of erroring, so the first
+        // payment succeeded but no MIT contract was ever actually created.)
+        recurrence: input.recurrence,
       },
-      recurrence: input.recurrence,
     }),
   });
 }
