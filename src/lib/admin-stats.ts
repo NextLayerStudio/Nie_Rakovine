@@ -211,6 +211,7 @@ export async function getRegistrationStats(
     YEARLY: "Ročné",
     MONTHLY: "Mesačné",
     SUPPORTER: "Podporujúce",
+    TRIAL: "Skúšobné",
     NONE: "Žiadne",
   };
   const planCounts = new Map<string, number>([
@@ -218,6 +219,7 @@ export async function getRegistrationStats(
     ["Ročné", 0],
     ["Mesačné", 0],
     ["Podporujúce", 0],
+    ["Skúšobné", 0],
     ["Žiadne", 0],
   ]);
   for (const u of users) {

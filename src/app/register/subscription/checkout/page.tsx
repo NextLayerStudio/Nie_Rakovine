@@ -16,11 +16,17 @@ const CHECKOUT_ERROR_MESSAGES: Record<string, string> = {
 export default async function SubscriptionCheckoutPage({
   searchParams,
 }: {
-  searchParams: Promise<{ plan?: string; amount?: string; error?: string }>;
+  searchParams: Promise<{
+    plan?: string;
+    amount?: string;
+    error?: string;
+    upgrade?: string;
+  }>;
 }) {
   await requireUser();
-  const { plan, amount, error } = await searchParams;
+  const { plan, amount, error, upgrade } = await searchParams;
   const errorMessage = error ? CHECKOUT_ERROR_MESSAGES[error] : undefined;
+  const isUpgrade = upgrade === "1";
 
   // FREE has no payment step — selectSubscriptionPlanAction activates it
   // directly and never sends anyone here.
@@ -51,7 +57,12 @@ export default async function SubscriptionCheckoutPage({
           </p>
         </header>
 
-        <CheckoutForm plan={selected} initialAmount={initialAmount} initialError={errorMessage} />
+        <CheckoutForm
+          plan={selected}
+          initialAmount={initialAmount}
+          initialError={errorMessage}
+          isUpgrade={isUpgrade}
+        />
       </div>
     </PhoneShell>
   );

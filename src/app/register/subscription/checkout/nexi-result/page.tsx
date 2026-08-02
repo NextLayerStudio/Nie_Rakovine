@@ -13,10 +13,11 @@ export const dynamic = "force-dynamic";
 export default async function NexiResultPage({
   searchParams,
 }: {
-  searchParams: Promise<{ orderId?: string }>;
+  searchParams: Promise<{ orderId?: string; upgrade?: string }>;
 }) {
   await requireUser();
-  const { orderId } = await searchParams;
+  const { orderId, upgrade } = await searchParams;
+  const isUpgrade = upgrade === "1";
 
   if (!orderId) {
     redirect("/register/subscription/checkout?error=missing_order");
@@ -25,12 +26,16 @@ export default async function NexiResultPage({
   const result = await finalizeNexiSubscriptionOrder(orderId);
 
   if (result.activated) {
-    // Supporters aren't patients — they skip the location/diagnosis/interests
-    // steps entirely, same as the bank-transfer and instant-activate paths.
+    // Existing members upgrading from Nastavenia go back there, not into
+    // the registration wizard. Otherwise: Supporters aren't patients — they
+    // skip the location/diagnosis/interests steps entirely, same as the
+    // bank-transfer and instant-activate paths.
     redirect(
-      result.plan === "SUPPORTER"
-        ? "/register/profile/done"
-        : "/register/profile/location",
+      isUpgrade
+        ? "/menu/nastavenia/predplatne"
+        : result.plan === "SUPPORTER"
+          ? "/register/profile/done"
+          : "/register/profile/location",
     );
   }
 

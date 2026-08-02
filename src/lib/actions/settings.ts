@@ -127,6 +127,51 @@ export async function updatePreferencesAction(
   return { ok: true, message: "Notifikácie boli uložené." };
 }
 
+const TRIAL_DAYS = 14;
+
+export async function startFreeTrialAction(
+  _prev: SettingsActionState,
+  _formData: FormData,
+): Promise<SettingsActionState> {
+  const user = await requireUser();
+
+  if (user.trialUsedAt) {
+    return {
+      ok: false,
+      message: "Skúšobné obdobie ste už niekedy využili — je dostupné len raz.",
+    };
+  }
+
+  if (
+    user.subscriptionStatus === "ACTIVE" &&
+    ["MONTHLY", "YEARLY", "SUPPORTER", "TRIAL"].includes(user.subscriptionPlan)
+  ) {
+    return {
+      ok: false,
+      message: "Už máte aktívny prístup k plateným výhodám.",
+    };
+  }
+
+  const now = new Date();
+  const end = new Date(now);
+  end.setDate(end.getDate() + TRIAL_DAYS);
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      subscriptionPlan: "TRIAL",
+      subscriptionStatus: "ACTIVE",
+      subscriptionStart: now,
+      subscriptionEnd: end,
+      trialUsedAt: now,
+    },
+  });
+
+  revalidatePath("/menu/nastavenia/predplatne");
+  revalidatePath("/menu/nastavenia");
+  return { ok: true, message: `Skúšobné obdobie je aktívne do ${end.toLocaleDateString("sk-SK")}.` };
+}
+
 export async function deleteAccountAction(): Promise<void> {
   const user = await requireUser();
 

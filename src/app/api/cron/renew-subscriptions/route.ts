@@ -18,13 +18,19 @@ function planPriceEuro(plan: string): number {
 }
 
 /**
- * Daily job (Vercel Cron, see vercel.json) — charges every Monthly/Yearly
- * member whose subscriptionEnd has passed via Nexi's MIT recurring-charge
- * API (POST /orders/mit, no 3D Secure / customer interaction).
+ * Daily job (Vercel Cron, see vercel.json). Two independent things happen
+ * here, run every day regardless of whether Nexi is live yet:
  *
- * V1 policy, as agreed: a single attempt per day. On failure the member is
- * simply downgraded to Free (no multi-attempt dunning) — they keep official
- * NIE RAKOVINE membership, just lose the paid-tier extras, and can
+ * 1. Trial expiry — any TRIAL member whose 14 days are up gets flipped back
+ *    to Free (no charge attempt, there was never a payment method on file).
+ * 2. Monthly/Yearly renewal — charges every member whose subscriptionEnd has
+ *    passed via Nexi's MIT recurring-charge API (POST /orders/mit, no 3D
+ *    Secure / customer interaction). Skipped entirely until NEXI_* env vars
+ *    are configured.
+ *
+ * V1 policy for renewal, as agreed: a single attempt per day. On failure the
+ * member is simply downgraded to Free (no multi-attempt dunning) — they keep
+ * official NIE RAKOVINE membership, just lose the paid-tier extras, and can
  * resubscribe any time from the app.
  */
 export async function GET(request: Request) {
@@ -36,8 +42,32 @@ export async function GET(request: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
 
+  const expiredTrials = await prisma.user.findMany({
+    where: {
+      subscriptionStatus: "ACTIVE",
+      subscriptionPlan: "TRIAL",
+      subscriptionEnd: { lte: new Date() },
+    },
+    select: { id: true },
+  });
+
+  for (const trialUser of expiredTrials) {
+    await prisma.user.update({
+      where: { id: trialUser.id },
+      data: {
+        subscriptionPlan: "FREE",
+        subscriptionStatus: "ACTIVE",
+        subscriptionStart: new Date(),
+        subscriptionEnd: null,
+      },
+    });
+  }
+
   if (!nexiConfigured()) {
-    return Response.json({ skipped: "NEXI not configured" });
+    return Response.json({
+      trialsExpired: expiredTrials.length,
+      skipped: "NEXI not configured",
+    });
   }
 
   const dueUsers = await prisma.user.findMany({
@@ -125,6 +155,7 @@ export async function GET(request: Request) {
   }
 
   return Response.json({
+    trialsExpired: expiredTrials.length,
     checked: dueUsers.length,
     renewed,
     downgraded,

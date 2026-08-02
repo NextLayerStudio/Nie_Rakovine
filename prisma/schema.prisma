@@ -46,6 +46,7 @@ enum SubscriptionPlan {
   MONTHLY
   YEARLY
   SUPPORTER
+  TRIAL
 }
 
 enum DiscountCodeType {
@@ -88,6 +89,9 @@ model User {
   subscriptionStatus SubscriptionStatus @default(INACTIVE)
   subscriptionStart  DateTime?
   subscriptionEnd    DateTime?
+  // Set once a 14-day free trial has ever been started — a member can only
+  // ever use the trial once, even after it expires back to Free.
+  trialUsedAt        DateTime?
 
   // Bankový prevod — kým nemáme platobnú bránu (Nexi) pripojenú, členovia
   // môžu zaplatiť aj prevodom; variabilný symbol slúži adminovi na spárovanie

@@ -33,10 +33,12 @@ export function CheckoutForm({
   plan,
   initialAmount,
   initialError,
+  isUpgrade = false,
 }: {
   plan: Plan;
   initialAmount?: number;
   initialError?: string;
+  isUpgrade?: boolean;
 }) {
   const [consent, setConsent] = useState(false);
   const [amount, setAmount] = useState(initialAmount ?? plan.priceEuro);
@@ -78,6 +80,7 @@ export function CheckoutForm({
     <form action={formAction} className="flex min-h-0 flex-1 flex-col">
       <input type="hidden" name="plan" value={plan.id} />
       <input type="hidden" name="paymentMethod" value={paymentMethod} />
+      {isUpgrade && <input type="hidden" name="upgrade" value="1" />}
 
       <div className="mt-4 flex flex-col gap-4 px-5 pb-4">
         {/* Zhrnutie objednávky */}

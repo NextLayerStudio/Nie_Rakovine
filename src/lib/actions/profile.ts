@@ -36,6 +36,11 @@ export async function selectSubscriptionPlanAction(
 ): Promise<ActionState> {
   const user = await requireUser();
   const plan = String(formData.get("plan") ?? "");
+  // Set when an existing member reaches this shared plan-picker from
+  // Nastavenia → Predplatné to upgrade, instead of from fresh registration —
+  // threaded through checkout so the post-payment redirect goes back to
+  // settings instead of the registration profile wizard.
+  const isUpgrade = formData.get("upgrade") === "1";
   if (
     plan !== "FREE" &&
     plan !== "MONTHLY" &&
@@ -55,12 +60,17 @@ export async function selectSubscriptionPlanAction(
         subscriptionEnd: null,
       },
     });
-    return { ok: true, redirectTo: "/register/profile/location" };
+    return {
+      ok: true,
+      redirectTo: isUpgrade
+        ? "/menu/nastavenia/predplatne"
+        : "/register/profile/location",
+    };
   }
 
   return {
     ok: true,
-    redirectTo: `/register/subscription/checkout?plan=${plan}`,
+    redirectTo: `/register/subscription/checkout?plan=${plan}${isUpgrade ? "&upgrade=1" : ""}`,
   };
 }
 
@@ -97,6 +107,7 @@ export async function confirmSubscriptionPaymentAction(
 ): Promise<ActionState> {
   const user = await requireUser();
   const plan = String(formData.get("plan") ?? "") as SubscriptionPlan;
+  const isUpgrade = formData.get("upgrade") === "1";
   if (plan !== "MONTHLY" && plan !== "YEARLY" && plan !== "SUPPORTER") {
     return { ok: false, message: "Vyberte balíček." };
   }
@@ -142,7 +153,7 @@ export async function confirmSubscriptionPaymentAction(
       });
       return {
         ok: true,
-        redirectTo: `/register/subscription/checkout/prevod?next=${encodeURIComponent("/register/profile/done")}`,
+        redirectTo: `/register/subscription/checkout/prevod?next=${encodeURIComponent(isUpgrade ? "/menu/nastavenia/predplatne" : "/register/profile/done")}`,
       };
     }
 
@@ -154,7 +165,7 @@ export async function confirmSubscriptionPaymentAction(
         amountEuroCents: Math.round(amount * 100),
         description: "ONKO KLUB - podporujúce členstvo",
         customerEmail: user.email,
-        resultUrl: `${appUrl}/register/subscription/checkout/nexi-result?orderId=${orderId}`,
+        resultUrl: `${appUrl}/register/subscription/checkout/nexi-result?orderId=${orderId}${isUpgrade ? "&upgrade=1" : ""}`,
         cancelUrl: `${appUrl}/register/subscription/checkout`,
         notificationUrl: `${appUrl}/api/nexi/notification`,
         // One-off donation, no recurring contract — also lets Apple Pay show
@@ -186,7 +197,10 @@ export async function confirmSubscriptionPaymentAction(
       },
     });
 
-    return { ok: true, redirectTo: "/register/profile/done" };
+    return {
+      ok: true,
+      redirectTo: isUpgrade ? "/menu/nastavenia/predplatne" : "/register/profile/done",
+    };
   }
 
   const planInfo = SUBSCRIPTION_PLANS.find((p) => p.id === plan);
@@ -220,7 +234,7 @@ export async function confirmSubscriptionPaymentAction(
     });
     return {
       ok: true,
-      redirectTo: `/register/subscription/checkout/prevod?next=${encodeURIComponent("/register/profile/location")}`,
+      redirectTo: `/register/subscription/checkout/prevod?next=${encodeURIComponent(isUpgrade ? "/menu/nastavenia/predplatne" : "/register/profile/location")}`,
     };
   }
 
@@ -232,7 +246,7 @@ export async function confirmSubscriptionPaymentAction(
       amountEuroCents: Math.round(finalAmount * 100),
       description: `ONKO KLUB - ${plan === "MONTHLY" ? "mesačné" : "ročné"} členstvo`,
       customerEmail: user.email,
-      resultUrl: `${appUrl}/register/subscription/checkout/nexi-result?orderId=${orderId}`,
+      resultUrl: `${appUrl}/register/subscription/checkout/nexi-result?orderId=${orderId}${isUpgrade ? "&upgrade=1" : ""}`,
       cancelUrl: `${appUrl}/register/subscription/checkout`,
       notificationUrl: `${appUrl}/api/nexi/notification`,
       recurrence: {
@@ -269,7 +283,10 @@ export async function confirmSubscriptionPaymentAction(
     },
   });
 
-  return { ok: true, redirectTo: "/register/profile/location" };
+  return {
+    ok: true,
+    redirectTo: isUpgrade ? "/menu/nastavenia/predplatne" : "/register/profile/location",
+  };
 }
 
 // --------------------------------------------------------------------

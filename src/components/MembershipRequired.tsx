@@ -20,10 +20,10 @@ export function MembershipRequired({
       </p>
       <div className="mt-5 flex flex-col gap-2">
         <Link
-          href="/cennik"
+          href="/menu/nastavenia/predplatne"
           className="rounded-pill bg-brand-pink px-6 py-3 text-sm font-semibold text-white"
         >
-          Zobraziť členstvo
+          Vyskúšať platené členstvo
         </Link>
         <Link
           href={backHref}

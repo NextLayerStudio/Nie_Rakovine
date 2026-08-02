@@ -47,7 +47,8 @@ export function membershipSubscriptionInfo(user: {
     user.subscriptionPlan === "FREE" ||
     user.subscriptionPlan === "MONTHLY" ||
     user.subscriptionPlan === "YEARLY" ||
-    user.subscriptionPlan === "SUPPORTER";
+    user.subscriptionPlan === "SUPPORTER" ||
+    user.subscriptionPlan === "TRIAL";
   const notExpired = !user.subscriptionEnd || user.subscriptionEnd > now;
   const active =
     user.subscriptionStatus === "ACTIVE" && hasPlan && notExpired;
@@ -69,6 +70,7 @@ export function membershipSubscriptionInfo(user: {
     MONTHLY: "Mesačné predplatné · aktívne",
     YEARLY: "Ročné predplatné · aktívne",
     SUPPORTER: "Podporujúce členstvo · aktívne",
+    TRIAL: "Skúšobné obdobie · aktívne",
   };
 
   return {
