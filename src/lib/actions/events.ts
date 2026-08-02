@@ -10,6 +10,7 @@ import { notifyNearbyUsersNewEvent } from "@/lib/notifications";
 import { EVENT_CATEGORIES } from "@/lib/event-category";
 import { EVENT_REGIONS } from "@/lib/event-region";
 import { parseCancerTypes } from "@/lib/cancer-type";
+import { isPremiumMember } from "@/lib/membership";
 import { resolveImageField } from "@/lib/uploads";
 import { parseZonedDateTime } from "@/lib/timezone";
 import { queueEventRegistrationEmail } from "@/lib/email/send";
@@ -218,9 +219,23 @@ export async function registerForEventAction(
 
   const user = await prisma.user.findUnique({
     where: { id: sessionUser.id },
-    select: { id: true, email: true, fullName: true },
+    select: {
+      id: true,
+      email: true,
+      fullName: true,
+      subscriptionPlan: true,
+      subscriptionStatus: true,
+    },
   });
   if (!user) return { ok: false, message: "Prihláste sa prosím znova." };
+
+  if (!isPremiumMember(user.subscriptionPlan, user.subscriptionStatus)) {
+    return {
+      ok: false,
+      message:
+        "Prihlasovanie na podujatia je dostupné len pre platiacich členov.",
+    };
+  }
 
   const event = await prisma.event.findFirst({
     where: { id: eventId, published: true },
