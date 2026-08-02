@@ -14,6 +14,7 @@ import {
 import { renderNewDeviceLoginEmail } from "@/lib/email/templates/new-device-login";
 import { renderWelcomeEmail } from "@/lib/email/templates/welcome";
 import { renderPaymentConfirmedEmail } from "@/lib/email/templates/payment-confirmed";
+import { renderRenewalFailedEmail } from "@/lib/email/templates/renewal-failed";
 
 const DEVICE_COOKIE = "onko_device";
 const DEVICE_MAX_AGE = 60 * 60 * 24 * 365;
@@ -102,6 +103,18 @@ export function queuePaymentConfirmedEmail(input: {
     to: input.email,
     subject: "Platba prijatá — členstvo ONKO KLUB je aktívne",
     html: renderPaymentConfirmedEmail(input),
+  });
+}
+
+export function queueRenewalFailedEmail(input: {
+  email: string;
+  fullName: string;
+  planLabel: string;
+}): void {
+  sendTransactionalEmailAsync({
+    to: input.email,
+    subject: "Obnovenie členstva sa nepodarilo — účet je na Free",
+    html: renderRenewalFailedEmail(input),
   });
 }
 
