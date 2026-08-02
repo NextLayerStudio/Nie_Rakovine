@@ -170,23 +170,29 @@ export type CreateMitChargeInput = {
   description: string;
 };
 
+type NexiMitResponse = {
+  operation: NexiOperation;
+};
+
 /** Recurring renewal charge — no 3D Secure, merchant-initiated. Called from the daily cron. */
 export async function createMitCharge(
   input: CreateMitChargeInput,
 ): Promise<NexiOrderStatus> {
-  return nexiFetch<NexiOrderStatus>("/orders/mit", {
+  const { operation } = await nexiFetch<NexiMitResponse>("/orders/mit", {
     method: "POST",
+    headers: { "Idempotency-Key": randomUUID() },
     body: JSON.stringify({
       order: {
         orderId: input.orderId,
         amount: String(input.amountEuroCents),
         currency: "EUR",
         description: input.description,
-      },
-      recurrence: {
-        action: "SUBSEQUENT_PAYMENT",
+        // Per POST /orders/mit's exact schema, contractId lives directly
+        // under order — unlike /orders/hpp, there is no separate
+        // "recurrence" wrapper object for this endpoint.
         contractId: input.contractId,
       },
     }),
   });
+  return { operations: [operation] };
 }
