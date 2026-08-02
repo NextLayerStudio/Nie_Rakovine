@@ -187,11 +187,11 @@ export async function createMitCharge(
         amount: String(input.amountEuroCents),
         currency: "EUR",
         description: input.description,
-        // Per POST /orders/mit's exact schema, contractId lives directly
-        // under order — unlike /orders/hpp, there is no separate
-        // "recurrence" wrapper object for this endpoint.
-        contractId: input.contractId,
       },
+      // Per POST /orders/mit's exact schema, contractId is a sibling of
+      // "order" at the top level of the request body — not nested inside
+      // it, and not wrapped in a "recurrence" object like /orders/hpp.
+      contractId: input.contractId,
     }),
   });
   return { operations: [operation] };
