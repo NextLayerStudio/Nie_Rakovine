@@ -4,8 +4,10 @@ import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
 import { FeedAudioPlayer } from "@/components/FeedAudioPlayer";
 import { LikeButton } from "@/components/LikeButton";
 import { PostImageCarousel } from "@/components/PostImageCarousel";
+import { MembershipRequired } from "@/components/MembershipRequired";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
+import { isPremiumMember } from "@/lib/membership";
 import { resolveVideoPlaybackUrl } from "@/lib/video-blob";
 import {
   buildPostGallery,
@@ -39,6 +41,28 @@ export default async function PostDetailPage({
 
   if (!post) notFound();
 
+  const profileBack = post.profile
+    ? `/home/profiles/${post.profile.handle}`
+    : "/home";
+  const backHref = safeReturnHref(from, profileBack);
+
+  if (!isPremiumMember(user.subscriptionPlan, user.subscriptionStatus)) {
+    return (
+      <>
+        <FeedHeaderWrapper />
+        <div className="px-5 pt-2">
+          <Link href={backHref} className="text-xs font-semibold text-brand-purple">
+            ← Späť
+          </Link>
+        </div>
+        <MembershipRequired
+          message="Prístup do ONKO knižnice — videá, podcasty a články — je súčasťou Mesačného, Ročného alebo Podporujúceho členstva."
+          backHref={backHref}
+        />
+      </>
+    );
+  }
+
   const like = await prisma.articleLike.findUnique({
     where: { userId_postId: { userId: user.id, postId: post.id } },
   });
@@ -46,11 +70,6 @@ export default async function PostDetailPage({
   const gallery = buildPostGallery(post.coverUrl, post.images);
   const isEditorial =
     post.type === "ARTICLE" || post.type === "RECIPE" || post.type === "NEWS";
-
-  const profileBack = post.profile
-    ? `/home/profiles/${post.profile.handle}`
-    : "/home";
-  const backHref = safeReturnHref(from, profileBack);
 
   const playableVideoUrl =
     post.type === "VIDEO" ? await resolveVideoPlaybackUrl(post.videoUrl) : null;

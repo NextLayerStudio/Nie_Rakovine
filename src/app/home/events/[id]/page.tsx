@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
 import { FeedHeaderWrapper } from "@/components/FeedHeaderWrapper";
+import { MembershipRequired } from "@/components/MembershipRequired";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
+import { isPremiumMember } from "@/lib/membership";
 import { EventRegistrationForm } from "./EventRegistrationForm";
 import { EVENT_TIME_ZONE } from "@/lib/timezone";
 
@@ -19,6 +21,15 @@ export default async function EventPage({
     include: { _count: { select: { registrations: true, tickets: true } } },
   });
   if (!event || !event.published) notFound();
+
+  if (!isPremiumMember(user.subscriptionPlan, user.subscriptionStatus)) {
+    return (
+      <>
+        <FeedHeaderWrapper />
+        <MembershipRequired message="Prihlasovanie na podujatia je súčasťou Mesačného, Ročného alebo Podporujúceho členstva." />
+      </>
+    );
+  }
 
   const registrationCount = event._count.registrations + event._count.tickets;
 
