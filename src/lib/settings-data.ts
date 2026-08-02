@@ -29,6 +29,8 @@ export function subscriptionPlanInfo(
       return { label: "Ročné predplatné", active: true };
     case "SUPPORTER":
       return { label: "Podporujúce členstvo", active: true };
+    case "TRIAL":
+      return { label: "Skúšobné obdobie", active: true };
     default:
       return { label: "Bez predplatného", active: false };
   }

@@ -27,6 +27,8 @@ export function subscriptionPlanLabel(plan: string): string {
       return "Ročné";
     case "SUPPORTER":
       return "Podporujúce";
+    case "TRIAL":
+      return "Skúšobné (14 dní)";
     default:
       return "Žiadne";
   }

@@ -4,8 +4,14 @@ import { requireUser } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-export default async function SubscriptionPage() {
+export default async function SubscriptionPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ upgrade?: string }>;
+}) {
   const user = await requireUser();
+  const { upgrade } = await searchParams;
+  const isUpgrade = upgrade === "1";
   return (
     <PhoneShell>
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
@@ -22,7 +28,7 @@ export default async function SubscriptionPage() {
           </p>
         </header>
 
-        <SubscriptionForm currentPlan={user.subscriptionPlan} />
+        <SubscriptionForm currentPlan={user.subscriptionPlan} isUpgrade={isUpgrade} />
       </div>
     </PhoneShell>
   );

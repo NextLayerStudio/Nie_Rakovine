@@ -1,6 +1,11 @@
 import type { SubscriptionPlan, SubscriptionStatus } from "@prisma/client";
 
-const PREMIUM_PLANS: SubscriptionPlan[] = ["MONTHLY", "YEARLY", "SUPPORTER"];
+const PREMIUM_PLANS: SubscriptionPlan[] = [
+  "MONTHLY",
+  "YEARLY",
+  "SUPPORTER",
+  "TRIAL",
+];
 
 /**
  * Free (and NONE/inactive) accounts are official NIE RAKOVINE members but

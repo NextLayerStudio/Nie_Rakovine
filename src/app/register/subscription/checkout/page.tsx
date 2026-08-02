@@ -10,10 +10,11 @@ export const dynamic = "force-dynamic";
 export default async function SubscriptionCheckoutPage({
   searchParams,
 }: {
-  searchParams: Promise<{ plan?: string; amount?: string }>;
+  searchParams: Promise<{ plan?: string; amount?: string; upgrade?: string }>;
 }) {
   await requireUser();
-  const { plan, amount } = await searchParams;
+  const { plan, amount, upgrade } = await searchParams;
+  const isUpgrade = upgrade === "1";
 
   // FREE has no payment step — selectSubscriptionPlanAction activates it
   // directly and never sends anyone here.
@@ -44,7 +45,7 @@ export default async function SubscriptionCheckoutPage({
           </p>
         </header>
 
-        <CheckoutForm plan={selected} initialAmount={initialAmount} />
+        <CheckoutForm plan={selected} initialAmount={initialAmount} isUpgrade={isUpgrade} />
       </div>
     </PhoneShell>
   );
