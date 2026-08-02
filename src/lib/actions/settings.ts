@@ -8,6 +8,7 @@ import { sendTransactionalEmail } from "@/lib/email/client";
 import { renderAccountDeletedEmail } from "@/lib/email/templates/account-deleted";
 import { enforceAuthRateLimit } from "@/lib/rate-limit";
 import { sendPasswordResetLink } from "@/lib/password-reset";
+import { addNewsletterSubscriber } from "@/lib/mailerlite";
 
 export type SettingsActionState = { ok: boolean; message?: string };
 
@@ -121,6 +122,10 @@ export async function updatePreferencesAction(
       notifyEventsNearby,
     },
   });
+
+  if (consentNewsletter) {
+    await addNewsletterSubscriber({ email: user.email, fullName: user.fullName });
+  }
 
   revalidatePath("/menu/nastavenia");
   revalidatePath("/profile");

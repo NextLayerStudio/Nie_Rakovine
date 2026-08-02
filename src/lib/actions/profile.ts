@@ -6,6 +6,7 @@ import { requireUser } from "@/lib/auth";
 import { parseCancerTypes } from "@/lib/cancer-type";
 import { SUBSCRIPTION_PLANS, SUPPORTER_MIN_AMOUNT_EUR } from "@/lib/constants";
 import { redeemDiscountCode, validateDiscountCode } from "@/lib/discount-codes";
+import { addNewsletterSubscriber } from "@/lib/mailerlite";
 import type {
   SubscriptionPlan,
   SubscriptionStatus,
@@ -327,6 +328,10 @@ export async function saveMembershipDetailsAction(
       consentNewsletter,
     },
   });
+
+  if (consentNewsletter) {
+    await addNewsletterSubscriber({ email: user.email, fullName: user.fullName });
+  }
 
   revalidatePath("/profile");
   return { ok: true, redirectTo: "/register/profile/done" };
