@@ -14,8 +14,8 @@ export function TermsContent({ className }: { className?: string }) {
       </p>
       <p className="mb-4">
         Kontakt: e-mail{" "}
-        <a href="mailto:office@nierakovine.sk" className="font-semibold underline underline-offset-2">
-          office@nierakovine.sk
+        <a href="mailto:info@nierakovine.sk" className="font-semibold underline underline-offset-2">
+          info@nierakovine.sk
         </a>
         , telefón{" "}
         <a href="tel:+421911843336" className="font-semibold underline underline-offset-2">
@@ -105,8 +105,8 @@ export function TermsContent({ className }: { className?: string }) {
         v dôsledku nedostatočného zabezpečenia zo strany Používateľa.
         Podozrenie na zneužitie účtu je Používateľ povinný bezodkladne
         oznámiť Prevádzkovateľovi na{" "}
-        <a href="mailto:office@nierakovine.sk" className="font-semibold underline underline-offset-2">
-          office@nierakovine.sk
+        <a href="mailto:info@nierakovine.sk" className="font-semibold underline underline-offset-2">
+          info@nierakovine.sk
         </a>
         .
       </p>
@@ -132,8 +132,8 @@ export function TermsContent({ className }: { className?: string }) {
         vám zostane aktívny do konca už zaplateného obdobia, ďalšie platby sa
         už nebudú strhávať. Ak sa domnievate, že vám bola služba poskytnutá
         vadne alebo vám bola omylom strhnutá platba, kontaktujte nás na{" "}
-        <a href="mailto:office@nierakovine.sk" className="font-semibold underline underline-offset-2">
-          office@nierakovine.sk
+        <a href="mailto:info@nierakovine.sk" className="font-semibold underline underline-offset-2">
+          info@nierakovine.sk
         </a>{" "}
         — vašu reklamáciu vybavíme najneskôr do 30 dní od jej doručenia.
       </p>
@@ -149,8 +149,8 @@ export function TermsContent({ className }: { className?: string }) {
       </p>
       <p className="mb-4">
         <strong>Ako reklamáciu podať:</strong> e-mailom na{" "}
-        <a href="mailto:office@nierakovine.sk" className="font-semibold underline underline-offset-2">
-          office@nierakovine.sk
+        <a href="mailto:info@nierakovine.sk" className="font-semibold underline underline-offset-2">
+          info@nierakovine.sk
         </a>{" "}
         s uvedením mena, e-mailu použitého pri registrácii, dátumu platby a
         popisu problému. Keďže ide o digitálnu službu bez fyzického tovaru,
@@ -254,8 +254,8 @@ export function TermsContent({ className }: { className?: string }) {
         Ak sa Používateľ nemôže po prihlásení na podujatie zúčastniť, je
         povinný svoju neúčasť oznámiť Prevádzkovateľovi, najlepšie čo
         najskôr pred konaním podujatia (napr. e-mailom na{" "}
-        <a href="mailto:office@nierakovine.sk" className="font-semibold underline underline-offset-2">
-          office@nierakovine.sk
+        <a href="mailto:info@nierakovine.sk" className="font-semibold underline underline-offset-2">
+          info@nierakovine.sk
         </a>
         ), aby sa uvoľnené miesto mohlo ponúknuť inému záujemcovi.
       </p>
@@ -307,8 +307,8 @@ export function TermsContent({ className }: { className?: string }) {
         <span className="font-semibold">Zásady ochrany osobných údajov</span>. Máte právo
         na prístup k svojim údajom, ich opravu, vymazanie a prenosnosť
         v zmysle nariadenia GDPR. Žiadosti o výkon práv zasielajte na adresu{" "}
-        <a href="mailto:office@nierakovine.sk" className="font-semibold underline underline-offset-2">
-          office@nierakovine.sk
+        <a href="mailto:info@nierakovine.sk" className="font-semibold underline underline-offset-2">
+          info@nierakovine.sk
         </a>
         .
       </p>

@@ -115,8 +115,8 @@ export function CommunityGuidelinesContent({ className }: { className?: string }
       <p>
         Ak si všimnete obsah alebo správanie, ktoré tieto pravidlá porušuje,
         nahláste to na{" "}
-        <a href="mailto:office@nierakovine.sk" className="font-semibold underline underline-offset-2">
-          office@nierakovine.sk
+        <a href="mailto:info@nierakovine.sk" className="font-semibold underline underline-offset-2">
+          info@nierakovine.sk
         </a>
         , s uvedením čo najpresnejšieho popisu a miesta výskytu (napr. názov
         fóra, príspevku).

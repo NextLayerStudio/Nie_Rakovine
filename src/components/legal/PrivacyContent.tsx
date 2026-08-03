@@ -9,8 +9,8 @@ export function PrivacyContent({ className }: { className?: string }) {
         so sídlom Cukrová 2272/14, 811 01 Bratislava-Staré Mesto, IČO: 50654896
         (ďalej len „Prevádzkovateľ“). Vo veciach ochrany osobných údajov nás
         môžete kontaktovať na{" "}
-        <a href="mailto:office@nierakovine.sk" className="font-semibold underline underline-offset-2">
-          office@nierakovine.sk
+        <a href="mailto:info@nierakovine.sk" className="font-semibold underline underline-offset-2">
+          info@nierakovine.sk
         </a>{" "}
         alebo telefonicky na{" "}
         <a href="tel:+421911843336" className="font-semibold underline underline-offset-2">
@@ -146,8 +146,8 @@ export function PrivacyContent({ className }: { className?: string }) {
       </ul>
       <p className="mb-4">
         Žiadosti o výkon týchto práv zasielajte na{" "}
-        <a href="mailto:office@nierakovine.sk" className="font-semibold underline underline-offset-2">
-          office@nierakovine.sk
+        <a href="mailto:info@nierakovine.sk" className="font-semibold underline underline-offset-2">
+          info@nierakovine.sk
         </a>
         . Vybavíme ich najneskôr do 30 dní. Ak sa domnievate, že spracovanie
         vašich údajov porušuje GDPR, máte tiež právo podať sťažnosť na Úrad

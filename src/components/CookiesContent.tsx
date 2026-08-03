@@ -88,10 +88,10 @@ export function CookiesContent({ className }: { className?: string }) {
         <p className="mt-1">
           Otázky týkajúce sa spracovania údajov a cookies smerujte na{" "}
           <a
-            href="mailto:office@nierakovine.sk"
+            href="mailto:info@nierakovine.sk"
             className="font-semibold text-brand-purple underline"
           >
-            office@nierakovine.sk
+            info@nierakovine.sk
           </a>
           .
         </p>

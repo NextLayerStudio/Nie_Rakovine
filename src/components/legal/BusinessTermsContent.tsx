@@ -23,8 +23,8 @@ export function BusinessTermsContent({ className }: { className?: string }) {
       </p>
       <p className="mb-4">
         Kontakt: e-mail{" "}
-        <a href="mailto:office@nierakovine.sk" className="font-semibold underline underline-offset-2">
-          office@nierakovine.sk
+        <a href="mailto:info@nierakovine.sk" className="font-semibold underline underline-offset-2">
+          info@nierakovine.sk
         </a>
         , telefón{" "}
         <a href="tel:+421911843336" className="font-semibold underline underline-offset-2">
@@ -126,8 +126,8 @@ export function BusinessTermsContent({ className }: { className?: string }) {
       </p>
       <p className="mb-4">
         <strong>Ako reklamáciu podať:</strong> e-mailom na{" "}
-        <a href="mailto:office@nierakovine.sk" className="font-semibold underline underline-offset-2">
-          office@nierakovine.sk
+        <a href="mailto:info@nierakovine.sk" className="font-semibold underline underline-offset-2">
+          info@nierakovine.sk
         </a>{" "}
         s uvedením mena, e-mailu použitého pri registrácii, dátumu platby a
         popisu problému. Keďže ide o digitálnu službu bez fyzického tovaru,
