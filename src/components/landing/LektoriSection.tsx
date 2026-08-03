@@ -8,9 +8,9 @@ const LEKTORI = [
     img: "/images/lektori/malejcikova.jpg",
     imgPosition: "object-top",
     meno: "MUDr. Miroslava Malejčíková",
-    titul: "Národný onkologický ústav",
+    titul: "klinická onkologička v prsníkovej ambulancii",
     bio: "Vyhľadávaná klinická onkologička v prsníkovej ambulancii s mimoriadne empatickým a trpezlivým prístupom k pacientom. Vo svojej praxi kladie dôraz na hlboký rešpekt k človeku, vďaka čomu pacienti pod jej starostlivosťou nachádzajú nielen špičkovú odbornú liečbu, ale aj ľudskú oporu a dôstojné sprevádzanie počas celej liečby.",
-    accent: "#6F2380",
+    accent: "#FDA4C7",
   },
   {
     img: "/images/lektori/micuchova.jpg",
