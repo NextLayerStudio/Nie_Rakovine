@@ -19,7 +19,6 @@ const INITIAL: ActionState = { ok: false };
 const DISCOUNT_INITIAL: DiscountPreviewState = { ok: false };
 
 const PAYMENT_LOGOS = [
-  { src: "/images/platby/gopay.png", alt: "GoPay", w: 100, h: 35 },
   { src: "/images/platby/visa.png", alt: "VISA", w: 67, h: 23 },
   { src: "/images/platby/verified-by-visa.png", alt: "Verified by VISA", w: 67, h: 30 },
   { src: "/images/platby/mastercard.png", alt: "Mastercard", w: 67, h: 43 },
@@ -259,7 +258,7 @@ export function CheckoutForm({
                 {paymentMethod === "CARD" ? (
                   <>
                     Údaje vašej platobnej karty spracúva výhradne platobná brána
-                    GoPay podľa bezpečnostného štandardu PCI DSS Level 1. NIE
+                    Nexi podľa bezpečnostného štandardu PCI DSS Level 1. NIE
                     RAKOVINE, o. z. k nim nemá prístup a neukladá ich.
                   </>
                 ) : (
@@ -278,7 +277,7 @@ export function CheckoutForm({
             {paymentMethod === "CARD" ? (
               <>
                 Údaje vašej platobnej karty spracúva výhradne platobná brána
-                GoPay podľa bezpečnostného štandardu PCI DSS Level 1. NIE
+                Nexi podľa bezpečnostného štandardu PCI DSS Level 1. NIE
                 RAKOVINE, o. z. k nim nemá prístup a neukladá ich.
               </>
             ) : (
@@ -317,12 +316,12 @@ export function CheckoutForm({
             ) : plan.customAmount ? (
               <>
                 Súhlasím so zaplatením uvedenej sumy a s uložením platobných
-                údajov na strane platobnej brány GoPay.
+                údajov na strane platobnej brány Nexi.
               </>
             ) : (
               <>
                 Súhlasím so založením a uvedenými parametrami opakovanej platby a
-                s uložením platobných údajov na strane platobnej brány GoPay.
+                s uložením platobných údajov na strane platobnej brány Nexi.
               </>
             )}{" "}
             Prečítal/a som si{" "}
@@ -345,8 +344,8 @@ export function CheckoutForm({
           {paymentMethod === "BANK_TRANSFER"
             ? "Pokračovať na platobné údaje"
             : plan.customAmount
-              ? "Podporiť cez GoPay"
-              : "Zaplatiť cez GoPay"}
+              ? "Podporiť cez Nexi"
+              : "Zaplatiť cez Nexi"}
         </SubmitButton>
       </div>
     </form>

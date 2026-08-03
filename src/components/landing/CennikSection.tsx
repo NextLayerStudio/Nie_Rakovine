@@ -9,7 +9,6 @@ import { ExpandableText } from "@/components/landing/ExpandableText";
 import { SupporterCard } from "@/components/landing/SupporterCard";
 
 const PAYMENT_LOGOS = [
-  { src: "/images/platby/gopay.png", alt: "GoPay", w: 100, h: 35 },
   { src: "/images/platby/visa.png", alt: "VISA", w: 67, h: 23 },
   { src: "/images/platby/verified-by-visa.png", alt: "Verified by VISA", w: 67, h: 30 },
   { src: "/images/platby/mastercard.png", alt: "Mastercard", w: 67, h: 43 },
@@ -28,7 +27,7 @@ const BENEFITY = [
 ];
 
 const CENNIK_INFO = [
-  { icon: CreditCard, title: "Bezpečná online platba", desc: "Platba prebieha cez platobnú bránu GoPay." },
+  { icon: CreditCard, title: "Bezpečná online platba", desc: "Platba prebieha cez platobnú bránu Nexi." },
   { icon: RefreshCw, title: "Flexibilné členstvo", desc: "Členstvo môžete kedykoľvek zrušiť bez záväzkov a ďalších podmienok." },
   { icon: ShieldCheck, title: "Bez skrytých poplatkov", desc: "Cena členstva je jasná a bez dodatočných nákladov." },
 ];
@@ -39,7 +38,7 @@ const REINVESTICIA_TEXT =
 const PLATBA_FAQ = [
   {
     q: "Ako prebieha platba za členstvo?",
-    a: "Free členstvo je úplne zadarmo. Platba za Mesačné a Ročné členstvo prebieha online cez platobnú bránu GoPay a automaticky sa obnovuje (mesačne, resp. ročne). Podporujúce členstvo je jednorazová platba vo vami zvolenej výške (min. 50 €), ktorá sa neobnovuje. Platbu je možné kedykoľvek zrušiť v nastaveniach vášho účtu. Ak uprednostňujete úhradu formou trvalého príkazu, kontaktujte nás, prosím, na info@onkoklub.sk.",
+    a: "Free členstvo je úplne zadarmo. Platba za Mesačné a Ročné členstvo prebieha online cez platobnú bránu Nexi a automaticky sa obnovuje (mesačne, resp. ročne). Podporujúce členstvo je jednorazová platba vo vami zvolenej výške (min. 50 €), ktorá sa neobnovuje. Platbu je možné kedykoľvek zrušiť v nastaveniach vášho účtu. Ak uprednostňujete úhradu formou trvalého príkazu, kontaktujte nás, prosím, na info@onkoklub.sk.",
   },
   {
     q: "Je možné členstvo kedykoľvek zrušiť?",

@@ -75,10 +75,10 @@ export async function selectSubscriptionPlanAction(
 
 // --------------------------------------------------------------------
 // Subscription — step 2: confirm the recurring-payment consent and
-// activate. GoPay is not wired up yet (no merchant contract/credentials),
+// activate. Nexi is not wired up yet (no merchant contract/credentials),
 // so this still just activates the membership directly — but the consent
 // checkbox + disclosed parameters here are the real, permanent UI, ready
-// for the actual charge call once GoPay is connected.
+// for the actual charge call once Nexi is connected.
 //
 // SUPPORTER is a one-time payment (custom amount, min. SUPPORTER_MIN_AMOUNT_EUR)
 // that grants a year of access and skips the rest of the profile-building
