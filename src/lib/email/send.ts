@@ -66,6 +66,7 @@ export function queueEventRegistrationEmail(input: {
   endsAt: Date | null;
   location: string | null;
   eventId: string;
+  registrationId: string;
 }): void {
   sendTransactionalEmailAsync({
     to: input.email,

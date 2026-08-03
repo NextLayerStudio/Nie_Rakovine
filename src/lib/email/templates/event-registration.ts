@@ -15,10 +15,12 @@ export function renderEventRegistrationEmail(input: {
   endsAt: Date | null;
   location: string | null;
   eventId: string;
+  registrationId: string;
 }): string {
   const name = firstName(input.fullName);
   const appUrl = getAppUrlFromEnv();
   const eventUrl = `${appUrl}/home/events/${input.eventId}`;
+  const cancelUrl = `${appUrl}/podujatia/registracia/${input.registrationId}/odhlasit`;
 
   const dateLabel = formatSkDate(input.startsAt);
   const timeLabel = input.endsAt
@@ -52,7 +54,7 @@ export function renderEventRegistrationEmail(input: {
     heroSubtitle: "Vaša registrácia na podujatie bola úspešne prijatá.",
     bodyHtml,
     cta: { label: "Zobraziť podujatie", href: eventUrl, variant: "pink" },
-    secondaryLink: { label: "Otvoriť kalendár →", href: `${appUrl}/home/calendar` },
+    secondaryLink: { label: "Nemôžem sa zúčastniť — odhlásiť sa", href: cancelUrl },
   });
 }
 
