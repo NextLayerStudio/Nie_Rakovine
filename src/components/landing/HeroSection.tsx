@@ -58,13 +58,13 @@ export function HeroSection() {
       </div>
 
       {/* Zvyšok textu — pod videom, na normálnom pozadí stránky */}
-      <div className="max-w-6xl mx-auto px-5 md:px-8 mt-6 md:mt-16 md:flex md:items-center md:gap-10">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 mt-6 md:mt-16 md:flex md:items-center md:gap-4">
         <div className="md:flex-1">
-          <p className="text-[#6F2380] text-lg md:text-2xl font-black leading-snug max-w-sm md:max-w-2xl mb-3">
+          <p className="text-[#6F2380] text-lg md:text-2xl font-black leading-snug max-w-sm md:max-w-xl mb-3">
             Overený obsah, odborné videá, diskusné fóra, podcasty, praktické
             rady, workshopy aj výhody pre členov.
           </p>
-          <p className="text-[#6F2380]/70 text-base md:text-lg leading-relaxed max-w-sm md:max-w-2xl">
+          <p className="text-[#6F2380]/70 text-base md:text-lg leading-relaxed max-w-sm md:max-w-xl">
             ONKO KLUB stojí na tíme desiatok
             odborníkov, lektorov a pacientskych poradcov s osobnou skúsenosťou s
             rakovinou. Jeho skutočnú hodnotu však tvoria samotní členovia – ľudia,
@@ -72,7 +72,7 @@ export function HeroSection() {
             ktoré si v ťažkých chvíľach nechávame iba pre seba.
           </p>
         </div>
-        <div className="hidden md:block shrink-0 w-64">
+        <div className="hidden md:block shrink-0 w-96">
           <div
             className="relative w-full overflow-hidden rounded-[1.5rem] shadow-card"
             style={{ aspectRatio: "1200 / 801" }}

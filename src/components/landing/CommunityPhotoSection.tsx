@@ -60,25 +60,6 @@ export function CommunityPhotoSection() {
           </div>
         </motion.div>
       </div>
-
-      {/* Desktop: jednoduché centrované foto, bez pootočenia */}
-      <div className="hidden md:block max-w-6xl mx-auto px-5 md:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.7, ease }}
-          className="relative mx-auto max-w-2xl overflow-hidden rounded-[2rem] shadow-card"
-          style={{ aspectRatio: "1200 / 801" }}
-        >
-          <Image
-            src="/images/komunita-hrdlicka.jpg"
-            alt="Komunita ONKO KLUB"
-            fill
-            className="object-cover"
-          />
-        </motion.div>
-      </div>
     </section>
   );
 }
