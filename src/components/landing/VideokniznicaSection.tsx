@@ -3,14 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Clock, ChevronRight, X } from "lucide-react";
+import { Play, ChevronRight, X } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const VIDEOS = [
-  { src: "/videos/adriana.mp4",  title: "Príbeh pacientky",                                        lektor: "Adriana",                  dur: "20 min", accent: "#FDA4C7" },
-  { src: "/videos/petra.mp4",    title: "Rozhovor s onkologičkou",                                 lektor: "MUDr. Miroslava Malejčíková", dur: "35 min", accent: "#6F2380" },
-  { src: "/videos/mirka.mp4",    title: "Odborné rady od profesionálov",                           lektor: "Petra Hlaváčová",           dur: "30 min", accent: "#FDA4C7" },
-  { src: "/videos/c0420.mp4",    title: "Mindfulness: ako zvládnuť úzkosť pri diagnóze",           lektor: "Výživa & nutričná poradňa", dur: "45 min", accent: "#6F2380" },
+  { src: "/videos/adriana.mp4",  title: "Príbeh pacientky",                                        lektor: "Adriana",                  accent: "#FDA4C7" },
+  { src: "/videos/petra.mp4",    title: "Rozhovor s onkologičkou",                                 lektor: "MUDr. Miroslava Malejčíková", accent: "#6F2380" },
+  { src: "/videos/mirka.mp4",    title: "Odborné rady od profesionálov",                           lektor: "Petra Hlaváčová",           accent: "#FDA4C7" },
+  { src: "/videos/c0420.mp4",    title: "Mindfulness: ako zvládnuť úzkosť pri diagnóze",           lektor: "Výživa & nutričná poradňa", accent: "#6F2380" },
 ];
 
 export function VideokniznicaSection() {
@@ -80,10 +80,6 @@ export function VideokniznicaSection() {
                     >
                       <Play size={18} className="text-white ml-0.5" fill="white" />
                     </div>
-                  </div>
-                  <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 rounded-full px-2 py-1">
-                    <Clock size={10} className="text-white/80" />
-                    <span className="text-white text-[10px] font-semibold">{v.dur}</span>
                   </div>
                   <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <div className="bg-black/50 rounded-full px-2 py-1 flex items-center gap-1">
