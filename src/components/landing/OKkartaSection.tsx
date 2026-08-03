@@ -44,7 +44,7 @@ const PARTNERS: { name: string; logo: string }[] = [
 export function OKkartaSection() {
   return (
     <section className="pb-14"><div className="max-w-6xl mx-auto px-5 md:px-8">
-      <div className="mb-14 md:flex md:items-center md:gap-12">
+      <div className="mb-14 md:flex md:items-center md:justify-between md:gap-8">
         {/* Nadpis */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -76,7 +76,7 @@ export function OKkartaSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.6 }}
-          className="md:max-w-sm md:shrink-0"
+          className="md:max-w-xl md:shrink-0"
         >
           <OkKartaCard />
         </motion.div>
