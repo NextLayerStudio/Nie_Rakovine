@@ -72,10 +72,13 @@ export function HeroSection() {
             ktoré si v ťažkých chvíľach nechávame iba pre seba.
           </p>
         </div>
-        <div className="hidden md:block shrink-0">
-          <span className="relative inline-block h-32 w-32 rotate-[-14deg]">
-            <Image src="/images/srdce-komunita.png" alt="srdce" fill className="object-contain" />
-          </span>
+        <div className="hidden md:block shrink-0 w-64">
+          <div
+            className="relative w-full overflow-hidden rounded-[1.5rem] shadow-card"
+            style={{ aspectRatio: "1200 / 801" }}
+          >
+            <Image src="/images/komunita-hrdlicka.jpg" alt="Komunita ONKO KLUB" fill className="object-cover" />
+          </div>
         </div>
       </div>
     </section>
