@@ -7,7 +7,7 @@ const NAV = [
   { label: "Kalendár aktivít",     href: "/akcie" },
   { label: "Zľavy a benefity",     href: "/sponzori" },
   { label: "Cenník",               href: "/cennik" },
-  { label: "Prihlásiť sa",         href: "/login" },
+  { label: "Prihlásiť sa",         href: "/pripravujeme" },
   { label: "Registrácia",          href: "/pripravujeme" },
 ];
 
