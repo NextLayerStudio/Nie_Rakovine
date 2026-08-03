@@ -71,7 +71,7 @@ const FEATURES: {
   {
     icon: MessageSquare,
     accent: "#6F2380",
-    slug: "onkorumky",
+    slug: null,
     title: "Diskusné fóra",
     headline: "Podeľte sa o to, čím prechádzate",
     desc: "Zdieľajte svoje skúsenosti, otázky, obavy či každodenné výzvy s ľuďmi, ktorí vedia, čo prežívate. Môžete prispievať pod vlastným menom alebo anonymne.",
