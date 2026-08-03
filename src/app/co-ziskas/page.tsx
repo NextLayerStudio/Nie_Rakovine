@@ -212,19 +212,33 @@ export default function CoZiskasPage() {
 
                   {/* Obrázky/videá */}
                   <div className={isEven ? "md:order-1" : "md:order-2"}>
-                  {f.introVideo && (
-                    <div className="relative w-full aspect-video overflow-hidden rounded-2xl mb-4">
-                      <video
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        className="absolute inset-0 h-full w-full object-cover"
-                      >
-                        <source src={f.introVideo} type="video/mp4" />
-                      </video>
+                  {f.slug === "prednasky-podcasty" ? (
+                    <div className="flex flex-col gap-3 mx-auto max-w-[380px] md:max-w-[420px]">
+                      {/* Fotka lektorky navrchu */}
+                      <div className="relative w-full aspect-square overflow-hidden rounded-2xl">
+                        <Image
+                          src={f.imgs[1].src!}
+                          alt={f.imgs[1].label}
+                          fill
+                          className="object-cover"
+                          style={f.imgs[1].position ? { objectPosition: f.imgs[1].position } : undefined}
+                        />
+                      </div>
+                      {/* Dve širokouhlé videá vedľa seba */}
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="relative w-full aspect-video overflow-hidden rounded-2xl">
+                          <video autoPlay muted loop playsInline className="absolute inset-0 h-full w-full object-cover">
+                            <source src={f.introVideo} type="video/mp4" />
+                          </video>
+                        </div>
+                        <div className="relative w-full aspect-video overflow-hidden rounded-2xl">
+                          <video autoPlay muted loop playsInline className="absolute inset-0 h-full w-full object-cover">
+                            <source src={f.imgs[0].src} type="video/mp4" />
+                          </video>
+                        </div>
+                      </div>
                     </div>
-                  )}
+                  ) : (
                   <div className="flex flex-col gap-3">
                     {f.skipMain ? (
                       <div className={`grid grid-cols-2 ${f.secondaryGap ?? "gap-3"}`}>
@@ -358,6 +372,7 @@ export default function CoZiskasPage() {
                       </>
                     )}
                   </div>
+                  )}
                   </div>
                 </div>
               );
