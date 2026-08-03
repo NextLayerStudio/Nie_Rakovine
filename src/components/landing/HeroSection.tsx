@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -57,18 +58,25 @@ export function HeroSection() {
       </div>
 
       {/* Zvyšok textu — pod videom, na normálnom pozadí stránky */}
-      <div className="max-w-6xl mx-auto px-5 md:px-8 mt-6">
-        <p className="text-[#6F2380] text-lg md:text-2xl font-black leading-snug max-w-sm md:max-w-2xl mb-3">
-          Overený obsah, odborné videá, diskusné fóra, podcasty, praktické
-          rady, workshopy aj výhody pre členov.
-        </p>
-        <p className="text-[#6F2380]/70 text-base md:text-lg leading-relaxed max-w-sm md:max-w-2xl">
-          ONKO KLUB stojí na tíme desiatok
-          odborníkov, lektorov a pacientskych poradcov s osobnou skúsenosťou s
-          rakovinou. Jeho skutočnú hodnotu však tvoria samotní členovia – ľudia,
-          ktorí si prechádzajú podobnou cestou a rozumejú aj tichým obavám,
-          ktoré si v ťažkých chvíľach nechávame iba pre seba.
-        </p>
+      <div className="max-w-6xl mx-auto px-5 md:px-8 mt-6 md:mt-16 md:flex md:items-center md:gap-10">
+        <div className="md:flex-1">
+          <p className="text-[#6F2380] text-lg md:text-2xl font-black leading-snug max-w-sm md:max-w-2xl mb-3">
+            Overený obsah, odborné videá, diskusné fóra, podcasty, praktické
+            rady, workshopy aj výhody pre členov.
+          </p>
+          <p className="text-[#6F2380]/70 text-base md:text-lg leading-relaxed max-w-sm md:max-w-2xl">
+            ONKO KLUB stojí na tíme desiatok
+            odborníkov, lektorov a pacientskych poradcov s osobnou skúsenosťou s
+            rakovinou. Jeho skutočnú hodnotu však tvoria samotní členovia – ľudia,
+            ktorí si prechádzajú podobnou cestou a rozumejú aj tichým obavám,
+            ktoré si v ťažkých chvíľach nechávame iba pre seba.
+          </p>
+        </div>
+        <div className="hidden md:block shrink-0">
+          <span className="relative inline-block h-32 w-32 rotate-[-14deg]">
+            <Image src="/images/srdce-komunita.png" alt="srdce" fill className="object-contain" />
+          </span>
+        </div>
       </div>
     </section>
   );
