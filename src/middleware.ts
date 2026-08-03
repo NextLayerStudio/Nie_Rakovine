@@ -6,53 +6,15 @@ import { jwtVerify } from "jose";
 // (see lib/auth.ts requireAdmin / requireUser).
 
 const COOKIE_NAME = "onko_session";
-const GATE_COOKIE_NAME = "onko_site_gate";
 
 const PROTECTED_PREFIXES = ["/home", "/menu", "/profile", "/admin"];
-
-// Temporary password gate on the public marketing site until launch —
-// remove this whole block (and /app/gate, /lib/actions/gate.ts) once
-// SITE_GATE_LAUNCH has passed and the gate is no longer needed at all.
-const SITE_GATE_LAUNCH = new Date("2026-09-01T00:00:00Z");
-
-// Paths that must always work regardless of the gate: the members app
-// itself, auth flows, the gate page, and API routes (webhooks/cron must
-// never be blocked by a password prompt).
-const GATE_BYPASS_PREFIXES = [
-  "/home",
-  "/menu",
-  "/profile",
-  "/admin",
-  "/login",
-  "/register",
-  "/welcome",
-  "/reset-password",
-  "/gate",
-  "/api",
-];
 
 function isProtected(pathname: string): boolean {
   return PROTECTED_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }
 
-function isGateBypassed(pathname: string): boolean {
-  return GATE_BYPASS_PREFIXES.some((prefix) => pathname.startsWith(prefix));
-}
-
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-
-  if (Date.now() < SITE_GATE_LAUNCH.getTime() && !isGateBypassed(pathname)) {
-    const unlocked = req.cookies.get(GATE_COOKIE_NAME)?.value === "1";
-    if (!unlocked) {
-      const gateUrl = req.nextUrl.clone();
-      const next = pathname + req.nextUrl.search;
-      gateUrl.pathname = "/gate";
-      gateUrl.search = next && next !== "/" ? `?next=${encodeURIComponent(next)}` : "";
-      return NextResponse.redirect(gateUrl);
-    }
-  }
-
   const token = req.cookies.get(COOKIE_NAME)?.value;
 
   // Authenticated users hitting the root go straight to the app (unless ?preview=1)
