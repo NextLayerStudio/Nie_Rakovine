@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { enforceAuthRateLimit } from "@/lib/rate-limit";
 
-export const GATE_COOKIE_NAME = "onko_site_gate";
+const GATE_COOKIE_NAME = "onko_site_gate";
 const GATE_COOKIE_MAX_AGE = 60 * 60 * 24 * 60; // 60 dní
 
 export type GateActionState = { ok: boolean; message?: string };
