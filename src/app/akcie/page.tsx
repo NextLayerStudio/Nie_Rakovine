@@ -11,7 +11,7 @@ import { PublicEventsExplorer } from "@/components/landing/PublicEventsExplorer"
 
 export const dynamic = "force-dynamic";
 
-const CITIES = ["Bratislava", "Nitra", "Košice", "Poprad", "Ďalšie mestá pribudnú"];
+const CITIES = ["Bratislava", "Nitra", "Košice", "Poprad", "a ďalšie"];
 
 const EVENT_TYPES: {
   icon: typeof Leaf;
