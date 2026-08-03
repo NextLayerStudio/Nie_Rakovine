@@ -19,8 +19,8 @@ export default function LandingPage() {
     <main className="min-h-screen bg-[#FFF3F9]">
       <Navbar />
       <HeroSection />
-      <CommunityPhotoSection />
       <NieSiVTomSamSection />
+      <CommunityPhotoSection />
       <FeatureSection />
       <VideokniznicaSection />
       <EventsSection />
