@@ -164,21 +164,54 @@ export default function CoZiskasPage() {
       {/* Features */}
       <section className="pb-10">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
-          <div className="md:grid md:grid-cols-2 md:gap-x-14 md:gap-y-16">
+          <div className="flex flex-col gap-14 md:gap-20">
             {FEATURES.map((f, fi) => {
               const Icon = f.icon;
               const isEven = fi % 2 === 0;
               return (
-                <div key={f.title} className="pb-14 md:pb-0 border-b border-[#FDA4C7]/15 md:border-0 last:border-0">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                      style={{ backgroundColor: f.accent }}
-                    >
-                      <Icon size={18} className="text-white" strokeWidth={2} />
+                <div key={f.title} className="pb-14 md:pb-0 border-b border-[#FDA4C7]/15 md:border-0 last:border-0 md:grid md:grid-cols-2 md:gap-14 md:items-center">
+                  {/* Text */}
+                  <div className={isEven ? "md:order-2" : "md:order-1"}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div
+                        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                        style={{ backgroundColor: f.accent }}
+                      >
+                        <Icon size={18} className="text-white" strokeWidth={2} />
+                      </div>
+                      <p className="text-[#6F2380]/50 text-xs font-bold uppercase tracking-wider">{f.title}</p>
                     </div>
-                    <p className="text-[#6F2380]/50 text-xs font-bold uppercase tracking-wider">{f.title}</p>
+                    <h2 className="text-[1.8rem] font-black text-[#6F2380] leading-[1.15] mb-3">{f.headline}</h2>
+                    <div className="mb-6">
+                      <ExpandableText maxHeight={80} fadeColor="#FFF3F9">
+                        <p className="text-[#6F2380]/65 text-[15px] leading-relaxed">{f.desc}</p>
+                      </ExpandableText>
+                    </div>
+
+                    <div className="flex flex-col gap-2 mb-5">
+                      {f.detailItems.map((item) => (
+                        <div key={item} className="flex items-center gap-3">
+                          <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: f.accent + "25" }}>
+                            <Check size={11} strokeWidth={3} style={{ color: f.accent }} />
+                          </div>
+                          <span className="text-[#6F2380]/70 text-[14px]">{item}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {f.slug && (
+                      <Link
+                        href={`/${f.slug}`}
+                        className="flex items-center justify-between bg-white rounded-2xl px-5 py-4 border border-[#FDA4C7]/20 active:scale-[0.98] transition-transform md:inline-flex md:gap-3 md:rounded-full md:border-2 md:border-[#FDA4C7] md:px-6 md:py-3"
+                      >
+                        <span className="text-[#6F2380] font-bold text-sm">Zistiť viac o {f.title}</span>
+                        <ChevronRight size={18} className="text-[#FDA4C7]" />
+                      </Link>
+                    )}
                   </div>
+
+                  {/* Obrázky/videá */}
+                  <div className={isEven ? "md:order-1" : "md:order-2"}>
                   {f.introVideo && (
                     <div className="relative w-full aspect-video overflow-hidden rounded-2xl mb-4">
                       <video
@@ -192,15 +225,7 @@ export default function CoZiskasPage() {
                       </video>
                     </div>
                   )}
-                  <h2 className="text-[1.8rem] font-black text-[#6F2380] leading-[1.15] mb-3">{f.headline}</h2>
-                  <div className="mb-6">
-                    <ExpandableText maxHeight={80} fadeColor="#FFF3F9">
-                      <p className="text-[#6F2380]/65 text-[15px] leading-relaxed">{f.desc}</p>
-                    </ExpandableText>
-                  </div>
-
-                  {/* Screenshoty */}
-                  <div className="flex flex-col gap-3 mb-6">
+                  <div className="flex flex-col gap-3">
                     {f.skipMain ? (
                       <div className={`grid grid-cols-2 ${f.secondaryGap ?? "gap-3"}`}>
                         {f.imgs.map((img, i) => (
@@ -333,27 +358,7 @@ export default function CoZiskasPage() {
                       </>
                     )}
                   </div>
-
-                  <div className="flex flex-col gap-2 mb-5">
-                    {f.detailItems.map((item) => (
-                      <div key={item} className="flex items-center gap-3">
-                        <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: f.accent + "25" }}>
-                          <Check size={11} strokeWidth={3} style={{ color: f.accent }} />
-                        </div>
-                        <span className="text-[#6F2380]/70 text-[14px]">{item}</span>
-                      </div>
-                    ))}
                   </div>
-
-                  {f.slug && (
-                    <Link
-                      href={`/${f.slug}`}
-                      className="flex items-center justify-between bg-white rounded-2xl px-5 py-4 border border-[#FDA4C7]/20 active:scale-[0.98] transition-transform md:inline-flex md:gap-3 md:rounded-full md:border-2 md:border-[#FDA4C7] md:px-6 md:py-3"
-                    >
-                      <span className="text-[#6F2380] font-bold text-sm">Zistiť viac o {f.title}</span>
-                      <ChevronRight size={18} className="text-[#FDA4C7]" />
-                    </Link>
-                  )}
                 </div>
               );
             })}
