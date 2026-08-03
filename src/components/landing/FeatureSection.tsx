@@ -11,7 +11,7 @@ const FEATURES = [
     id: "library" as const,
     title: "ONKO knižnica",
     desc: "Videá, články a recepty od overených odborníkov, zoradené podľa toho, čo práve riešite.",
-    href: "/kontent-kniznica",
+    href: "/co-ziskas",
   },
   {
     id: "podcasts" as const,
@@ -29,7 +29,7 @@ const FEATURES = [
     id: "community" as const,
     title: "Diskusné fórum",
     desc: "Desiatky diskusných fór prepájajú ľudí s podobnou skúsenosťou a vytvárajú priestor pre zdieľanie, porozumenie a vzájomnú podporu aj bez dlhého vysvetľovania.",
-    href: "/onkorumky",
+    href: "/co-ziskas",
   },
 ];
 
