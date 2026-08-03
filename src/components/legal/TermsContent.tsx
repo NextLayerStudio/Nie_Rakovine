@@ -1,6 +1,3 @@
-// Shared between the registration TermsModal and the public /podmienky page —
-// single source of truth so the two never drift apart.
-
 export function TermsContent({ className }: { className?: string }) {
   return (
     <div className={className}>

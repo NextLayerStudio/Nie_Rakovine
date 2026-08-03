@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useActionState } from "react";
 import { registerAction, type ActionState } from "@/lib/actions/auth";
 import { FormError, SubmitButton } from "@/components/FormError";
-import { TermsModal } from "@/components/TermsModal";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useFormRedirect } from "@/hooks/useFormRedirect";
 import {
@@ -18,7 +18,6 @@ const INITIAL: ActionState = { ok: false };
 export function RegisterForm() {
   const [state, formAction] = useActionState(registerAction, INITIAL);
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const [showTerms, setShowTerms] = useState(false);
   useFormRedirect(state);
 
   // Remember a plan (and Supporter amount) chosen on a public marketing
@@ -132,11 +131,16 @@ export function RegisterForm() {
 
         {/* Terms consent */}
         <div className="pt-1">
-          <button
-            type="button"
-            onClick={() => setShowTerms(true)}
-            className="flex w-full cursor-pointer items-start gap-3 py-1.5 text-left"
-          >
+          <label className="flex w-full cursor-pointer items-start gap-3 py-1.5 text-left">
+            <input
+              type="checkbox"
+              name="terms"
+              value="on"
+              checked={termsAccepted}
+              onChange={(e) => setTermsAccepted(e.target.checked)}
+              required
+              className="sr-only"
+            />
             <span
               className={cn(
                 "mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-md transition",
@@ -159,23 +163,16 @@ export function RegisterForm() {
             </span>
             <span className="text-sm leading-snug text-brand-purple">
               Súhlasím s{" "}
-              <span className="font-semibold underline underline-offset-2">
+              <Link
+                href="/podmienky"
+                target="_blank"
+                onClick={(e) => e.stopPropagation()}
+                className="font-semibold underline underline-offset-2"
+              >
                 Podmienkami používania
-              </span>
+              </Link>
             </span>
-          </button>
-          {/* hidden required checkbox drives native form validation */}
-          <input
-            type="checkbox"
-            name="terms"
-            value="on"
-            checked={termsAccepted}
-            onChange={() => {}}
-            required
-            className="sr-only"
-            tabIndex={-1}
-            aria-hidden="true"
-          />
+          </label>
         </div>
 
         <FormError message={state.message} />
@@ -189,16 +186,6 @@ export function RegisterForm() {
           </SubmitButton>
         </div>
       </form>
-
-      {showTerms && (
-        <TermsModal
-          onAccept={() => {
-            setTermsAccepted(true);
-            setShowTerms(false);
-          }}
-          onClose={() => setShowTerms(false)}
-        />
-      )}
     </>
   );
 }
