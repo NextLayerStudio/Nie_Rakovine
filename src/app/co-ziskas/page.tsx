@@ -29,7 +29,7 @@ const FEATURES: {
   {
     icon: Play,
     accent: "#FDA4C7",
-    slug: "kontent-kniznica",
+    slug: "register",
     title: "ONKO knižnica",
     headline: "Desiatky videí vždy poruke",
     desc: "Joga, mindfulness, jemné pohybové a dychové cvičenia, odborné diskusie o liečbe, výžive aj psychike. ONKO KLUB prináša exkluzívnu ONKO knižnicu vytvorenú špeciálne pre onkologických pacientov a ich blízkych. Sledujte kedykoľvek, kdekoľvek a vo vlastnom tempe.",
