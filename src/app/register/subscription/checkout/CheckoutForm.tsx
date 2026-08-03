@@ -252,7 +252,7 @@ export function CheckoutForm({
                 <Row label="Dátum strhávania" value={perioda} />
                 <Row
                   label="Zmena alebo zrušenie"
-                  value="Kedykoľvek v nastaveniach účtu, alebo e-mailom na office@onkoklub.sk"
+                  value="Kedykoľvek v nastaveniach účtu, alebo e-mailom na info@onkoklub.sk"
                 />
               </dl>
               <p className="mt-3 text-xs leading-relaxed text-brand-purple/60">
