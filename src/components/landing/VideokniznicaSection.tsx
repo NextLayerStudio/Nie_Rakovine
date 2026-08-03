@@ -87,7 +87,7 @@ export function VideokniznicaSection() {
                       src={v.photo}
                       alt={v.lektor}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
                     />
                   )}
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
@@ -173,7 +173,7 @@ export function VideokniznicaSection() {
                     src={activeItem.photo}
                     alt={activeItem.lektor}
                     fill
-                    className="object-cover"
+                    className="object-cover object-top"
                   />
                   <audio
                     key={activeItem.src}
