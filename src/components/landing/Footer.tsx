@@ -8,7 +8,7 @@ const NAV = [
   { label: "Zľavy a benefity",     href: "/sponzori" },
   { label: "Cenník",               href: "/cennik" },
   { label: "Prihlásiť sa",         href: "/login" },
-  { label: "Registrácia",          href: "/register" },
+  { label: "Registrácia",          href: "/pripravujeme" },
 ];
 
 export function Footer() {
@@ -63,7 +63,7 @@ export function Footer() {
             <a href="https://nierakovine.sk" target="_blank" rel="noopener noreferrer" className="text-white/50 text-sm block mb-6">
               nierakovine.sk
             </a>
-            <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white text-sm font-black px-6 py-3">
+            <Link href="/pripravujeme" className="inline-block rounded-full bg-[#FDA4C7] text-white text-sm font-black px-6 py-3">
               Registrácia
             </Link>
           </div>

@@ -209,7 +209,7 @@ export function NavbarClient({ isLoggedIn }: { isLoggedIn: boolean }) {
             </Link>
           ) : (
             <>
-              <Link href="/register" onClick={close} className="block text-center rounded-full bg-white text-[#FDA4C7] text-sm font-black py-3.5">
+              <Link href="/pripravujeme" onClick={close} className="block text-center rounded-full bg-white text-[#FDA4C7] text-sm font-black py-3.5">
                 Chcem sa zapojiť
               </Link>
               <Link href="/login" onClick={close} className="block text-center rounded-full bg-white/15 text-white text-sm font-semibold py-3">

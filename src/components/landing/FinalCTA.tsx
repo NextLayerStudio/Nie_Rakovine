@@ -35,7 +35,7 @@ export function FinalCTA() {
             Registrácia je jednoduchá a nezáväzná. Prístup získate okamžite.
           </p>
           <Link
-            href="/register"
+            href="/pripravujeme"
             className="block w-full rounded-full bg-[#FDA4C7] text-white font-black text-xl py-5 text-center active:scale-[0.98] transition-transform mb-4"
           >
             Vytvoriť účet

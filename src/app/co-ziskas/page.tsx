@@ -144,7 +144,7 @@ export default function CoZiskasPage() {
               </div>
               <div className="md:flex md:gap-3">
                 <Link
-                  href="/register"
+                  href="/pripravujeme"
                   className="block w-full md:w-auto md:inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black py-4 md:px-8 text-center mb-3 md:mb-0 shadow-lg"
                 >
                   Vytvoriť účet
@@ -399,7 +399,7 @@ export default function CoZiskasPage() {
               Registrácia trvá 2 minúty. Členstvo od 5 € / mesiac, zruší sa kedykoľvek.
             </p>
             <Link
-              href="/register"
+              href="/pripravujeme"
               className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-10 py-4"
             >
               Chcem sa zapojiť

@@ -212,7 +212,7 @@ export default async function AkciePage() {
               stretnutí po celom Slovensku aj online. Miesta na vybraných podujatiach sú z
               kapacitných dôvodov obmedzené.
             </p>
-            <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-10 py-4">
+            <Link href="/pripravujeme" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-10 py-4">
               Zobraziť podujatia
             </Link>
           </div>

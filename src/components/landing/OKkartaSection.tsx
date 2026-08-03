@@ -30,15 +30,15 @@ const HOW_STEPS = [
   },
 ];
 
-const PARTNERS: { name: string; logo: string }[] = [
-  { name: "Nadácia SPP", logo: "/images/partneri/nadacia-spp.jpg" },
-  { name: "RAJ zdravia", logo: "/images/partneri/raj-zdravia.png" },
-  { name: "Meditesty", logo: "/images/partneri/meditesty-tmave-pozadie.png" },
-  { name: "Dulcia.sk", logo: "/images/partneri/dulcia.png" },
-  { name: "Hyundai", logo: "/images/partneri/hyundai.jpg" },
-  { name: "Kittler", logo: "/images/partneri/kittler.png" },
-  { name: "Visibility", logo: "/images/partneri/visibility.png" },
-  { name: "Bratislava - Staré Mesto", logo: "/images/partneri/bratislava-stare-mesto.png" },
+const PARTNERS: { name: string; logo: string; url: string }[] = [
+  { name: "Nadácia SPP", logo: "/images/partneri/nadacia-spp.jpg", url: "https://www.nadaciaspp.sk/" },
+  { name: "RAJ zdravia", logo: "/images/partneri/raj-zdravia.png", url: "https://www.rajzdravia.sk/" },
+  { name: "Meditesty", logo: "/images/partneri/meditesty-tmave-pozadie.png", url: "https://meditesty.sk/" },
+  { name: "Dulcia.sk", logo: "/images/partneri/dulcia.png", url: "https://www.dulcia.sk/" },
+  { name: "Hyundai", logo: "/images/partneri/hyundai.jpg", url: "https://www.hyundai.com/sk/sk/modely.html" },
+  { name: "Kittler", logo: "/images/partneri/kittler.png", url: "https://www.kittlermedia.com/" },
+  { name: "Visibility", logo: "/images/partneri/visibility.png", url: "https://visibility.sk/" },
+  { name: "Bratislava - Staré Mesto", logo: "/images/partneri/bratislava-stare-mesto.png", url: "https://www.staremesto.sk/" },
 ];
 
 export function OKkartaSection() {
@@ -140,13 +140,17 @@ export function OKkartaSection() {
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {PARTNERS.map((p, i) => (
-            <motion.div
+            <motion.a
               key={p.name}
+              href={p.url}
+              target="_blank"
+              rel="noopener noreferrer"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: "-20px" }}
               transition={{ duration: 0.35, delay: i * 0.06 }}
-              className="aspect-square rounded-2xl bg-white flex items-center justify-center p-3"
+              whileHover={{ scale: 1.04 }}
+              className="aspect-square rounded-2xl bg-white flex items-center justify-center p-3 cursor-pointer"
               style={{ border: `1.5px solid ${i % 2 === 0 ? "#FDA4C7" : "#6F2380"}22` }}
             >
               <div className="relative w-full h-full">
@@ -158,7 +162,7 @@ export function OKkartaSection() {
                   className="object-contain"
                 />
               </div>
-            </motion.div>
+            </motion.a>
           ))}
         </div>
 
@@ -187,7 +191,7 @@ export function OKkartaSection() {
           </ExpandableText>
         </div>
         <Link
-          href="/register"
+          href="/pripravujeme"
           className="block w-full rounded-full bg-[#FDA4C7] text-white font-black text-base py-4 active:scale-[0.98] transition-transform"
         >
           Aktivovať OK Kartu

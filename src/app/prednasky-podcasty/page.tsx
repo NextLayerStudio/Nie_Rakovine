@@ -53,7 +53,7 @@ export default function PrenasakyPodcastyPage() {
                 </ExpandableText>
               </div>
               <Link
-                href="/register"
+                href="/pripravujeme"
                 className="block w-full md:w-auto md:inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black py-4 md:px-10 text-center"
               >
                 Chcem prístup k prednáškam
@@ -133,7 +133,7 @@ export default function PrenasakyPodcastyPage() {
               Po registrácii získate okamžitý prístup k prednáškam, podcastom
               a ďalšiemu obsahu pre onkologických pacientov a ich blízkych.
             </p>
-            <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-10 py-4">
+            <Link href="/pripravujeme" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-10 py-4">
               Získať prístup
             </Link>
           </div>

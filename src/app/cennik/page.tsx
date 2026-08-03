@@ -146,7 +146,7 @@ export default function CennikPage() {
                 ))}
               </div>
               <Link
-                href="/register?plan=free"
+                href="/pripravujeme"
                 className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center"
               >
                 Registrovať zadarmo
@@ -182,7 +182,7 @@ export default function CennikPage() {
                   </div>
                 ))}
               </div>
-              <Link href="/register?plan=monthly" className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center">
+              <Link href="/pripravujeme" className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center">
                 Zvoliť mesačné členstvo
               </Link>
             </div>
@@ -222,7 +222,7 @@ export default function CennikPage() {
                   </div>
                 ))}
               </div>
-              <Link href="/register?plan=annual" className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center">
+              <Link href="/pripravujeme" className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center">
                 Zvoliť ročné členstvo
               </Link>
             </div>
@@ -258,7 +258,7 @@ export default function CennikPage() {
             <p className="text-white/65 text-sm leading-relaxed mb-7 md:max-w-sm md:mx-auto">
               Registrácia je jednoduchá a nezáväzná. Prístup získate okamžite.
             </p>
-            <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-10 py-4">
+            <Link href="/pripravujeme" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-10 py-4">
               Vytvoriť účet
             </Link>
           </div>

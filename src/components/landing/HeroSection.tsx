@@ -46,7 +46,7 @@ export function HeroSection() {
             </motion.div>
 
             <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start gap-3">
-              <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black px-8 py-4 shadow-lg">
+              <Link href="/pripravujeme" className="inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black px-8 py-4 shadow-lg">
                 Chcem sa pripojiť
               </Link>
               <Link href="/co-ziskas" className="inline-block rounded-full border-2 border-[#FDA4C7] bg-white/90 text-[#FDA4C7] text-base font-black px-8 py-4 shadow-lg">

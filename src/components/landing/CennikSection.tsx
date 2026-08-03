@@ -135,7 +135,7 @@ export function CennikSection() {
             ))}
           </div>
           <Link
-            href="/register?plan=free"
+            href="/pripravujeme"
             className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center active:scale-[0.98] transition-transform"
           >
             Registrovať zadarmo
@@ -180,7 +180,7 @@ export function CennikSection() {
           </div>
 
           <Link
-            href="/register?plan=monthly"
+            href="/pripravujeme"
             className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center active:scale-[0.98] transition-transform"
           >
             Zvoliť mesačné členstvo
@@ -232,7 +232,7 @@ export function CennikSection() {
           </div>
 
           <Link
-            href="/register?plan=annual"
+            href="/pripravujeme"
             className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center active:scale-[0.98] transition-transform"
           >
             Zvoliť ročné členstvo
