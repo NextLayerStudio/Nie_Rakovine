@@ -121,7 +121,7 @@ export function VideokniznicaSection() {
           </div>
           <div className="md:flex md:justify-start">
             <Link
-              href="/register"
+              href="/welcome"
               className="flex items-center justify-between bg-white rounded-2xl px-5 py-4 border border-[#FDA4C7]/20 active:scale-[0.98] transition-transform md:inline-flex md:gap-3 md:justify-center md:rounded-full md:border-2 md:border-[#FDA4C7] md:px-7 md:py-3"
             >
               <span className="text-[#6F2380] font-bold text-sm">Otvoriť ONKO knižnicu</span>
