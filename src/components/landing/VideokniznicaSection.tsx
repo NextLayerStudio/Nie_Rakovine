@@ -66,10 +66,17 @@ export function VideokniznicaSection() {
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       onLoadedMetadata={(e) => {
                         const el = e.currentTarget;
-                        if (el.duration) {
-                          // Each card starts at a different point in its clip so
-                          // they don't all show the same intro frame at once.
-                          el.currentTime = (el.duration * ((i + 1) / (VIDEOS.length + 1)));
+                        // Some MP4s report duration as NaN/Infinity at this point —
+                        // retry on durationchange (fired once it's actually known)
+                        // so every card doesn't fall back to starting at frame 0.
+                        if (Number.isFinite(el.duration) && el.duration > 0) {
+                          el.currentTime = el.duration * ((i + 1) / (VIDEOS.length + 1));
+                        }
+                      }}
+                      onDurationChange={(e) => {
+                        const el = e.currentTarget;
+                        if (el.currentTime === 0 && Number.isFinite(el.duration) && el.duration > 0) {
+                          el.currentTime = el.duration * ((i + 1) / (VIDEOS.length + 1));
                         }
                       }}
                     >
