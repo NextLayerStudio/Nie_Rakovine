@@ -44,41 +44,43 @@ const PARTNERS: { name: string; logo: string }[] = [
 export function OKkartaSection() {
   return (
     <section className="pb-14"><div className="max-w-6xl mx-auto px-5 md:px-8">
-      {/* Nadpis */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="mb-10"
-      >
-        <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
-          Zľavy a benefity
-        </p>
-        <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
-          Vaša OK Karta.
-          <br />
-          Výhody, ktoré máte vždy pri sebe.
-        </h2>
-        <ExpandableText maxHeight={80} fadeColor="#FFF3F9">
-          <p className="text-[#6F2380]/65 text-base leading-relaxed">
-            Ako člen/ka ONKO KLUBU získavate digitálnu OK Kartu s QR kódom, vďaka
-            ktorej môžete využívať zvýhodnené ponuky a benefity u vybraných
-            partnerov po celom Slovensku.
+      <div className="mb-14 md:flex md:items-center md:gap-12">
+        {/* Nadpis */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-10 md:mb-0 md:max-w-md"
+        >
+          <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
+            Zľavy a benefity
           </p>
-        </ExpandableText>
-      </motion.div>
+          <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
+            Vaša OK Karta.
+            <br />
+            Výhody, ktoré máte vždy pri sebe.
+          </h2>
+          <ExpandableText maxHeight={80} fadeColor="#FFF3F9">
+            <p className="text-[#6F2380]/65 text-base leading-relaxed">
+              Ako člen/ka ONKO KLUBU získavate digitálnu OK Kartu s QR kódom, vďaka
+              ktorej môžete využívať zvýhodnené ponuky a benefity u vybraných
+              partnerov po celom Slovensku.
+            </p>
+          </ExpandableText>
+        </motion.div>
 
-      {/* Vizuál karty — presne rovnaký dizajn ako reálna OK Karta v aplikácii */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.6 }}
-        className="mb-14 md:max-w-xs"
-      >
-        <OkKartaCard />
-      </motion.div>
+        {/* Vizuál karty — presne rovnaký dizajn ako reálna OK Karta v aplikácii */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.6 }}
+          className="md:max-w-sm md:shrink-0"
+        >
+          <OkKartaCard />
+        </motion.div>
+      </div>
 
       {/* Ako to funguje — cestička */}
       <div className="mb-14">
