@@ -1,4 +1,4 @@
-import { PublicEventsHeader } from "@/components/landing/PublicEventsHeader";
+import { Navbar } from "@/components/landing/Navbar";
 import { PublicEventsFooter } from "@/components/landing/PublicEventsFooter";
 import { CookieConsentBanner } from "@/components/landing/CookieConsentBanner";
 import { TicketQrCode } from "@/components/landing/TicketQrCode";
@@ -40,7 +40,7 @@ export default async function TicketPage({
 
   return (
     <main className="min-h-screen bg-[#FFF3F9] font-sans">
-      <PublicEventsHeader />
+      <Navbar />
 
       <section className="pt-28 pb-20">
         <div className="mx-auto max-w-md px-5">

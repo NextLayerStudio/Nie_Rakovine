@@ -1,4 +1,4 @@
-import { PublicEventsHeader } from "@/components/landing/PublicEventsHeader";
+import { Navbar } from "@/components/landing/Navbar";
 import { PublicEventsFooter } from "@/components/landing/PublicEventsFooter";
 import { CookieConsentBanner } from "@/components/landing/CookieConsentBanner";
 import { CancelRegistrationForm } from "@/components/landing/CancelRegistrationForm";
@@ -33,7 +33,7 @@ export default async function CancelRegistrationPage({
   // state, not an error, so we show a friendly message instead of a 404.
   return (
     <main className="min-h-screen bg-[#FFF3F9] font-sans">
-      <PublicEventsHeader />
+      <Navbar />
 
       <section className="pt-28 pb-20">
         <div className="mx-auto max-w-md px-5">
