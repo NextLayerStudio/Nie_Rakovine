@@ -8,7 +8,7 @@ const ease = [0.22, 1, 0.36, 1] as const;
 /** Krátky fotografický medzikrok pred sekciou "Nie ste v tom sami". */
 export function CommunityPhotoSection() {
   return (
-    <section className="pt-12 md:pt-24 pb-8 md:pb-12">
+    <section className="pt-8 md:pt-14 pb-6 md:pb-8">
       <div className="max-w-6xl mx-auto px-5 md:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

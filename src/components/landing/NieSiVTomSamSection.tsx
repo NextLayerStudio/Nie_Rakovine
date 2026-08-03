@@ -21,7 +21,7 @@ function ProstriedkyBox({ fadeColor }: { fadeColor: string }) {
 
 export function NieSiVTomSamSection() {
   return (
-    <section className="pb-16">
+    <section className="pb-10">
       <div className="max-w-6xl mx-auto px-5 md:px-8">
         {/* Riadok 1 — obrázok naľavo, text napravo */}
         <div className="hidden md:grid md:grid-cols-2 md:gap-16 md:items-center md:mb-16">

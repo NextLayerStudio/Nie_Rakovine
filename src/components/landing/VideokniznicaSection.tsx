@@ -20,7 +20,7 @@ export function VideokniznicaSection() {
 
   return (
     <>
-      <section className="pt-16 pb-20">
+      <section className="pt-10 pb-14">
         {/* Nadpis */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}

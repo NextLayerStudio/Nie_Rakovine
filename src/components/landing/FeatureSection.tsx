@@ -177,7 +177,7 @@ const ICONS = { library: LibraryIcon, podcasts: PodcastIcon, events: EventsIcon,
 
 export function FeatureSection() {
   return (
-    <section className="bg-[#FCE9F0] pt-16 pb-20">
+    <section className="bg-[#FCE9F0] pt-10 pb-14">
       <div className="max-w-6xl mx-auto px-5 md:px-8">
       {/* Nadpis + podnadpis */}
       <motion.h2

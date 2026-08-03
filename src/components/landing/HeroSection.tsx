@@ -10,7 +10,7 @@ const fadeUp = { hidden: { opacity: 0, y: 28 }, show: { opacity: 1, y: 0, transi
 
 export function HeroSection() {
   return (
-    <section className="pt-20 md:pt-24 pb-10 md:pb-16">
+    <section className="pt-14 md:pt-16 pb-6 md:pb-8">
       {/* Video na celú šírku ako pozadie nadpisu/úvodu/CTA - kontajner nemá pevnú
           výšku, video ju len vyplní, takže končí presne tam, kde končí posledné
           tlačidlo. Platí na mobile aj na desktope. */}

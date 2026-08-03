@@ -44,7 +44,7 @@ export function FAQSection() {
   const [listOpen, setListOpen] = useState(false);
 
   return (
-    <section className="pb-20"><div className="max-w-6xl mx-auto px-5 md:px-8">
+    <section className="pb-14"><div className="max-w-6xl mx-auto px-5 md:px-8">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}

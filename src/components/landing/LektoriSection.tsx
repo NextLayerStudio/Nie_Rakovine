@@ -48,7 +48,7 @@ const LEKTORI = [
 
 export function LektoriSection() {
   return (
-    <section className="pb-20"><div className="max-w-6xl mx-auto px-5 md:px-8">
+    <section className="pb-14"><div className="max-w-6xl mx-auto px-5 md:px-8">
       <div className="mb-10">
         <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
           Naši lektori
