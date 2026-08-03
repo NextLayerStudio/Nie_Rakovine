@@ -193,8 +193,7 @@ export function renderEmailShell({
           ${ctaBlock}
           <tr>
             <td class="ok-border" style="padding:20px 18px 8px;border-top:1px solid rgba(111,35,128,0.1);text-align:center;">
-              ${renderEmailLogos(appUrl, "footer")}
-              ${footerNote ? `<p class="ok-muted" style="margin:16px 0 14px;font-size:12px;line-height:1.6;color:${BRAND.textMuted};">${escapeHtml(footerNote)}</p>` : `<div style="height:16px;"></div>`}
+              ${footerNote ? `<p class="ok-muted" style="margin:0 0 14px;font-size:12px;line-height:1.6;color:${BRAND.textMuted};">${escapeHtml(footerNote)}</p>` : ""}
               <a href="${escapeAttr(appUrl)}" class="ok-muted" style="font-size:12px;font-weight:600;color:${BRAND.purple};text-decoration:none;">${escapeHtml(appUrl.replace(/^https?:\/\//, ""))}</a>
             </td>
           </tr>
