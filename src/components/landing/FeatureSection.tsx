@@ -191,7 +191,7 @@ export function FeatureSection() {
       </motion.h2>
 
       {/* 4 položky */}
-      <div className="flex flex-col gap-16 md:grid md:grid-cols-2 md:gap-x-12 md:gap-y-20">
+      <div className="flex flex-col gap-16 md:grid md:grid-cols-2 md:gap-x-12 md:gap-y-20 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-0">
         {FEATURES.map((feature, i) => {
           const Icon = ICONS[feature.id];
           return (
