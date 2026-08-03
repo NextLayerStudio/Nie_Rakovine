@@ -168,6 +168,15 @@ export default function CoZiskasPage() {
             {FEATURES.map((f, fi) => {
               const Icon = f.icon;
               const isEven = fi % 2 === 0;
+              // Kalendár aktivít (vysoký telefónny screenshot) a OK Karta
+              // (otočené portrétové karty) by inak vizuálne prerástli
+              // hranice sekcie — zmenšené na rozumnú šírku.
+              const imgWrapMaxW =
+                f.slug === "akcie"
+                  ? "mx-auto max-w-[220px] md:max-w-[260px]"
+                  : f.title === "OK Karta"
+                    ? "mx-auto max-w-[260px] md:max-w-[300px]"
+                    : "";
               return (
                 <div key={f.title} className="pb-14 md:pb-0 border-b border-[#FDA4C7]/15 md:border-0 last:border-0 md:grid md:grid-cols-2 md:gap-14 md:items-center">
                   {/* Text */}
@@ -239,7 +248,7 @@ export default function CoZiskasPage() {
                       </div>
                     </div>
                   ) : (
-                  <div className="flex flex-col gap-3">
+                  <div className={`flex flex-col gap-3 ${imgWrapMaxW}`}>
                     {f.skipMain ? (
                       <div className={`grid grid-cols-2 ${f.secondaryGap ?? "gap-3"}`}>
                         {f.imgs.map((img, i) => (
