@@ -6,7 +6,12 @@ import type { Area } from "react-easy-crop";
 import { IMAGE_FILE_INPUT_ACCEPT } from "@/lib/image-upload-limits";
 import { compressImageFile } from "@/lib/client-image-compress";
 
-async function getCroppedFile(imageSrc: string, pixelCrop: Area, fileName: string): Promise<File> {
+async function getCroppedFile(
+  imageSrc: string,
+  pixelCrop: Area,
+  fileName: string,
+  bgColor: string,
+): Promise<File> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
@@ -14,6 +19,11 @@ async function getCroppedFile(imageSrc: string, pixelCrop: Area, fileName: strin
       canvas.width = pixelCrop.width;
       canvas.height = pixelCrop.height;
       const ctx = canvas.getContext("2d")!;
+      // JPEG has no alpha channel — without this, transparent PNG areas get
+      // filled in black by the encoder. Paint the chosen background first,
+      // then draw the (possibly transparent) source image on top of it.
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(
         img,
         pixelCrop.x,
@@ -77,6 +87,9 @@ export function AdminImageField({
   // "original" follows the source photo's own shape (no forced ratio); the other two are manual overrides.
   const [cropOrientation, setCropOrientation] = useState<"original" | "landscape" | "portrait">("original");
   const [naturalAspect, setNaturalAspect] = useState<number | null>(null);
+  // Fills in behind transparent PNG/GIF/WebP areas — JPEG output has no alpha
+  // channel, so without this the encoder would fill transparency in black.
+  const [bgColor, setBgColor] = useState("#ffffff");
 
   const cropAspect =
     previewAspect !== "video"
@@ -112,6 +125,7 @@ export function AdminImageField({
 
   async function onFileChange(file: File | undefined) {
     if (!file) { setFilePreview(null); setFileName(null); setLocalFileSrc(null); return; }
+    setBgColor("#ffffff");
 
     // Always compress+downscale on selection, before anything else touches the
     // file — this guarantees the real <input> never holds a raw, oversized
@@ -166,7 +180,7 @@ export function AdminImageField({
   async function confirmCrop() {
     if (!cropSrc || !croppedAreaPixels) return;
     try {
-      const croppedFile = await getCroppedFile(cropSrc, croppedAreaPixels, cropOrigName);
+      const croppedFile = await getCroppedFile(cropSrc, croppedAreaPixels, cropOrigName, bgColor);
       const previewUrl = URL.createObjectURL(croppedFile);
       setFilePreview(previewUrl);
       setFileName(croppedFile.name);
@@ -275,6 +289,30 @@ export function AdminImageField({
 
           {/* Controls */}
           <div className="flex flex-col items-center gap-4 border-t border-brand-purple/10 bg-white px-6 py-5">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-brand-purple/60">Pozadie za priehľadnosťou:</span>
+              {["#ffffff", "#000000", "#6F2380", "#FDA4C7"].map((swatch) => (
+                <button
+                  key={swatch}
+                  type="button"
+                  aria-label={`Farba pozadia ${swatch}`}
+                  onClick={() => setBgColor(swatch)}
+                  className={`h-6 w-6 rounded-full border-2 transition ${
+                    bgColor.toLowerCase() === swatch.toLowerCase()
+                      ? "border-brand-purple scale-110"
+                      : "border-brand-purple/15"
+                  }`}
+                  style={{ backgroundColor: swatch }}
+                />
+              ))}
+              <input
+                type="color"
+                value={bgColor}
+                onChange={(e) => setBgColor(e.target.value)}
+                aria-label="Vlastná farba pozadia"
+                className="h-6 w-6 cursor-pointer rounded-full border-2 border-brand-purple/15 bg-transparent p-0"
+              />
+            </div>
             {previewAspect === "video" && !mandatoryAspect && (
               <div className="flex gap-2">
                 <button

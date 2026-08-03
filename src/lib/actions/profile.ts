@@ -8,6 +8,7 @@ import { SUBSCRIPTION_PLANS, SUPPORTER_MIN_AMOUNT_EUR } from "@/lib/constants";
 import { redeemDiscountCode, validateDiscountCode } from "@/lib/discount-codes";
 import { createHppOrder, generateNexiOrderId, nexiConfigured } from "@/lib/nexi";
 import { getAppUrlFromEnv } from "@/lib/email/brand";
+import { addNewsletterSubscriber } from "@/lib/mailerlite";
 import type {
   SubscriptionPlan,
   SubscriptionStatus,
@@ -76,10 +77,10 @@ export async function selectSubscriptionPlanAction(
 
 // --------------------------------------------------------------------
 // Subscription — step 2: confirm the recurring-payment consent and
-// activate. GoPay is not wired up yet (no merchant contract/credentials),
+// activate. Nexi is not wired up yet (no merchant contract/credentials),
 // so this still just activates the membership directly — but the consent
 // checkbox + disclosed parameters here are the real, permanent UI, ready
-// for the actual charge call once GoPay is connected.
+// for the actual charge call once Nexi is connected.
 //
 // SUPPORTER is a one-time payment (custom amount, min. SUPPORTER_MIN_AMOUNT_EUR)
 // that grants a year of access and skips the rest of the profile-building
@@ -392,6 +393,10 @@ export async function saveMembershipDetailsAction(
       consentNewsletter,
     },
   });
+
+  if (consentNewsletter) {
+    await addNewsletterSubscriber({ email: user.email, fullName: user.fullName });
+  }
 
   revalidatePath("/profile");
   return { ok: true, redirectTo: "/register/profile/done" };

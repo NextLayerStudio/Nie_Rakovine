@@ -196,6 +196,36 @@ export async function removeEventAttendeeAction(formData: FormData): Promise<voi
   revalidatePath(`/admin/events/${eventId}`);
 }
 
+export type CancelRegistrationState = { ok: boolean; message?: string };
+
+/** Cancel a member's own registration — reached via the "Odhlásiť sa" link in the confirmation e-mail. */
+export async function cancelEventRegistrationAction(
+  _prev: CancelRegistrationState,
+  formData: FormData,
+): Promise<CancelRegistrationState> {
+  const registrationId = String(formData.get("registrationId") ?? "");
+  if (!registrationId) return { ok: false, message: "Chýba registrácia." };
+
+  const registration = await prisma.eventRegistration.findUnique({
+    where: { id: registrationId },
+    select: { eventId: true },
+  });
+  if (!registration) {
+    return { ok: false, message: "Táto registrácia už neexistuje — bola zrejme už zrušená." };
+  }
+
+  await prisma.eventRegistration.delete({ where: { id: registrationId } });
+
+  revalidatePath("/home");
+  revalidatePath("/home/calendar");
+  revalidatePath(`/home/events/${registration.eventId}`);
+  revalidatePath(`/podujatia/${registration.eventId}`);
+  revalidatePath(`/admin/events/${registration.eventId}`);
+  revalidatePath("/profile");
+
+  return { ok: true };
+}
+
 function revalidateEventPaths(profileId: string | null) {
   revalidatePath("/admin/profiles");
   if (profileId) revalidatePath(`/admin/profiles/${profileId}`);
@@ -264,12 +294,14 @@ export async function registerForEventAction(
   }
 
   const wasAlreadyRegistered = Boolean(alreadyRegistered);
+  let registration: { id: string };
 
   try {
-    await prisma.eventRegistration.upsert({
+    registration = await prisma.eventRegistration.upsert({
       where: { eventId_userId: { eventId, userId: user.id } },
       create: { eventId, userId: user.id, name, surname },
       update: { name, surname },
+      select: { id: true },
     });
   } catch (err) {
     return {
@@ -287,6 +319,7 @@ export async function registerForEventAction(
       endsAt: event.endsAt,
       location: event.location,
       eventId,
+      registrationId: registration.id,
     });
   }
 

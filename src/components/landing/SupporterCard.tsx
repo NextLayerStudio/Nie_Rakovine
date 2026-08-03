@@ -91,7 +91,7 @@ export function SupporterCard({ className }: { className?: string }) {
       </p>
 
       <Link
-        href={`/welcome?plan=supporter&amount=${amount}`}
+        href="/pripravujeme"
         className="mt-auto block w-full rounded-full bg-[#FDA4C7] py-3.5 text-center text-sm font-black text-white transition-transform active:scale-[0.98]"
       >
         Darovať {amount} €

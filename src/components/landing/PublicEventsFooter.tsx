@@ -30,8 +30,8 @@ export function PublicEventsFooter() {
         </p>
 
         <p className="text-white/30 text-[10px] font-bold uppercase tracking-widest mb-2">Kontakt</p>
-        <a href="mailto:office@onkoklub.sk" className="text-[#FDA4C7] text-sm font-semibold block mb-1">
-          office@onkoklub.sk
+        <a href="mailto:info@onkoklub.sk" className="text-[#FDA4C7] text-sm font-semibold block mb-1">
+          info@onkoklub.sk
         </a>
         <a href="tel:+421904701009" className="text-white/65 text-sm block">
           +421 904 701 009

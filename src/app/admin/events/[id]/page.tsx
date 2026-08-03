@@ -92,11 +92,11 @@ export default async function EditEventPage({
       />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_360px]">
-        <div className="max-w-2xl">
+        <div className="max-w-2xl lg:order-2">
           <EventForm mode="edit" event={event} />
         </div>
 
-        <aside>
+        <aside className="order-first lg:order-1">
           <h2 className="admin-section-title">
             Zúčastnení ({attendees.length})
           </h2>

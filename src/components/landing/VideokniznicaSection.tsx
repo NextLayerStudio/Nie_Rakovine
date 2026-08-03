@@ -2,23 +2,25 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Clock, ChevronRight, X } from "lucide-react";
+import { Play, ChevronRight, X } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const VIDEOS = [
-  { src: "/videos/adriana.mp4",  title: "Príbeh pacientky",                                        lektor: "Adriana",                  dur: "20 min", accent: "#FDA4C7" },
-  { src: "/videos/petra.mp4",    title: "Jemná joga pri únave — 20 minút",                         lektor: "Petra Joga",               dur: "35 min", accent: "#6F2380" },
-  { src: "/videos/mirka.mp4",    title: "Odborné rady od profesionálov",                           lektor: "MUDr. Miroslava Malejčíková", dur: "30 min", accent: "#FDA4C7" },
-  { src: "/videos/c0420.mp4",    title: "Mindfulness: ako zvládnuť úzkosť pri diagnóze",           lektor: "Výživa & nutričná poradňa", dur: "45 min", accent: "#6F2380" },
+  { type: "video" as const, src: "/videos/adriana.mp4",  title: "Príbeh pacientky",                                        lektor: "Adriana",                  accent: "#FDA4C7" },
+  { type: "video" as const, src: "/videos/petra.mp4",    title: "Rozhovor s onkologičkou",                                 lektor: "MUDr. Miroslava Malejčíková", accent: "#6F2380" },
+  { type: "video" as const, src: "/videos/mirka.mp4",    title: "Odborné rady od profesionálov",                           lektor: "Petra Hlaváčová",           accent: "#FDA4C7" },
+  { type: "audio" as const, src: "/audio/body-scan.mp3", photo: "/images/lektori/micuchova.jpg", title: "Mindfulness: ako zvládnuť úzkosť pri diagnóze", lektor: "Zuzana Mičúchová", accent: "#6F2380" },
 ];
 
 export function VideokniznicaSection() {
-  const [active, setActive] = useState<string | null>(null);
+  const [active, setActive] = useState<number | null>(null);
+  const activeItem = active !== null ? VIDEOS[active] : null;
 
   return (
     <>
-      <section className="pb-20">
+      <section className="pt-10 pb-14">
         {/* Nadpis */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -27,9 +29,9 @@ export function VideokniznicaSection() {
           transition={{ duration: 0.6 }}
           className="px-5 md:max-w-6xl md:mx-auto md:px-8 mb-8"
         >
-          <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
+          <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
             ONKO knižnica
-          </p>
+          </h2>
           <div className="md:max-w-xl">
             <ExpandableText maxHeight={72} fadeColor="#FFF3F9">
               <p className="text-[#6F2380]/65 text-base leading-relaxed">
@@ -51,27 +53,43 @@ export function VideokniznicaSection() {
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.45, delay: i * 0.08 }}
                 className="shrink-0 w-[72vw] max-w-[280px] md:w-auto md:max-w-none cursor-pointer"
-                onClick={() => setActive(v.src)}
+                onClick={() => setActive(i)}
               >
-                {/* Video thumbnail */}
+                {/* Video/audio thumbnail */}
                 <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-3 group">
-                  <video
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    onLoadedMetadata={(e) => {
-                      const el = e.currentTarget;
-                      if (el.duration) {
-                        // Each card starts at a different point in its clip so
-                        // they don't all show the same intro frame at once.
-                        el.currentTime = (el.duration * ((i + 1) / (VIDEOS.length + 1)));
-                      }
-                    }}
-                  >
-                    <source src={v.src} type="video/mp4" />
-                  </video>
+                  {v.type === "video" ? (
+                    <video
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      onLoadedMetadata={(e) => {
+                        const el = e.currentTarget;
+                        // Some MP4s report duration as NaN/Infinity at this point —
+                        // retry on durationchange (fired once it's actually known)
+                        // so every card doesn't fall back to starting at frame 0.
+                        if (Number.isFinite(el.duration) && el.duration > 0) {
+                          el.currentTime = el.duration * ((i + 1) / (VIDEOS.length + 1));
+                        }
+                      }}
+                      onDurationChange={(e) => {
+                        const el = e.currentTarget;
+                        if (el.currentTime === 0 && Number.isFinite(el.duration) && el.duration > 0) {
+                          el.currentTime = el.duration * ((i + 1) / (VIDEOS.length + 1));
+                        }
+                      }}
+                    >
+                      <source src={v.src} type="video/mp4" />
+                    </video>
+                  ) : (
+                    <Image
+                      src={v.photo}
+                      alt={v.lektor}
+                      fill
+                      className="object-cover object-[center_25%] transition-transform duration-500 group-hover:scale-105"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div
@@ -80,10 +98,6 @@ export function VideokniznicaSection() {
                     >
                       <Play size={18} className="text-white ml-0.5" fill="white" />
                     </div>
-                  </div>
-                  <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 rounded-full px-2 py-1">
-                    <Clock size={10} className="text-white/80" />
-                    <span className="text-white text-[10px] font-semibold">{v.dur}</span>
                   </div>
                   <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <div className="bg-black/50 rounded-full px-2 py-1 flex items-center gap-1">
@@ -114,7 +128,7 @@ export function VideokniznicaSection() {
           </div>
           <div className="md:flex md:justify-start">
             <Link
-              href="/kontent-kniznica"
+              href="/welcome"
               className="flex items-center justify-between bg-white rounded-2xl px-5 py-4 border border-[#FDA4C7]/20 active:scale-[0.98] transition-transform md:inline-flex md:gap-3 md:justify-center md:rounded-full md:border-2 md:border-[#FDA4C7] md:px-7 md:py-3"
             >
               <span className="text-[#6F2380] font-bold text-sm">Otvoriť ONKO knižnicu</span>
@@ -124,9 +138,9 @@ export function VideokniznicaSection() {
         </div>
       </section>
 
-      {/* Video lightbox modal */}
+      {/* Video/audio lightbox modal */}
       <AnimatePresence>
-        {active && (
+        {activeItem && (
           <motion.div
             key="modal"
             initial={{ opacity: 0 }}
@@ -144,14 +158,32 @@ export function VideokniznicaSection() {
               className="relative w-full max-w-3xl rounded-2xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              <video
-                key={active}
-                src={active}
-                controls
-                autoPlay
-                playsInline
-                className="w-full aspect-video bg-black"
-              />
+              {activeItem.type === "video" ? (
+                <video
+                  key={activeItem.src}
+                  src={activeItem.src}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="w-full aspect-video bg-black"
+                />
+              ) : (
+                <div className="relative w-full aspect-video bg-black">
+                  <Image
+                    src={activeItem.photo}
+                    alt={activeItem.lektor}
+                    fill
+                    className="object-cover object-[center_25%]"
+                  />
+                  <audio
+                    key={activeItem.src}
+                    src={activeItem.src}
+                    controls
+                    autoPlay
+                    className="absolute bottom-0 left-0 w-full"
+                  />
+                </div>
+              )}
               <button
                 onClick={() => setActive(null)}
                 className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/60 flex items-center justify-center text-white hover:bg-black/80 transition-colors"

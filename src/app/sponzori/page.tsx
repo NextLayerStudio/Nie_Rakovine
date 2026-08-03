@@ -51,7 +51,7 @@ export default function SponzoriPage() {
                 </ExpandableText>
               </div>
               <Link
-                href="/register"
+                href="/pripravujeme"
                 className="block w-full md:w-auto md:inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black py-4 md:px-10 text-center"
               >
                 Chcem zľavy pre členov
@@ -184,7 +184,7 @@ export default function SponzoriPage() {
               digitálnej OK Karte s unikátnym QR kódom. Nájdete ju vo svojom
               profile, pripravenú na okamžité používanie.
             </p>
-            <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-10 py-4">
+            <Link href="/pripravujeme" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-10 py-4">
               Chcem svoju OK Kartu
             </Link>
           </div>

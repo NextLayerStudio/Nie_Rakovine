@@ -16,10 +16,9 @@ import { PRESELECTED_PLAN_KEY } from "@/lib/preselected-plan";
 
 const INITIAL: ActionState = { ok: false };
 
-// GoPay vyžaduje viditeľné logá akceptovaných platobných metód priamo na
+// Nexi vyžaduje viditeľné logá akceptovaných platobných metód priamo na
 // stránke s cenou/produktom — nielen na samotnej platobnej obrazovke.
 const PAYMENT_LOGOS = [
-  { src: "/images/platby/gopay.png", alt: "GoPay", w: 100, h: 35 },
   { src: "/images/platby/visa.png", alt: "VISA", w: 67, h: 23 },
   { src: "/images/platby/verified-by-visa.png", alt: "Verified by VISA", w: 67, h: 30 },
   { src: "/images/platby/mastercard.png", alt: "Mastercard", w: 67, h: 43 },
@@ -106,7 +105,7 @@ export function SubscriptionForm({
           })}
         </ul>
 
-        {/* Platobné metódy — vyžaduje GoPay na stránke s cenou/produktom */}
+        {/* Platobné metódy — vyžaduje Nexi na stránke s cenou/produktom */}
         <div className="px-1">
           <p className="mb-3 text-xs font-bold uppercase tracking-wide text-brand-purple/50">
             Platba prebehne bezpečne cez

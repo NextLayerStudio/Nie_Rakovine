@@ -119,7 +119,7 @@ export function PrivacyContent({ className }: { className?: string }) {
         <li><strong>Neon (Neon, Inc.)</strong> — hosting databázy (servery v EÚ, región Frankfurt),</li>
         <li><strong>Resend</strong> — odosielanie transakčných a marketingových e-mailov,</li>
         <li><strong>Upstash</strong> — technické zabezpečenie a ochrana pred zneužitím (rate limiting),</li>
-        <li><strong>GoPay</strong> — platobná brána spracúvajúca platby za členstvo (Prevádzkovateľ platobné údaje ako číslo karty nevidí ani neukladá).</li>
+        <li><strong>Nexi</strong> — platobná brána spracúvajúca platby za členstvo (Prevádzkovateľ platobné údaje ako číslo karty nevidí ani neukladá).</li>
       </ul>
 
       <h3 className="mb-3 mt-6 text-sm font-bold text-brand-purple">

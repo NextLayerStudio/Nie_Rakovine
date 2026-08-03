@@ -73,9 +73,9 @@ export function BusinessTermsContent({ className }: { className?: string }) {
       </h3>
       <p className="mb-4">
         Platba prebieha online, bezpečne, platobnou kartou prostredníctvom
-        platobnej brány <strong>GoPay</strong>, vrátane overenia 3-D Secure.
+        platobnej brány <strong>Nexi</strong>, vrátane overenia 3-D Secure.
         Predávajúci nemá prístup k číslu platobnej karty ani iným
-        platobným údajom — tie spracúva výhradne GoPay. Mesačné a Ročné
+        platobným údajom — tie spracúva výhradne Nexi. Mesačné a Ročné
         členstvo je opakovaná platba, ktorá sa automaticky strháva vo
         výške aktuálnej ceny platnej v čase obnovenia; Podporujúce
         členstvo je jednorazová platba.

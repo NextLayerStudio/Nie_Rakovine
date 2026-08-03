@@ -55,7 +55,7 @@ export function MoodSupportBanner() {
       </p>
       <div className="mt-3 flex flex-col gap-2 sm:flex-row">
         <a
-          href="mailto:office@onkoklub.sk"
+          href="mailto:info@onkoklub.sk"
           className="flex-1 rounded-pill bg-brand-pink py-2.5 text-center text-xs font-bold text-white"
         >
           Kontaktovať podporu

@@ -27,7 +27,7 @@ const CITATY = [
 
 export function TestimonialsSection() {
   return (
-    <section className="pb-20">
+    <section className="pb-14">
       <div className="max-w-6xl mx-auto px-5 md:px-8">
       <motion.div
         initial={{ opacity: 0, y: 30 }}

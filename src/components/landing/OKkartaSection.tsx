@@ -30,55 +30,57 @@ const HOW_STEPS = [
   },
 ];
 
-const PARTNERS: { name: string; logo: string }[] = [
-  { name: "Nadácia SPP", logo: "/images/partneri/nadacia-spp.jpg" },
-  { name: "RAJ zdravia", logo: "/images/partneri/raj-zdravia.png" },
-  { name: "Meditesty", logo: "/images/partneri/meditesty-tmave-pozadie.png" },
-  { name: "Dulcia.sk", logo: "/images/partneri/dulcia.png" },
-  { name: "Hyundai", logo: "/images/partneri/hyundai.jpg" },
-  { name: "Kittler", logo: "/images/partneri/kittler.png" },
-  { name: "Visibility", logo: "/images/partneri/visibility.png" },
-  { name: "Bratislava - Staré Mesto", logo: "/images/partneri/bratislava-stare-mesto.png" },
+const PARTNERS: { name: string; logo: string; url: string }[] = [
+  { name: "Nadácia SPP", logo: "/images/partneri/nadacia-spp.jpg", url: "https://www.nadaciaspp.sk/" },
+  { name: "RAJ zdravia", logo: "/images/partneri/raj-zdravia.png", url: "https://www.rajzdravia.sk/" },
+  { name: "Meditesty", logo: "/images/partneri/meditesty-tmave-pozadie.png", url: "https://meditesty.sk/" },
+  { name: "Dulcia.sk", logo: "/images/partneri/dulcia.png", url: "https://www.dulcia.sk/" },
+  { name: "Hyundai", logo: "/images/partneri/hyundai.jpg", url: "https://www.hyundai.com/sk/sk/modely.html" },
+  { name: "Kittler", logo: "/images/partneri/kittler.png", url: "https://www.kittlermedia.com/" },
+  { name: "Visibility", logo: "/images/partneri/visibility.png", url: "https://visibility.sk/" },
+  { name: "Bratislava - Staré Mesto", logo: "/images/partneri/bratislava-stare-mesto.png", url: "https://www.staremesto.sk/" },
 ];
 
 export function OKkartaSection() {
   return (
-    <section className="pb-20"><div className="max-w-6xl mx-auto px-5 md:px-8">
-      {/* Nadpis */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="mb-10"
-      >
-        <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
-          Zľavy a benefity
-        </p>
-        <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
-          Vaša OK Karta.
-          <br />
-          Výhody, ktoré máte vždy pri sebe.
-        </h2>
-        <ExpandableText maxHeight={80} fadeColor="#FFF3F9">
-          <p className="text-[#6F2380]/65 text-base leading-relaxed">
-            Ako člen/ka ONKO KLUBU získavate digitálnu OK Kartu s QR kódom, vďaka
-            ktorej môžete využívať zvýhodnené ponuky a benefity u vybraných
-            partnerov po celom Slovensku.
+    <section className="pb-14"><div className="max-w-6xl mx-auto px-5 md:px-8">
+      <div className="mb-14 md:flex md:items-center md:gap-8">
+        {/* Nadpis */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-10 md:mb-0 md:max-w-sm md:shrink-0"
+        >
+          <p className="text-[#FDA4C7] text-sm font-bold uppercase tracking-widest mb-3">
+            Zľavy a benefity
           </p>
-        </ExpandableText>
-      </motion.div>
+          <h2 className="text-[2.2rem] font-black text-[#6F2380] leading-[1.1] mb-4">
+            Vaša OK Karta.
+            <br />
+            Výhody, ktoré máte vždy pri sebe.
+          </h2>
+          <ExpandableText maxHeight={80} fadeColor="#FFF3F9">
+            <p className="text-[#6F2380]/65 text-base leading-relaxed">
+              Ako člen/ka ONKO KLUBU získavate digitálnu OK Kartu s QR kódom, vďaka
+              ktorej môžete využívať zvýhodnené ponuky a benefity u vybraných
+              partnerov po celom Slovensku.
+            </p>
+          </ExpandableText>
+        </motion.div>
 
-      {/* Vizuál karty — presne rovnaký dizajn ako reálna OK Karta v aplikácii */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.6 }}
-        className="mb-14 md:max-w-xs"
-      >
-        <OkKartaCard />
-      </motion.div>
+        {/* Vizuál karty — presne rovnaký dizajn ako reálna OK Karta v aplikácii */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.6 }}
+          className="md:max-w-xl md:shrink-0"
+        >
+          <OkKartaCard />
+        </motion.div>
+      </div>
 
       {/* Ako to funguje — cestička */}
       <div className="mb-14">
@@ -138,13 +140,17 @@ export function OKkartaSection() {
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {PARTNERS.map((p, i) => (
-            <motion.div
+            <motion.a
               key={p.name}
+              href={p.url}
+              target="_blank"
+              rel="noopener noreferrer"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: "-20px" }}
               transition={{ duration: 0.35, delay: i * 0.06 }}
-              className="aspect-square rounded-2xl bg-white flex items-center justify-center p-3"
+              whileHover={{ scale: 1.04 }}
+              className="aspect-square rounded-2xl bg-white flex items-center justify-center p-3 cursor-pointer"
               style={{ border: `1.5px solid ${i % 2 === 0 ? "#FDA4C7" : "#6F2380"}22` }}
             >
               <div className="relative w-full h-full">
@@ -156,7 +162,7 @@ export function OKkartaSection() {
                   className="object-contain"
                 />
               </div>
-            </motion.div>
+            </motion.a>
           ))}
         </div>
 
@@ -185,7 +191,7 @@ export function OKkartaSection() {
           </ExpandableText>
         </div>
         <Link
-          href="/register"
+          href="/pripravujeme"
           className="block w-full rounded-full bg-[#FDA4C7] text-white font-black text-base py-4 active:scale-[0.98] transition-transform"
         >
           Aktivovať OK Kartu

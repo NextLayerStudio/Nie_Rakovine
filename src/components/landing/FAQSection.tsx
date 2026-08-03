@@ -19,7 +19,7 @@ const OTAZKY = [
   },
   {
     q: "Ako prebieha platba za členstvo?",
-    a: "Platba prebieha online cez platobnú bránu GoPay. V rámci mesačného členstva sa suma automaticky obnovuje každý mesiac, v prípade ročného členstva ide o jednorazovú platbu raz ročne. Platbu je možné kedykoľvek zrušiť v nastaveniach vášho účtu. Ak uprednostňujete úhradu formou trvalého príkazu, kontaktujte nás, prosím, na office@onkoklub.sk.",
+    a: "Platba prebieha online cez platobnú bránu Nexi. V rámci mesačného členstva sa suma automaticky obnovuje každý mesiac, v prípade ročného členstva ide o jednorazovú platbu raz ročne. Platbu je možné kedykoľvek zrušiť v nastaveniach vášho účtu. Ak uprednostňujete úhradu formou trvalého príkazu, kontaktujte nás, prosím, na info@onkoklub.sk.",
   },
   {
     q: "Je možné členstvo kedykoľvek zrušiť?",
@@ -44,7 +44,7 @@ export function FAQSection() {
   const [listOpen, setListOpen] = useState(false);
 
   return (
-    <section className="pb-20"><div className="max-w-6xl mx-auto px-5 md:px-8">
+    <section className="pb-14"><div className="max-w-6xl mx-auto px-5 md:px-8">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}

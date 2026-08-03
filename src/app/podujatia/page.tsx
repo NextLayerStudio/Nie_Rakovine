@@ -1,5 +1,5 @@
 import type { EventCategory } from "@prisma/client";
-import { PublicEventsHeader } from "@/components/landing/PublicEventsHeader";
+import { Navbar } from "@/components/landing/Navbar";
 import { PublicEventsFooter } from "@/components/landing/PublicEventsFooter";
 import { CookieConsentBanner } from "@/components/landing/CookieConsentBanner";
 import { PublicEventsExplorer } from "@/components/landing/PublicEventsExplorer";
@@ -62,7 +62,7 @@ export default async function PodujatiaPage({
   return (
     <EventsFilterProvider>
       <main className="min-h-screen bg-[#FFF3F9] font-sans">
-        <PublicEventsHeader right={<EventsFilterToggle />} />
+        <Navbar />
 
         <section className="pt-24 pb-5">
           <div className="mx-auto max-w-6xl px-5 md:px-8">
@@ -70,9 +70,12 @@ export default async function PodujatiaPage({
               <h1 className="text-xl font-black text-[#6F2380] md:text-2xl">
                 Podujatia ONKO KLUBU
               </h1>
-              <span className="text-xs font-semibold text-[#6F2380]/50">
-                {publicEvents.length} {publicEvents.length === 1 ? "podujatie" : "podujatí"}
-              </span>
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-semibold text-[#6F2380]/50">
+                  {publicEvents.length} {publicEvents.length === 1 ? "podujatie" : "podujatí"}
+                </span>
+                <EventsFilterToggle />
+              </div>
             </div>
 
             <CategoryFilterBar

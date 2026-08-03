@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { PublicEventsHeader } from "@/components/landing/PublicEventsHeader";
+import { Navbar } from "@/components/landing/Navbar";
 import { PublicEventsFooter } from "@/components/landing/PublicEventsFooter";
 import { CookieConsentBanner } from "@/components/landing/CookieConsentBanner";
 import { EventGuestTicketForm } from "@/components/landing/EventGuestTicketForm";
@@ -53,19 +53,18 @@ export default async function PodujatieDetailPage({
 
   return (
     <main className="min-h-screen bg-[#FFF3F9] font-sans">
-      <PublicEventsHeader
-        left={
+      <Navbar />
+
+      <section className="pt-[60px] pb-16 md:pt-[68px]">
+        <div className="mx-auto max-w-[1400px] px-5 pt-4 md:px-8">
           <Link
             href="/podujatia"
             className="inline-flex items-center gap-1.5 text-sm font-bold text-[#6F2380]/70 hover:text-[#6F2380]"
           >
             <ArrowLeft size={16} />
-            <span className="hidden sm:inline">Všetky podujatia</span>
+            <span>Všetky podujatia</span>
           </Link>
-        }
-      />
-
-      <section className="pt-[60px] pb-16 md:pt-[68px]">
+        </div>
         <div className="mx-auto grid max-w-[1400px] md:grid-cols-2">
           <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#6F2380]/10">
             {event.coverUrl ? (

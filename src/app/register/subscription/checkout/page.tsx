@@ -53,7 +53,7 @@ export default async function SubscriptionCheckoutPage({
             Dokončite platbu
           </h1>
           <p className="mx-auto mt-4 max-w-[320px] text-center text-sm leading-relaxed text-brand-purple/75">
-            Posledný krok — bezpečná online platba cez GoPay.
+            Posledný krok — bezpečná online platba cez Nexi.
           </p>
         </header>
 

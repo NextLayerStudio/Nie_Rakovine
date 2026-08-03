@@ -7,7 +7,6 @@ import { Check, Star, ShieldCheck, CreditCard, RefreshCw } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
 
 const PAYMENT_LOGOS = [
-  { src: "/images/platby/gopay.png", alt: "GoPay", w: 100, h: 35 },
   { src: "/images/platby/visa.png", alt: "VISA", w: 67, h: 23 },
   { src: "/images/platby/verified-by-visa.png", alt: "Verified by VISA", w: 67, h: 30 },
   { src: "/images/platby/mastercard.png", alt: "Mastercard", w: 67, h: 43 },
@@ -37,7 +36,7 @@ const MEMBERSHIP_INFO_TEXT =
 const FAQ = [
   {
     q: "Ako prebieha platba za členstvo?",
-    a: "Free členstvo je úplne zadarmo. Platba za Mesačné a Ročné členstvo prebieha online cez platobnú bránu GoPay a automaticky sa obnovuje (mesačne, resp. ročne). Podporujúce členstvo je jednorazová platba vo vami zvolenej výške (min. 50 €), ktorá sa neobnovuje. Platbu je možné kedykoľvek zrušiť v nastaveniach vášho účtu. Ak uprednostňujete úhradu formou trvalého príkazu, kontaktujte nás, prosím, na office@onkoklub.sk.",
+    a: "Free členstvo je úplne zadarmo. Platba za Mesačné a Ročné členstvo prebieha online cez platobnú bránu Nexi a automaticky sa obnovuje (mesačne, resp. ročne). Podporujúce členstvo je jednorazová platba vo vami zvolenej výške (min. 50 €), ktorá sa neobnovuje. Platbu je možné kedykoľvek zrušiť v nastaveniach vášho účtu. Ak uprednostňujete úhradu formou trvalého príkazu, kontaktujte nás, prosím, na info@onkoklub.sk.",
   },
   {
     q: "Je možné členstvo kedykoľvek zrušiť?",
@@ -78,7 +77,7 @@ export default function CennikPage() {
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:max-w-2xl">
             {[
-              { icon: CreditCard, label: "Bezpečná online platba", sub: "Platba prebieha cez platobnú bránu GoPay." },
+              { icon: CreditCard, label: "Bezpečná online platba", sub: "Platba prebieha cez platobnú bránu Nexi." },
               { icon: RefreshCw,  label: "Flexibilné členstvo",    sub: "Členstvo môžete kedykoľvek zrušiť bez záväzkov a ďalších podmienok." },
               { icon: ShieldCheck, label: "Bez skrytých poplatkov", sub: "Cena členstva je jasná a bez dodatočných nákladov." },
             ].map((item) => {
@@ -97,7 +96,7 @@ export default function CennikPage() {
             })}
           </div>
 
-          {/* Platobné karty a 3D-Secure — GoPay vyžaduje viditeľné logá na prvej
+          {/* Platobné karty a 3D-Secure — Nexi vyžaduje viditeľné logá na prvej
               stránke s cenami. */}
           <div className="flex flex-wrap items-center justify-between gap-4 mt-6 md:max-w-2xl">
             {PAYMENT_LOGOS.map((logo) => (
@@ -147,7 +146,7 @@ export default function CennikPage() {
                 ))}
               </div>
               <Link
-                href="/register?plan=free"
+                href="/pripravujeme"
                 className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center"
               >
                 Registrovať zadarmo
@@ -183,7 +182,7 @@ export default function CennikPage() {
                   </div>
                 ))}
               </div>
-              <Link href="/register?plan=monthly" className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center">
+              <Link href="/pripravujeme" className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center">
                 Zvoliť mesačné členstvo
               </Link>
             </div>
@@ -223,7 +222,7 @@ export default function CennikPage() {
                   </div>
                 ))}
               </div>
-              <Link href="/register?plan=annual" className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center">
+              <Link href="/pripravujeme" className="mt-auto block w-full rounded-full bg-[#FDA4C7] text-white font-black text-sm py-3.5 text-center">
                 Zvoliť ročné členstvo
               </Link>
             </div>
@@ -259,7 +258,7 @@ export default function CennikPage() {
             <p className="text-white/65 text-sm leading-relaxed mb-7 md:max-w-sm md:mx-auto">
               Registrácia je jednoduchá a nezáväzná. Prístup získate okamžite.
             </p>
-            <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-10 py-4">
+            <Link href="/pripravujeme" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-10 py-4">
               Vytvoriť účet
             </Link>
           </div>

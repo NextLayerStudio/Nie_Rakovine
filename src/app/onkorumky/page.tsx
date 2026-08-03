@@ -57,7 +57,7 @@ export default function OnkorumkyPage() {
             </p>
           </ExpandableText>
         </div>
-        <Link href="/register" className="block w-full rounded-full bg-[#FDA4C7] text-white text-xl font-black py-5 text-center">
+        <Link href="/pripravujeme" className="block w-full rounded-full bg-[#FDA4C7] text-white text-xl font-black py-5 text-center">
           Vstúpiť do komunity
         </Link>
       </section>
@@ -139,10 +139,10 @@ export default function OnkorumkyPage() {
             </ExpandableText>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-8 py-4">
+            <Link href="/pripravujeme" className="inline-block rounded-full bg-[#FDA4C7] text-white font-black text-base px-8 py-4">
               Zobraziť diskusie
             </Link>
-            <Link href="/register" className="inline-block rounded-full border-2 border-white text-white font-black text-base px-8 py-4">
+            <Link href="/pripravujeme" className="inline-block rounded-full border-2 border-white text-white font-black text-base px-8 py-4">
               Vytvoriť príspevok
             </Link>
           </div>

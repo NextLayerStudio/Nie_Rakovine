@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export function FinalCTA() {
   return (
-    <section className="pb-16"><div className="max-w-6xl mx-auto px-5 md:px-8">
+    <section className="pb-12"><div className="max-w-6xl mx-auto px-5 md:px-8">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -35,7 +35,7 @@ export function FinalCTA() {
             Registrácia je jednoduchá a nezáväzná. Prístup získate okamžite.
           </p>
           <Link
-            href="/register"
+            href="/pripravujeme"
             className="block w-full rounded-full bg-[#FDA4C7] text-white font-black text-xl py-5 text-center active:scale-[0.98] transition-transform mb-4"
           >
             Vytvoriť účet

@@ -64,6 +64,7 @@ async function main() {
     endsAt,
     location: "Bratislava, Centrum",
     eventId: "preview-event-id",
+    registrationId: "preview-registration-id",
   };
 
   const resend = new Resend(apiKey);

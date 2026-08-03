@@ -11,7 +11,7 @@ const FEATURES = [
     id: "library" as const,
     title: "ONKO knižnica",
     desc: "Videá, články a recepty od overených odborníkov, zoradené podľa toho, čo práve riešite.",
-    href: "/kontent-kniznica",
+    href: "/co-ziskas",
   },
   {
     id: "podcasts" as const,
@@ -29,7 +29,7 @@ const FEATURES = [
     id: "community" as const,
     title: "Diskusné fórum",
     desc: "Desiatky diskusných fór prepájajú ľudí s podobnou skúsenosťou a vytvárajú priestor pre zdieľanie, porozumenie a vzájomnú podporu aj bez dlhého vysvetľovania.",
-    href: "/onkorumky",
+    href: "/co-ziskas",
   },
 ];
 
@@ -177,7 +177,7 @@ const ICONS = { library: LibraryIcon, podcasts: PodcastIcon, events: EventsIcon,
 
 export function FeatureSection() {
   return (
-    <section className="bg-[#FCE9F0] pt-16 pb-20">
+    <section className="bg-[#FCE9F0] pt-10 pb-14">
       <div className="max-w-6xl mx-auto px-5 md:px-8">
       {/* Nadpis + podnadpis */}
       <motion.h2
@@ -191,7 +191,7 @@ export function FeatureSection() {
       </motion.h2>
 
       {/* 4 položky */}
-      <div className="flex flex-col gap-16 md:grid md:grid-cols-2 md:gap-x-12 md:gap-y-20">
+      <div className="flex flex-col gap-16 md:grid md:grid-cols-2 md:gap-x-12 md:gap-y-20 lg:grid-cols-4 lg:gap-x-16 lg:gap-y-0">
         {FEATURES.map((feature, i) => {
           const Icon = ICONS[feature.id];
           return (

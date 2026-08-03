@@ -1,6 +1,3 @@
-// Shared between the registration TermsModal and the public /podmienky page —
-// single source of truth so the two never drift apart.
-
 export function TermsContent({ className }: { className?: string }) {
   return (
     <div className={className}>
@@ -63,7 +60,7 @@ export function TermsContent({ className }: { className?: string }) {
         Aktuálne ceny členstva sú uvedené v cenníku na platforme, vždy
         v eurách (EUR) a ako konečná cena vrátane DPH, bez akýchkoľvek
         skrytých poplatkov. Platba prebieha online, bezpečne, cez platobnú
-        bránu GoPay platobnou kartou.
+        bránu Nexi platobnou kartou.
       </p>
       <p className="mb-4">
         Platforma ponúka štyri formy členstva: <strong>Free</strong> členstvo

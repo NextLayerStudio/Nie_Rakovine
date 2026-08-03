@@ -43,7 +43,7 @@ export function EventsSection() {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <section className="pb-20"><div className="max-w-6xl mx-auto px-5 md:px-8">
+    <section className="pb-14"><div className="max-w-6xl mx-auto px-5 md:px-8">
       {/* Nadpis */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}

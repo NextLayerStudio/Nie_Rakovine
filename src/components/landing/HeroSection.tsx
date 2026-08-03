@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -9,7 +10,7 @@ const fadeUp = { hidden: { opacity: 0, y: 28 }, show: { opacity: 1, y: 0, transi
 
 export function HeroSection() {
   return (
-    <section className="pt-20 md:pt-24 pb-10 md:pb-16">
+    <section className="pt-14 md:pt-16 pb-6 md:pb-8">
       {/* Video na celú šírku ako pozadie nadpisu/úvodu/CTA - kontajner nemá pevnú
           výšku, video ju len vyplní, takže končí presne tam, kde končí posledné
           tlačidlo. Platí na mobile aj na desktope. */}
@@ -45,7 +46,7 @@ export function HeroSection() {
             </motion.div>
 
             <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-start gap-3">
-              <Link href="/register" className="inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black px-8 py-4 shadow-lg">
+              <Link href="/pripravujeme" className="inline-block rounded-full bg-[#FDA4C7] text-white text-base font-black px-8 py-4 shadow-lg">
                 Chcem sa pripojiť
               </Link>
               <Link href="/co-ziskas" className="inline-block rounded-full border-2 border-[#FDA4C7] bg-white/90 text-[#FDA4C7] text-base font-black px-8 py-4 shadow-lg">
@@ -57,18 +58,28 @@ export function HeroSection() {
       </div>
 
       {/* Zvyšok textu — pod videom, na normálnom pozadí stránky */}
-      <div className="max-w-6xl mx-auto px-5 md:px-8 mt-6">
-        <p className="text-[#6F2380] text-lg md:text-2xl font-black leading-snug max-w-sm md:max-w-2xl mb-3">
-          Overený obsah, odborné videá, diskusné fóra, podcasty, praktické
-          rady, workshopy aj výhody pre členov.
-        </p>
-        <p className="text-[#6F2380]/70 text-base md:text-lg leading-relaxed max-w-sm md:max-w-2xl">
-          ONKO KLUB stojí na tíme desiatok
-          odborníkov, lektorov a pacientskych poradcov s osobnou skúsenosťou s
-          rakovinou. Jeho skutočnú hodnotu však tvoria samotní členovia – ľudia,
-          ktorí si prechádzajú podobnou cestou a rozumejú aj tichým obavám,
-          ktoré si v ťažkých chvíľach nechávame iba pre seba.
-        </p>
+      <div className="max-w-6xl mx-auto px-5 md:px-8 mt-6 md:mt-16 md:flex md:items-center md:gap-4">
+        <div className="md:flex-1">
+          <p className="text-[#6F2380] text-lg md:text-2xl font-black leading-snug max-w-sm md:max-w-xl mb-3">
+            Overený obsah, odborné videá, diskusné fóra, podcasty, praktické
+            rady, workshopy aj výhody pre členov.
+          </p>
+          <p className="text-[#6F2380]/70 text-base md:text-lg leading-relaxed max-w-sm md:max-w-xl">
+            ONKO KLUB stojí na tíme desiatok
+            odborníkov, lektorov a pacientskych poradcov s osobnou skúsenosťou s
+            rakovinou. Jeho skutočnú hodnotu však tvoria samotní členovia – ľudia,
+            ktorí si prechádzajú podobnou cestou a rozumejú aj tichým obavám,
+            ktoré si v ťažkých chvíľach nechávame iba pre seba.
+          </p>
+        </div>
+        <div className="hidden md:block shrink-0 w-96">
+          <div
+            className="relative w-full overflow-hidden rounded-[1.5rem] shadow-card"
+            style={{ aspectRatio: "1200 / 801" }}
+          >
+            <Image src="/images/komunita-hrdlicka.jpg" alt="Komunita ONKO KLUB" fill className="object-cover" />
+          </div>
+        </div>
       </div>
     </section>
   );
