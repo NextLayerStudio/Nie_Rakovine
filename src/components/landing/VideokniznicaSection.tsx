@@ -6,6 +6,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, ChevronRight, X } from "lucide-react";
 import { ExpandableText } from "@/components/landing/ExpandableText";
+import { ensureAutoplay } from "@/lib/video-autoplay";
 
 const VIDEOS = [
   { type: "video" as const, src: "/videos/adriana.mp4",  title: "Príbeh pacientky",                                        lektor: "Adriana",                  accent: "#FDA4C7" },
@@ -59,6 +60,7 @@ export function VideokniznicaSection() {
                 <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-3 group">
                   {v.type === "video" ? (
                     <video
+                      ref={ensureAutoplay}
                       autoPlay
                       muted
                       loop

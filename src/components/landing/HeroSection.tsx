@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { ensureAutoplay } from "@/lib/video-autoplay";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.11, delayChildren: 0.05 } } };
@@ -16,6 +17,7 @@ export function HeroSection() {
           tlačidlo. Platí na mobile aj na desktope. */}
       <div className="relative overflow-hidden">
         <video
+          ref={ensureAutoplay}
           autoPlay
           muted
           loop
