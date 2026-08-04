@@ -65,6 +65,7 @@ export function VideokniznicaSection() {
                       muted
                       loop
                       playsInline
+                      preload="auto"
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       onLoadedMetadata={(e) => {
                         const el = e.currentTarget;
