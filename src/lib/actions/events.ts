@@ -13,7 +13,8 @@ import { parseCancerTypes } from "@/lib/cancer-type";
 import { isPremiumMember } from "@/lib/membership";
 import { resolveImageField } from "@/lib/uploads";
 import { parseZonedDateTime } from "@/lib/timezone";
-import { queueEventRegistrationEmail } from "@/lib/email/send";
+import { queueEventTicketEmail } from "@/lib/email/send";
+import { deleteEventTicketAndLinkedRegistration } from "@/lib/actions/event-tickets";
 
 export type ActionState = { ok: boolean; message?: string };
 
@@ -184,21 +185,25 @@ export async function removeEventAttendeeAction(formData: FormData): Promise<voi
   await requireAdmin();
   const id = String(formData.get("id") ?? "");
   const eventId = String(formData.get("eventId") ?? "");
-  const source = String(formData.get("source") ?? "");
   if (!id || !eventId) return;
 
-  if (source === "member") {
-    await prisma.eventRegistration.delete({ where: { id } });
-  } else {
-    await prisma.eventTicket.delete({ where: { id } });
-  }
+  await deleteEventTicketAndLinkedRegistration(id);
 
   revalidatePath(`/admin/events/${eventId}`);
+  revalidatePath("/home");
+  revalidatePath("/home/calendar");
+  revalidatePath("/profile");
 }
 
 export type CancelRegistrationState = { ok: boolean; message?: string };
 
-/** Cancel a member's own registration — reached via the "Odhlásiť sa" link in the confirmation e-mail. */
+/**
+ * Cancel a member's own registration — reached via the "Odhlásiť sa" link in
+ * emails sent before the unified ticket flow. Kept working for old emails
+ * already in people's inboxes; new confirmation e-mails link to the ticket
+ * cancel flow instead (see `cancelEventTicketAction`), which this mirrors by
+ * also removing the linked ticket so both stay in sync either way.
+ */
 export async function cancelEventRegistrationAction(
   _prev: CancelRegistrationState,
   formData: FormData,
@@ -208,13 +213,16 @@ export async function cancelEventRegistrationAction(
 
   const registration = await prisma.eventRegistration.findUnique({
     where: { id: registrationId },
-    select: { eventId: true },
+    select: { eventId: true, userId: true },
   });
   if (!registration) {
     return { ok: false, message: "Táto registrácia už neexistuje — bola zrejme už zrušená." };
   }
 
   await prisma.eventRegistration.delete({ where: { id: registrationId } });
+  await prisma.eventTicket.deleteMany({
+    where: { eventId: registration.eventId, userId: registration.userId },
+  });
 
   revalidatePath("/home");
   revalidatePath("/home/calendar");
@@ -274,8 +282,9 @@ export async function registerForEventAction(
       startsAt: true,
       endsAt: true,
       location: true,
+      description: true,
       capacity: true,
-      _count: { select: { registrations: true, tickets: true } },
+      _count: { select: { tickets: true } },
     },
   });
   if (!event) return { ok: false, message: "Podujatie neexistuje." };
@@ -288,16 +297,15 @@ export async function registerForEventAction(
   if (
     !alreadyRegistered &&
     event.capacity !== null &&
-    event._count.registrations + event._count.tickets >= event.capacity
+    event._count.tickets >= event.capacity
   ) {
     return { ok: false, message: "Podujatie je plne obsadené." };
   }
 
   const wasAlreadyRegistered = Boolean(alreadyRegistered);
-  let registration: { id: string };
 
   try {
-    registration = await prisma.eventRegistration.upsert({
+    await prisma.eventRegistration.upsert({
       where: { eventId_userId: { eventId, userId: user.id } },
       create: { eventId, userId: user.id, name, surname },
       update: { name, surname },
@@ -310,16 +318,40 @@ export async function registerForEventAction(
     };
   }
 
-  if (!wasAlreadyRegistered) {
-    queueEventRegistrationEmail({
+  // Every attendee (member or guest) gets a ticket — it's what drives the
+  // QR code / listok page and the unified "Odhlásiť sa" cancel flow.
+  const [derivedFirstName, ...derivedRest] = user.fullName.trim().split(/\s+/);
+  const ticketFirstName = name ?? derivedFirstName ?? user.fullName;
+  const ticketLastName = surname ?? derivedRest.join(" ");
+
+  const ticket = await prisma.eventTicket.upsert({
+    where: { eventId_email: { eventId, email: user.email } },
+    create: {
+      eventId,
+      userId: user.id,
+      firstName: ticketFirstName,
+      lastName: ticketLastName,
       email: user.email,
-      fullName: user.fullName,
+      consentPrivacy: true,
+    },
+    update: {
+      userId: user.id,
+      firstName: ticketFirstName,
+      lastName: ticketLastName,
+    },
+    select: { id: true },
+  });
+
+  if (!wasAlreadyRegistered) {
+    queueEventTicketEmail({
+      email: user.email,
+      firstName: ticketFirstName,
+      ticketId: ticket.id,
       eventTitle: event.title,
       startsAt: event.startsAt,
       endsAt: event.endsAt,
       location: event.location,
-      eventId,
-      registrationId: registration.id,
+      description: event.description,
     });
   }
 

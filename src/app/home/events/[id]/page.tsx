@@ -18,7 +18,7 @@ export default async function EventPage({
   const user = await requireUser();
   const event = await prisma.event.findUnique({
     where: { id },
-    include: { _count: { select: { registrations: true, tickets: true } } },
+    include: { _count: { select: { tickets: true } } },
   });
   if (!event || !event.published) notFound();
 
@@ -31,7 +31,7 @@ export default async function EventPage({
     );
   }
 
-  const registrationCount = event._count.registrations + event._count.tickets;
+  const registrationCount = event._count.tickets;
 
   const myRegistration = await prisma.eventRegistration.findUnique({
     where: { eventId_userId: { eventId: id, userId: user.id } },

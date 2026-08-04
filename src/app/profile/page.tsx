@@ -60,7 +60,7 @@ export default async function ProfilePage({
             endsAt: true,
             location: true,
             capacity: true,
-            _count: { select: { registrations: true, tickets: true } },
+            _count: { select: { tickets: true } },
           },
         },
       },
@@ -90,7 +90,7 @@ export default async function ProfilePage({
       startsAt: r.event.startsAt.toISOString(),
       endsAt: r.event.endsAt?.toISOString() ?? null,
       location: r.event.location,
-      registrationCount: r.event._count.registrations + r.event._count.tickets,
+      registrationCount: r.event._count.tickets,
       capacity: r.event.capacity,
     })),
   };

@@ -73,7 +73,7 @@ export default async function AkciePage() {
       endsAt: true,
       capacity: true,
       visibility: true,
-      _count: { select: { registrations: true, tickets: true } },
+      _count: { select: { tickets: true } },
     },
   });
 
@@ -89,7 +89,7 @@ export default async function AkciePage() {
     endsAt: e.endsAt ? e.endsAt.toISOString() : null,
     capacity: e.capacity,
     visibility: e.visibility,
-    registrationCount: e._count.registrations + e._count.tickets,
+    registrationCount: e._count.tickets,
   }));
 
   return (

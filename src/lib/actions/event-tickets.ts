@@ -55,7 +55,7 @@ export async function registerGuestForEventAction(
       location: true,
       description: true,
       capacity: true,
-      _count: { select: { registrations: true, tickets: true } },
+      _count: { select: { tickets: true } },
     },
   });
   if (!event) {
@@ -70,9 +70,7 @@ export async function registerGuestForEventAction(
     return { ok: false, message: ALREADY_REGISTERED_MESSAGE };
   }
 
-  const totalRegistered =
-    event._count.registrations + event._count.tickets;
-  if (event.capacity !== null && totalRegistered >= event.capacity) {
+  if (event.capacity !== null && event._count.tickets >= event.capacity) {
     return { ok: false, message: "Podujatie je plne obsadené." };
   }
 
@@ -116,7 +114,34 @@ export async function registerGuestForEventAction(
 
 export type CancelTicketState = { ok: boolean; message?: string };
 
-/** Cancel a guest ticket — reached via the "Odhlásiť sa" link in the ticket e-mail. */
+/**
+ * Delete a ticket and, when it belongs to a member (userId set), the linked
+ * EventRegistration too — a member's ticket and registration are always
+ * created and cancelled together so both sides of the app stay in sync.
+ * Shared by the public "Odhlásiť sa" flow and the admin attendee list.
+ */
+export async function deleteEventTicketAndLinkedRegistration(
+  ticketId: string,
+): Promise<{ ok: true; eventId: string } | { ok: false; message: string }> {
+  const ticket = await prisma.eventTicket.findUnique({
+    where: { id: ticketId },
+    select: { eventId: true, userId: true },
+  });
+  if (!ticket) {
+    return { ok: false, message: "Tento lístok už neexistuje — registrácia bola zrejme už zrušená." };
+  }
+
+  await prisma.eventTicket.delete({ where: { id: ticketId } });
+  if (ticket.userId) {
+    await prisma.eventRegistration.deleteMany({
+      where: { eventId: ticket.eventId, userId: ticket.userId },
+    });
+  }
+
+  return { ok: true, eventId: ticket.eventId };
+}
+
+/** Cancel a ticket — reached via the "Odhlásiť sa" link in the ticket e-mail (members and guests alike). */
 export async function cancelEventTicketAction(
   _prev: CancelTicketState,
   formData: FormData,
@@ -124,19 +149,15 @@ export async function cancelEventTicketAction(
   const ticketId = String(formData.get("ticketId") ?? "");
   if (!ticketId) return { ok: false, message: "Chýba lístok." };
 
-  const ticket = await prisma.eventTicket.findUnique({
-    where: { id: ticketId },
-    select: { eventId: true },
-  });
-  if (!ticket) {
-    return { ok: false, message: "Tento lístok už neexistuje — registrácia bola zrejme už zrušená." };
-  }
-
-  await prisma.eventTicket.delete({ where: { id: ticketId } });
+  const result = await deleteEventTicketAndLinkedRegistration(ticketId);
+  if (!result.ok) return result;
 
   revalidatePath("/podujatia");
-  revalidatePath(`/podujatia/${ticket.eventId}`);
-  revalidatePath(`/admin/events/${ticket.eventId}`);
+  revalidatePath(`/podujatia/${result.eventId}`);
+  revalidatePath(`/admin/events/${result.eventId}`);
+  revalidatePath("/home");
+  revalidatePath("/home/calendar");
+  revalidatePath("/profile");
 
   return { ok: true };
 }

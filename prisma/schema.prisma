@@ -111,6 +111,7 @@ model User {
 
   // Relations
   eventRegistrations EventRegistration[]
+  eventTickets       EventTicket[]
   articleLikes       ArticleLike[]
   eventLikes         EventLike[]
   eventComments      EventComment[]
@@ -561,11 +562,15 @@ model EventRegistration {
   @@unique([eventId, userId])
 }
 
-/// Guest ticket registrations from the public landing page — no account required.
+/// Unified attendance record for an event — covers both member registrations
+/// and guest signups from the public landing page. `userId` is set when the
+/// attendee registered as a logged-in member; null for guests.
 model EventTicket {
   id        String   @id @default(cuid())
   eventId   String
   event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId         String?
+  user           User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   firstName      String
   lastName       String
   email          String
@@ -575,6 +580,7 @@ model EventTicket {
 
   @@unique([eventId, email])
   @@index([eventId])
+  @@index([userId])
 }
 
 // ---------------- Forums (Fóra) ----------------

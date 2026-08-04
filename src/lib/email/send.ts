@@ -4,10 +4,6 @@ import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { sendTransactionalEmailAsync } from "@/lib/email/client";
 import {
-  renderEventRegistrationEmail,
-  renderEventRegistrationEmailSubject,
-} from "@/lib/email/templates/event-registration";
-import {
   renderEventTicketEmail,
   renderEventTicketEmailSubject,
 } from "@/lib/email/templates/event-ticket";
@@ -59,24 +55,11 @@ export function queueNewDeviceLoginEmail(input: {
   });
 }
 
-export function queueEventRegistrationEmail(input: {
-  email: string;
-  fullName: string;
-  eventTitle: string;
-  startsAt: Date;
-  endsAt: Date | null;
-  location: string | null;
-  eventId: string;
-  registrationId: string;
-}): void {
-  sendTransactionalEmailAsync({
-    to: input.email,
-    subject: renderEventRegistrationEmailSubject(input.eventTitle),
-    html: renderEventRegistrationEmail(input),
-  });
-}
-
-/** Guest (no-account) ticket registration from the public landing page. */
+/**
+ * Ticket ("listok") email — sent for every event attendee, member or guest.
+ * Members get a linked ticket (see registerForEventAction); guests get one
+ * from the public landing page (see registerGuestForEventAction).
+ */
 export function queueEventTicketEmail(input: {
   email: string;
   firstName: string;

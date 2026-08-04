@@ -13,9 +13,8 @@ type Attendee = {
   name: string;
   email: string;
   isMember: boolean;
-  source: "member" | "guest";
   registeredAt: Date;
-  ticketId: string | null;
+  ticketId: string;
 };
 
 export default async function EditEventPage({
@@ -27,47 +26,21 @@ export default async function EditEventPage({
   const event = await prisma.event.findUnique({
     where: { id },
     include: {
-      registrations: {
-        include: { user: { select: { email: true, fullName: true } } },
-        orderBy: { createdAt: "desc" },
-      },
       tickets: { orderBy: { createdAt: "desc" } },
     },
   });
   if (!event) notFound();
 
-  const ticketEmails = event.tickets.map((t) => t.email);
-  const memberEmails = ticketEmails.length
-    ? new Set(
-        (
-          await prisma.user.findMany({
-            where: { email: { in: ticketEmails } },
-            select: { email: true },
-          })
-        ).map((u) => u.email),
-      )
-    : new Set<string>();
-
-  const attendees: Attendee[] = [
-    ...event.registrations.map((r) => ({
-      id: r.id,
-      name: `${r.name ?? r.user.fullName} ${r.surname ?? ""}`.trim(),
-      email: r.user.email,
-      isMember: true,
-      source: "member" as const,
-      registeredAt: r.createdAt,
-      ticketId: null,
-    })),
-    ...event.tickets.map((t) => ({
-      id: t.id,
-      name: `${t.firstName} ${t.lastName}`.trim(),
-      email: t.email,
-      isMember: memberEmails.has(t.email),
-      source: "guest" as const,
-      registeredAt: t.createdAt,
-      ticketId: t.id,
-    })),
-  ].sort((a, b) => b.registeredAt.getTime() - a.registeredAt.getTime());
+  // Every attendee — member or guest — has exactly one EventTicket row;
+  // `userId` tells us which is which.
+  const attendees: Attendee[] = event.tickets.map((t) => ({
+    id: t.id,
+    name: `${t.firstName} ${t.lastName}`.trim(),
+    email: t.email,
+    isMember: t.userId !== null,
+    registeredAt: t.createdAt,
+    ticketId: t.id,
+  }));
 
   const dateFormat = new Intl.DateTimeFormat("sk-SK", {
     timeZone: EVENT_TIME_ZONE,
@@ -102,7 +75,7 @@ export default async function EditEventPage({
           </h2>
           <div className="mt-3 space-y-2">
             {attendees.map((a) => (
-              <details key={`${a.source}-${a.id}`} className="admin-card p-3 text-sm">
+              <details key={a.id} className="admin-card p-3 text-sm">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-2">
                   <span className="font-semibold text-brand-purple">{a.name}</span>
                   <span
@@ -119,27 +92,25 @@ export default async function EditEventPage({
                   <p>{a.email}</p>
                   <p>Zaregistrovaný: {dateFormat.format(a.registeredAt)}</p>
                   <p>
-                    {a.source === "member"
+                    {a.isMember
                       ? "Registrácia v aplikácii"
                       : "Registrácia z verejnej stránky (lístok)"}
                   </p>
-                  {a.ticketId && (
-                    <a
-                      href={`/podujatia/listok/${a.ticketId}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-block font-semibold text-brand-pink underline"
-                    >
-                      Zobraziť lístok →
-                    </a>
-                  )}
+                  <a
+                    href={`/podujatia/listok/${a.ticketId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-block font-semibold text-brand-pink underline"
+                  >
+                    Zobraziť lístok →
+                  </a>
                   <div className="pt-1.5">
                     <DeleteConfirmButton
                       action={removeEventAttendeeAction}
                       id={a.id}
                       label="Odstrániť z podujatia"
                       confirmText={`Naozaj odstrániť ${a.name} z tohto podujatia?`}
-                      extraFields={{ eventId: id, source: a.source }}
+                      extraFields={{ eventId: id }}
                     />
                   </div>
                 </div>

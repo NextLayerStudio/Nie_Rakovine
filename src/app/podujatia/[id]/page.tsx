@@ -24,11 +24,11 @@ export default async function PodujatieDetailPage({
 
   const event = await prisma.event.findFirst({
     where: { id, published: true },
-    include: { _count: { select: { registrations: true, tickets: true } } },
+    include: { _count: { select: { tickets: true } } },
   });
   if (!event) notFound();
 
-  const registrationCount = event._count.registrations + event._count.tickets;
+  const registrationCount = event._count.tickets;
   const isFull = event.capacity !== null && registrationCount >= event.capacity;
   const isMembersOnly = event.visibility === "MEMBERS_ONLY";
 

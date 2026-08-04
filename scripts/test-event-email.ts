@@ -1,14 +1,14 @@
 /**
- * Send a preview of the event registration email.
+ * Send a preview of the event ticket ("listok") email.
  * Usage: npm run email:event -- you@email.sk
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { Resend } from "resend";
 import {
-  renderEventRegistrationEmail,
-  renderEventRegistrationEmailSubject,
-} from "../src/lib/email/templates/event-registration";
+  renderEventTicketEmail,
+  renderEventTicketEmailSubject,
+} from "../src/lib/email/templates/event-ticket";
 
 function loadEnvFile() {
   const path = resolve(process.cwd(), ".env");
@@ -58,21 +58,21 @@ async function main() {
   endsAt.setHours(12, 0, 0, 0);
 
   const sample = {
-    fullName: "Peter Test",
+    firstName: "Peter",
     eventTitle: "ONKO YOGA",
     startsAt,
     endsAt,
     location: "Bratislava, Centrum",
-    eventId: "preview-event-id",
-    registrationId: "preview-registration-id",
+    description: "Spoločné cvičenie jogy pre členov ONKO KLUBU.",
+    ticketId: "preview-ticket-id",
   };
 
   const resend = new Resend(apiKey);
   const { data, error } = await resend.emails.send({
     from,
     to,
-    subject: renderEventRegistrationEmailSubject(sample.eventTitle),
-    html: renderEventRegistrationEmail(sample),
+    subject: renderEventTicketEmailSubject(sample.eventTitle),
+    html: renderEventTicketEmail(sample),
   });
 
   if (error) {
@@ -80,7 +80,7 @@ async function main() {
     process.exit(1);
   }
 
-  console.log(`Event registration email sent to ${to} (id: ${data?.id ?? "ok"})`);
+  console.log(`Event ticket email sent to ${to} (id: ${data?.id ?? "ok"})`);
 }
 
 main().catch((err) => {
