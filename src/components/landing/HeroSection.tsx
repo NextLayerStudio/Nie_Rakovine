@@ -72,7 +72,7 @@ export function HeroSection() {
             ktoré si v ťažkých chvíľach nechávame iba pre seba.
           </p>
         </div>
-        <div className="hidden md:block shrink-0 w-96">
+        <div className="mt-6 md:mt-0 shrink-0 w-full md:w-96">
           <div
             className="relative w-full overflow-hidden rounded-[1.5rem] shadow-card"
             style={{ aspectRatio: "1200 / 801" }}
