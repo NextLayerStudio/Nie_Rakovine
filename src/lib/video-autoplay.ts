@@ -9,9 +9,17 @@
  */
 export function ensureAutoplay(el: HTMLVideoElement | null): void {
   if (!el) return;
+  // Same JSX-prop-vs-DOM-property timing gap can affect playsInline/autoplay
+  // too, not just muted — WebKit (Safari and, since it wraps the same
+  // engine, Chrome on iOS) is the strictest about all three being set.
   el.muted = true;
+  el.defaultMuted = true;
+  el.playsInline = true;
+  el.autoplay = true;
+  if (el.readyState === 0) el.load();
   el.play().catch(() => {
-    // Autoplay can still be blocked (e.g. low-power mode) — nothing to do,
-    // the poster frame / first video frame just stays visible.
+    // Autoplay can still be blocked (e.g. iOS Low Data Mode, low-power
+    // mode) — nothing to do, the poster frame / first video frame just
+    // stays visible.
   });
 }
