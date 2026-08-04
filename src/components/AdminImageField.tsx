@@ -312,6 +312,18 @@ export function AdminImageField({
                 aria-label="Vlastná farba pozadia"
                 className="h-6 w-6 cursor-pointer rounded-full border-2 border-brand-purple/15 bg-transparent p-0"
               />
+              <input
+                type="text"
+                value={bgColor}
+                onChange={(e) => {
+                  const v = e.target.value.trim();
+                  setBgColor(v && !v.startsWith("#") ? `#${v}` : v);
+                }}
+                placeholder="#RRGGBB"
+                maxLength={7}
+                aria-label="Hex kód farby pozadia"
+                className="admin-input h-6 w-24 px-2 py-0 text-xs font-mono"
+              />
             </div>
             {previewAspect === "video" && !mandatoryAspect && (
               <div className="flex gap-2">
