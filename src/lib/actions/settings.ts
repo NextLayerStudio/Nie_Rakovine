@@ -183,7 +183,7 @@ export async function deleteAccountAction(): Promise<void> {
   const emailResult = await sendTransactionalEmail({
     to: user.email,
     subject: "Váš účet v Onko Klube bol zrušený",
-    html: renderAccountDeletedEmail({ fullName: user.fullName }),
+    html: renderAccountDeletedEmail(),
   });
 
   if (!emailResult.ok) {

@@ -27,13 +27,13 @@ const FEATURES = [
   {
     emoji: "◉",
     title: "Podujatia a aktivity",
-    text: "Objavte stretnutia, workshopy a aktivity v okolí.",
+    text: "Buďte súčasťou workshopov a iných podporných aktivít vo Vašom okolí.",
   },
   {
     emoji: "◎",
     title: "Diskusné fóra",
     subtitle: "komunita pre vás",
-    text: "Podeľte sa o svoje skúsenosti s ľuďmi, ktorí vám rozumejú.",
+    text: "Podeľte sa o svoje skúsenosti s ľuďmi, ktorí Vám rozumejú.",
   },
   {
     emoji: "❋",
@@ -54,7 +54,7 @@ function membershipPillarsRow(): string {
       <td style="padding:16px 12px;">
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" align="center">
           <tr>
-            ${cell("PODPORA")}${dot}${cell("ZDIEĽANIE")}${dot}${cell("POROZUMENIE")}${dot}${cell("PRAKTICKÉ INFO")}
+            ${cell("PODPORA")}${dot}${cell("ZDIEĽANIE")}${dot}${cell("POROZUMENIE")}${dot}${cell("ODBORNÉ INFORMÁCIE")}
           </tr>
         </table>
       </td>
@@ -119,10 +119,10 @@ export function renderWelcomeEmail(fullName: string): string {
             <td style="padding:0 18px 24px;text-align:center;">
               ${renderEmailLogos(appUrl, "header")}
               <div class="ok-text" style="font-size:24px;font-weight:800;color:${BRAND.text};line-height:1.3;letter-spacing:-0.01em;margin:0 0 8px;">
-                Ahoj, ${escapeHtml(name)}!
+                Dobrý deň, ${escapeHtml(name)}!
               </div>
               <div class="ok-muted" style="font-size:15px;font-weight:500;color:${BRAND.textMuted};line-height:1.6;">
-                Vitajte v ONKO KLUBE – bezpečnom priestore pre ľudí, ktorých život zasiahlo onkologické ochorenie.
+                Vitajte v ONKO KLUBE, priestore vytvorenom s rešpektom k príbehom, obavám aj nádejam ľudí, ktorých zasiahlo onkologické ochorenie. Sme radi, že ste medzi nami!
               </div>
             </td>
           </tr>
@@ -132,7 +132,7 @@ export function renderWelcomeEmail(fullName: string): string {
               ${membershipPillarsRow()}
 
               <p class="ok-text" style="margin:0 0 22px;font-size:15px;line-height:1.75;color:${BRAND.text};">
-                Ďakujeme, že ste sa k nám pridali. Váš účet je aktívny a pripravený. Nižšie sa dozviete, čo všetko máte v rámci členstva k dispozícii.
+                Váš účet je aktívny a pripravený. Nižšie sa dozviete, čo všetko máte v rámci členstva k dispozícii.
               </p>
 
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 8px;">
@@ -154,7 +154,7 @@ export function renderWelcomeEmail(fullName: string): string {
               </table>
 
               <a href="${escapeAttr(homeUrl)}" class="ok-muted" style="font-size:13px;font-weight:700;color:${BRAND.purple};text-decoration:none;border-bottom:1px solid rgba(111,35,128,0.25);padding-bottom:1px;">
-                Alebo prejsť priamo do aplikácie →
+                Alebo prejsť priamo do aplikácie ONKO KLUB →
               </a>
             </td>
           </tr>
@@ -162,8 +162,11 @@ export function renderWelcomeEmail(fullName: string): string {
           <tr>
             <td class="ok-border" style="padding:20px 18px 8px;border-top:1px solid rgba(111,35,128,0.1);text-align:center;">
               ${renderEmailLogos(appUrl, "footer")}
-              <p class="ok-muted" style="margin:16px 0 14px;font-size:12px;line-height:1.6;color:${BRAND.textMuted};">
-                Ak ste sa neregistrovali vy, ignorujte tento e-mail alebo nás kontaktujte.
+              <p class="ok-text" style="margin:14px 0 0;font-size:13px;font-weight:800;color:${BRAND.purple};letter-spacing:-0.01em;">
+                Komunita je naše srdce
+              </p>
+              <p class="ok-muted" style="margin:14px 0 14px;font-size:12px;line-height:1.6;color:${BRAND.textMuted};">
+                Ak ste sa neregistrovali Vy, ignorujte tento e-mail alebo nás kontaktujte.
               </p>
               <a href="${escapeAttr(appUrl)}" class="ok-muted" style="font-size:12px;font-weight:600;color:${BRAND.purple};text-decoration:none;">
                 ${escapeHtml(appUrl.replace(/^https?:\/\//, ""))}
@@ -174,7 +177,7 @@ export function renderWelcomeEmail(fullName: string): string {
         </table>
 
         <p class="ok-muted" style="margin:20px 0 0;font-size:11px;color:rgba(74,26,86,0.45);text-align:center;">
-          © ONKO KLUB · Komunita NIE RAKOVINE
+          © ONKO KLUB · Komunita NIE RAKOVINE, o. z.
         </p>
 
       </td>

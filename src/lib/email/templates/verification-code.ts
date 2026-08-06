@@ -9,8 +9,8 @@ export function renderVerificationCodeEmail(input: {
   const spaced = input.code.split("").join(" ");
 
   const bodyHtml = `
-    <p style="margin:0 0 18px;">Ahoj ${escapeHtml(name)},</p>
-    <p style="margin:0 0 20px;">ďakujeme za registráciu v Onko Klube. Pre dokončenie registrácie zadajte v aplikácii tento overovací kód:</p>
+    <p style="margin:0 0 18px;">Dobrý deň, ${escapeHtml(name)},</p>
+    <p style="margin:0 0 20px;">sme radi, že ste si vybrali ONKO KLUB a stali sa súčasťou komunity, kde nájdete porozumenie, podporu a ľudí s podobnou skúsenosťou. Pre dokončenie registrácie zadajte v aplikácii tento overovací kód:</p>
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 20px;">
       <tr>
         <td class="ok-surface" style="padding:22px 24px;text-align:center;background:#FFF3F9;border-radius:18px;border:1px solid rgba(111,35,128,0.12);">
@@ -27,6 +27,6 @@ export function renderVerificationCodeEmail(input: {
     heroTitle: "Overte svoj e-mail",
     heroSubtitle: "Zadajte kód v aplikácii a dokončite registráciu.",
     bodyHtml,
-    footerNote: "Tento e-mail slúži na overenie vašej e-mailovej adresy.",
+    footerNote: "Tento e-mail slúži na overenie Vašej e-mailovej adresy.",
   });
 }

@@ -1,7 +1,6 @@
 import { getAppUrlFromEnv } from "@/lib/email/brand";
 import {
   emailDetailRows,
-  firstName,
   formatSkDateTime,
   renderEmailShell,
 } from "@/lib/email/templates/shared";
@@ -11,12 +10,11 @@ export function renderNewDeviceLoginEmail(input: {
   deviceLabel: string;
   loginAt: Date;
 }): string {
-  const name = firstName(input.fullName);
   const resetUrl = `${getAppUrlFromEnv()}/reset-password`;
 
   const bodyHtml = `
-    <p style="margin:0 0 18px;">Ahoj ${name},</p>
-    <p style="margin:0 0 20px;">zaznamenali sme nové prihlásenie do vášho účtu Onko Klub:</p>
+    <p style="margin:0 0 18px;">Dobrý deň,</p>
+    <p style="margin:0 0 20px;">zaznamenali sme nové prihlásenie do Vášho účtu ONKO KLUB z iného zariadenia.</p>
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 18px;">
       ${emailDetailRows([
         { icon: "◈", label: "Zariadenie", value: input.deviceLabel },
@@ -27,7 +25,7 @@ export function renderNewDeviceLoginEmail(input: {
       <tr>
         <td style="padding:14px 16px;background:#FEF2F2;border-radius:14px;border:1px solid rgba(220,38,38,0.15);">
           <p style="margin:0;font-size:13px;line-height:1.6;color:#991B1B;font-weight:600;">
-            Ak ste to neboli vy, okamžite si zmeňte heslo a kontaktujte nás.
+            Ak ste sa neprihlasovali Vy, z bezpečnostných dôvodov si zmeňte heslo.
           </p>
         </td>
       </tr>
@@ -38,9 +36,9 @@ export function renderNewDeviceLoginEmail(input: {
     pageTitle: "Nové prihlásenie",
     heroIcon: "◈",
     heroTitle: "Nové zariadenie",
-    heroSubtitle: "Prihlásenie z neznámeho zariadenia bolo zaznamenané.",
+    heroSubtitle: "Bolo zaznamenané prihlásenie z neznámeho zariadenia.",
     bodyHtml,
     cta: { label: "Zmeniť heslo", href: resetUrl, variant: "purple" },
-    footerNote: "Tento e-mail slúži na ochranu vášho účtu.",
+    footerNote: "Tento e-mail slúži na ochranu Vášho účtu.",
   });
 }

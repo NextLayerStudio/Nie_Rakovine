@@ -1,14 +1,11 @@
-import { escapeHtml, firstName, renderEmailShell } from "@/lib/email/templates/shared";
+import { renderEmailShell } from "@/lib/email/templates/shared";
 
-export function renderAccountDeletedEmail(input: {
-  fullName: string;
-}): string {
-  const name = firstName(input.fullName);
-
+export function renderAccountDeletedEmail(): string {
   const bodyHtml = `
-    <p style="margin:0 0 18px;">Ahoj ${escapeHtml(name)},</p>
-    <p style="margin:0 0 20px;">potvrdzujeme, že váš účet v Onko Klube bol natrvalo zrušený. Všetky vaše osobné údaje a nastavenia boli odstránené z našej aplikácie.</p>
-    <p class="ok-muted" style="margin:0;font-size:13px;line-height:1.6;color:#6F2380B3;">Ak ste o zrušenie účtu nežiadali vy, kontaktujte nás čo najskôr. Ak sa k nám v budúcnosti chcete vrátiť, môžete si kedykoľvek vytvoriť nový účet.</p>`;
+    <p style="margin:0 0 18px;">Dobrý deň,</p>
+    <p style="margin:0 0 20px;">potvrdzujeme, že váš účet v ONKO KLUBE bol natrvalo zrušený. Všetky Vaše osobné údaje a nastavenia boli z aplikácie odstránené v súlade s Vašou požiadavkou.</p>
+    <p class="ok-muted" style="margin:0 0 12px;font-size:13px;line-height:1.6;color:#6F2380B3;">Ak ste o zrušenie účtu nežiadali Vy, kontaktujte nás čo najskôr.</p>
+    <p class="ok-muted" style="margin:0;font-size:13px;line-height:1.6;color:#6F2380B3;">Dvere ONKO KLUBU Vám zostávajú vždy otvorené. Ak sa k nám v budúcnosti rozhodnete vrátiť, môžete si kedykoľvek vytvoriť nový účet.</p>`;
 
   return renderEmailShell({
     previewText: "Váš účet v Onko Klube bol zrušený",

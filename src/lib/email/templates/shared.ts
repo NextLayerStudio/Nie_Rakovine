@@ -198,7 +198,7 @@ export function renderEmailShell({
             </td>
           </tr>
         </table>
-        <p class="ok-muted" style="margin:20px 0 0;font-size:11px;color:rgba(74,26,86,0.45);text-align:center;">© ONKO KLUB · Komunita NIE RAKOVINE</p>
+        <p class="ok-muted" style="margin:20px 0 0;font-size:11px;color:rgba(74,26,86,0.45);text-align:center;">© ONKO KLUB · Komunita NIE RAKOVINE, o. z.</p>
       </td>
     </tr>
   </table>

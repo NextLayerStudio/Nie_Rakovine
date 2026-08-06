@@ -35,8 +35,9 @@ export function renderEventTicketEmail(input: {
   }
 
   const bodyHtml = `
-    <p style="margin:0 0 18px;">Ahoj ${input.firstName},</p>
-    <p style="margin:0 0 20px;">tvoja registrácia na podujatie je potvrdená. Nižšie nájdeš svoj lístok.</p>
+    <p style="margin:0 0 18px;">Dobrý deň,</p>
+    <p style="margin:0 0 20px;">Vaša účasť na podujatí je potvrdená. Pri príchode sa, prosím, preukážte QR kódom, ktorý nájdete nižšie.</p>
+    <p style="margin:0 0 12px;font-weight:700;">Tešíme sa na Vás!</p>
     ${emailTicketCard(input.eventTitle, `Lístok č. ${input.ticketId}`)}
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
       ${emailDetailRows(details)}
@@ -52,10 +53,10 @@ export function renderEventTicketEmail(input: {
     ${input.description ? `<p class="ok-muted" style="margin:16px 0 0;font-size:13px;line-height:1.6;color:#6F2380B3;">${input.description}</p>` : ""}`;
 
   return renderEmailShell({
-    previewText: `Tvoj lístok na ${input.eventTitle}`,
+    previewText: `Váš lístok na ${input.eventTitle}`,
     pageTitle: `Lístok — ${input.eventTitle}`,
-    heroTitle: "Tvoj lístok je pripravený!",
-    heroSubtitle: "Ukáž QR kód na mieste konania podujatia.",
+    heroTitle: "Váš lístok je pripravený!",
+    heroSubtitle: "Na mieste sa preukážete QR kódom.",
     bodyHtml,
     cta: { label: "Zobraziť lístok", href: ticketUrl, variant: "pink" },
     secondaryLink: { label: "Nemôžem sa zúčastniť — odhlásiť sa", href: cancelUrl },
@@ -63,5 +64,5 @@ export function renderEventTicketEmail(input: {
 }
 
 export function renderEventTicketEmailSubject(eventTitle: string): string {
-  return `Tvoj lístok: ${eventTitle}`;
+  return `Váš lístok: ${eventTitle}`;
 }

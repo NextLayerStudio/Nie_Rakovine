@@ -101,7 +101,7 @@ const emails: { file: string; subject: string; html: string }[] = [
   {
     file: "07-ucet-zruseny-account-deleted.html",
     subject: "Váš účet v Onko Klube bol zrušený",
-    html: renderAccountDeletedEmail({ fullName: "Andrej Paulička" }),
+    html: renderAccountDeletedEmail(),
   },
   {
     file: "08-listok-na-podujatie-event-ticket.html",
