@@ -36,9 +36,6 @@ export default function PripravujemePage() {
           <OnkoLogo size="lg" priority />
         </Link>
 
-        <p className="mb-3 text-sm font-bold uppercase tracking-widest text-[#FDA4C7]">
-          ONKO KLUB
-        </p>
         <h1 className="mb-4 max-w-lg text-[2rem] md:text-[2.6rem] font-black leading-[1.15] text-[#6F2380]">
           ONKO KLUB už čoskoro
         </h1>
