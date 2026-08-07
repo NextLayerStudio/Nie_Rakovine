@@ -10,6 +10,19 @@ import { ExpandableText } from "@/components/landing/ExpandableText";
 
 type FeatureImg = { label: string; src?: string; fit?: "cover" | "contain"; position?: string; width?: number; height?: number; rotate?: number; video?: boolean };
 
+const PARTNERS: { name: string; logo: string; url: string }[] = [
+  { name: "Nadácia SPP", logo: "/images/partneri/nadacia-spp.jpg", url: "https://www.nadaciaspp.sk/" },
+  { name: "RAJ zdravia", logo: "/images/partneri/raj-zdravia.png", url: "https://www.rajzdravia.sk/" },
+  { name: "Meditesty", logo: "/images/partneri/meditesty-tmave-pozadie.png", url: "https://meditesty.sk/" },
+  { name: "Dulcia.sk", logo: "/images/partneri/dulcia.png", url: "https://www.dulcia.sk/" },
+  { name: "Hyundai", logo: "/images/partneri/hyundai.jpg", url: "https://www.hyundai.com/sk/sk/modely.html" },
+  { name: "Kittler", logo: "/images/partneri/kittler.png", url: "https://www.kittlermedia.com/" },
+  { name: "Visibility", logo: "/images/partneri/visibility.png", url: "https://visibility.sk/" },
+  { name: "Bratislava - Staré Mesto", logo: "/images/partneri/bratislava-stare-mesto.png", url: "https://www.staremesto.sk/" },
+  { name: "NextLayer Studio", logo: "/images/partneri/nextlayer-studio.png", url: "https://www.nextlayer.studio/" },
+  { name: "EpixGym", logo: "/images/partneri/epixgym.png", url: "https://epixgym.sk/" },
+];
+
 const FEATURES: {
   icon: typeof Play;
   accent: string;
@@ -93,8 +106,6 @@ const FEATURES: {
     detailItems: ["Zdravie a starostlivosť o telo", "Výživa, doplnky a zdravý životný štýl", "Pohyb, rehabilitácia a fyzická aktivita", "Spánok a regenerácia", "Kozmetika a starostlivosť o pokožku", "Technológie pre zdravie", "Voľnočasové aktivity", "Duševná pohoda a relaxácia"],
     imgs: [
       { label: "Naši partneri", src: "/images/co-ziskas-discounts-wide.jpg" },
-      { label: "Nadácia SPP", src: "/images/partneri/nadacia-spp.jpg", fit: "contain" },
-      { label: "RAJ zdravia", src: "/images/partneri/raj-zdravia.png", fit: "contain" },
     ],
   },
   {
@@ -386,6 +397,35 @@ export default function CoZiskasPage() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Naši partneri */}
+      <section className="pb-14">
+        <div className="max-w-6xl mx-auto px-5 md:px-8">
+          <h2 className="text-xl font-black text-[#6F2380] mb-6">Naši partneri</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {PARTNERS.map((p, i) => (
+              <a
+                key={p.name}
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="aspect-square rounded-2xl bg-white flex items-center justify-center p-3"
+                style={{ border: `1.5px solid ${i % 2 === 0 ? "#FDA4C7" : "#6F2380"}22` }}
+              >
+                <div className="relative w-full h-full">
+                  <Image
+                    src={p.logo}
+                    alt={p.name}
+                    fill
+                    sizes="140px"
+                    className="object-contain"
+                  />
+                </div>
+              </a>
+            ))}
           </div>
         </div>
       </section>

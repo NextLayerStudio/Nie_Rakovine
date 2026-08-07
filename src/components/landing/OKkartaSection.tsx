@@ -39,6 +39,8 @@ const PARTNERS: { name: string; logo: string; url: string }[] = [
   { name: "Kittler", logo: "/images/partneri/kittler.png", url: "https://www.kittlermedia.com/" },
   { name: "Visibility", logo: "/images/partneri/visibility.png", url: "https://visibility.sk/" },
   { name: "Bratislava - Staré Mesto", logo: "/images/partneri/bratislava-stare-mesto.png", url: "https://www.staremesto.sk/" },
+  { name: "NextLayer Studio", logo: "/images/partneri/nextlayer-studio.png", url: "https://www.nextlayer.studio/" },
+  { name: "EpixGym", logo: "/images/partneri/epixgym.png", url: "https://epixgym.sk/" },
 ];
 
 export function OKkartaSection() {
