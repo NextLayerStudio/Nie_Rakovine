@@ -81,10 +81,6 @@ export function TestimonialsSection() {
           </motion.div>
         ))}
       </div>
-
-      <p className="text-[#6F2380]/30 text-[11px] text-center mt-6 leading-relaxed px-2">
-        Príbehy sú ilustračné. Skutočné referencie budú doplnené po spustení platformy.
-      </p>
       </div>
     </section>
   );

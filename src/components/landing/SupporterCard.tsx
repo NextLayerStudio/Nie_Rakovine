@@ -27,8 +27,10 @@ export function SupporterCard({ className }: { className?: string }) {
         Podporujúce členstvo
       </p>
       <p className="mb-6 text-sm leading-relaxed text-[#6F2380]/55">
-        Chcete podporiť komunitu vyššou sumou? Jednorazová platba vám
-        dá prístup na celý rok, rovnako ako pri ročnom členstve.
+        Podporte činnosť NIE RAKOVINE, o. z. darom vo výške, ktorú si zvolíte
+        sami. Ako poďakovanie získate najvyššiu úroveň členstva v ONKO KLUBE
+        na 12 mesiacov. Ďakujeme, že pomáhate tvoriť miesto, kde nikto nemusí
+        zostať sám.
       </p>
 
       <div className="mb-4 flex items-center justify-center gap-2">

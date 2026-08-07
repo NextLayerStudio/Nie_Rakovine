@@ -48,7 +48,7 @@ const PLATBA_FAQ = [
   },
   {
     q: "Má členstvo skúšobné obdobie?",
-    a: "Členstvo si môžete vyskúšať bez záväzkov. Ak sa rozhodnete v prvom mesiaci nepokračovať, stačí ho jednoducho zrušiť. Bez pokuty a akýchkoľvek sankcií.",
+    a: "Členstvo si môžete vyskúšať bez záväzkov. Ak sa rozhodnete po prvom mesiaci nepokračovať, stačí ho jednoducho zrušiť. Bez pokuty a akýchkoľvek sankcií.",
   },
   {
     q: "Sú moje osobné a zdravotné údaje v bezpečí?",

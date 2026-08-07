@@ -31,7 +31,7 @@ const EVENT_TYPES: {
     icon: Brain,
     accent: "#6F2380",
     title: "Mindfulness a meditácia",
-    host: "Mirka Malejčíková / Zuzka Mindfulness",
+    host: "Mirka Malejčíková / Zuzka Mičúchová",
     desc: "Skupinové stretnutia zamerané na zvládanie stresu, vedomé dýchanie, uvoľnenie a vnímanie vlastného tela.",
   },
   {
@@ -53,7 +53,7 @@ const EVENT_TYPES: {
 const STEPS = [
   { title: "Vyberte si podujatie",       desc: "V členskej sekcii nájdete prehľad pripravovaných workshopov, stretnutí a podujatí z celého Slovenska, prehľadne usporiadaných podľa regiónov." },
   { title: "Prihláste sa online",        desc: "Svoje miesto si rezervujete jednoducho priamo v aplikácii ONKO KLUB. Po registrácii vám zašleme potvrdenie a včas vám pripomenieme termín podujatia." },
-  { title: "Stretnite ľudí, ktorí vám rozumejú", desc: "Podujatia sú určené členom ONKO KLUBU a mnohé z nich sú bezplatné alebo za zvýhodnených podmienok. Počet miest býva obmedzený, preto odporúčame prihlásiť sa vopred." },
+  { title: "Stretnite ľudí, ktorí vám rozumejú", desc: "Podujatia sú určené členom ONKO KLUBU a mnohé z nich sú bezplatné alebo za zvýhodnenú cenu. Počet miest býva obmedzený, preto odporúčame prihlásiť sa vopred." },
 ];
 
 export default async function AkciePage() {

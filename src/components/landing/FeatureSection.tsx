@@ -10,7 +10,7 @@ const FEATURES = [
   {
     id: "library" as const,
     title: "ONKO knižnica",
-    desc: "Videá, články a recepty od overených odborníkov, zoradené podľa toho, čo práve riešite.",
+    desc: "Videá, články a recepty pripravené špecialistami, prehľadne usporiadané podľa jednotlivých tém.",
     href: "/co-ziskas",
   },
   {

@@ -89,7 +89,7 @@ const FEATURES: {
     slug: "sponzori",
     title: "Zľavy a benefity",
     headline: "Špeciálne zľavy len pre členov ONKO KLUBU",
-    desc: "Ako člen/ka ONKO KLUBU máte vďaka našim partnerom možnosť využiť špeciálne zľavy. Stačí sa preukázať OK Kartou a zľava sa vám automaticky uplatní.",
+    desc: "Vďaka našim partnerom získate prístup k zvýhodneným ponukám a exkluzívnym benefitom. Stačí sa preukázať OK kartou a zľava sa vám automaticky uplatní. Sme vďační, že po našom boku stoja spoločnosti a ľudia, ktorí sa rozhodli investovať do lepšej budúcnosti onkologických pacientov.",
     detailItems: ["Zdravie a starostlivosť o telo", "Výživa, doplnky a zdravý životný štýl", "Pohyb, rehabilitácia a fyzická aktivita", "Spánok a regenerácia", "Kozmetika a starostlivosť o pokožku", "Technológie pre zdravie", "Voľnočasové aktivity", "Duševná pohoda a relaxácia"],
     imgs: [
       { label: "Naši partneri", src: "/images/co-ziskas-discounts-wide.jpg" },
@@ -396,7 +396,7 @@ export default function CoZiskasPage() {
           <div className="rounded-[2rem] bg-[#6F2380] px-6 py-10 text-center md:py-14">
             <h2 className="text-[2rem] md:text-[2.4rem] font-black text-white leading-tight mb-3">Pripravený začať?</h2>
             <p className="text-white/65 text-sm leading-relaxed mb-7 md:max-w-md md:mx-auto">
-              Registrácia trvá 2 minúty. Členstvo od 5 € / mesiac, zruší sa kedykoľvek.
+              Registrácia trvá 2 minúty. Členstvo od 5 € / mesiac, zrušiť môžete kedykoľvek.
             </p>
             <Link
               href="/pripravujeme"

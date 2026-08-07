@@ -31,7 +31,7 @@ const PREMIUM_BENEFITY = [
 ];
 
 const MEMBERSHIP_INFO_TEXT =
-  "NIE RAKOVINE, o. z. je pacientska organizácia a podľa zákona musí mať oficiálnych členov — presne preto je Free členstvo úplne zadarmo. Členský príspevok pri Mesačnom, Ročnom a Podporujúcom členstve nie je platbou za konkrétnu službu, ale príspevkom na činnosť organizácie. Vďaka nemu vieme rozširovať pomoc onkologickým pacientom, prevádzkovať pacientske poradne a organizovať podujatia a cvičenia po celom Slovensku.";
+  "NIE RAKOVINE, o. z. je pacientska organizácia, ktorá podľa zákona funguje na členskej báze. Záleží nám na tom, aby mal každý možnosť stať sa jej súčasťou, preto v rámci ONKO KLUBU ponúkame Free členstvo bez členského príspevku. Mesačné, Ročné a Podporujúce členstvo nepredstavujú platbu za konkrétnu službu, ale dobrovoľný príspevok na činnosť organizácie. Vďaka nim môžeme rozširovať pomoc onkologickým pacientom, prevádzkovať pacientske poradne a organizovať podujatia po celom Slovensku.";
 
 const FAQ = [
   {
@@ -44,7 +44,7 @@ const FAQ = [
   },
   {
     q: "Má členstvo skúšobné obdobie?",
-    a: "Členstvo si môžete vyskúšať bez záväzkov. Ak sa rozhodnete v prvom mesiaci nepokračovať, stačí ho jednoducho zrušiť. Bez pokuty a akýchkoľvek sankcií.",
+    a: "Členstvo si môžete vyskúšať bez záväzkov. Ak sa rozhodnete po prvom mesiaci nepokračovať, stačí ho jednoducho zrušiť. Bez pokuty a akýchkoľvek sankcií.",
   },
   {
     q: "Sú moje osobné a zdravotné údaje v bezpečí?",

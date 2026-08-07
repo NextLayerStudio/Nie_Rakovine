@@ -117,7 +117,7 @@ export function EventsSection() {
           {[
             { n: "1", title: "Vyberte si podujatie", desc: "V členskej sekcii nájdete prehľad pripravovaných workshopov, stretnutí a podujatí z celého Slovenska, prehľadne usporiadaných podľa regiónov." },
             { n: "2", title: "Prihláste sa online", desc: "Svoje miesto si rezervujete jednoducho priamo v aplikácii ONKO KLUB. Po registrácii vám zašleme potvrdenie a včas vám pripomenieme termín podujatia." },
-            { n: "3", title: "Stretnite ľudí, ktorí vám rozumejú", desc: "Podujatia sú určené členom ONKO KLUBU a mnohé z nich sú bezplatné alebo za zvýhodnených podmienok. Počet miest býva obmedzený, preto odporúčame prihlásiť sa vopred." },
+            { n: "3", title: "Stretnite ľudí, ktorí vám rozumejú", desc: "Podujatia sú určené členom ONKO KLUBU a mnohé z nich sú bezplatné alebo za zvýhodnenú cenu. Počet miest býva obmedzený, preto odporúčame prihlásiť sa vopred." },
           ].map((s, i) => (
             <motion.div
               key={s.n}
@@ -153,8 +153,8 @@ export function EventsSection() {
           Nezmeškajte podujatia vo vašom okolí
         </h3>
         <p className="text-white/65 text-sm leading-relaxed mb-5">
-          Vyberte región a zanechajte kontakt — dáme vám vedieť o podujatiach
-          vo vašom okolí.
+          Vyberte svoj región a zanechajte kontakt, aby sme vám mohli posielať
+          informácie o pripravovaných podujatiach vo vašom okolí.
         </p>
 
         <AnimatePresence mode="wait">

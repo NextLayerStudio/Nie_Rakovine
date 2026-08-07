@@ -64,7 +64,7 @@ export default function SponzoriPage() {
                 <div className="relative z-10">
                   <ExpandableText maxHeight={120} fadeColor="#6F2380">
                     <p className="text-white font-black text-[1.5rem] leading-snug">
-                      Partnerské zľavy prinášajú reálnu úsporu, ktorá môže prevýšiť náklady na členstvo.
+                      Vďaka partnerským zľavám môžete ušetriť viac, než stojí samotné členstvo.
                     </p>
                   </ExpandableText>
                 </div>
